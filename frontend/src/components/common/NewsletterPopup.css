@@ -1,0 +1,155 @@
+.newsletter-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-popup);
+  padding: 20px;
+}
+
+.newsletter-popup {
+  background: white;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: popupSlideIn 0.3s ease-out;
+}
+
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.popup-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+  z-index: 1;
+}
+
+.popup-close-btn:hover {
+  background: rgba(0, 0, 0, 0.2);
+  color: #333;
+}
+
+.popup-content {
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.popup-icon {
+  font-size: 3rem;
+  color: #B87C4B;
+  margin-bottom: 1.5rem;
+}
+
+.popup-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.popup-description {
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+  font-size: 1rem;
+}
+
+.popup-form {
+  margin-bottom: 1rem;
+}
+
+.popup-input {
+  margin-bottom: 1rem;
+}
+
+.popup-button {
+  margin-bottom: 1rem;
+}
+
+.popup-success {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  color: white;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.popup-message {
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.popup-message:not(.popup-success) {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .newsletter-popup-overlay {
+    padding: 10px;
+  }
+  
+  .popup-content {
+    padding: 2rem 1.5rem;
+  }
+  
+  .popup-title {
+    font-size: 1.5rem;
+  }
+  
+  .popup-description {
+    font-size: 0.9rem;
+  }
+  
+  .popup-icon {
+    font-size: 2.5rem;
+  }
+}
+
+/* Animation for closing */
+.newsletter-popup.closing {
+  animation: popupSlideOut 0.3s ease-in forwards;
+}
+
+@keyframes popupSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+}

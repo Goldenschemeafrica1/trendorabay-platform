@@ -1,0 +1,149 @@
+.checkout-form {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.checkout-section {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+  border: 1px solid #e1e1e1;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 2rem 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-title svg {
+  color: #B87C4B;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e1e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.3s ease;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: #B87C4B;
+  box-shadow: 0 0 0 3px rgba(184, 124, 75, 0.1);
+}
+
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid #f44336;
+  border-radius: 8px;
+  color: #f44336;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+/* Payment specific styles */
+.checkout-section:nth-child(2) {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+/* Order notes section */
+.checkout-section:nth-child(3) {
+  background: #fff;
+  border-style: dashed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .checkout-form {
+    padding: 1rem;
+  }
+  
+  .checkout-section {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Animation for form sections */
+.checkout-section {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus states for better UX */
+.form-group {
+  position: relative;
+}
+
+.form-input:focus + .input-label,
+.form-textarea:focus + .textarea-label {
+  color: #B87C4B;
+  transform: translateY(-25px) scale(0.85);
+}
+
+/* Loading state for submit button */
+.btn.loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,154 @@
+.pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pagination-numbers {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pagination-ellipsis {
+  padding: 0.5rem 0.75rem;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.pagination-info {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Button specific styles for pagination */
+.pagination .btn {
+  min-width: 40px;
+  height: 40px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.pagination .btn.active {
+  background: #B87C4B;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(184, 124, 75, 0.3);
+}
+
+.pagination .btn:hover:not(:disabled):not(.active) {
+  background: rgba(184, 124, 75, 0.1);
+  color: #B87C4B;
+  transform: translateY(-1px);
+}
+
+.pagination .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Compact pagination */
+.pagination.compact .pagination-controls {
+  gap: 0.25rem;
+}
+
+.pagination.compact .btn {
+  min-width: 35px;
+  height: 35px;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.8rem;
+}
+
+/* Centered pagination */
+.pagination.centered {
+  text-align: center;
+}
+
+/* Loading state */
+.pagination.loading .btn {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pagination-controls {
+    gap: 0.25rem;
+  }
+  
+  .pagination .btn {
+    min-width: 35px;
+    height: 35px;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.8rem;
+  }
+  
+  .pagination-info {
+    font-size: 0.8rem;
+  }
+  
+  /* Hide some controls on very small screens */
+  .pagination .btn:first-child,
+  .pagination .btn:last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-numbers {
+    gap: 0.125rem;
+  }
+  
+  .pagination .btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Animation */
+.pagination .btn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Different pagination styles */
+.pagination.square .btn {
+  border-radius: 0;
+}
+
+.pagination.rounded .btn {
+  border-radius: 20px;
+}
+
+.pagination.large .btn {
+  min-width: 45px;
+  height: 45px;
+  padding: 0.625rem 1rem;
+  font-size: 1rem;
+}

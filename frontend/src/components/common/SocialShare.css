@@ -1,0 +1,149 @@
+/* SocialShare Component Styles */
+.social-share {
+  padding: 2rem 0;
+}
+
+.social-share-container {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.share-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.native-share-btn {
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #B87C4B, #D4A373);
+  border: none;
+  color: white;
+}
+
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--social-color);
+  background: white;
+  color: var(--social-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.social-btn:hover {
+  background: var(--social-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.social-icon {
+  font-size: 1rem;
+}
+
+.social-name {
+  font-size: 0.85rem;
+}
+
+.copy-link-section {
+  margin-bottom: 1rem;
+}
+
+.copy-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.copy-link-btn:hover {
+  background: #e9ecef;
+  border-color: #B87C4B;
+  color: #B87C4B;
+}
+
+.url-display {
+  margin-top: 1rem;
+}
+
+.url-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #f8f9fa;
+  font-size: 0.85rem;
+  color: #6c757d;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.url-input:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.url-input:focus {
+  outline: none;
+  border-color: #B87C4B;
+  box-shadow: 0 0 0 3px rgba(184, 124, 75, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .social-share {
+    padding: 1rem 0;
+  }
+  
+  .social-buttons {
+    gap: 0.75rem;
+  }
+  
+  .social-btn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  .social-name {
+    display: none;
+  }
+  
+  .social-icon {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .share-title {
+    font-size: 1.25rem;
+  }
+  
+  .social-buttons {
+    gap: 0.5rem;
+  }
+  
+  .social-btn {
+    padding: 0.5rem 0.7rem;
+  }
+}

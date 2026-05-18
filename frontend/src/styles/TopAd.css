@@ -1,0 +1,336 @@
+/* TopAd.css - African-inspired advertisement bar */
+
+.top-ad {
+  position: relative;
+  width: 100%;
+  height: 48px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Container */
+.top-ad-container {
+  position: relative;
+  max-width: 1400px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Ad Content - Clickable */
+.top-ad-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.top-ad-content:hover {
+  transform: scale(1.02);
+}
+
+/* Animated Pattern Overlay */
+.ad-pattern-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' opacity='0.1'%3E%3Cpath d='M20,30 L35,10 L50,30 L70,15 L80,35 L60,50 L75,70 L50,65 L30,80 L25,55 L5,45 L20,30' fill='none' stroke='white' stroke-width='2'/%3E%3Ccircle cx='40' cy='40' r='3' fill='white'/%3E%3Ccircle cx='60' cy='60' r='3' fill='white'/%3E%3C/svg%3E");
+  background-size: 60px;
+  background-repeat: repeat;
+  animation: slidePattern 20s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes slidePattern {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100px 100px;
+  }
+}
+
+/* Ad Icon */
+.ad-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: pulseIcon 2s ease infinite;
+}
+
+.ad-icon {
+  font-size: 18px;
+  color: white;
+}
+
+@keyframes pulseIcon {
+  0%, 100% {
+    transform: scale(1);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Text Wrapper */
+.ad-text-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ad-label {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.ad-message {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Call to Action */
+.ad-cta-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.top-ad-content:hover .ad-cta-wrapper {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(5px);
+}
+
+.ad-cta-text {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ad-cta-icon {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.top-ad-content:hover .ad-cta-icon {
+  transform: translateX(3px);
+}
+
+/* Navigation Dots */
+.ad-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 20px;
+}
+
+.ad-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.ad-dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.2);
+}
+
+.ad-dot.active {
+  width: 20px;
+  background: white;
+  border-radius: 10px;
+}
+
+/* Close Button */
+.ad-close-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ad-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Kente-inspired edge decoration */
+.top-ad::before,
+.top-ad::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(
+    180deg,
+    white,
+    white 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  opacity: 0.3;
+}
+
+.top-ad::before {
+  left: 0;
+}
+
+.top-ad::after {
+  right: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .top-ad {
+    height: auto;
+    min-height: 60px;
+    padding: 8px 0;
+  }
+
+  .top-ad-container {
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 12px;
+  }
+
+  .top-ad-content {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .ad-text-wrapper {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .ad-message {
+    font-size: 12px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .ad-cta-wrapper {
+    margin-left: 0;
+  }
+
+  .ad-navigation {
+    order: 3;
+    margin: 4px 0;
+  }
+
+  .ad-close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-ad-content {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ad-icon-wrapper {
+    display: none;
+  }
+
+  .ad-label {
+    font-size: 9px;
+  }
+
+  .ad-message {
+    font-size: 11px;
+  }
+
+  .ad-cta-wrapper {
+    padding: 2px 8px;
+  }
+
+  .ad-cta-text {
+    font-size: 11px;
+  }
+}
+
+/* Animation for new ad */
+@keyframes slideInAd {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.top-ad-content {
+  animation: slideInAd 0.5s ease;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .top-ad-content,
+  .ad-icon-wrapper,
+  .ad-cta-icon,
+  .ad-close-btn,
+  .ad-pattern-overlay {
+    animation: none;
+    transition: none;
+  }
+}

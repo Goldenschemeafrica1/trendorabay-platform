@@ -1,0 +1,291 @@
+.ad-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.ad-banner.visible {
+  animation: slideIn 0.5s ease-out;
+}
+
+.ad-banner.hidden {
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.ad-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  z-index: 10;
+}
+
+.ad-close-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+.ad-content {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.ad-image {
+  flex-shrink: 0;
+}
+
+.ad-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.ad-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.ad-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.ad-description {
+  margin: 0 0 1rem 0;
+  color: #666;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+.ad-cta-btn {
+  background: #B87C4B;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.ad-cta-btn:hover {
+  background: #9a6340;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(184, 124, 75, 0.3);
+}
+
+/* Banner Type Variations */
+.ad-banner {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 1px solid #dee2e6;
+}
+
+.ad-banner.ad-sidebar {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.ad-banner.ad-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Position Variations */
+.ad-banner.ad-top {
+  margin-bottom: 1rem;
+}
+
+.ad-banner.ad-bottom {
+  margin-top: 1rem;
+}
+
+.ad-banner.ad-sidebar {
+  margin: 0 0 1rem 0;
+}
+
+/* Size Variations */
+.ad-banner.ad-small .ad-content {
+  padding: 0.5rem;
+}
+
+.ad-banner.ad-small .ad-title {
+  font-size: 0.9rem;
+}
+
+.ad-banner.ad-small .ad-description {
+  font-size: 0.75rem;
+}
+
+.ad-banner.ad-medium .ad-content {
+  padding: 0.75rem;
+}
+
+.ad-banner.ad-medium .ad-title {
+  font-size: 1rem;
+}
+
+.ad-banner.ad-medium .ad-description {
+  font-size: 0.85rem;
+}
+
+.ad-banner.ad-large .ad-content {
+  padding: 1.5rem;
+}
+
+.ad-banner.ad-large .ad-title {
+  font-size: 1.3rem;
+}
+
+.ad-banner.ad-large .ad-description {
+  font-size: 1rem;
+}
+
+/* Leaderboard size - reduced height */
+.ad-banner.ad-leaderboard {
+  height: 90px;
+  max-height: 90px;
+}
+
+.ad-banner.ad-leaderboard .ad-content {
+  padding: 0.75rem 1rem;
+  height: 100%;
+  align-items: center;
+}
+
+.ad-banner.ad-leaderboard .ad-title {
+  font-size: 1rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.ad-banner.ad-leaderboard .ad-description {
+  font-size: 0.8rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.ad-banner.ad-leaderboard .ad-image {
+  width: 120px;
+  height: 70px;
+}
+
+.ad-banner.ad-leaderboard .ad-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ad-banner.ad-leaderboard .ad-cta-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ad-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .ad-image {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .ad-banner.ad-popup {
+    width: 95%;
+    max-width: none;
+  }
+  
+  /* Leaderboard responsive adjustments */
+  .ad-banner.ad-leaderboard {
+    height: auto;
+    min-height: 120px;
+    max-height: none;
+  }
+  
+  .ad-banner.ad-leaderboard .ad-content {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .ad-banner.ad-leaderboard .ad-image {
+    width: 100%;
+    max-width: 150px;
+    height: 80px;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Animation for rotating ads */
+.ad-banner.ad-rotating {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Dark theme support */
+.ad-banner.dark {
+  background: linear-gradient(135deg, #2d3748, #1a202c);
+  border-color: #4a5568;
+}
+
+.ad-banner.dark .ad-title {
+  color: white;
+}
+
+.ad-banner.dark .ad-description {
+  color: #cbd5e0;
+}
+
+.ad-banner.dark .ad-cta-btn {
+  background: #4299e1;
+}
+
+.ad-banner.dark .ad-cta-btn:hover {
+  background: #3182ce;
+}

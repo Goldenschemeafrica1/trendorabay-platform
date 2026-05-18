@@ -1,0 +1,349 @@
+/* components/Advert.css */
+.advert {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  width: 900px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  text-decoration: none;
+  color: #ffffff;
+  margin: 10px auto 0 auto;
+}
+
+.advert:hover {
+  transform: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Badge styling */
+.advert__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 2;
+  padding: 2px 4px;
+  background-color: #01ace0;
+  color: white;
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Image wrapper for consistent aspect ratio */
+.advert__image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 110px;
+  background-color: #f5f5f5;
+  overflow: hidden;
+  display: flex;
+}
+
+/* Individual image sections */
+.advert__image-section {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  margin-right: 4px;
+}
+
+.advert__image-section:last-child {
+  margin-right: 0;
+}
+
+
+.advert__image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  display: block;
+}
+
+.advert:hover .advert__image {
+  transform: none;
+}
+
+/* Content area */
+.advert__content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  min-height: 40px;
+  background-color: #ffffff;
+}
+
+/* Sponsored/Ad tag */
+.advert__sponsored-tag {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 2;
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #757575;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 3px;
+}
+
+/* Title styling */
+.advert__title {
+  margin: 0 0 0px 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #000000 !important;
+}
+
+/* Description text */
+.advert__description {
+  margin: 0 0 16px 0;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: #666666;
+  flex: 1;
+}
+
+/* Link/CTA button */
+.advert__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #01ace0;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+  padding: 2px 0;
+}
+
+.advert__link:hover {
+  color: #0086b3;
+  border-bottom-color: #01ace0;
+}
+
+.advert__link-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.advert__link:hover .advert__link-icon {
+  transform: translateX(4px);
+}
+
+/* Compact variant */
+.advert--compact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: none;
+  border-bottom: 1px solid #e6e6e6;
+  border-radius: 0;
+  padding: 16px 0;
+}
+
+.advert--compact:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.advert--compact .advert__image-wrapper {
+  width: 120px;
+  padding-top: 67.5px;
+  flex-shrink: 0;
+  margin-right: 16px;
+}
+
+.advert--compact .advert__content {
+  padding: 0;
+}
+
+.advert--compact .advert__title {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.advert--compact .advert__description {
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Featured variant */
+.advert--featured {
+  border: none;
+  border-radius: 12px;
+}
+
+.advert--featured .advert__title {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.advert--featured .advert__description {
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+
+.advert--featured .advert__link {
+  font-size: 1.1rem;
+}
+
+/* Dark theme variant */
+.advert--dark {
+  background: #0f2540;
+  color: white;
+}
+
+.advert--dark .advert__title {
+  color: white;
+}
+
+.advert--dark .advert__description {
+  color: #cccccc;
+}
+
+.advert--dark .advert__link {
+  color: #ffffff;
+  background: #01ace0;
+  padding: 12px 24px;
+  border-radius: 4px;
+  border-bottom: none;
+  justify-content: center;
+}
+
+.advert--dark .advert__link:hover {
+  background: #0086b3;
+  color: white;
+  border-bottom: none;
+}
+
+.advert--dark .advert__link .advert__link-icon {
+  color: white;
+}
+
+/* Grid layout */
+.advert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 24px 0;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
+  .advert {
+    width: 100%;
+    max-width: 900px;
+    margin: 60px 20px 0 20px;
+  }
+  
+  .advert__title {
+    font-size: 1.1rem;
+  }
+  
+  .advert--featured .advert__title {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .advert {
+    width: calc(100% - 40px);
+    margin: 40px 20px 0 20px;
+    height: auto;
+    min-height: 120px;
+  }
+  
+  .advert__image-wrapper {
+    height: 70px;
+  }
+  
+  .advert__content {
+    padding: 16px 12px 20px;
+  }
+  
+  .advert--compact {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .advert--compact .advert__image-wrapper {
+    width: 100%;
+    padding-top: 56.25%;
+    margin-right: 0;
+    margin-bottom: 12px;
+  }
+  
+  .advert-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .advert {
+    width: calc(100% - 60px);
+    margin: 30px 30px 0 30px;
+    height: auto;
+    min-height: 100px;
+  }
+  
+  .advert__image-wrapper {
+    height: 60px;
+  }
+  
+  .advert__badge {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  .advert__title {
+    font-size: 1rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .advert:not(.advert--dark) {
+    background: #1a1a1a;
+  }
+  
+  .advert:not(.advert--dark) .advert__title {
+    color: #ffffff;
+  }
+  
+  .advert:not(.advert--dark) .advert__description {
+    color: #b0b0b0;
+  }
+  
+  .advert--compact {
+    border-bottom-color: #333;
+  }
+}

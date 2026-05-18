@@ -1,0 +1,215 @@
+.magazine-category-page {
+  padding: 2rem 0;
+  min-height: 60vh;
+}
+
+.magazine-category-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Breadcrumbs */
+.magazine-category-page .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.magazine-category-page .breadcrumb a {
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.magazine-category-page .breadcrumb a:hover {
+  color: #dc2626;
+}
+
+.magazine-category-page .breadcrumb .separator {
+  color: #d1d5db;
+}
+
+.magazine-category-page .breadcrumb .current {
+  color: #111827;
+  font-weight: 500;
+}
+
+/* Category Header */
+.category-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.category-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+}
+
+.category-header p {
+  font-size: 1.125rem;
+  color: #6b7280;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Category Content */
+.category-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Pagination Container */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .magazine-category-page {
+    padding: 1rem 0;
+  }
+  
+  .category-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+  }
+  
+  .category-header h1 {
+    font-size: 2rem;
+  }
+  
+  .category-header p {
+    font-size: 1rem;
+  }
+  
+  .pagination-container {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .category-header p {
+    font-size: 0.875rem;
+  }
+  
+  .magazine-category-page .breadcrumb {
+    font-size: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Loading State */
+.magazine-category-page.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Empty State */
+.category-content .empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #6b7280;
+}
+
+.category-content .empty-state h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #374151;
+}
+
+.category-content .empty-state p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.category-content .empty-state .btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #dc2626;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.category-content .empty-state .btn:hover {
+  background-color: #b91c1c;
+}
+
+/* Animation for page transitions */
+.magazine-category-page {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Category-specific color themes */
+.magazine-category-page.tech .category-header {
+  border-bottom-color: #3b82f6;
+}
+
+.magazine-category-page.tech .category-header h1 {
+  color: #1e40af;
+}
+
+.magazine-category-page.fashion .category-header {
+  border-bottom-color: #ec4899;
+}
+
+.magazine-category-page.fashion .category-header h1 {
+  color: #be185d;
+}
+
+.magazine-category-page.business .category-header {
+  border-bottom-color: #10b981;
+}
+
+.magazine-category-page.business .category-header h1 {
+  color: #047857;
+}
+
+.magazine-category-page.culture .category-header {
+  border-bottom-color: #f59e0b;
+}
+
+.magazine-category-page.culture .category-header h1 {
+  color: #d97706;
+}
+
+.magazine-category-page.lifestyle .category-header {
+  border-bottom-color: #8b5cf6;
+}
+
+.magazine-category-page.lifestyle .category-header h1 {
+  color: #6d28d9;
+}

@@ -1,0 +1,449 @@
+/* ===== Advertise Page Styles ===== */
+.advertise-page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 40px 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.advertise-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== Advertise Header ===== */
+.advertise-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.advertise-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.advertise-header p {
+  font-size: 18px;
+  color: #6b7280;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ===== Advertise Content ===== */
+.advertise-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+/* ===== Advertise Info Section ===== */
+.advertise-info {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.info-section h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 24px;
+}
+
+/* ===== Benefits Grid ===== */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.benefit-card {
+  background: #faf6f0;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-4px);
+}
+
+.benefit-card i {
+  font-size: 32px;
+  color: #b87c4b;
+  margin-bottom: 16px;
+}
+
+.benefit-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.benefit-card p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ===== Opportunities List ===== */
+.opportunities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.opportunity-item {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  padding: 20px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.opportunity-item:hover {
+  border-color: #b87c4b;
+  box-shadow: 0 4px 12px rgba(184, 124, 75, 0.1);
+}
+
+.opportunity-item h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.opportunity-item p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ===== Advertise Form Section ===== */
+.advertise-form-section {
+  background: #faf6f0;
+  border-radius: 16px;
+  padding: 32px;
+  height: fit-content;
+}
+
+.form-container h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.form-container > p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+/* ===== Form Styles ===== */
+.advertise-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #b87c4b;
+  box-shadow: 0 0 0 3px rgba(184, 124, 75, 0.1);
+}
+
+.form-group input.error,
+.form-group select.error {
+  border-color: #dc2626;
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background: #f9fafb;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.error-text {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ===== Checkbox Styles ===== */
+.checkbox-group {
+  margin-top: 8px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  position: relative;
+  line-height: 1.5;
+}
+
+.checkbox-container input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  background: white;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.checkbox-container:hover .checkmark {
+  border-color: #b87c4b;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background: #b87c4b;
+  border-color: #b87c4b;
+}
+
+.checkbox-container input:checked ~ .checkmark::after {
+  content: '✓';
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ===== Submit Button ===== */
+.submit-btn {
+  background: linear-gradient(135deg, #b87c4b, #9d6341);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(184, 124, 75, 0.3);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== Success Message ===== */
+.success-message {
+  text-align: center;
+  padding: 60px 40px;
+  background: #faf6f0;
+  border-radius: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.success-icon {
+  font-size: 64px;
+  color: #10b981;
+  margin-bottom: 24px;
+}
+
+.success-message h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.success-message p {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.back-home-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #b87c4b, #9d6341);
+  color: white;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.back-home-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(184, 124, 75, 0.3);
+}
+
+/* ===== Back to Home ===== */
+.back-to-home {
+  text-align: center;
+  padding-top: 32px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.back-to-home a {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-to-home a:hover {
+  color: #b87c4b;
+}
+
+.back-to-home i {
+  font-size: 12px;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 992px) {
+  .advertise-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .advertise-page {
+    padding: 24px 16px;
+  }
+  
+  .advertise-header h1 {
+    font-size: 28px;
+  }
+  
+  .advertise-header p {
+    font-size: 16px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .advertise-form-section {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .advertise-header h1 {
+    font-size: 24px;
+  }
+  
+  .advertise-header p {
+    font-size: 14px;
+  }
+  
+  .advertise-form-section {
+    padding: 20px;
+  }
+  
+  .success-message {
+    padding: 40px 24px;
+  }
+  
+  .success-icon {
+    font-size: 48px;
+  }
+  
+  .success-message h1 {
+    font-size: 24px;
+  }
+  
+  .success-message p {
+    font-size: 14px;
+  }
+}

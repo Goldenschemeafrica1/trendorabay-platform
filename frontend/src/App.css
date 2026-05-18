@@ -1,0 +1,416 @@
+/* App.css - Main styles for Trendorabay Magazine */
+
+/* Import African patterns and variables */
+@import './styles/variables.css';
+@import './styles/african-patterns.css';
+@import './styles/animations.css';
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background-color: #FFFFFF;
+  color: var(--deep-green, #1e2a1e);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* App Container */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-image: var(--adinkra-pattern-light);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  min-height: 60vh;
+  padding-top: 20px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Container */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--gold-accent, #b87c4b);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Toast Customization - African Theme */
+.african-toast {
+  background: var(--deep-green, #1e2a1e) !important;
+  color: var(--cream, #faf6f0) !important;
+  border-left: 4px solid var(--gold-accent, #b87c4b) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.african-toast .Toastify__progress-bar {
+  background: var(--gold-accent, #b87c4b) !important;
+}
+
+.african-toast .Toastify__close-button {
+  color: var(--cream, #faf6f0) !important;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--cream, #faf6f0);
+  border-top: 3px solid var(--gold-accent, #b87c4b);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Section Styles */
+.section {
+  padding: 60px 0;
+}
+
+.newsletter-section {
+  padding: 48px 0;
+  background: #1a1a1a;
+  border-top: 1px solid rgba(30, 42, 30, 0.08);
+}
+
+.combined-subscription-section {
+  padding: 48px 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.65), rgba(250, 246, 240, 0.9));
+  border-top: 1px solid rgba(30, 42, 30, 0.08);
+}
+
+.subscription-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+@media (max-width: 968px) {
+  .subscription-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* Combined subscription section specific styles */
+.combined-subscription-section .subscription-cta {
+  margin: 0;
+  padding: 32px 40px;
+}
+
+.combined-subscription-section .newsletter-signup {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.combined-subscription-section .cta-content h3 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.combined-subscription-section .cta-content p {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.combined-subscription-section .cta-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.combined-subscription-section .cta-buttons .subscribe-btn,
+.combined-subscription-section .cta-buttons .gift-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.combined-subscription-section .cta-buttons .subscribe-btn {
+  background: #b87c4b;
+  color: white;
+  border: none;
+}
+
+.combined-subscription-section .cta-buttons .subscribe-btn:hover {
+  background: #a0683f;
+  transform: translateY(-1px);
+}
+
+.combined-subscription-section .cta-buttons .gift-btn {
+  background: transparent;
+  color: white;
+  border: 2px solid #b87c4b;
+}
+
+.combined-subscription-section .cta-buttons .gift-btn:hover {
+  background: #b87c4b;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 968px) {
+  .combined-subscription-section .subscription-cta {
+    padding: 24px;
+  }
+  
+  .combined-subscription-section .cta-content h3 {
+    font-size: 24px;
+  }
+  
+  .combined-subscription-section .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .combined-subscription-section .cta-buttons .subscribe-btn,
+  .combined-subscription-section .cta-buttons .gift-btn {
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.section-title {
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  display: none;
+}
+
+.view-all-link {
+  color: var(--gold-accent, #b87c4b);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: gap 0.3s ease;
+}
+
+.view-all-link:hover {
+  gap: 12px;
+}
+
+/* Grid Layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+/* Responsive Grid */
+@media (max-width: 1024px) {
+  .grid-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-3, .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .section {
+    padding: 40px 0;
+  }
+
+  .newsletter-section {
+    padding: 32px 0;
+  }
+  
+  .main-content {
+    padding-top: 126px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .container {
+    padding: 0 16px;
+  }
+  
+  .main-content {
+    padding-top: 134px;
+  }
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-gold { color: var(--gold-accent, #b87c4b); }
+.bg-cream { background-color: var(--cream, #faf6f0); }
+.bg-deep { background-color: var(--deep-green, #1e2a1e); color: white; }
+
+.mt-1 { margin-top: 10px; }
+.mt-2 { margin-top: 20px; }
+.mt-3 { margin-top: 30px; }
+.mt-4 { margin-top: 40px; }
+.mt-5 { margin-top: 50px; }
+
+.mb-1 { margin-bottom: 10px; }
+.mb-2 { margin-bottom: 20px; }
+.mb-3 { margin-bottom: 30px; }
+.mb-4 { margin-bottom: 40px; }
+.mb-5 { margin-bottom: 50px; }
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* African Pattern Dividers */
+.pattern-divider {
+  height: 30px;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--gold-accent-light, #b87c4b20) 0px,
+    var(--gold-accent-light, #b87c4b20) 15px,
+    transparent 15px,
+    transparent 30px
+  );
+  margin: 40px 0;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cream, #faf6f0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold-accent, #b87c4b);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--deep-green, #1e2a1e);
+}
+
+/* Selection Styling */
+::selection {
+  background: var(--gold-accent, #b87c4b);
+  color: white;
+}
+
+/* Focus Styles */
+:focus-visible {
+  outline: 2px solid var(--gold-accent, #b87c4b);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .header,
+  .footer,
+  .cart-drawer,
+  .newsletter-popup {
+    display: none !important;
+  }
+}

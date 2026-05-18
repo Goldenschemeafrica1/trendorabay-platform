@@ -1,0 +1,153 @@
+/* ===== Trusted By Section ===== */
+.trusted-by-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.trusted-by-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e9dac9, transparent);
+}
+
+.trusted-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.trusted-header h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e2a1e;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.trusted-header p {
+  font-size: 0.9rem;
+  color: #6a7a6a;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ===== Logos Marquee ===== */
+.logos-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: white;
+  border-radius: 16px;
+  padding: 40px 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9dac9;
+}
+
+.logos-track {
+  display: flex;
+  align-items: center;
+  animation: scroll-left 30s linear infinite;
+  will-change: transform;
+}
+
+.logo-item {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 60px;
+  height: 80px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.logo-item:hover {
+  opacity: 1;
+}
+
+.logo-item img {
+  height: 50px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.logo-item:hover img {
+  filter: grayscale(0%);
+}
+
+/* Infinite scroll animation */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause animation on hover */
+.logos-marquee:hover .logos-track {
+  animation-play-state: paused;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .trusted-by-section {
+    padding: 40px 0;
+  }
+  
+  .trusted-header h2 {
+    font-size: 2rem;
+  }
+  
+  .trusted-header p {
+    font-size: 1rem;
+  }
+  
+  .logos-marquee {
+    padding: 30px 0;
+  }
+  
+  .logo-item {
+    padding: 0 40px;
+    height: 60px;
+  }
+  
+  .logo-item img {
+    height: 40px;
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .trusted-by-section {
+    padding: 30px 0;
+  }
+  
+  .trusted-header {
+    margin-bottom: 30px;
+  }
+  
+  .logos-marquee {
+    padding: 20px 0;
+  }
+  
+  .logo-item {
+    padding: 0 30px;
+    height: 50px;
+  }
+  
+  .logo-item img {
+    height: 35px;
+    max-width: 100px;
+  }
+}
