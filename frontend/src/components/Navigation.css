@@ -1,19 +1,22 @@
 /* ===== Main Navigation ===== */
 .main-navigation {
   background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-top: none;
+  border-bottom: none;
+  box-shadow: none;
   padding: 0;
-  position: sticky;
-  top: 0;
+  position: static;
+  top: auto;
   width: 100%;
-  z-index: 50;
+  z-index: 2000;
   display: block !important;
   margin-top: 0px;
+  overflow: visible;
+  pointer-events: auto;
 }
 
 .nav-container {
-  max-width: 1400px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
@@ -21,6 +24,11 @@
   justify-content: space-between;
   gap: 6px;
   height: 50px;
+  overflow: visible;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  border-left: none;
+  border-right: none;
 }
 
 .nav-menu {
@@ -30,12 +38,21 @@
   justify-content: center;
   flex: 1;
   height: 100%;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
 }
 
 /* Dropdown Container */
 .dropdown-container {
   position: relative;
   margin-top: 0;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.dropdown-container:not(.active) .dropdown-menu {
+  pointer-events: none;
 }
 
 /* Dropdown Trigger Button */
@@ -56,6 +73,7 @@
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.3px;
+  text-decoration: none !important;
 }
 
 .dropdown-trigger i {
@@ -64,8 +82,18 @@
   transition: transform 0.2s ease;
 }
 
-/* All dropdowns - no hover background */
-.dropdown-container:hover .dropdown-trigger,
+/* All dropdowns - show on hover */
+.dropdown-container:hover .dropdown-trigger {
+  background: transparent;
+  color: #374151;
+  opacity: 0.7;
+}
+
+.dropdown-container:hover .dropdown-trigger i {
+  transform: rotate(180deg);
+  color: #374151;
+}
+
 .dropdown-container.active .dropdown-trigger {
   background: transparent;
   color: #374151;
@@ -88,20 +116,20 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e9dac9;
+  border: none;
   padding: 8px 0;
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease;
-  z-index: 100;
+  z-index: 1000;
   max-height: 400px;
   overflow-y: auto;
 }
 
 .dropdown-container:hover .dropdown-menu,
 .dropdown-container.active .dropdown-menu {
-  opacity: 1;
-  visibility: visible;
+  opacity: 1 !important;
+  visibility: visible !important;
   top: calc(100% + 4px);
 }
 
@@ -149,18 +177,7 @@
 
 /* Dropdown Arrow */
 .dropdown-menu::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 12px;
-  background: white;
-  border-top: 1px solid #e9dac9;
-  border-left: 1px solid #e9dac9;
-  transform: translateX(-50%) rotate(45deg);
-  border-radius: 2px;
+  display: none;
 }
 
 /* Dropdown Items */
@@ -168,7 +185,7 @@
   display: block;
   padding: 8px 16px;
   color: #2c3e2c;
-  text-decoration: none;
+  text-decoration: none !important;
   font-size: 12px;
   font-weight: 400;
   transition: all 0.2s ease;
@@ -212,12 +229,16 @@
   font-size: 12px;
   font-weight: 600;
   color: #1e2a1e;
-  text-decoration: none;
+  text-decoration: none !important;
   border-radius: 20px;
   transition: all 0.2s ease;
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.3px;
+  pointer-events: auto;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
 }
 
 .nav-link:hover {
@@ -227,12 +248,12 @@
 
 /* Store and Podcasts link specific styling - no background */
 .nav-link[href="/store"],
-.nav-link[href="/podcasts"] {
+.nav-link[href="/podcast"] {
   transition: opacity 0.3s ease;
 }
 
 .nav-link[href="/store"]:hover,
-.nav-link[href="/podcasts"]:hover {
+.nav-link[href="/podcast"]:hover {
   background: transparent;
   color: #374151;
   opacity: 0.7;

@@ -398,19 +398,6 @@ const StorePage = ({ onAddToCart, cartItemCount }) => {
 
   return (
     <div className="store-page">
-      {/* Hero Section */}
-      <div className="store-hero">
-        <div className="store-hero-content">
-          <h1 className="store-hero-title">TRENDORABAY STORE</h1>
-          <p className="store-hero-subtitle">Premium merchandise • Limited editions • Creator exclusives</p>
-          {cartItemCount > 0 && (
-            <div className="cart-badge">
-              <span>{cartItemCount} items in cart</span>
-            </div>
-          )}
-        </div>
-      </div>
-
       <div className="store-container">
         {/* Mobile Filter Toggle */}
         <button className="filter-toggle" onClick={() => setShowFilters(!showFilters)}>

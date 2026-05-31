@@ -15,6 +15,16 @@ const Navigation = () => {
     events: useRef(null),
   };
 
+  // Handle hover enter
+  const handleMouseEnter = (dropdown) => {
+    setOpenDropdown(dropdown);
+  };
+
+  // Handle hover leave
+  const handleMouseLeave = () => {
+    setOpenDropdown(null);
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -33,7 +43,7 @@ const Navigation = () => {
     };
   }, []);
 
-  // Toggle dropdown
+  // Toggle dropdown (for click fallback)
   const toggleDropdown = (dropdown) => {
     if (openDropdown === dropdown) {
       setOpenDropdown(null);
@@ -50,10 +60,11 @@ const Navigation = () => {
           <div 
             className={`dropdown-container ${openDropdown === 'home' ? 'active' : ''}`}
             ref={dropdownRefs.home}
+            onMouseEnter={() => handleMouseEnter('home')}
+            onMouseLeave={handleMouseLeave}
           >
             <button 
               className="dropdown-trigger"
-              onClick={() => toggleDropdown('home')}
             >
               EXPLORE
             </button>
@@ -70,10 +81,11 @@ const Navigation = () => {
           <div 
             className={`dropdown-container ${openDropdown === 'magazine' ? 'active' : ''}`}
             ref={dropdownRefs.magazine}
+            onMouseEnter={() => handleMouseEnter('magazine')}
+            onMouseLeave={handleMouseLeave}
           >
             <button 
               className="dropdown-trigger"
-              onClick={() => toggleDropdown('magazine')}
             >
               Magazine
             </button>
@@ -89,10 +101,11 @@ const Navigation = () => {
           <div 
             className={`dropdown-container ${openDropdown === 'write' ? 'active' : ''}`}
             ref={dropdownRefs.write}
+            onMouseEnter={() => handleMouseEnter('write')}
+            onMouseLeave={handleMouseLeave}
           >
             <button 
               className="dropdown-trigger"
-              onClick={() => toggleDropdown('write')}
             >
               Get Featured
             </button>
@@ -108,10 +121,11 @@ const Navigation = () => {
           <div 
             className={`dropdown-container ${openDropdown === 'creators' ? 'active' : ''}`}
             ref={dropdownRefs.creators}
+            onMouseEnter={() => handleMouseEnter('creators')}
+            onMouseLeave={handleMouseLeave}
           >
             <button 
               className="dropdown-trigger"
-              onClick={() => toggleDropdown('creators')}
             >
               Creators Hub
             </button>
@@ -127,10 +141,11 @@ const Navigation = () => {
           <div 
             className={`dropdown-container ${openDropdown === 'business' ? 'active' : ''}`}
             ref={dropdownRefs.business}
+            onMouseEnter={() => handleMouseEnter('business')}
+            onMouseLeave={handleMouseLeave}
           >
             <button 
               className="dropdown-trigger"
-              onClick={() => toggleDropdown('business')}
             >
               Business Hub
             </button>
@@ -144,18 +159,19 @@ const Navigation = () => {
           </div>
 
           {/* Podcasts Link */}
-          <Link to="/podcast" className="nav-link">
+          <a href="/podcast" className="nav-link">
             Podcasts
-          </Link>
+          </a>
 
           {/* Events Dropdown */}
           <div 
             className={`dropdown-container ${openDropdown === 'events' ? 'active' : ''}`}
             ref={dropdownRefs.events}
+            onMouseEnter={() => handleMouseEnter('events')}
+            onMouseLeave={handleMouseLeave}
           >
             <button 
               className="dropdown-trigger"
-              onClick={() => toggleDropdown('events')}
             >
               Events
             </button>

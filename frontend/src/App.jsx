@@ -102,8 +102,8 @@ function App() {
       {/* Main Header with Navigation */}
       <Header />
 
-      {/* Navigation Menu - Hidden on magazine detail and podcast pages */}
-      {!location.pathname.startsWith('/magazines/') && location.pathname !== '/podcast' && <Navigation />}
+      {/* Navigation Menu */}
+      <Navigation />
 
       {/* Advertisement Bar - Hidden on magazine detail, podcast, merchandise, cart, login, and signup pages */}
       {!location.pathname.startsWith('/magazines/') && location.pathname !== '/podcast' && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && <Advert />}
