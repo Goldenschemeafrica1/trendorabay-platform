@@ -29,7 +29,8 @@ const Header = () => {
   };
 
   // Toggle mobile dropdown
-  const toggleMobileDropdown = (dropdown) => {
+  const toggleMobileDropdown = (dropdown, e) => {
+    e?.stopPropagation();
     if (mobileOpenDropdown === dropdown) {
       setMobileOpenDropdown(null);
     } else {
@@ -38,7 +39,8 @@ const Header = () => {
   };
 
   // Close mobile menu and navigate
-  const handleMobileLinkClick = () => {
+  const handleMobileLinkClick = (e) => {
+    e?.stopPropagation();
     setIsMenuOpen(false);
     setMobileOpenDropdown(null);
   };
@@ -112,6 +114,138 @@ const Header = () => {
 
           {/* Right Side - Empty on mobile, can be used for future elements */}
           <div className="header-actions">
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Navigation Overlay */}
+      {isMenuOpen && (
+        <div 
+          className="mobile-nav-overlay"
+          onClick={() => setIsMenuOpen(false)}
+        ></div>
+      )}
+
+      {/* Mobile Navigation Menu */}
+      <div className={`mobile-navigation ${isMenuOpen ? 'open' : ''}`}>
+        {/* Close Button */}
+        <button 
+          className="mobile-nav-close"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          <i className="fas fa-times"></i>
+        </button>
+        
+        <div className="mobile-nav-content">
+          {/* Mobile Nav Items */}
+          <div className="mobile-nav-item">
+            <button 
+              className="mobile-nav-button"
+              onClick={(e) => toggleMobileDropdown('home', e)}
+            >
+              EXPLORE
+              <i className={`fas fa-chevron-${mobileOpenDropdown === 'home' ? 'up' : 'down'}`}></i>
+            </button>
+            <div className={`mobile-dropdown ${mobileOpenDropdown === 'home' ? 'open' : ''}`}>
+              <Link to="/stories/latest" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Latest Stories</Link>
+              <Link to="/stories" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>All Stories</Link>
+              <Link to="/community/contributors" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contributors</Link>
+              <Link to="/community" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Community</Link>
+              <Link to="/about" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>About</Link>
+            </div>
+          </div>
+
+          <div className="mobile-nav-item">
+            <button 
+              className="mobile-nav-button"
+              onClick={(e) => toggleMobileDropdown('magazine', e)}
+            >
+              Magazine
+              <i className={`fas fa-chevron-${mobileOpenDropdown === 'magazine' ? 'up' : 'down'}`}></i>
+            </button>
+            <div className={`mobile-dropdown ${mobileOpenDropdown === 'magazine' ? 'open' : ''}`}>
+              <Link to="/magazines" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Magazines</Link>
+              <Link to="/stories/latest" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Latest Stories</Link>
+              <Link to="/stories" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>All Stories</Link>
+              <Link to="/community/contributors" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contributors</Link>
+            </div>
+          </div>
+
+          <div className="mobile-nav-item">
+            <button 
+              className="mobile-nav-button"
+              onClick={(e) => toggleMobileDropdown('write', e)}
+            >
+              Get Featured
+              <i className={`fas fa-chevron-${mobileOpenDropdown === 'write' ? 'up' : 'down'}`}></i>
+            </button>
+            <div className={`mobile-dropdown ${mobileOpenDropdown === 'write' ? 'open' : ''}`}>
+              <Link to="/write" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Start Writing</Link>
+              <Link to="/write-for-us" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Submit a Story</Link>
+              <Link to="/community/contributors" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contributors</Link>
+              <Link to="/community" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Join Community</Link>
+            </div>
+          </div>
+
+          <div className="mobile-nav-item">
+            <button 
+              className="mobile-nav-button"
+              onClick={(e) => toggleMobileDropdown('creators', e)}
+            >
+              Creators Hub
+              <i className={`fas fa-chevron-${mobileOpenDropdown === 'creators' ? 'up' : 'down'}`}></i>
+            </button>
+            <div className={`mobile-dropdown ${mobileOpenDropdown === 'creators' ? 'open' : ''}`}>
+              <Link to="/community" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Join Community</Link>
+              <Link to="/community/contributors" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contributors</Link>
+              <Link to="/community/events" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Events</Link>
+              <Link to="/write" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Write For Us</Link>
+            </div>
+          </div>
+
+          <div className="mobile-nav-item">
+            <button 
+              className="mobile-nav-button"
+              onClick={(e) => toggleMobileDropdown('business', e)}
+            >
+              Business Hub
+              <i className={`fas fa-chevron-${mobileOpenDropdown === 'business' ? 'up' : 'down'}`}></i>
+            </button>
+            <div className={`mobile-dropdown ${mobileOpenDropdown === 'business' ? 'open' : ''}`}>
+              <Link to="/about" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>About Us</Link>
+              <Link to="/mission" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Mission</Link>
+              <Link to="/contact" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contact</Link>
+              <Link to="/write-for-us" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Partner With Us</Link>
+              <Link to="/contact" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Advertise With Us</Link>
+            </div>
+          </div>
+
+          <div className="mobile-nav-item">
+            <Link to="/podcast" className="mobile-nav-link" onClick={(e) => handleMobileLinkClick(e)}>
+              Podcasts
+            </Link>
+          </div>
+
+          <div className="mobile-nav-item">
+            <button 
+              className="mobile-nav-button"
+              onClick={(e) => toggleMobileDropdown('events', e)}
+            >
+              Events
+              <i className={`fas fa-chevron-${mobileOpenDropdown === 'events' ? 'up' : 'down'}`}></i>
+            </button>
+            <div className={`mobile-dropdown ${mobileOpenDropdown === 'events' ? 'open' : ''}`}>
+              <Link to="/events" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Events</Link>
+              <Link to="/community/events" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Community Events</Link>
+              <Link to="/community" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Community Hub</Link>
+              <Link to="/contact" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contact for Tickets</Link>
+            </div>
+          </div>
+
+          <div className="mobile-nav-item">
+            <Link to="/store" className="mobile-nav-link" onClick={(e) => handleMobileLinkClick(e)}>
+              Store
+            </Link>
           </div>
         </div>
       </div>

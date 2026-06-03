@@ -283,10 +283,19 @@ body {
   }
   
   .editorial-header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     gap: 20px;
     margin-bottom: 30px;
+  }
+  
+  .header-right {
+    align-self: flex-end;
+    width: auto;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 0;
   }
   
   .main-headline {

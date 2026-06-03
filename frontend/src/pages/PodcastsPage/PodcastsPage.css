@@ -11,6 +11,7 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
+  padding-top: 0;
 }
 
 /* Container */
@@ -305,11 +306,12 @@
     grid-template-columns: 1fr;
     gap: 32px;
   }
-  
+
   .live-video-container {
     order: 1;
+    width: 100%;
   }
-  
+
   .live-sidebar {
     order: 2;
     display: grid;
@@ -321,67 +323,97 @@
 @media (max-width: 768px) {
   .live-podcast-section {
     padding: 0px 0;
-    margin-top: -85px;
+    margin-top: 0;
+    transform: translateY(-40px);
   }
-  
+
+  .container {
+    padding: 0 16px;
+  }
+
   .live-header h1 {
     font-size: 2rem;
   }
-  
+
   .live-description {
     font-size: 1rem;
   }
-  
+
   .live-sidebar {
     grid-template-columns: 1fr;
   }
-  
+
+  .live-video-container {
+    width: 100%;
+    min-height: 280px;
+    aspect-ratio: 16/9;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .live-video {
+    width: 100%;
+    height: 100%;
+  }
+
+  .live-video iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    border: none;
+  }
+
   .live-controls {
     bottom: 16px;
     right: 16px;
   }
-  
+
   .live-control-btn {
     width: 40px;
     height: 40px;
     font-size: 0.9rem;
   }
-  
+
   /* Mobile responsive styles for MUSIC section */
   .live-info-card {
-    padding: 20px;
+    padding: 16px;
+    background: #f8f9fc;
+    border-radius: 12px;
   }
-  
+
   .live-info-card h3 {
-    font-size: 0.8rem;
-    padding: 3px 6px;
+    font-size: 0.7rem;
+    padding: 4px 8px;
     margin-bottom: 12px;
+    font-weight: 600;
   }
-  
+
   .episode-info h4 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.3;
     margin-bottom: 6px;
+    font-weight: 700;
   }
-  
+
   .episode-info p {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     line-height: 1.4;
     margin-bottom: 12px;
+    color: #5B6778;
   }
-  
+
   .episode-meta {
     gap: 12px;
     margin-bottom: 16px;
   }
-  
+
   .episode-meta span {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
-  
+
   .join-live-btn {
     padding: 12px 16px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 }
 
@@ -389,60 +421,81 @@
 @media (max-width: 480px) {
   .live-podcast-section {
     padding: 0px 0;
-    margin-top: -95px;
+    margin-top: 0;
+    transform: translateY(-50px);
   }
-  
+
   .live-content {
     gap: 24px;
   }
-  
+
   .live-video-container {
-    min-height: 250px;
+    width: 100%;
+    min-height: 180px;
     aspect-ratio: 16/9;
+    border-radius: 12px;
+    overflow: hidden;
   }
-  
+
+  .live-video {
+    width: 100%;
+    height: 100%;
+  }
+
+  .live-video iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    border: none;
+  }
+
   .live-info-card {
-    padding: 16px;
+    padding: 14px;
+    background: #f8f9fc;
+    border-radius: 12px;
   }
-  
+
   .live-info-card h3 {
-    font-size: 0.75rem;
-    padding: 2px 6px;
+    font-size: 0.65rem;
+    padding: 3px 6px;
     margin-bottom: 10px;
+    font-weight: 600;
   }
-  
+
   .episode-info h4 {
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.2;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    font-weight: 700;
   }
-  
+
   .episode-info p {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     line-height: 1.3;
     margin-bottom: 10px;
+    color: #5B6778;
   }
-  
+
   .episode-meta {
     gap: 8px;
     margin-bottom: 12px;
   }
-  
+
   .episode-meta span {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
-  
+
   .join-live-btn {
     padding: 10px 14px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
-  
+
   .live-controls {
     bottom: 12px;
     right: 12px;
     gap: 8px;
   }
-  
+
   .live-control-btn {
     width: 36px;
     height: 36px;
@@ -587,6 +640,23 @@
   height: 3px;
   background: #E67E22;
   border-radius: 3px;
+}
+
+.view-all {
+  background: none;
+  border: none;
+  color: #E67E22;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.view-all:hover {
+  opacity: 0.8;
 }
 
 .readmore {
@@ -785,8 +855,34 @@
 }
 
 @media (max-width: 768px) {
+  .featured-series-section {
+    margin-bottom: 80px;
+    margin-top: -40px;
+  }
+
   .featured-series-grid {
     grid-template-columns: 1fr;
+  }
+
+  .view-all {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-series-section {
+    margin-bottom: 80px;
+    margin-top: -45px;
+  }
+
+  .featured-series-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .view-all {
+    font-size: 0.7rem;
+    padding: 3px 6px;
   }
 }
 

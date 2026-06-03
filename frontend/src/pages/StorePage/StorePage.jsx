@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useCart } from '../../store/hooks/useCart';
 import './StorePage.css';
 
-const StorePage = ({ onAddToCart, cartItemCount }) => {
+const StorePage = () => {
+  const { addToCart, openCartDrawer } = useCart();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -89,7 +91,7 @@ const StorePage = ({ onAddToCart, cartItemCount }) => {
       category: 'art',
       price: 49.99,
       originalPrice: 79.99,
-      image: 'https://images.unsplash.com/photo-1578301977993-1ad858658c28?w=400&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&h=500&fit=crop',
       hoverImage: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&h=500&fit=crop',
       description: 'Set of 3 premium art prints celebrating African creativity and innovation. Museum-quality paper.',
       badge: 'Artist Series',
@@ -144,7 +146,7 @@ const StorePage = ({ onAddToCart, cartItemCount }) => {
       category: 'accessories',
       price: 29.99,
       originalPrice: null,
-      image: 'https://images.unsplash.com/photo-1601065585928-203d4b02f056?w=400&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?w=400&h=500&fit=crop',
       hoverImage: 'https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?w=400&h=500&fit=crop',
       description: 'Durable canvas tote bag perfect for carrying your essentials in style. Machine washable.',
       badge: 'New',
@@ -162,8 +164,8 @@ const StorePage = ({ onAddToCart, cartItemCount }) => {
       category: 'magazine',
       price: 24.99,
       originalPrice: 29.99,
-      image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18fc6?w=400&h=500&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1572375992501-4b0892d50c69?w=400&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=500&fit=crop',
+      hoverImage: 'https://images.unsplash.com/photo-1589998059171-988d887df646?w=400&h=500&fit=crop',
       description: 'Deep dive into Africa\'s tech revolution with exclusive interviews with leading founders.',
       badge: 'Best Seller',
       badgeColor: '#2E8B57',
@@ -336,13 +338,13 @@ const StorePage = ({ onAddToCart, cartItemCount }) => {
       name: product.name,
       price: product.price,
       image: product.image,
-      size: size,
+      size: size || '',
+      color: '',
       quantity: 1
     };
     
-    if (onAddToCart) {
-      onAddToCart(cartItem);
-    }
+    addToCart(cartItem);
+    openCartDrawer();
     
     // Show notification
     showNotification(`${product.name} added to cart!`);
@@ -600,10 +602,6 @@ const StorePage = ({ onAddToCart, cartItemCount }) => {
                   <div className="product-info">
                     <div className="product-category">{product.category}</div>
                     <h3 className="product-name">{product.name}</h3>
-                    <div className="product-rating">
-                      <span className="stars">{renderStars(product.rating)}</span>
-                      <span className="review-count">({product.reviews})</span>
-                    </div>
                     <div className="product-price">
                       <span className="current-price">{formatPrice(product.price)}</span>
                       {product.originalPrice && (
@@ -611,21 +609,6 @@ const StorePage = ({ onAddToCart, cartItemCount }) => {
                       )}
                     </div>
                     <p className="product-description">{product.description}</p>
-                    
-                    {product.sizes && product.inStock && (
-                      <div className="quick-size-selector">
-                        {product.sizes.slice(0, 4).map(size => (
-                          <button
-                            key={size}
-                            className="quick-size-btn"
-                            onClick={() => handleAddToCart(product, size)}
-                          >
-                            {size}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    
                     <button 
                       className={`add-to-cart-btn ${!product.inStock ? 'disabled' : ''}`}
                       onClick={() => handleAddToCart(product)}

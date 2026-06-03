@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useCart } from '../../store/hooks/useCart';
+import { useNavigate } from 'react-router-dom';
 import './CartPage.css';
 
 const CartPage = ({ onCheckoutComplete }) => {
-  const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
+  const { cartItems, removeFromCart, updateItemQuantity, subtotal, calculateTotal, clearAllItems } = useCart();
   const [loading, setLoading] = useState(true);
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
@@ -55,11 +58,6 @@ const CartPage = ({ onCheckoutComplete }) => {
 
   // Load cart from localStorage
   useEffect(() => {
-    const savedCart = localStorage.getItem('trendorabay_cart');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
-    }
-    
     const savedItemsData = localStorage.getItem('trendorabay_saved_items');
     if (savedItemsData) {
       setSavedItems(JSON.parse(savedItemsData));
@@ -69,22 +67,12 @@ const CartPage = ({ onCheckoutComplete }) => {
     setRecommendedProducts(recommendedData);
   }, []);
 
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    if (!loading) {
-      localStorage.setItem('trendorabay_cart', JSON.stringify(cart));
-    }
-  }, [cart, loading]);
-
   // Save saved items to localStorage
   useEffect(() => {
     if (!loading) {
       localStorage.setItem('trendorabay_saved_items', JSON.stringify(savedItems));
     }
   }, [savedItems, loading]);
-
-  // Calculate subtotal
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   // Calculate shipping cost
   const shippingCost = () => {
@@ -107,48 +95,53 @@ const CartPage = ({ onCheckoutComplete }) => {
   const total = subtotal + shippingCost() + giftWrapCost - discountAmount;
 
   // Update quantity
-  const updateQuantity = (itemId, size, newQuantity) => {
+  const handleUpdateQuantity = (itemId, size, color, newQuantity) => {
     if (newQuantity < 1) {
-      removeItem(itemId, size);
+      handleRemoveItem(itemId, size, color);
       return;
     }
     
-    setCart(cart.map(item =>
-      item.id === itemId && item.size === size
-        ? { ...item, quantity: newQuantity }
-        : item
-    ));
+    updateItemQuantity(itemId, size, color, newQuantity);
   };
 
   // Remove item from cart
-  const removeItem = (itemId, size) => {
-    setCart(cart.filter(item => !(item.id === itemId && item.size === size)));
+  const handleRemoveItem = (itemId, size, color) => {
+    removeFromCart(itemId, size, color);
     showNotification('Item removed from cart');
   };
 
   // Move item to saved for later
   const moveToSaved = (item) => {
-    removeItem(item.id, item.size);
+    handleRemoveItem(item.id, item.size, item.color);
     setSavedItems([...savedItems, { ...item, savedAt: new Date().toISOString() }]);
     showNotification('Item moved to Saved for Later');
   };
 
   // Move saved item back to cart
   const moveToCart = (savedItem) => {
-    setSavedItems(savedItems.filter(i => 
+    setSavedItems(savedItems.filter(i =>
       !(i.id === savedItem.id && i.size === savedItem.size)
     ));
-    
-    const existingItem = cart.find(item => 
+
+    const existingItem = cartItems.find(item =>
       item.id === savedItem.id && item.size === savedItem.size
     );
-    
+
     if (existingItem) {
-      updateQuantity(savedItem.id, savedItem.size, existingItem.quantity + 1);
+      updateItemQuantity(savedItem.id, savedItem.size, savedItem.color, existingItem.quantity + 1);
     } else {
-      setCart([...cart, { ...savedItem, quantity: 1 }]);
+      const cartItem = {
+        id: savedItem.id,
+        name: savedItem.name,
+        price: savedItem.price,
+        image: savedItem.image,
+        size: savedItem.size || '',
+        color: savedItem.color || '',
+        quantity: 1
+      };
+      updateItemQuantity(cartItem.id, cartItem.size, cartItem.color, 1);
     }
-    
+
     showNotification('Item moved back to cart');
   };
 
@@ -189,16 +182,18 @@ const CartPage = ({ onCheckoutComplete }) => {
       name: product.name,
       price: product.price,
       image: product.image,
+      size: '',
+      color: '',
       quantity: 1
     };
-    
-    const existingItem = cart.find(item => item.id === product.id);
+
+    const existingItem = cartItems.find(item => item.id === product.id);
     if (existingItem) {
-      updateQuantity(product.id, null, existingItem.quantity + 1);
+      updateItemQuantity(product.id, '', '', existingItem.quantity + 1);
     } else {
-      setCart([...cart, cartItem]);
+      updateItemQuantity(cartItem.id, cartItem.size, cartItem.color, 1);
     }
-    
+
     showNotification(`${product.name} added to cart!`);
   };
 
@@ -223,14 +218,14 @@ const CartPage = ({ onCheckoutComplete }) => {
 
   // Proceed to checkout
   const handleCheckout = () => {
-    if (cart.length === 0) {
+    if (cartItems.length === 0) {
       showNotification('Your cart is empty');
       return;
     }
-    
+
     // Simulate checkout process
     const orderData = {
-      items: cart,
+      items: cartItems,
       subtotal,
       shipping: shippingCost(),
       giftWrap: giftWrapCost,
@@ -242,15 +237,16 @@ const CartPage = ({ onCheckoutComplete }) => {
       orderDate: new Date().toISOString(),
       orderNumber: 'TRX-' + Math.random().toString(36).substr(2, 8).toUpperCase()
     };
-    
+
     localStorage.setItem('trendorabay_last_order', JSON.stringify(orderData));
-    
+
     if (onCheckoutComplete) {
       onCheckoutComplete(orderData);
     } else {
       alert(`Order placed successfully!\nOrder #: ${orderData.orderNumber}\nTotal: $${total.toFixed(2)}\n\nThank you for shopping with Trendorabay!`);
       // Clear cart
-      setCart([]);
+      clearAllItems();
+      navigate('/checkout/success');
     }
   };
 
@@ -268,22 +264,22 @@ const CartPage = ({ onCheckoutComplete }) => {
       <div className="cart-container">
         {/* Main Cart Content */}
         <div className="cart-main">
-          {cart.length === 0 && savedItems.length === 0 ? (
+          {cartItems.length === 0 && savedItems.length === 0 ? (
             <div className="empty-cart">
               <div className="empty-cart-icon">🛒</div>
               <h2>Your cart is empty</h2>
               <p>Looks like you haven't added any items to your cart yet.</p>
-              <a href="/store" className="continue-shopping-btn">Continue Shopping</a>
+              <button onClick={() => navigate('/store')} className="continue-shopping-btn">Continue Shopping</button>
             </div>
           ) : (
             <>
               {/* Cart Items */}
-              {cart.length > 0 && (
+              {cartItems.length > 0 && (
                 <div className="cart-items-section">
-                  <h2 className="section-title">Cart Items ({cart.length})</h2>
+                  <h2 className="section-title">Cart Items ({cartItems.length})</h2>
                   <div className="cart-items-list">
-                    {cart.map((item, index) => (
-                      <div key={`${item.id}-${item.size || ''}-${index}`} className="cart-item-card">
+                    {cartItems.map((item, index) => (
+                      <div key={`${item.id}-${item.size || ''}-${item.color || ''}-${index}`} className="cart-item-card">
                         <div className="cart-item-image">
                           <img src={item.image} alt={item.name} />
                         </div>
@@ -293,29 +289,29 @@ const CartPage = ({ onCheckoutComplete }) => {
                           <div className="cart-item-price">${item.price.toFixed(2)}</div>
                           <div className="cart-item-actions">
                             <div className="quantity-selector">
-                              <button 
-                                onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)}
+                              <button
+                                onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.quantity - 1)}
                                 aria-label="Decrease quantity"
                               >
                                 −
                               </button>
                               <span>{item.quantity}</span>
-                              <button 
-                                onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
+                              <button
+                                onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.quantity + 1)}
                                 aria-label="Increase quantity"
                               >
                                 +
                               </button>
                             </div>
-                            <button 
+                            <button
                               className="save-for-later-btn"
                               onClick={() => moveToSaved(item)}
                             >
                               Save for Later
                             </button>
-                            <button 
+                            <button
                               className="remove-btn"
-                              onClick={() => removeItem(item.id, item.size)}
+                              onClick={() => handleRemoveItem(item.id, item.size, item.color)}
                             >
                               Remove
                             </button>
@@ -390,7 +386,7 @@ const CartPage = ({ onCheckoutComplete }) => {
         </div>
 
         {/* Order Summary Sidebar */}
-        {cart.length > 0 && (
+        {cartItems.length > 0 && (
           <div className="cart-summary">
             <h2 className="summary-title">Order Summary</h2>
             

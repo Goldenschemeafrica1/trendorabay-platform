@@ -1,24 +1,36 @@
 import React from 'react';
-import { FaTimes, FaShoppingCart, FaTrash } from 'react-icons/fa';
+import { FaTimes, FaShoppingCart, FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
+import { useCart } from '../store/hooks/useCart';
+import { Link } from 'react-router-dom';
 import Button from './forms/Button';
 import './styles/CartDrawer.css';
 
-const CartDrawer = ({ isOpen, onClose }) => {
-  const cartItems = []; // This would come from your cart state/context
+const CartDrawer = () => {
+  const { cartItems, removeFromCart, updateItemQuantity, subtotal, calculateTotal, closeCartDrawer, isOpen } = useCart();
 
-  const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const handleRemove = (item) => {
+    removeFromCart(item.id, item.size, item.color);
+  };
+
+  const handleQuantityChange = (item, newQuantity) => {
+    if (newQuantity > 0) {
+      updateItemQuantity(item.id, item.size, item.color, newQuantity);
+    }
+  };
+
+  const handleClose = () => {
+    closeCartDrawer();
   };
 
   return (
     <div className={`cart-drawer ${isOpen ? 'open' : ''}`}>
-      <div className="cart-drawer-overlay" onClick={onClose} />
+      <div className="cart-drawer-overlay" onClick={handleClose} />
       <div className="cart-drawer-content">
         <div className="cart-drawer-header">
           <h2 className="cart-title">
-            <FaShoppingCart /> Shopping Cart
+            <FaShoppingCart /> Shopping Cart ({cartItems.length})
           </h2>
-          <button className="close-btn" onClick={onClose}>
+          <button className="close-btn" onClick={handleClose}>
             <FaTimes />
           </button>
         </div>
@@ -28,15 +40,15 @@ const CartDrawer = ({ isOpen, onClose }) => {
             <div className="empty-cart">
               <FaShoppingCart className="empty-cart-icon" />
               <p>Your cart is empty</p>
-              <Button onClick={onClose} variant="primary">
+              <Button onClick={handleClose} variant="primary">
                 Continue Shopping
               </Button>
             </div>
           ) : (
             <>
               <div className="cart-items">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="cart-item">
+                {cartItems.map((item, index) => (
+                  <div key={`${item.id}-${item.size}-${item.color}-${index}`} className="cart-item">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -44,12 +56,26 @@ const CartDrawer = ({ isOpen, onClose }) => {
                     />
                     <div className="cart-item-details">
                       <h4 className="cart-item-name">{item.name}</h4>
+                      {item.size && <p className="cart-item-size">Size: {item.size}</p>}
                       <p className="cart-item-price">${item.price.toFixed(2)}</p>
                       <div className="cart-item-quantity">
-                        <span>Qty: {item.quantity}</span>
+                        <button 
+                          className="quantity-btn"
+                          onClick={() => handleQuantityChange(item, item.quantity - 1)}
+                          disabled={item.quantity <= 1}
+                        >
+                          <FaMinus />
+                        </button>
+                        <span className="quantity">{item.quantity}</span>
+                        <button 
+                          className="quantity-btn"
+                          onClick={() => handleQuantityChange(item, item.quantity + 1)}
+                        >
+                          <FaPlus />
+                        </button>
                       </div>
                     </div>
-                    <button className="remove-item-btn">
+                    <button className="remove-item-btn" onClick={() => handleRemove(item)}>
                       <FaTrash />
                     </button>
                   </div>
@@ -57,17 +83,23 @@ const CartDrawer = ({ isOpen, onClose }) => {
               </div>
 
               <div className="cart-summary">
+                <div className="cart-subtotal">
+                  <span>Subtotal:</span>
+                  <span className="subtotal-amount">${subtotal.toFixed(2)}</span>
+                </div>
                 <div className="cart-total">
                   <span>Total:</span>
                   <span className="total-amount">${calculateTotal().toFixed(2)}</span>
                 </div>
                 <div className="cart-actions">
-                  <Button onClick={onClose} variant="outline" fullWidth>
+                  <Button onClick={handleClose} variant="outline" fullWidth>
                     Continue Shopping
                   </Button>
-                  <Button variant="primary" fullWidth>
-                    Checkout
-                  </Button>
+                  <Link to="/checkout" onClick={handleClose}>
+                    <Button variant="primary" fullWidth>
+                      Checkout
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </>
