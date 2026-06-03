@@ -284,6 +284,12 @@
   }
 }
 
+@media (max-width: 768px) {
+  .main-navigation.mobile-nav {
+    margin-top: 40px;
+  }
+}
+
 @media (max-width: 480px) {
   .nav-container {
     padding: 0 16px;
