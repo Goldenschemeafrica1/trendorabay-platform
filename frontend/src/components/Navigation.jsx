@@ -159,9 +159,9 @@ const Navigation = () => {
           </div>
 
           {/* Podcasts Link */}
-          <a href="/podcast" className="nav-link">
+          <Link to="/podcast" className="nav-link">
             Podcasts
-          </a>
+          </Link>
 
           {/* Events Dropdown */}
           <div 
