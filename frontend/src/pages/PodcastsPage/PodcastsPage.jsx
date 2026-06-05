@@ -494,7 +494,7 @@ const PodcastPage = () => {
             <h3>Never Miss an Episode</h3>
             <p>Get the latest stories delivered straight to your inbox</p>
             <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-              <input type="email" placeholder="Enter your email address" />
+              <input type="email" id="podcast-newsletter-email" name="email" placeholder="Enter your email address" />
               <button type="submit">Subscribe <i className="fas fa-arrow-right"></i></button>
             </form>
           </div>
