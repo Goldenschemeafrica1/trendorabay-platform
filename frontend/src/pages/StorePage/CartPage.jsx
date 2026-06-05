@@ -14,7 +14,6 @@ const CartPage = ({ onCheckoutComplete }) => {
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [savedItems, setSavedItems] = useState([]);
   const [shippingMethod, setShippingMethod] = useState('standard');
-  const [giftWrap, setGiftWrap] = useState(false);
 
   // Valid promo codes
   const validPromoCodes = {
@@ -86,13 +85,13 @@ const CartPage = ({ onCheckoutComplete }) => {
   };
 
   // Calculate gift wrap cost
-  const giftWrapCost = giftWrap ? 4.99 : 0;
+  // const giftWrapCost = giftWrap ? 4.99 : 0;
 
   // Calculate discount amount
   const discountAmount = promoApplied ? (discount.type === 'percentage' ? (subtotal * discount.discount / 100) : discount.discount) : 0;
 
   // Calculate total
-  const total = subtotal + shippingCost() + giftWrapCost - discountAmount;
+  const total = subtotal + shippingCost() - discountAmount;
 
   // Update quantity
   const handleUpdateQuantity = (itemId, size, color, newQuantity) => {
@@ -228,12 +227,10 @@ const CartPage = ({ onCheckoutComplete }) => {
       items: cartItems,
       subtotal,
       shipping: shippingCost(),
-      giftWrapCost: giftWrapCost,
       discount: discountAmount,
       total,
       promoApplied: promoApplied ? discount.name : null,
       shippingMethod,
-      giftWrapEnabled: giftWrap,
       orderDate: new Date().toISOString(),
       orderNumber: 'TRX-' + Math.random().toString(36).substr(2, 8).toUpperCase()
     };
@@ -432,17 +429,6 @@ const CartPage = ({ onCheckoutComplete }) => {
                 </div>
               </div>
               
-              <div className="summary-row">
-                <span>Gift Wrap</span>
-                <label className="gift-wrap-option">
-                  <input
-                    type="checkbox"
-                    checked={giftWrap}
-                    onChange={(e) => setGiftWrap(e.target.checked)}
-                  />
-                  <span>Add gift wrapping (+$4.99)</span>
-                </label>
-              </div>
               
               {/* Promo Code Section */}
               <div className="promo-section">
