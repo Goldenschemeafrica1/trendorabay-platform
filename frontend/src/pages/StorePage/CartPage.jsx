@@ -228,12 +228,12 @@ const CartPage = ({ onCheckoutComplete }) => {
       items: cartItems,
       subtotal,
       shipping: shippingCost(),
-      giftWrap: giftWrapCost,
+      giftWrapCost: giftWrapCost,
       discount: discountAmount,
       total,
       promoApplied: promoApplied ? discount.name : null,
       shippingMethod,
-      giftWrap,
+      giftWrapEnabled: giftWrap,
       orderDate: new Date().toISOString(),
       orderNumber: 'TRX-' + Math.random().toString(36).substr(2, 8).toUpperCase()
     };
