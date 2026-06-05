@@ -7,5 +7,6 @@
       "destination": "/index.html"
     }
   ],
-  "cleanUrls": true
+  "cleanUrls": true,
+  "_comment": "Cache bust: 2024-06-05"
 }
