@@ -295,7 +295,7 @@ const PodcastPage = () => {
                 <iframe
                   width="100%"
                   height="100%"
-                  src="https://www.youtube.com/embed/LXb3EKWsInQ"
+                  src="https://www.youtube.com/embed/OMRVcaWzYFc"
                   title="YouTube video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
