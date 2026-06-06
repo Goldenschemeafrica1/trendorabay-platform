@@ -378,7 +378,7 @@ const MagazineGrid = ({
 }) => {
   const [magazines, setMagazines] = useState([]);
   const [filteredMagazines, setFilteredMagazines] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('newest');
@@ -392,16 +392,9 @@ const MagazineGrid = ({
       setMagazines(externalMagazines);
       setLoading(externalLoading);
     } else {
-      // Fetch sample magazines
-      const fetchMagazines = () => {
-        setLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-          setMagazines(sampleMagazines);
-          setLoading(false);
-        }, 500);
-      };
-      fetchMagazines();
+      // Use sample magazines directly without delay
+      setMagazines(sampleMagazines);
+      setLoading(false);
     }
   }, [externalMagazines, externalLoading]);
 
