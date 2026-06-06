@@ -415,9 +415,9 @@ const FeaturedStories = () => {
         <div className="advertisement-section-wrapper">
           <div className="ad-label">Advertisement</div>
           <div className="advertisement-section">
-            <img 
-              src="https://images.unsplash.com/photo-1603732551681-1ed37185a5e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
-              alt="Advertisement" 
+            <img
+              src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=300&fit=crop"
+              alt="Advertisement"
               className="ad-image"
               loading="lazy"
             />
