@@ -51,7 +51,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: color 0.2s ease;
 }
 
 .view-all-link i {
@@ -825,54 +824,20 @@
 
 /* ===== Chevron Left Icon ===== */
 .chevron-left-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 200px;
-  flex-shrink: 0;
-  position: absolute;
-  left: -13px;
-  top: 10px;
-  z-index: 10;
+  display: none;
 }
 
 .chevron-left-icon {
-  font-size: 24px;
-  color: #e63946;
-  opacity: 0.8;
-  transition: all 0.3s ease;
-}
-
-.chevron-left-icon:hover {
-  opacity: 1;
-  color: #d62828;
+  display: none;
 }
 
 /* ===== Chevron Right Icon ===== */
 .chevron-right-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 200px;
-  flex-shrink: 0;
-  position: absolute;
-  right: 0px;
-  top: 10px;
-  z-index: 10;
+  display: none;
 }
 
 .chevron-right-icon {
-  font-size: 24px;
-  color: #e63946;
-  opacity: 0.8;
-  transition: all 0.3s ease;
-}
-
-.chevron-right-icon:hover {
-  opacity: 1;
-  color: #d62828;
+  display: none;
 }
 
 /* Optional: Remove hover effect for magazine cover */

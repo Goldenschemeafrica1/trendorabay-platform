@@ -249,7 +249,7 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
   return (
     <section className="latest-magazines">
       <div className="container">
-        {/* <div className="latest-magazines-header">
+        <div className="latest-magazines-header">
           <div className="header-left">
             <h2>
               <span className="accent">✦</span> Latest Magazines
@@ -260,7 +260,7 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
               View All <i className="fas fa-arrow-right"></i>
             </Link>
           )}
-        </div> */}
+        </div>
 
         <div className="magazines-scroll-container" ref={scrollContainerRef}>
           <div className="magazines-grid-wrapper">
@@ -309,16 +309,8 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
             </div>
           ))}
           </div>
-          
-          {/* Sticky Chevron Icons */}
-          <div className="chevron-left-container">
-            <i className="fas fa-chevron-left chevron-left-icon"></i>
           </div>
-          <div className="chevron-right-container">
-            <i className="fas fa-chevron-right chevron-right-icon"></i>
-          </div>
-          </div>
-          
+
                   </div>
 
 

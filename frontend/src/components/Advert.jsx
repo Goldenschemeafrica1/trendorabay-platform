@@ -5,7 +5,7 @@ import './Advert.css';
 const Advert = ({ 
   title = "Special Offer - Tech Collection",
   description = "Discover our curated selection of tech magazines and books.",
-  imageUrl = "/assets/african.jpeg",
+  imageUrl = "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=200&fit=crop",
   badge = "Ad",
   badgeColor = '#01ace0', 
   variant = 'default',
@@ -14,6 +14,7 @@ const Advert = ({
   return (
     <div className="advert">
       {sponsored && <span className="advert__sponsored-tag">Ad</span>}
+      <img src={imageUrl} alt="Advertisement" className="advert__image" />
     </div>
   );
 };
