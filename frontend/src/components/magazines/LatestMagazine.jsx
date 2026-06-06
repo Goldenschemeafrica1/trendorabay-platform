@@ -303,9 +303,6 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
                   <span className="rating-number">{magazine.rating}</span>
                 </div>
               </div>
-
-              {/* African pattern accent */}
-              <div className="card-pattern"></div>
             </div>
           ))}
           </div>

@@ -874,9 +874,11 @@
 }
 
 .related-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
 }
 
 .related-card {
@@ -885,6 +887,8 @@
   border-radius: 16px;
   overflow: hidden;
   border: none;
+  flex-shrink: 0;
+  width: 200px;
 }
 
 
@@ -1193,7 +1197,7 @@
   }
 
   .related-grid {
-    grid-template-columns: repeat(2, 1fr);
+    flex-direction: row;
   }
 
   .info-title {
@@ -1262,7 +1266,7 @@
   }
 
   .related-grid {
-    grid-template-columns: 1fr;
+    flex-direction: row;
   }
 
   .preview-navigation {

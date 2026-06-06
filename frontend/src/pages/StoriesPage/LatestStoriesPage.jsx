@@ -6,7 +6,6 @@ const LatestStoriesPage = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [viewMode, setViewMode] = useState('grid');
   const [sortBy, setSortBy] = useState('latest');
 
   // Categories for filtering
@@ -114,7 +113,7 @@ const LatestStoriesPage = () => {
       categoryName: "Urban Culture & Trends",
       readTime: 9,
       publishedDate: "2024-01-16",
-      imageUrl: "https://images.unsplash.com/photo-1589927986089-35812388d0b8?w=800&auto=format",
+      imageUrl: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=800&auto=format",
       likes: 634,
       views: 4560,
       featured: false,
@@ -251,7 +250,7 @@ const LatestStoriesPage = () => {
           >
             {categories.map(category => (
               <option key={category.id} value={category.id}>
-                {category.icon} {category.name}
+                {category.name}
               </option>
             ))}
           </select>
@@ -266,34 +265,18 @@ const LatestStoriesPage = () => {
             <option value="liked">Most Liked</option>
             <option value="read-time">Quick Reads</option>
           </select>
-
-          <div className="view-toggle">
-            <button
-              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-              onClick={() => setViewMode('grid')}
-            >
-              Grid
-            </button>
-            <button
-              className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-              onClick={() => setViewMode('list')}
-            >
-              List
-            </button>
-          </div>
         </div>
       </div>
 
       {/* Stories Grid */}
       <div className="latest-stories-content">
         {filteredStories.length > 0 ? (
-          <div className={`stories-grid ${viewMode}`}>
+          <div className="stories-grid">
             {filteredStories.map(story => (
-              <article key={story.id} className={`story-card ${viewMode}`}>
+              <article key={story.id} className="story-card">
                 <Link to={`/stories/${story.id}`} className="story-link">
                   <div className="story-image">
                     <img src={story.imageUrl} alt={story.title} loading="lazy" />
-                    {story.featured && <span className="featured-badge">Featured</span>}
                   </div>
                   <div className="story-content">
                     <div className="story-category">{story.categoryName}</div>
@@ -346,13 +329,6 @@ const LatestStoriesPage = () => {
             <button>Subscribe</button>
           </div>
         </div>
-      </div>
-
-      {/* Back Navigation */}
-      <div className="back-navigation">
-        <Link to="/stories" className="back-to-stories">
-          ← Back to All Stories
-        </Link>
       </div>
     </div>
   );

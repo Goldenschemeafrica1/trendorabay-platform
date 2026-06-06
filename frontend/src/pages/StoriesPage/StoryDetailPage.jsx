@@ -242,7 +242,7 @@ const StoryDetailPage = () => {
 
       {/* Back Navigation */}
       <div className="story-navigation">
-        <Link to="/stories" className="back-to-stories">
+        <Link to="/stories/latest" className="back-to-stories">
           ← Back to All Stories
         </Link>
       </div>

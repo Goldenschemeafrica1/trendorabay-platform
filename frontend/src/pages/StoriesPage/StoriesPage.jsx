@@ -144,18 +144,18 @@ const StoriesPage = () => {
       {/* Category Filter */}
       <section className="category-filter">
         <div className="container">
-          <div className="category-buttons">
-            {categories.map(category => (
-              <button
-                key={category.id}
-                data-category={category.id}
-                className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
-                onClick={() => handleCategoryChange(category.id)}
-              >
-                <span className="category-icon">{category.icon}</span>
-                {category.name}
-              </button>
-            ))}
+          <div className="category-dropdown">
+            <select
+              value={selectedCategory}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className="category-select"
+            >
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </section>

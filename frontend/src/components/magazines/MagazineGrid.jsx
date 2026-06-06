@@ -81,7 +81,7 @@ const sampleMagazines = [
   },
   {
     id: 10,
-    category: 'Business & Entrepreneurship',
+    category: 'Business',
     subcategory: 'Business',
     issue: 'Vol. 2 / October 2026',
     coverImage: '/womeninbusiness.jpeg',
@@ -353,12 +353,14 @@ const sampleMagazines = [
   },
 ];
 
+export { sampleMagazines };
+
 // Categories for filtering
 const categories = [
   'All Categories',
   'Tech & Innovation',
   'Fashion & Style',
-  'Business & Entrepreneurship',
+  'Business',
   'Street Culture & Trends',
   'Real Estate & Property',
   'Lifestyle & Wellness',

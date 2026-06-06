@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addItem } from '../../store/slices/cartSlice';
 import { toast } from 'react-toastify';
+import { sampleMagazines as magazinesFromGrid } from './MagazineGrid';
 import './MagazineDetails.css';
 
 // Sample magazine data - same as LatestMagazine component
@@ -65,7 +66,7 @@ const sampleMagazines = [
         comment: 'The 30 Under 30 list is inspiring. Keep up the great work!',
       },
     ],
-    relatedMagazines: [2, 3, 4, 7],
+    relatedMagazines: [2, 3, 4, 7, 8],
   },
   {
     id: 2,
@@ -126,7 +127,7 @@ const sampleMagazines = [
         comment: 'Absolutely stunning fashion photography! Love the focus on African designers.',
       },
     ],
-    relatedMagazines: [1, 6, 7],
+    relatedMagazines: [1, 6, 7, 8, 9],
   },
   {
     id: 3,
@@ -185,7 +186,7 @@ const sampleMagazines = [
         comment: 'Great travel inspiration! Already planning my next trip.',
       },
     ],
-    relatedMagazines: [1, 8],
+    relatedMagazines: [1, 8, 2, 6, 7],
   },
   {
     id: 4,
@@ -244,7 +245,7 @@ const sampleMagazines = [
         comment: 'Comprehensive sports coverage. Love the focus on African athletes!',
       },
     ],
-    relatedMagazines: [1, 5],
+    relatedMagazines: [1, 5, 4, 3, 12],
   },
   {
     id: 5,
@@ -303,7 +304,7 @@ const sampleMagazines = [
         comment: 'Great motorcycle content! Love the adventure riding section.',
       },
     ],
-    relatedMagazines: [4, 3],
+    relatedMagazines: [4, 3, 12, 1, 8],
   },
   {
     id: 6,
@@ -362,7 +363,7 @@ const sampleMagazines = [
         comment: 'Excellent wellness content. Very informative and practical!',
       },
     ],
-    relatedMagazines: [2, 7],
+    relatedMagazines: [2, 7, 1, 8, 6],
   },
   {
     id: 7,
@@ -480,7 +481,7 @@ const sampleMagazines = [
         comment: 'Rich cultural content! Very educational and inspiring.',
       },
     ],
-    relatedMagazines: [3, 7],
+    relatedMagazines: [3, 7, 1, 8, 6],
   },
   {
     id: 9,
@@ -539,12 +540,12 @@ const sampleMagazines = [
         comment: 'Amazing coverage of African music! Love the artist spotlights.',
       },
     ],
-    relatedMagazines: [1, 8],
+    relatedMagazines: [1, 8, 2, 6, 7],
   },
   {
     id: 10,
     title: 'Women in Business',
-    category: 'Business & Entrepreneurship',
+    category: 'Business',
     subcategory: 'Business',
     issue: 'Vol. 2 / October 2026',
     coverImage: '/womeninbusiness.jpeg',
@@ -598,7 +599,7 @@ const sampleMagazines = [
         comment: 'Inspiring stories of women in business. Very motivational!',
       },
     ],
-    relatedMagazines: [1, 2],
+    relatedMagazines: [1, 2, 6, 7, 8],
   },
   {
     id: 11,
@@ -657,7 +658,7 @@ const sampleMagazines = [
         comment: 'Important coverage of youth in politics. Keep it up!',
       },
     ],
-    relatedMagazines: [1, 10],
+    relatedMagazines: [1, 10, 2, 6, 8],
   },
   {
     id: 12,
@@ -716,7 +717,7 @@ const sampleMagazines = [
         comment: 'Great automotive coverage for the African market!',
       },
     ],
-    relatedMagazines: [4, 5],
+    relatedMagazines: [4, 5, 3, 12, 1],
   },
   {
     id: 13,
@@ -775,7 +776,7 @@ const sampleMagazines = [
         comment: 'My kids love this magazine! Great educational content.',
       },
     ],
-    relatedMagazines: [6, 8],
+    relatedMagazines: [6, 8, 1, 2, 3],
   },
   {
     id: 14,
@@ -834,7 +835,7 @@ const sampleMagazines = [
         comment: 'Great blockchain coverage for the African market!',
       },
     ],
-    relatedMagazines: [1, 14],
+    relatedMagazines: [1, 14, 2, 10, 8],
   },
   {
     id: 15,
@@ -893,7 +894,7 @@ const sampleMagazines = [
         comment: 'Great insights into the fashion business!',
       },
     ],
-    relatedMagazines: [2, 10],
+    relatedMagazines: [2, 10, 1, 6, 8],
   },
   {
     id: 16,
@@ -952,7 +953,7 @@ const sampleMagazines = [
         comment: 'Interesting analysis of social trends in Africa!',
       },
     ],
-    relatedMagazines: [8, 9],
+    relatedMagazines: [8, 9, 1, 2, 6],
   },
   {
     id: 17,
@@ -1011,7 +1012,7 @@ const sampleMagazines = [
         comment: 'Great pet care content for African pet owners!',
       },
     ],
-    relatedMagazines: [6, 13],
+    relatedMagazines: [6, 13, 1, 8, 2],
   },
   {
     id: 18,
@@ -1070,7 +1071,7 @@ const sampleMagazines = [
         comment: 'Inspiring community stories across Africa!',
       },
     ],
-    relatedMagazines: [8, 10],
+    relatedMagazines: [8, 10, 1, 2, 6],
   },
   {
     id: 19,
@@ -1129,7 +1130,7 @@ const sampleMagazines = [
         comment: 'Helpful relationship advice for African readers!',
       },
     ],
-    relatedMagazines: [6, 16],
+    relatedMagazines: [6, 16, 1, 8, 2],
   },
   {
     id: 20,
@@ -1188,7 +1189,7 @@ const sampleMagazines = [
         comment: 'Excellent investment advice for the African market!',
       },
     ],
-    relatedMagazines: [1, 10],
+    relatedMagazines: [1, 10, 2, 6, 8],
   },
   {
     id: 21,
@@ -1247,7 +1248,7 @@ const sampleMagazines = [
         comment: 'Great coverage of African dining and nightlife!',
       },
     ],
-    relatedMagazines: [2, 6],
+    relatedMagazines: [2, 6, 1, 8, 9],
   },
   {
     id: 22,
@@ -1306,7 +1307,7 @@ const sampleMagazines = [
         comment: 'Amazing coverage of African gaming!',
       },
     ],
-    relatedMagazines: [1, 9],
+    relatedMagazines: [1, 9, 4, 5, 12],
   },
   {
     id: 23,
@@ -1365,7 +1366,7 @@ const sampleMagazines = [
         comment: 'Love the celebration of matatu culture!',
       },
     ],
-    relatedMagazines: [5, 8],
+    relatedMagazines: [5, 8, 1, 3, 4],
   },
   {
     id: 24,
@@ -1424,7 +1425,7 @@ const sampleMagazines = [
         comment: 'Great boxing coverage for African fighters!',
       },
     ],
-    relatedMagazines: [4, 22],
+    relatedMagazines: [4, 22, 1, 5, 12],
   },
   {
     id: 25,
@@ -1483,7 +1484,7 @@ const sampleMagazines = [
         comment: 'Inspiring leadership content for African leaders!',
       },
     ],
-    relatedMagazines: [10, 20],
+    relatedMagazines: [10, 20, 1, 2, 6],
   },
   {
     id: 26,
@@ -1542,7 +1543,7 @@ const sampleMagazines = [
         comment: 'Great photography showcase from across Africa!',
       },
     ],
-    relatedMagazines: [7, 8],
+    relatedMagazines: [7, 8, 1, 2, 3],
   },
   {
     id: 27,
@@ -1601,7 +1602,7 @@ const sampleMagazines = [
         comment: 'Beautiful celebration of African unity!',
       },
     ],
-    relatedMagazines: [8, 18],
+    relatedMagazines: [8, 18, 1, 2, 3],
   },
   {
     id: 28,
@@ -1644,7 +1645,7 @@ const sampleMagazines = [
         comment: 'Great automotive content!',
       },
     ],
-    relatedMagazines: [12, 5],
+    relatedMagazines: [12, 5, 4, 3, 1],
   },
   {
     id: 29,
@@ -1687,7 +1688,7 @@ const sampleMagazines = [
         comment: 'Amazing fashion insights!',
       },
     ],
-    relatedMagazines: [2, 15],
+    relatedMagazines: [2, 15, 1, 10, 6],
   },
   {
     id: 30,
@@ -1730,7 +1731,7 @@ const sampleMagazines = [
         comment: 'Perfect blend of style and business!',
       },
     ],
-    relatedMagazines: [2, 29],
+    relatedMagazines: [2, 29, 1, 10, 6],
   },
   {
     id: 31,
@@ -1773,7 +1774,7 @@ const sampleMagazines = [
         comment: 'My kids love this magazine!',
       },
     ],
-    relatedMagazines: [13, 17],
+    relatedMagazines: [13, 17, 6, 1, 8],
   },
   {
     id: 32,
@@ -1816,7 +1817,7 @@ const sampleMagazines = [
         comment: 'Great family resource!',
       },
     ],
-    relatedMagazines: [13, 31],
+    relatedMagazines: [13, 31, 17, 6, 1],
   },
   {
     id: 33,
@@ -1859,7 +1860,7 @@ const sampleMagazines = [
         comment: 'Great music coverage!',
       },
     ],
-    relatedMagazines: [9, 22],
+    relatedMagazines: [9, 22, 1, 8, 2],
   },
   {
     id: 34,
@@ -1902,7 +1903,7 @@ const sampleMagazines = [
         comment: 'Love discovering new artists!',
       },
     ],
-    relatedMagazines: [9, 33],
+    relatedMagazines: [9, 33, 1, 8, 22],
   },
   {
     id: 35,
@@ -1945,7 +1946,7 @@ const sampleMagazines = [
         comment: 'Perfect year-end summary!',
       },
     ],
-    relatedMagazines: [9, 34],
+    relatedMagazines: [9, 34, 33, 1, 8],
   },
   {
     id: 36,
@@ -1988,7 +1989,7 @@ const sampleMagazines = [
         comment: 'Excited for the new year!',
       },
     ],
-    relatedMagazines: [9, 35],
+    relatedMagazines: [9, 35, 34, 33, 1],
   },
   {
     id: 37,
@@ -2031,7 +2032,7 @@ const sampleMagazines = [
         comment: 'Perfect Valentine issue!',
       },
     ],
-    relatedMagazines: [9, 36],
+    relatedMagazines: [9, 36, 35, 34, 1],
   },
   {
     id: 38,
@@ -2074,7 +2075,7 @@ const sampleMagazines = [
         comment: 'Ready for festival season!',
       },
     ],
-    relatedMagazines: [9, 37],
+    relatedMagazines: [9, 37, 36, 35, 1],
   },
   {
     id: 39,
@@ -2117,7 +2118,7 @@ const sampleMagazines = [
         comment: 'Great production insights!',
       },
     ],
-    relatedMagazines: [9, 38],
+    relatedMagazines: [9, 38, 37, 36, 1],
   },
   {
     id: 40,
@@ -2160,7 +2161,7 @@ const sampleMagazines = [
         comment: 'Perfect summer vibes!',
       },
     ],
-    relatedMagazines: [9, 39],
+    relatedMagazines: [9, 39, 38, 37, 1],
   },
   {
     id: 41,
@@ -2203,7 +2204,7 @@ const sampleMagazines = [
         comment: 'Great mid-year summary!',
       },
     ],
-    relatedMagazines: [9, 40],
+    relatedMagazines: [9, 40, 39, 38, 1],
   },
   {
     id: 42,
@@ -2246,7 +2247,7 @@ const sampleMagazines = [
         comment: 'Inspiring youth leadership!',
       },
     ],
-    relatedMagazines: [11, 18],
+    relatedMagazines: [11, 18, 1, 10, 8],
   },
   {
     id: 43,
@@ -2289,7 +2290,7 @@ const sampleMagazines = [
         comment: 'Great policy insights!',
       },
     ],
-    relatedMagazines: [11, 42],
+    relatedMagazines: [11, 42, 18, 1, 10],
   },
 ];
 
@@ -2307,7 +2308,7 @@ const relatedMagazinesData = {
     title: 'African Business Review',
     coverImage: 'https://images.unsplash.com/photo-1542744173-05336fcc7ad4?w=400&auto=format',
     price: 9.99,
-    category: 'Business & Entrepreneurship',
+    category: 'Business',
   },
   4: {
     id: 4,
@@ -2349,8 +2350,8 @@ const MagazineDetails = () => {
         setMagazine(foundMagazine || null);
         
         if (foundMagazine) {
-          // Fetch related magazines (simplified)
-          const related = sampleMagazines.filter(m => 
+          // Fetch related magazines from MagazineGrid
+          const related = magazinesFromGrid.filter(m => 
             foundMagazine.relatedMagazines.includes(m.id)
           );
           setRelatedMagazines(related);

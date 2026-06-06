@@ -22,8 +22,8 @@ const StorePage = () => {
     { id: 'magazine', name: 'Magazines', icon: '📖', count: 0 },
     { id: 'apparel', name: 'Apparel', icon: '👕', count: 0 },
     { id: 'accessories', name: 'Accessories', icon: '⌚', count: 0 },
-    { id: 'art', name: 'Art & Prints', icon: '🎨', count: 0 },
-    { id: 'digital', name: 'Digital Products', icon: '💻', count: 0 }
+    { id: 'art', name: 'Art', icon: '🎨', count: 0 },
+    { id: 'digital', name: 'Digital', icon: '💻', count: 0 }
   ];
 
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
@@ -54,8 +54,8 @@ const StorePage = () => {
       category: 'apparel',
       price: 79.99,
       originalPrice: null,
-      image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=500&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1578681994509-bad0fa5ef46e?w=400&h=500&fit=crop',
+      image: '/hoodie.jpeg',
+      hoverImage: '/hoodie1.jpeg',
       description: 'Premium 100% cotton hoodie featuring the Trendorabay logo and African-inspired patterns. Perfect for casual wear.',
       badge: 'Best Seller',
       badgeColor: '#2E8B57',
@@ -109,7 +109,7 @@ const StorePage = () => {
       category: 'apparel',
       price: 44.99,
       originalPrice: 59.99,
-      image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop',
+      image: '/tshirt1.jpeg',
       hoverImage: 'https://images.unsplash.com/photo-1503342219980-2c4cd1a7e331?w=400&h=500&fit=crop',
       description: '100% organic cotton t-shirt featuring original artwork by Kenyan artists. Ethically made.',
       badge: 'Eco-Friendly',
@@ -247,6 +247,82 @@ const StorePage = () => {
       featured: false,
       new: true,
       sale: false
+    },
+    {
+      id: 13,
+      name: 'Trendorabay Hoodie - Classic Black',
+      category: 'apparel',
+      price: 84.99,
+      originalPrice: null,
+      image: '/hoodie3.jpeg',
+      hoverImage: '/hoodie4.jpeg',
+      description: 'Classic black hoodie with premium cotton blend. Features subtle Trendorabay branding.',
+      badge: 'New',
+      badgeColor: '#E67E22',
+      inStock: true,
+      rating: 4.7,
+      reviews: 45,
+      featured: false,
+      new: true,
+      sale: false,
+      sizes: ['S', 'M', 'L', 'XL', 'XXL']
+    },
+    {
+      id: 14,
+      name: 'Trendorabay Hoodie - Limited Edition',
+      category: 'apparel',
+      price: 99.99,
+      originalPrice: 129.99,
+      image: '/hoodie5.jpeg',
+      hoverImage: '/hoodie6.jpeg',
+      description: 'Limited edition hoodie with exclusive African art print. Only 100 pieces available.',
+      badge: 'Limited',
+      badgeColor: '#C4451B',
+      inStock: true,
+      rating: 4.9,
+      reviews: 28,
+      featured: true,
+      new: false,
+      sale: true,
+      sizes: ['M', 'L', 'XL']
+    },
+    {
+      id: 15,
+      name: 'Trendorabay Hoodie - Street Style',
+      category: 'apparel',
+      price: 89.99,
+      originalPrice: null,
+      image: '/hoodie7.jpeg',
+      hoverImage: '/hoodie8.jpeg',
+      description: 'Street-style inspired hoodie with bold graphics and comfortable fit.',
+      badge: 'Trending',
+      badgeColor: '#9B59B6',
+      inStock: true,
+      rating: 4.6,
+      reviews: 52,
+      featured: false,
+      new: false,
+      sale: false,
+      sizes: ['S', 'M', 'L', 'XL']
+    },
+    {
+      id: 16,
+      name: 'Trendorabay Hoodie - Premium Collection',
+      category: 'apparel',
+      price: 109.99,
+      originalPrice: null,
+      image: '/hoodie9.jpeg',
+      hoverImage: '/hoodie.jpeg',
+      description: 'Premium collection hoodie with luxury materials and exclusive design.',
+      badge: 'Premium',
+      badgeColor: '#2E8B57',
+      inStock: true,
+      rating: 5.0,
+      reviews: 18,
+      featured: true,
+      new: true,
+      sale: false,
+      sizes: ['M', 'L', 'XL', 'XXL']
     }
   ];
 
@@ -600,7 +676,9 @@ const StorePage = () => {
                     </button>
                   </div>
                   <div className="product-info">
-                    <div className="product-category">{product.category}</div>
+                    <div className="product-category">
+                      {categories.find(c => c.id === product.category)?.name || product.category}
+                    </div>
                     <h3 className="product-name">{product.name}</h3>
                     <div className="product-price">
                       <span className="current-price">{formatPrice(product.price)}</span>

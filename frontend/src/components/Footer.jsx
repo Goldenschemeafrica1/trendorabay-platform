@@ -32,7 +32,6 @@ const Footer = () => {
     { name: 'Merchandise', path: '/merchandise' },
     { name: 'Gift Cards', path: '/gift-cards' },
     { name: 'Cart', path: '/cart' },
-    { name: 'Checkout', path: '/checkout' },
   ];
 
   const communityLinks = [
