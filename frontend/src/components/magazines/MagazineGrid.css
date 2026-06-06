@@ -348,7 +348,7 @@
 /* Magazine Cover */
 .magazine-cover-wrapper {
   position: relative;
-  height: 240px;
+  height: 180px;
   overflow: hidden;
   border-bottom: 3px solid #b87c4b;
   flex-shrink: 0;
@@ -426,7 +426,7 @@
 
 /* Magazine Details */
 .magazine-details {
-  padding: 20px;
+  padding: 12px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -434,15 +434,27 @@
 }
 
 .magazine-category {
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #b87c4b;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   display: flex;
   align-items: center;
   gap: 4px;
   font-weight: 600;
+}
+
+.magazine-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.magazine-rating i {
+  color: #ffb800;
+  font-size: 10px;
 }
 
 .category-icon {

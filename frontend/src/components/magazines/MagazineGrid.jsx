@@ -9,141 +9,219 @@ import './MagazineGrid.css';
 const sampleMagazines = [
   {
     id: 1,
-    title: '',
     category: 'Tech & Innovation',
     subcategory: 'Technology',
-    issue: '',
+    issue: 'Vol. 12 / Q1 2026',
     coverImage: '/assets/Tech.jpeg',
-    description: '',
-    price: 5.99,
-    subscriptionPrice: 24.00,
-    readers: 1240,
-    rating: 4.8,
-    isNew: true,
-    isFeatured: true,
-    editorPick: true,
-    publishDate: '2026-01-15',
+    rating: 5.0,
   },
   {
     id: 2,
-    title: '',
     category: 'Fashion & Style',
     subcategory: 'Fashion',
-    issue: '',
+    issue: 'Vol. 8 / Spring 2026',
     coverImage: '/assets/fashion.jpeg',
-    description: '',
-    price: 2.99,
-    subscriptionPrice: 8.00,
-    readers: 3200,
-    rating: 4.9,
-    isNew: true,
-    isFeatured: true,
-    publishDate: '2026-02-01',
+    rating: 5.0,
   },
   {
     id: 3,
-    title: '',
-    category: 'Music & Entertainment',
-    subcategory: 'Music',
-    issue: '',
-    coverImage: '/assets/music.jpeg',
-    description: '',
-    price: 3.99,
-    subscriptionPrice: 12.00,
-    readers: 892,
-    rating: 4.7,
-    isNew: true,
-    publishDate: '2026-01-20',
+    category: 'Travel & Adventure',
+    subcategory: 'Travel',
+    issue: 'Vol. 15 / March 2026',
+    coverImage: '/assets/travel.jpeg',
+    rating: 5.0,
   },
   {
     id: 4,
-    title: '',
     category: 'Sports Trends',
     subcategory: 'Sports',
-    issue: '',
+    issue: 'Vol. 6 / April 2026',
     coverImage: '/assets/sports.jpeg',
-    description: '',
-    price: 1.99,
-    subscriptionPrice: 7.00,
-    readers: 2100,
-    rating: 4.6,
-    isNew: true,
-    publishDate: '2026-02-10',
+    rating: 5.0,
   },
   {
     id: 5,
-    title: '',
     category: 'Riders',
-    subcategory: 'Lifestyle',
-    issue: '',
+    subcategory: 'Motorcycle',
+    issue: 'Vol. 4 / May 2026',
     coverImage: '/assets/riders.jpeg',
-    description: '',
-    price: 2.99,
-    subscriptionPrice: 10.00,
-    readers: 567,
-    rating: 4.5,
-    isNew: true,
-    publishDate: '2026-02-05',
+    rating: 5.0,
   },
   {
     id: 6,
-    title: '',
     category: 'Lifestyle & Wellness',
-    subcategory: 'Lifestyle',
-    issue: '',
+    subcategory: 'Health',
+    issue: 'Vol. 3 / June 2026',
     coverImage: '/assets/well_dress.jpeg',
-    description: '',
-    price: 4.99,
-    subscriptionPrice: 13.00,
-    readers: 1450,
-    rating: 4.8,
-    isNew: true,
-    publishDate: '2026-01-28',
+    rating: 5.0,
   },
   {
     id: 7,
-    title: '',
-    category: 'Travel & Adventure',
-    subcategory: 'Travel',
-    issue: '',
-    coverImage: '/assets/travel.jpeg',
-    description: '',
-    price: 10.99,
-    subscriptionPrice: 22.00,
-    readers: 1870,
-    rating: 4.7,
-    isNew: true,
-    publishDate: '2026-02-12',
+    category: 'Art & Photography',
+    subcategory: 'Art',
+    issue: 'Vol. 9 / July 2026',
+    coverImage: '/assets/art.jpeg',
+    rating: 5.0,
   },
   {
     id: 8,
-    title: '',
-    category: 'Art & Photography',
-    subcategory: 'Art',
-    issue: '',
-    coverImage: '/assets/art.jpeg',
-    description: '',
-    price: 11.99,
-    subscriptionPrice: 40.00,
-    readers: 923,
-    rating: 4.9,
-    isNew: true,
-    publishDate: '2026-01-18',
+    category: 'Culture',
+    subcategory: 'Cultural',
+    issue: 'Vol. 11 / August 2026',
+    coverImage: '/assets/african.jpeg',
+    rating: 5.0,
   },
   {
     id: 9,
-    title: '',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 1 / September 2026',
+    coverImage: '/music.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 10,
+    category: 'Business & Entrepreneurship',
+    subcategory: 'Business',
+    issue: 'Vol. 2 / October 2026',
+    coverImage: '/womeninbusiness.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 11,
+    category: 'Politics & Policy',
+    subcategory: 'Politics',
+    issue: 'Vol. 1 / November 2026',
+    coverImage: '/youthinpolicy.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 12,
+    category: 'Automotive',
+    subcategory: 'Cars',
+    issue: 'Vol. 1 / December 2026',
+    coverImage: '/automotives.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 13,
+    category: 'Kids & Family',
+    subcategory: 'Kids',
+    issue: 'Vol. 1 / January 2027',
+    coverImage: '/kids.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 14,
+    category: 'Technology',
+    subcategory: 'Blockchain',
+    issue: 'Vol. 1 / February 2027',
+    coverImage: '/blockchain.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 15,
+    category: 'Fashion & Business',
+    subcategory: 'Fashion',
+    issue: 'Vol. 1 / March 2027',
+    coverImage: '/fashionandbusiness.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 16,
+    category: 'Lifestyle',
+    subcategory: 'Social',
+    issue: 'Vol. 1 / April 2027',
+    coverImage: '/socialtrends.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 17,
+    category: 'Lifestyle',
+    subcategory: 'Pets',
+    issue: 'Vol. 1 / May 2027',
+    coverImage: '/pets.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 18,
+    category: 'Community',
+    subcategory: 'Community',
+    issue: 'Vol. 1 / June 2027',
+    coverImage: '/community.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 19,
+    category: 'Lifestyle',
+    subcategory: 'Relationships',
+    issue: 'Vol. 1 / July 2027',
+    coverImage: '/relationship.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 20,
+    category: 'Finance',
+    subcategory: 'Investments',
+    issue: 'Vol. 1 / August 2027',
+    coverImage: '/financeandinvestment.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 21,
+    category: 'Food & Beverage',
+    subcategory: 'Hospitality',
+    issue: 'Vol. 1 / September 2027',
+    coverImage: '/barandrestaurant.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 22,
+    category: 'Gaming',
+    subcategory: 'Gaming',
+    issue: 'Vol. 1 / October 2027',
+    coverImage: '/gamers.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 23,
     category: 'Culture',
-    subcategory: 'Culture',
-    issue: '',
-    coverImage: '/assets/african.jpeg',
-    description: '',
-    price: 6.99,
-    subscriptionPrice: 25.00,
-    readers: 670,
-    rating: 4.6,
-    isNew: false,
-    publishDate: '2025-12-10',
+    subcategory: 'Transportation',
+    issue: 'Vol. 1 / November 2027',
+    coverImage: '/matatuculture.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 24,
+    category: 'Sports',
+    subcategory: 'Boxing',
+    issue: 'Vol. 1 / December 2027',
+    coverImage: '/boxing.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 25,
+    category: 'Leadership',
+    subcategory: 'Business',
+    issue: 'Vol. 1 / January 2028',
+    coverImage: '/leadingwithpurpose.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 26,
+    category: 'Art & Photography',
+    subcategory: 'Photography',
+    issue: 'Vol. 1 / February 2028',
+    coverImage: '/photography.jpeg',
+    rating: 5.0,
+  },
+  {
+    id: 27,
+    category: 'Culture',
+    subcategory: 'Unity',
+    issue: 'Vol. 1 / March 2028',
+    coverImage: '/theunity.jpeg',
+    rating: 5.0,
   },
 ];
 
@@ -454,52 +532,23 @@ const MagazineGrid = ({
             {viewMode === 'grid' ? (
               /* Grid View */
               <div className="magazine-card">
-                <img 
-                  src={magazine.coverImage} 
-                  alt={magazine.title}
-                  className="magazine-cover"
-                  loading="lazy"
-                />
+                <Link to={`/magazines/${magazine.id}`}>
+                  <img 
+                    src={magazine.coverImage} 
+                    alt={magazine.title}
+                    className="magazine-cover"
+                    loading="lazy"
+                  />
+                </Link>
 
                 <div className="magazine-details">
                   <div className="magazine-category">
                     {magazine.category}
                   </div>
-                  
-                  <h3 className="magazine-title">
-                    <Link to={`/magazines/${magazine.id}`}>
-                      {magazine.title}
-                    </Link>
-                  </h3>
-                  
-                  <p className="magazine-description">{magazine.description}</p>
-                  
-                  <div className="magazine-pricing">
-                    <div className="price">
-                      <span className="currency">$</span>
-                      <span className="amount">{magazine.price}</span>
-                      <span className="period">/issue</span>
-                    </div>
-                    {magazine.subscriptionPrice && (
-                      <div className="subscription-price">
-                        ${magazine.subscriptionPrice}/year
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="magazine-actions">
-                    <button 
-                      className="add-to-cart-btn"
-                      onClick={() => handleAddToCart(magazine)}
-                    >
-                      <i className="fas fa-shopping-cart"></i>
-                    </button>
-                    <Link 
-                      to={`/magazines/${magazine.id}`}
-                      className="details-btn"
-                    >
-                      Details
-                    </Link>
+                  <div className="magazine-rating">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i key={star} className="fas fa-star"></i>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -507,12 +556,14 @@ const MagazineGrid = ({
               /* List View */
               <div className="magazine-list-item">
                 <div className="list-cover-wrapper">
-                  <img 
-                    src={magazine.coverImage} 
-                    alt={magazine.title}
-                    className="list-cover"
-                    loading="lazy"
-                  />
+                  <Link to={`/magazines/${magazine.id}`}>
+                    <img 
+                      src={magazine.coverImage} 
+                      alt={magazine.title}
+                      className="list-cover"
+                      loading="lazy"
+                    />
+                  </Link>
                   {magazine.isNew && <span className="list-badge new">New</span>}
                 </div>
 
@@ -533,36 +584,6 @@ const MagazineGrid = ({
                   </div>
 
                   <p className="list-description">{magazine.description}</p>
-                  
-                  <div className="list-meta">
-                    <span><i className="fas fa-users"></i> {magazine.readers.toLocaleString()} readers</span>
-                    <span><i className="fas fa-calendar"></i> {magazine.issue}</span>
-                  </div>
-
-                  <div className="list-footer">
-                    <div className="list-price">
-                      <span className="list-currency">$</span>
-                      <span className="list-amount">{magazine.price}</span>
-                      <span className="list-period">/issue</span>
-                      <span className="list-subscription">or ${magazine.subscriptionPrice}/year</span>
-                    </div>
-                    
-                    <div className="list-actions">
-                      <button 
-                        className="list-cart-btn"
-                        onClick={() => handleAddToCart(magazine)}
-                      >
-                        <i className="fas fa-shopping-cart"></i>
-                        Add to Cart
-                      </button>
-                      <Link 
-                        to={`/magazines/${magazine.id}`}
-                        className="list-details-btn"
-                      >
-                        View Details
-                      </Link>
-                    </div>
-                  </div>
                 </div>
               </div>
             )}

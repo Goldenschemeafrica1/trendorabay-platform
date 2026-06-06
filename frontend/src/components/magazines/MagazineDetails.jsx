@@ -9,32 +9,11 @@ import './MagazineDetails.css';
 const sampleMagazines = [
   {
     id: 1,
-    title: 'AfroTech Quarterly',
     category: 'Tech & Innovation',
     subcategory: 'Technology',
     issue: 'Vol. 12 / Q1 2026',
     coverImage: '/assets/Tech.jpeg',
     coverImageLarge: '/assets/Tech.jpeg',
-    description: 'AI in Africa · Fintech Revolution · 10 Innovators to Watch',
-    fullDescription: `This quarter's issue of AfroTech Quarterly dives deep into the technological revolution sweeping across Africa. From AI startups in Lagos to fintech innovations in Nairobi, we explore how African innovators are shaping the future of technology.
-
-  Stories include:
-  • The Rise of AI in African Agriculture
-  • Kenya's Mobile Money Revolution: 10 Years Later
-  • 30 Under 30: Africa's Top Tech Innovators
-  • How Blockchain is Transforming Land Rights
-  • Investment Guide: Where VCs Are Putting Their Money`,
-    price: 8.99,
-    subscriptionPrice: 24.00,
-    digitalPrice: 8.99,
-    printPrice: 12.99,
-    readers: 1240,
-    rating: 4.8,
-    reviewCount: 89,
-    isNew: true,
-    isFeatured: true,
-    editorPick: true,
-    publishDate: '2026-01-15',
     pages: 128,
     language: 'English',
     publisher: 'Trendorabay Media',
@@ -502,6 +481,1127 @@ const sampleMagazines = [
       },
     ],
     relatedMagazines: [3, 7],
+  },
+  {
+    id: 9,
+    title: 'Music Africa',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 1 / September 2026',
+    coverImage: '/music.jpeg',
+    coverImageLarge: '/music.jpeg',
+    description: 'African Music Scene · Artist Spotlight · Genre Evolution',
+    fullDescription: `Music Africa celebrates the vibrant and diverse music scene across the continent. From traditional rhythms to modern beats, we explore how African music is shaping global culture.
+
+  Features:
+  • African Music Industry Overview
+  • Rising Stars to Watch
+  • Traditional vs Modern Fusion
+  • Music Festival Guide
+  • Producer Spotlight`,
+    price: 8.99,
+    subscriptionPrice: 27.00,
+    digitalPrice: 8.99,
+    printPrice: 12.99,
+    readers: 3500,
+    rating: 4.8,
+    reviewCount: 145,
+    isNew: true,
+    isFeatured: true,
+    editorPick: true,
+    publishDate: '2026-09-01',
+    pages: 116,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'DJ Africa',
+    contributors: [
+      { name: 'Melody Maker', role: 'Music Editor', avatar: 'https://randomuser.me/api/portraits/men/21.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Music Editorial', page: 4 },
+      { title: 'Industry Overview', page: 8 },
+      { title: 'Artist Spotlight', page: 32 },
+      { title: 'Genre Evolution', page: 56 },
+      { title: 'Festival Guide', page: 80 },
+    ],
+    previewPages: [
+      '/music1.jpeg',
+      '/music2.jpeg',
+      '/music3.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Music Fan',
+        avatar: 'https://randomuser.me/api/portraits/men/22.jpg',
+        rating: 5,
+        date: '2026-09-10',
+        comment: 'Amazing coverage of African music! Love the artist spotlights.',
+      },
+    ],
+    relatedMagazines: [1, 8],
+  },
+  {
+    id: 10,
+    title: 'Women in Business',
+    category: 'Business & Entrepreneurship',
+    subcategory: 'Business',
+    issue: 'Vol. 2 / October 2026',
+    coverImage: '/womeninbusiness.jpeg',
+    coverImageLarge: '/womeninbusiness.jpeg',
+    description: 'Female Entrepreneurs · Leadership · Success Stories',
+    fullDescription: `Women in Business highlights the achievements of female entrepreneurs across Africa. From startups to corporate leadership, we celebrate women breaking barriers.
+
+  Stories:
+  • Top Female Entrepreneurs
+  • Leadership Lessons
+  • Startup Success Stories
+  • Work-Life Balance
+  • Investment Tips`,
+    price: 11.99,
+    subscriptionPrice: 36.00,
+    digitalPrice: 11.99,
+    printPrice: 15.99,
+    readers: 2800,
+    rating: 4.9,
+    reviewCount: 167,
+    isNew: true,
+    isFeatured: true,
+    editorPick: true,
+    publishDate: '2026-10-01',
+    pages: 124,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Sarah Business',
+    contributors: [
+      { name: 'Emma Leader', role: 'Business Editor', avatar: 'https://randomuser.me/api/portraits/women/22.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Business Editorial', page: 4 },
+      { title: 'Entrepreneur Spotlight', page: 8 },
+      { title: 'Leadership Lessons', page: 32 },
+      { title: 'Success Stories', page: 56 },
+      { title: 'Investment Guide', page: 80 },
+    ],
+    previewPages: [
+      '/womeninbusiness.jpeg',
+      '/womeninbusiness.jpeg',
+      '/womeninbusiness.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Female Founder',
+        avatar: 'https://randomuser.me/api/portraits/women/23.jpg',
+        rating: 5,
+        date: '2026-10-15',
+        comment: 'Inspiring stories of women in business. Very motivational!',
+      },
+    ],
+    relatedMagazines: [1, 2],
+  },
+  {
+    id: 11,
+    title: 'Youth in Policy',
+    category: 'Politics & Policy',
+    subcategory: 'Politics',
+    issue: 'Vol. 1 / November 2026',
+    coverImage: '/youthinpolicy.jpeg',
+    coverImageLarge: '/youthinpolicy.jpeg',
+    description: 'Youth Leadership · Policy Making · Civic Engagement',
+    fullDescription: `Youth in Policy explores how young Africans are shaping the future of governance and policy across the continent.
+
+  Features:
+  • Young Leaders Making Change
+  • Policy Reform Initiatives
+  • Civic Engagement Guide
+  • Youth in Parliament
+  • Future of African Politics`,
+    price: 9.99,
+    subscriptionPrice: 30.00,
+    digitalPrice: 9.99,
+    printPrice: 13.99,
+    readers: 1900,
+    rating: 4.7,
+    reviewCount: 89,
+    isNew: true,
+    isFeatured: false,
+    editorPick: true,
+    publishDate: '2026-11-01',
+    pages: 108,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Policy Expert',
+    contributors: [
+      { name: 'Young Leader', role: 'Political Analyst', avatar: 'https://randomuser.me/api/portraits/men/23.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Policy Editorial', page: 4 },
+      { title: 'Youth Leadership', page: 8 },
+      { title: 'Policy Reform', page: 32 },
+      { title: 'Civic Engagement', page: 56 },
+      { title: 'Future Politics', page: 80 },
+    ],
+    previewPages: [
+      '/youthinpolicy1.jpeg',
+      '/youthinpolicy3.jpeg',
+      '/youthinpolicy.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Civic Activist',
+        avatar: 'https://randomuser.me/api/portraits/men/24.jpg',
+        rating: 4,
+        date: '2026-11-10',
+        comment: 'Important coverage of youth in politics. Keep it up!',
+      },
+    ],
+    relatedMagazines: [1, 10],
+  },
+  {
+    id: 12,
+    title: 'Automotives Africa',
+    category: 'Automotive',
+    subcategory: 'Cars',
+    issue: 'Vol. 1 / December 2026',
+    coverImage: '/automotives.jpeg',
+    coverImageLarge: '/automotives.jpeg',
+    description: 'Car Reviews · Industry News · Electric Vehicles',
+    fullDescription: `Automotives Africa brings you the latest in the African automotive industry. From car reviews to industry trends, we cover it all.
+
+  Stories:
+  • African Car Market
+  • Electric Vehicle Revolution
+  • Local Manufacturing
+  • Car Reviews
+  • Industry Future`,
+    price: 10.99,
+    subscriptionPrice: 33.00,
+    digitalPrice: 10.99,
+    printPrice: 14.99,
+    readers: 2200,
+    rating: 4.6,
+    reviewCount: 78,
+    isNew: true,
+    isFeatured: false,
+    editorPick: false,
+    publishDate: '2026-12-01',
+    pages: 112,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Auto Expert',
+    contributors: [
+      { name: 'Car Reviewer', role: 'Automotive Journalist', avatar: 'https://randomuser.me/api/portraits/men/25.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Auto Editorial', page: 4 },
+      { title: 'Market Overview', page: 8 },
+      { title: 'EV Revolution', page: 32 },
+      { title: 'Local Manufacturing', page: 56 },
+      { title: 'Car Reviews', page: 80 },
+    ],
+    previewPages: [
+      '/automotives1.jpeg',
+      '/automotives.jpeg',
+      '/automotives.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Car Enthusiast',
+        avatar: 'https://randomuser.me/api/portraits/men/26.jpg',
+        rating: 4,
+        date: '2026-12-10',
+        comment: 'Great automotive coverage for the African market!',
+      },
+    ],
+    relatedMagazines: [4, 5],
+  },
+  {
+    id: 13,
+    title: 'Kids World Africa',
+    category: 'Kids & Family',
+    subcategory: 'Kids',
+    issue: 'Vol. 1 / January 2027',
+    coverImage: '/kids.jpeg',
+    coverImageLarge: '/kids.jpeg',
+    description: 'Children Education · Fun Activities · Parenting Tips',
+    fullDescription: `Kids World Africa is dedicated to children across the continent. Educational content, fun activities, and parenting tips.
+
+  Features:
+  • Educational Activities
+  • African Folktales
+  • Parenting Guide
+  • Kids Health
+  • Creative Learning`,
+    price: 7.99,
+    subscriptionPrice: 24.00,
+    digitalPrice: 7.99,
+    printPrice: 11.99,
+    readers: 4100,
+    rating: 4.8,
+    reviewCount: 198,
+    isNew: true,
+    isFeatured: true,
+    editorPick: true,
+    publishDate: '2027-01-01',
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Kids Editor',
+    contributors: [
+      { name: 'Child Expert', role: 'Education Specialist', avatar: 'https://randomuser.me/api/portraits/women/24.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Kids Editorial', page: 4 },
+      { title: 'Educational Activities', page: 8 },
+      { title: 'African Folktales', page: 32 },
+      { title: 'Parenting Guide', page: 56 },
+      { title: 'Creative Learning', page: 80 },
+    ],
+    previewPages: [
+      '/kids2.jpeg',
+      '/kids3.jpeg',
+      '/kids.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Parent',
+        avatar: 'https://randomuser.me/api/portraits/women/25.jpg',
+        rating: 5,
+        date: '2027-01-15',
+        comment: 'My kids love this magazine! Great educational content.',
+      },
+    ],
+    relatedMagazines: [6, 8],
+  },
+  {
+    id: 14,
+    title: 'Blockchain Africa',
+    category: 'Technology',
+    subcategory: 'Blockchain',
+    issue: 'Vol. 1 / February 2027',
+    coverImage: '/blockchain.jpeg',
+    coverImageLarge: '/blockchain.jpeg',
+    description: 'Cryptocurrency · DeFi · Web3 · Digital Assets',
+    fullDescription: `Blockchain Africa explores the blockchain revolution across the continent. From cryptocurrency to Web3, we cover the future of finance.
+
+  Stories:
+  • African Crypto Adoption
+  • DeFi Revolution
+  • Web3 Development
+  • NFT Market
+  • Digital Assets`,
+    price: 12.99,
+    subscriptionPrice: 39.00,
+    digitalPrice: 12.99,
+    printPrice: 16.99,
+    readers: 1650,
+    rating: 4.7,
+    reviewCount: 92,
+    isNew: true,
+    isFeatured: false,
+    editorPick: true,
+    publishDate: '2027-02-01',
+    pages: 120,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Blockchain Expert',
+    contributors: [
+      { name: 'Crypto Analyst', role: 'Blockchain Writer', avatar: 'https://randomuser.me/api/portraits/men/27.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Blockchain Editorial', page: 4 },
+      { title: 'Crypto Adoption', page: 8 },
+      { title: 'DeFi Revolution', page: 32 },
+      { title: 'Web3 Development', page: 56 },
+      { title: 'NFT Market', page: 80 },
+    ],
+    previewPages: [
+      '/blockchain.jpeg',
+      '/blockchain.jpeg',
+      '/blockchain.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Crypto Investor',
+        avatar: 'https://randomuser.me/api/portraits/men/28.jpg',
+        rating: 4,
+        date: '2027-02-10',
+        comment: 'Great blockchain coverage for the African market!',
+      },
+    ],
+    relatedMagazines: [1, 14],
+  },
+  {
+    id: 15,
+    title: 'Fashion & Business',
+    category: 'Fashion & Business',
+    subcategory: 'Fashion',
+    issue: 'Vol. 1 / March 2027',
+    coverImage: '/fashionandbusiness.jpeg',
+    coverImageLarge: '/fashionandbusiness.jpeg',
+    description: 'Fashion Industry · Business of Style · Brand Building',
+    fullDescription: `Fashion & Business explores the intersection of fashion and business. From brand building to industry trends, we cover it all.
+
+  Features:
+  • Fashion Business Guide
+  • Brand Building
+  • Industry Trends
+  • Fashion Tech
+  • Sustainable Fashion Business`,
+    price: 11.99,
+    subscriptionPrice: 36.00,
+    digitalPrice: 11.99,
+    printPrice: 15.99,
+    readers: 1950,
+    rating: 4.6,
+    reviewCount: 87,
+    isNew: true,
+    isFeatured: false,
+    editorPick: false,
+    publishDate: '2027-03-01',
+    pages: 108,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Fashion Business Editor',
+    contributors: [
+      { name: 'Style Expert', role: 'Fashion Writer', avatar: 'https://randomuser.me/api/portraits/women/26.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Fashion Business Editorial', page: 4 },
+      { title: 'Business Guide', page: 8 },
+      { title: 'Brand Building', page: 32 },
+      { title: 'Industry Trends', page: 56 },
+      { title: 'Fashion Tech', page: 80 },
+    ],
+    previewPages: [
+      '/fashionandbusiness.jpeg',
+      '/fashionandbusiness.jpeg',
+      '/fashionandbusiness.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Fashion Entrepreneur',
+        avatar: 'https://randomuser.me/api/portraits/women/27.jpg',
+        rating: 4,
+        date: '2027-03-10',
+        comment: 'Great insights into the fashion business!',
+      },
+    ],
+    relatedMagazines: [2, 10],
+  },
+  {
+    id: 16,
+    title: 'Social Trends',
+    category: 'Lifestyle',
+    subcategory: 'Social',
+    issue: 'Vol. 1 / April 2027',
+    coverImage: '/socialtrends.jpeg',
+    coverImageLarge: '/socialtrends.jpeg',
+    description: 'Social Media · Digital Culture · Trend Analysis',
+    fullDescription: `Social Trends analyzes the latest social media trends and digital culture across Africa.
+
+  Stories:
+  • Social Media Landscape
+  • Digital Culture
+  • Influencer Economy
+  • Viral Trends
+  • Future of Social`,
+    price: 9.99,
+    subscriptionPrice: 30.00,
+    digitalPrice: 9.99,
+    printPrice: 13.99,
+    readers: 2900,
+    rating: 4.5,
+    reviewCount: 112,
+    isNew: true,
+    isFeatured: false,
+    editorPick: false,
+    publishDate: '2027-04-01',
+    pages: 104,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Social Media Expert',
+    contributors: [
+      { name: 'Trend Analyst', role: 'Social Writer', avatar: 'https://randomuser.me/api/portraits/women/28.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Social Trends Editorial', page: 4 },
+      { title: 'Social Media Landscape', page: 8 },
+      { title: 'Digital Culture', page: 32 },
+      { title: 'Influencer Economy', page: 56 },
+      { title: 'Future of Social', page: 80 },
+    ],
+    previewPages: [
+      '/socialtrends.jpeg',
+      '/socialtrends.jpeg',
+      '/socialtrends.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Social Media User',
+        avatar: 'https://randomuser.me/api/portraits/women/29.jpg',
+        rating: 4,
+        date: '2027-04-10',
+        comment: 'Interesting analysis of social trends in Africa!',
+      },
+    ],
+    relatedMagazines: [8, 9],
+  },
+  {
+    id: 17,
+    title: 'Pets Africa',
+    category: 'Lifestyle',
+    subcategory: 'Pets',
+    issue: 'Vol. 1 / May 2027',
+    coverImage: '/pets.jpeg',
+    coverImageLarge: '/pets.jpeg',
+    description: 'Pet Care · Animal Welfare · Pet Lifestyle',
+    fullDescription: `Pets Africa celebrates our furry friends across the continent. Pet care tips, animal welfare, and pet lifestyle.
+
+  Features:
+  • Pet Care Guide
+  • Animal Welfare
+  • Pet Nutrition
+  • Training Tips
+  • Pet Stories`,
+    price: 8.99,
+    subscriptionPrice: 27.00,
+    digitalPrice: 8.99,
+    printPrice: 12.99,
+    readers: 2400,
+    rating: 4.7,
+    reviewCount: 98,
+    isNew: true,
+    isFeatured: false,
+    editorPick: false,
+    publishDate: '2027-05-01',
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Pet Expert',
+    contributors: [
+      { name: 'Vet Africa', role: 'Veterinarian', avatar: 'https://randomuser.me/api/portraits/men/29.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Pets Editorial', page: 4 },
+      { title: 'Pet Care Guide', page: 8 },
+      { title: 'Animal Welfare', page: 32 },
+      { title: 'Pet Nutrition', page: 56 },
+      { title: 'Training Tips', page: 80 },
+    ],
+    previewPages: [
+      '/pets.jpeg',
+      '/pets.jpeg',
+      '/pets.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Pet Owner',
+        avatar: 'https://randomuser.me/api/portraits/women/30.jpg',
+        rating: 5,
+        date: '2027-05-10',
+        comment: 'Great pet care content for African pet owners!',
+      },
+    ],
+    relatedMagazines: [6, 13],
+  },
+  {
+    id: 18,
+    title: 'Community Africa',
+    category: 'Community',
+    subcategory: 'Community',
+    issue: 'Vol. 1 / June 2027',
+    coverImage: '/community.jpeg',
+    coverImageLarge: '/community.jpeg',
+    description: 'Community Building · Local Initiatives · Social Impact',
+    fullDescription: `Community Africa highlights community building initiatives across the continent. Local projects making a difference.
+
+  Stories:
+  • Community Projects
+  • Local Initiatives
+  • Social Impact
+  • Volunteer Stories
+  • Community Leadership`,
+    price: 9.99,
+    subscriptionPrice: 30.00,
+    digitalPrice: 9.99,
+    printPrice: 13.99,
+    readers: 2100,
+    rating: 4.8,
+    reviewCount: 134,
+    isNew: true,
+    isFeatured: true,
+    editorPick: true,
+    publishDate: '2027-06-01',
+    pages: 112,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Community Leader',
+    contributors: [
+      { name: 'Social Worker', role: 'Community Writer', avatar: 'https://randomuser.me/api/portraits/women/31.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Community Editorial', page: 4 },
+      { title: 'Community Projects', page: 8 },
+      { title: 'Local Initiatives', page: 32 },
+      { title: 'Social Impact', page: 56 },
+      { title: 'Community Leadership', page: 80 },
+    ],
+    previewPages: [
+      '/community.jpeg',
+      '/community.jpeg',
+      '/community.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Community Activist',
+        avatar: 'https://randomuser.me/api/portraits/men/30.jpg',
+        rating: 5,
+        date: '2027-06-10',
+        comment: 'Inspiring community stories across Africa!',
+      },
+    ],
+    relatedMagazines: [8, 10],
+  },
+  {
+    id: 19,
+    title: 'Relationships Africa',
+    category: 'Lifestyle',
+    subcategory: 'Relationships',
+    issue: 'Vol. 1 / July 2027',
+    coverImage: '/relationship.jpeg',
+    coverImageLarge: '/relationship.jpeg',
+    description: 'Love & Relationships · Dating · Family Dynamics',
+    fullDescription: `Relationships Africa explores love, dating, and family dynamics across the continent. Relationship advice and stories.
+
+  Features:
+  • Dating Guide
+  • Relationship Advice
+  • Family Dynamics
+  • Love Stories
+  • Communication Tips`,
+    price: 8.99,
+    subscriptionPrice: 27.00,
+    digitalPrice: 8.99,
+    printPrice: 12.99,
+    readers: 3800,
+    rating: 4.6,
+    reviewCount: 178,
+    isNew: true,
+    isFeatured: false,
+    editorPick: false,
+    publishDate: '2027-07-01',
+    pages: 104,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Relationship Expert',
+    contributors: [
+      { name: 'Love Coach', role: 'Relationship Writer', avatar: 'https://randomuser.me/api/portraits/women/32.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Relationship Editorial', page: 4 },
+      { title: 'Dating Guide', page: 8 },
+      { title: 'Relationship Advice', page: 32 },
+      { title: 'Family Dynamics', page: 56 },
+      { title: 'Communication Tips', page: 80 },
+    ],
+    previewPages: [
+      '/relationship.jpeg',
+      '/relationship.jpeg',
+      '/relationship.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Relationship Reader',
+        avatar: 'https://randomuser.me/api/portraits/women/33.jpg',
+        rating: 4,
+        date: '2027-07-10',
+        comment: 'Helpful relationship advice for African readers!',
+      },
+    ],
+    relatedMagazines: [6, 16],
+  },
+  {
+    id: 20,
+    title: 'Finance & Investments',
+    category: 'Finance',
+    subcategory: 'Investments',
+    issue: 'Vol. 1 / August 2027',
+    coverImage: '/financeandinvestment.jpeg',
+    coverImageLarge: '/financeandinvestment.jpeg',
+    description: 'Personal Finance · Investment Guide · Wealth Building',
+    fullDescription: `Finance & Investments provides expert advice on personal finance and wealth building across Africa.
+
+  Stories:
+  • Investment Guide
+  • Personal Finance Tips
+  • Wealth Building
+  • African Markets
+  • Financial Planning`,
+    price: 12.99,
+    subscriptionPrice: 39.00,
+    digitalPrice: 12.99,
+    printPrice: 16.99,
+    readers: 3200,
+    rating: 4.8,
+    reviewCount: 156,
+    isNew: true,
+    isFeatured: true,
+    editorPick: true,
+    publishDate: '2027-08-01',
+    pages: 128,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Finance Expert',
+    contributors: [
+      { name: 'Investment Advisor', role: 'Finance Writer', avatar: 'https://randomuser.me/api/portraits/men/31.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Finance Editorial', page: 4 },
+      { title: 'Investment Guide', page: 8 },
+      { title: 'Personal Finance', page: 32 },
+      { title: 'Wealth Building', page: 56 },
+      { title: 'Financial Planning', page: 80 },
+    ],
+    previewPages: [
+      '/financeandinvestment.jpeg',
+      '/financeandinvestment.jpeg',
+      '/financeandinvestment.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Investor',
+        avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+        rating: 5,
+        date: '2027-08-10',
+        comment: 'Excellent investment advice for the African market!',
+      },
+    ],
+    relatedMagazines: [1, 10],
+  },
+  {
+    id: 21,
+    title: 'Bar & Restaurant',
+    category: 'Food & Beverage',
+    subcategory: 'Hospitality',
+    issue: 'Vol. 1 / September 2027',
+    coverImage: '/barandrestaurant.jpeg',
+    coverImageLarge: '/barandrestaurant.jpeg',
+    description: 'Nightlife · Dining · Hospitality Industry',
+    fullDescription: `Bar & Restaurant showcases the best of African nightlife and dining. From trendy bars to fine dining restaurants.
+
+  Features:
+  • Nightlife Guide
+  • Restaurant Reviews
+  • Hospitality Industry
+  • Cocktail Culture
+  • Food Trends`,
+    price: 10.99,
+    subscriptionPrice: 33.00,
+    digitalPrice: 10.99,
+    printPrice: 14.99,
+    readers: 2600,
+    rating: 4.5,
+    reviewCount: 92,
+    isNew: true,
+    isFeatured: false,
+    editorPick: false,
+    publishDate: '2027-09-01',
+    pages: 108,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Hospitality Expert',
+    contributors: [
+      { name: 'Food Critic', role: 'Restaurant Writer', avatar: 'https://randomuser.me/api/portraits/women/34.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Hospitality Editorial', page: 4 },
+      { title: 'Nightlife Guide', page: 8 },
+      { title: 'Restaurant Reviews', page: 32 },
+      { title: 'Cocktail Culture', page: 56 },
+      { title: 'Food Trends', page: 80 },
+    ],
+    previewPages: [
+      '/barandrestaurant.jpeg',
+      '/barandrestaurant.jpeg',
+      '/barandrestaurant.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Foodie',
+        avatar: 'https://randomuser.me/api/portraits/women/35.jpg',
+        rating: 4,
+        date: '2027-09-10',
+        comment: 'Great coverage of African dining and nightlife!',
+      },
+    ],
+    relatedMagazines: [2, 6],
+  },
+  {
+    id: 22,
+    title: 'Gamers Africa',
+    category: 'Gaming',
+    subcategory: 'Gaming',
+    issue: 'Vol. 1 / October 2027',
+    coverImage: '/gamers.jpeg',
+    coverImageLarge: '/gamers.jpeg',
+    description: 'Video Games · Esports · Gaming Culture',
+    fullDescription: `Gamers Africa covers the gaming scene across the continent. From video games to esports, we explore gaming culture.
+
+  Stories:
+  • African Gaming Scene
+  • Esports Tournaments
+  • Game Reviews
+  • Gaming Industry
+  • Gaming Culture`,
+    price: 9.99,
+    subscriptionPrice: 30.00,
+    digitalPrice: 9.99,
+    printPrice: 13.99,
+    readers: 3100,
+    rating: 4.7,
+    reviewCount: 145,
+    isNew: true,
+    isFeatured: false,
+    editorPick: true,
+    publishDate: '2027-10-01',
+    pages: 112,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Gaming Expert',
+    contributors: [
+      { name: 'Pro Gamer', role: 'Gaming Writer', avatar: 'https://randomuser.me/api/portraits/men/33.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Gaming Editorial', page: 4 },
+      { title: 'Gaming Scene', page: 8 },
+      { title: 'Esports Tournaments', page: 32 },
+      { title: 'Game Reviews', page: 56 },
+      { title: 'Gaming Culture', page: 80 },
+    ],
+    previewPages: [
+      '/gamers.jpeg',
+      '/gamers.jpeg',
+      '/gamers.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Gamer',
+        avatar: 'https://randomuser.me/api/portraits/men/34.jpg',
+        rating: 5,
+        date: '2027-10-10',
+        comment: 'Amazing coverage of African gaming!',
+      },
+    ],
+    relatedMagazines: [1, 9],
+  },
+  {
+    id: 23,
+    title: 'Matatu Culture',
+    category: 'Culture',
+    subcategory: 'Transportation',
+    issue: 'Vol. 1 / November 2027',
+    coverImage: '/matatuculture.jpeg',
+    coverImageLarge: '/matatuculture.jpeg',
+    description: 'Matatu Art · Public Transport · Urban Culture',
+    fullDescription: `Matatu Culture celebrates the unique art and culture of African public transport. From matatu art to urban mobility.
+
+  Features:
+  • Matatu Art Showcase
+  • Public Transport Culture
+  • Urban Mobility
+  • Matatu Stories
+  • Transport Innovation`,
+    price: 8.99,
+    subscriptionPrice: 27.00,
+    digitalPrice: 8.99,
+    printPrice: 12.99,
+    readers: 2800,
+    rating: 4.9,
+    reviewCount: 167,
+    isNew: true,
+    isFeatured: true,
+    editorPick: true,
+    publishDate: '2027-11-01',
+    pages: 104,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Culture Expert',
+    contributors: [
+      { name: 'Matatu Artist', role: 'Culture Writer', avatar: 'https://randomuser.me/api/portraits/men/35.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Matatu Editorial', page: 4 },
+      { title: 'Matatu Art', page: 8 },
+      { title: 'Transport Culture', page: 32 },
+      { title: 'Urban Mobility', page: 56 },
+      { title: 'Transport Innovation', page: 80 },
+    ],
+    previewPages: [
+      '/matatuculture.jpeg',
+      '/matatuculture.jpeg',
+      '/matatuculture.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Matatu Fan',
+        avatar: 'https://randomuser.me/api/portraits/men/36.jpg',
+        rating: 5,
+        date: '2027-11-10',
+        comment: 'Love the celebration of matatu culture!',
+      },
+    ],
+    relatedMagazines: [5, 8],
+  },
+  {
+    id: 24,
+    title: 'Boxing Africa',
+    category: 'Sports',
+    subcategory: 'Boxing',
+    issue: 'Vol. 1 / December 2027',
+    coverImage: '/boxing.jpeg',
+    coverImageLarge: '/boxing.jpeg',
+    description: 'Boxing Champions · Fight Night · African Fighters',
+    fullDescription: `Boxing Africa celebrates African boxing champions and fighters. From legendary champions to rising stars, we cover the boxing scene across the continent.
+
+  Stories:
+  • African Boxing Champions
+  • Fight Night Coverage
+  • Rising Stars
+  • Training Techniques
+  • Boxing Industry`,
+    price: 9.99,
+    subscriptionPrice: 30.00,
+    digitalPrice: 9.99,
+    printPrice: 13.99,
+    readers: 2300,
+    rating: 4.7,
+    reviewCount: 112,
+    isNew: true,
+    isFeatured: false,
+    editorPick: false,
+    publishDate: '2027-12-01',
+    pages: 104,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Boxing Expert',
+    contributors: [
+      { name: 'Fight Analyst', role: 'Sports Writer', avatar: 'https://randomuser.me/api/portraits/men/37.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Boxing Editorial', page: 4 },
+      { title: 'Champions', page: 8 },
+      { title: 'Fight Night', page: 32 },
+      { title: 'Rising Stars', page: 56 },
+      { title: 'Training', page: 80 },
+    ],
+    previewPages: [
+      '/boxing.jpeg',
+      '/boxing.jpeg',
+      '/boxing.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Boxing Fan',
+        avatar: 'https://randomuser.me/api/portraits/men/38.jpg',
+        rating: 4,
+        date: '2027-12-10',
+        comment: 'Great boxing coverage for African fighters!',
+      },
+    ],
+    relatedMagazines: [4, 22],
+  },
+  {
+    id: 25,
+    title: 'Leading with Purpose',
+    category: 'Leadership',
+    subcategory: 'Business',
+    issue: 'Vol. 1 / January 2028',
+    coverImage: '/leadingwithpurpose.jpeg',
+    coverImageLarge: '/leadingwithpurpose.jpeg',
+    description: 'Leadership Skills · Purpose-Driven · Success Stories',
+    fullDescription: `Leading with Purpose explores leadership across Africa. From purpose-driven leadership to success stories, we inspire the next generation of leaders.
+
+  Features:
+  • Leadership Skills
+  • Purpose-Driven Leadership
+  • Success Stories
+  • Management Tips
+  • Future Leaders`,
+    price: 11.99,
+    subscriptionPrice: 36.00,
+    digitalPrice: 11.99,
+    printPrice: 15.99,
+    readers: 1900,
+    rating: 4.8,
+    reviewCount: 98,
+    isNew: true,
+    isFeatured: true,
+    editorPick: true,
+    publishDate: '2028-01-01',
+    pages: 112,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Leadership Expert',
+    contributors: [
+      { name: 'CEO Africa', role: 'Leadership Writer', avatar: 'https://randomuser.me/api/portraits/women/36.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Leadership Editorial', page: 4 },
+      { title: 'Leadership Skills', page: 8 },
+      { title: 'Purpose-Driven', page: 32 },
+      { title: 'Success Stories', page: 56 },
+      { title: 'Future Leaders', page: 80 },
+    ],
+    previewPages: [
+      '/leadingwithpurpose.jpeg',
+      '/leadingwithpurpose.jpeg',
+      '/leadingwithpurpose.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Business Leader',
+        avatar: 'https://randomuser.me/api/portraits/men/39.jpg',
+        rating: 5,
+        date: '2028-01-10',
+        comment: 'Inspiring leadership content for African leaders!',
+      },
+    ],
+    relatedMagazines: [10, 20],
+  },
+  {
+    id: 26,
+    title: 'Photography Africa',
+    category: 'Art & Photography',
+    subcategory: 'Photography',
+    issue: 'Vol. 1 / February 2028',
+    coverImage: '/photography.jpeg',
+    coverImageLarge: '/photography.jpeg',
+    description: 'African Photography · Visual Storytelling · Photo Essays',
+    fullDescription: `Photography Africa showcases the best of African photography. From visual storytelling to photo essays, we celebrate African photographers.
+
+  Stories:
+  • African Photographers
+  • Visual Storytelling
+  • Photo Essays
+  • Photography Techniques
+  • Photo Industry`,
+    price: 10.99,
+    subscriptionPrice: 33.00,
+    digitalPrice: 10.99,
+    printPrice: 14.99,
+    readers: 1700,
+    rating: 4.6,
+    reviewCount: 87,
+    isNew: true,
+    isFeatured: false,
+    editorPick: false,
+    publishDate: '2028-02-01',
+    pages: 108,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Photo Editor',
+    contributors: [
+      { name: 'Photo Pro', role: 'Photography Writer', avatar: 'https://randomuser.me/api/portraits/women/37.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Photo Editorial', page: 4 },
+      { title: 'Photographers', page: 8 },
+      { title: 'Visual Storytelling', page: 32 },
+      { title: 'Photo Essays', page: 56 },
+      { title: 'Photo Industry', page: 80 },
+    ],
+    previewPages: [
+      '/photography.jpeg',
+      '/photography.jpeg',
+      '/photography.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Photographer',
+        avatar: 'https://randomuser.me/api/portraits/men/40.jpg',
+        rating: 4,
+        date: '2028-02-10',
+        comment: 'Great photography showcase from across Africa!',
+      },
+    ],
+    relatedMagazines: [7, 8],
+  },
+  {
+    id: 27,
+    title: 'The Unity',
+    category: 'Culture',
+    subcategory: 'Unity',
+    issue: 'Vol. 1 / March 2028',
+    coverImage: '/theunity.jpeg',
+    coverImageLarge: '/theunity.jpeg',
+    description: 'African Unity · Cultural Connection · Together We Rise',
+    fullDescription: `The Unity celebrates African unity and cultural connection. From pan-African movements to cultural connections, we explore what unites us.
+
+  Features:
+  • African Unity
+  • Cultural Connection
+  • Pan-African Movements
+  • Unity Stories
+  • Together We Rise`,
+    price: 8.99,
+    subscriptionPrice: 27.00,
+    digitalPrice: 8.99,
+    printPrice: 12.99,
+    readers: 2500,
+    rating: 4.9,
+    reviewCount: 145,
+    isNew: true,
+    isFeatured: true,
+    editorPick: true,
+    publishDate: '2028-03-01',
+    pages: 104,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Unity Editor',
+    contributors: [
+      { name: 'Unity Activist', role: 'Culture Writer', avatar: 'https://randomuser.me/api/portraits/men/41.jpg' },
+    ],
+    tableOfContents: [
+      { title: 'Unity Editorial', page: 4 },
+      { title: 'African Unity', page: 8 },
+      { title: 'Cultural Connection', page: 32 },
+      { title: 'Pan-African', page: 56 },
+      { title: 'Together We Rise', page: 80 },
+    ],
+    previewPages: [
+      '/theunity.jpeg',
+      '/theunity.jpeg',
+      '/theunity.jpeg',
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: 'Unity Supporter',
+        avatar: 'https://randomuser.me/api/portraits/women/38.jpg',
+        rating: 5,
+        date: '2028-03-10',
+        comment: 'Beautiful celebration of African unity!',
+      },
+    ],
+    relatedMagazines: [8, 18],
   },
 ];
 

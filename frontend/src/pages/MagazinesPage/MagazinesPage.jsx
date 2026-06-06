@@ -12,8 +12,8 @@ const MagazinesPage = () => {
   return (
     <div className="magazines-page">
       <div className="container">
-        <div className="page-header">
-          <p>Discover our collection of African-focused magazines covering culture, fashion, business, and lifestyle</p>
+        <div className="page-header" style={{ padding: '10px 0', textAlign: 'center' }}>
+          <p style={{ fontSize: '16px', color: '#6a7a6a', maxWidth: '600px', margin: '0 auto' }}>Discover our collection of African-focused magazines covering culture, fashion, business, and lifestyle</p>
         </div>
 
         <div className="magazines-content">

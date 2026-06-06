@@ -105,8 +105,8 @@ function App() {
       {/* Navigation Menu */}
       <Navigation />
 
-      {/* Advertisement Bar - Hidden on magazine detail, podcast, merchandise, cart, login, and signup pages */}
-      {!location.pathname.startsWith('/magazines/') && location.pathname !== '/podcast' && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && <Advert />}
+      {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, and signup pages */}
+      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && <Advert />}
 
       {/* Shopping Cart Drawer (Slides from right) */}
       <CartDrawer />
