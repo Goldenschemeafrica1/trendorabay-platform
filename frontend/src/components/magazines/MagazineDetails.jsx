@@ -1603,6 +1603,694 @@ const sampleMagazines = [
     ],
     relatedMagazines: [8, 18],
   },
+  {
+    id: 28,
+    title: 'Automotive World',
+    category: 'Automotive',
+    subcategory: 'Cars',
+    issue: 'Vol. 2 / January 2028',
+    coverImage: '/automotives1.jpeg',
+    coverImageLarge: '/automotives1.jpeg',
+    description: 'Car Reviews · Future Tech · Racing',
+    fullDescription: `Automotive World brings you the latest in car technology, reviews, and racing news from around the globe.
+
+  Features:
+  • Latest Car Reviews
+  • Electric Vehicle Revolution
+  • Racing Championships
+  • Future of Transportation`,
+    pages: 128,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'James Motor',
+    contributors: [
+      { name: 'Sarah Driver', role: 'Senior Writer', avatar: 'https://randomuser.me/api/portraits/women/22.jpg' },
+      { name: 'Mike Speed', role: 'Tech Editor', avatar: 'https://randomuser.me/api/portraits/men/22.jpg' },
+    ],
+    tableOfContents: [
+      'The Future of Electric Cars',
+      'Top 10 Sports Cars of 2028',
+      'Racing Season Preview',
+      'Auto Tech Innovations',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Car Enthusiast',
+        avatar: 'https://randomuser.me/api/portraits/men/23.jpg',
+        rating: 5,
+        date: '2028-01-15',
+        comment: 'Great automotive content!',
+      },
+    ],
+    relatedMagazines: [12, 5],
+  },
+  {
+    id: 29,
+    title: 'Fashion Forward',
+    category: 'Fashion & Business',
+    subcategory: 'Fashion',
+    issue: 'Vol. 2 / April 2028',
+    coverImage: '/fashinandbusiness..jpeg',
+    coverImageLarge: '/fashinandbusiness..jpeg',
+    description: 'Trend Forecast · Designer Spotlight · Business of Fashion',
+    fullDescription: `Fashion Forward explores the intersection of style and business in the fashion industry.
+
+  Features:
+  • Spring/Summer Trends
+  • Emerging Designers
+  • Fashion Business Strategies
+  • Sustainable Fashion`,
+    pages: 128,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Emma Style',
+    contributors: [
+      { name: 'Lucy Trend', role: 'Fashion Editor', avatar: 'https://randomuser.me/api/portraits/women/23.jpg' },
+      { name: 'David Business', role: 'Business Writer', avatar: 'https://randomuser.me/api/portraits/men/24.jpg' },
+    ],
+    tableOfContents: [
+      'Spring Fashion Forecast',
+      'Designer Spotlight',
+      'Fashion Business Models',
+      'Sustainable Style',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Fashion Lover',
+        avatar: 'https://randomuser.me/api/portraits/women/24.jpg',
+        rating: 5,
+        date: '2028-04-10',
+        comment: 'Amazing fashion insights!',
+      },
+    ],
+    relatedMagazines: [2, 15],
+  },
+  {
+    id: 30,
+    title: 'Style & Business',
+    category: 'Fashion & Business',
+    subcategory: 'Fashion',
+    issue: 'Vol. 3 / May 2028',
+    coverImage: '/fashionandbusiness...jpeg',
+    coverImageLarge: '/fashionandbusiness...jpeg',
+    description: 'Fashion Industry · Brand Building · Marketing',
+    fullDescription: `Style & Business covers the business side of fashion, from brand building to marketing strategies.
+
+  Features:
+  • Building Fashion Brands
+  • Marketing Strategies
+  • Retail Innovation
+  • Fashion Technology`,
+    pages: 128,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Anna Brand',
+    contributors: [
+      { name: 'Tom Market', role: 'Marketing Editor', avatar: 'https://randomuser.me/api/portraits/men/25.jpg' },
+      { name: 'Kate Retail', role: 'Retail Writer', avatar: 'https://randomuser.me/api/portraits/women/25.jpg' },
+    ],
+    tableOfContents: [
+      'Brand Building 101',
+      'Fashion Marketing',
+      'Retail Trends',
+      'Fashion Tech',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Business Fashionista',
+        avatar: 'https://randomuser.me/api/portraits/women/26.jpg',
+        rating: 5,
+        date: '2028-05-12',
+        comment: 'Perfect blend of style and business!',
+      },
+    ],
+    relatedMagazines: [2, 29],
+  },
+  {
+    id: 31,
+    title: 'Kids World',
+    category: 'Kids & Family',
+    subcategory: 'Kids',
+    issue: 'Vol. 2 / February 2028',
+    coverImage: '/kids2.jpeg',
+    coverImageLarge: '/kids2.jpeg',
+    description: 'Fun Activities · Learning · Parenting Tips',
+    fullDescription: `Kids World is packed with fun activities, learning content, and parenting tips for families.
+
+  Features:
+  • Fun Activities for Kids
+  • Educational Content
+  • Parenting Tips
+  • Family Adventures`,
+    pages: 64,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Mommy Joy',
+    contributors: [
+      { name: 'Daddy Fun', role: 'Parenting Writer', avatar: 'https://randomuser.me/api/portraits/men/26.jpg' },
+      { name: 'Teacher Sarah', role: 'Education Editor', avatar: 'https://randomuser.me/api/portraits/women/27.jpg' },
+    ],
+    tableOfContents: [
+      'Fun Indoor Activities',
+      'Learning Games',
+      'Parenting Hacks',
+      'Family Travel',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Happy Parent',
+        avatar: 'https://randomuser.me/api/portraits/women/28.jpg',
+        rating: 5,
+        date: '2028-02-20',
+        comment: 'My kids love this magazine!',
+      },
+    ],
+    relatedMagazines: [13, 17],
+  },
+  {
+    id: 32,
+    title: 'Family Fun',
+    category: 'Kids & Family',
+    subcategory: 'Kids',
+    issue: 'Vol. 3 / March 2028',
+    coverImage: '/kids3.jpeg',
+    coverImageLarge: '/kids3.jpeg',
+    description: 'Family Activities · Kids Education · Parenting',
+    fullDescription: `Family Fun brings families together with activities, education, and parenting advice.
+
+  Features:
+  • Family Bonding Activities
+  • Kids Education
+  • Parenting Support
+  • Healthy Living`,
+    pages: 64,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Family First',
+    contributors: [
+      { name: 'Child Expert', role: 'Child Development', avatar: 'https://randomuser.me/api/portraits/women/29.jpg' },
+      { name: 'Health Coach', role: 'Wellness Writer', avatar: 'https://randomuser.me/api/portraits/men/27.jpg' },
+    ],
+    tableOfContents: [
+      'Family Game Night',
+      'Educational Apps',
+      'Parenting Support',
+      'Healthy Habits',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Family Mom',
+        avatar: 'https://randomuser.me/api/portraits/women/30.jpg',
+        rating: 5,
+        date: '2028-03-15',
+        comment: 'Great family resource!',
+      },
+    ],
+    relatedMagazines: [13, 31],
+  },
+  {
+    id: 33,
+    title: 'Music Vibes 2',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 2 / October 2026',
+    coverImage: '/music1.jpeg',
+    coverImageLarge: '/music1.jpeg',
+    description: 'Music Reviews · Artist Interviews · Concert Tours',
+    fullDescription: `Music Vibes 2 continues our coverage of the music scene with reviews, interviews, and tour news.
+
+  Features:
+  • Album Reviews
+  • Artist Interviews
+  • Concert Tours
+  • Music Technology`,
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'DJ Mike',
+    contributors: [
+      { name: 'Music Critic', role: 'Reviewer', avatar: 'https://randomuser.me/api/portraits/men/28.jpg' },
+      { name: 'Tour Manager', role: 'Tour Writer', avatar: 'https://randomuser.me/api/portraits/women/31.jpg' },
+    ],
+    tableOfContents: [
+      'Top Albums of October',
+      'Artist Spotlight',
+      'Tour Dates',
+      'Music Tech',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Music Fan',
+        avatar: 'https://randomuser.me/api/portraits/men/29.jpg',
+        rating: 5,
+        date: '2026-10-25',
+        comment: 'Great music coverage!',
+      },
+    ],
+    relatedMagazines: [9, 22],
+  },
+  {
+    id: 34,
+    title: 'Music Vibes 3',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 3 / November 2026',
+    coverImage: '/music2.jpeg',
+    coverImageLarge: '/music2.jpeg',
+    description: 'Music Industry · Emerging Artists · Genre Spotlight',
+    fullDescription: `Music Vibes 3 explores the music industry, emerging artists, and genre spotlights.
+
+  Features:
+  • Music Industry News
+  • Emerging Artists
+  • Genre Deep Dives
+  • Production Tips`,
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Producer Paul',
+    contributors: [
+      { name: 'A&R Scout', role: 'Talent Scout', avatar: 'https://randomuser.me/api/portraits/women/32.jpg' },
+      { name: 'Sound Engineer', role: 'Tech Writer', avatar: 'https://randomuser.me/api/portraits/men/30.jpg' },
+    ],
+    tableOfContents: [
+      'Industry Trends',
+      'New Artists to Watch',
+      'Hip Hop Spotlight',
+      'Production 101',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Indie Lover',
+        avatar: 'https://randomuser.me/api/portraits/men/31.jpg',
+        rating: 5,
+        date: '2026-11-20',
+        comment: 'Love discovering new artists!',
+      },
+    ],
+    relatedMagazines: [9, 33],
+  },
+  {
+    id: 35,
+    title: 'Music Vibes 4',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 4 / December 2026',
+    coverImage: '/music3.jpeg',
+    coverImageLarge: '/music3.jpeg',
+    description: 'Year in Music · Best of 2026 · Holiday Songs',
+    fullDescription: `Music Vibes 4 is our year-end special featuring the best of 2026 and holiday music.
+
+  Features:
+  • Best Albums of 2026
+  • Top Songs of the Year
+  • Holiday Music Special
+  • Year in Review`,
+    pages: 128,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Year End Editor',
+    contributors: [
+      { name: 'Chart Expert', role: 'Chart Analyst', avatar: 'https://randomuser.me/api/portraits/women/33.jpg' },
+      { name: 'Holiday Music', role: 'Seasonal Writer', avatar: 'https://randomuser.me/api/portraits/men/32.jpg' },
+    ],
+    tableOfContents: [
+      'Best of 2026',
+      'Top Charts',
+      'Holiday Playlist',
+      'Year in Review',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Year End Fan',
+        avatar: 'https://randomuser.me/api/portraits/women/34.jpg',
+        rating: 5,
+        date: '2026-12-25',
+        comment: 'Perfect year-end summary!',
+      },
+    ],
+    relatedMagazines: [9, 34],
+  },
+  {
+    id: 36,
+    title: 'Music Vibes 5',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 5 / January 2027',
+    coverImage: '/music4.jpeg',
+    coverImageLarge: '/music4.jpeg',
+    description: 'New Year Music · Artist Predictions · Trending Sounds',
+    fullDescription: `Music Vibes 5 kicks off the new year with predictions and trending sounds.
+
+  Features:
+  • New Year Music Trends
+  • Artist Predictions for 2027
+  • Trending Genres
+  • Festival Preview`,
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Trend Watcher',
+    contributors: [
+      { name: 'Trend Analyst', role: 'Trend Forecaster', avatar: 'https://randomuser.me/api/portraits/men/33.jpg' },
+      { name: 'Festival Guide', role: 'Events Writer', avatar: 'https://randomuser.me/api/portraits/women/35.jpg' },
+    ],
+    tableOfContents: [
+      '2027 Music Predictions',
+      'Rising Stars',
+      'Genre Trends',
+      'Festival Guide',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Trend Follower',
+        avatar: 'https://randomuser.me/api/portraits/men/34.jpg',
+        rating: 5,
+        date: '2027-01-15',
+        comment: 'Excited for the new year!',
+      },
+    ],
+    relatedMagazines: [9, 35],
+  },
+  {
+    id: 37,
+    title: 'Music Vibes 6',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 6 / February 2027',
+    coverImage: '/music5.jpeg',
+    coverImageLarge: '/music5.jpeg',
+    description: 'Love Songs · Valentine Special · Romance in Music',
+    fullDescription: `Music Vibes 6 is our Valentine special featuring love songs and romance in music.
+
+  Features:
+  • Valentine Playlist
+  • Love Song History
+  • Romantic Duets
+  • Couples in Music`,
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Love Editor',
+    contributors: [
+      { name: 'Romance Writer', role: 'Love Songs Expert', avatar: 'https://randomuser.me/api/portraits/women/36.jpg' },
+      { name: 'Couples Writer', role: 'Relationships', avatar: 'https://randomuser.me/api/portraits/men/35.jpg' },
+    ],
+    tableOfContents: [
+      'Valentine Special',
+      'Greatest Love Songs',
+      'Romantic Duets',
+      'Power Couples',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Romantic Reader',
+        avatar: 'https://randomuser.me/api/portraits/women/37.jpg',
+        rating: 5,
+        date: '2027-02-14',
+        comment: 'Perfect Valentine issue!',
+      },
+    ],
+    relatedMagazines: [9, 36],
+  },
+  {
+    id: 38,
+    title: 'Music Vibes 7',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 7 / March 2027',
+    coverImage: '/music6.jpeg',
+    coverImageLarge: '/music6.jpeg',
+    description: 'Spring Music · Festival Season · New Releases',
+    fullDescription: `Music Vibes 7 covers spring music, festival season, and new releases.
+
+  Features:
+  • Spring Music Guide
+  • Festival Season Preview
+  • New Album Releases
+  • Spring Playlists`,
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Spring Editor',
+    contributors: [
+      { name: 'Festival Expert', role: 'Events Writer', avatar: 'https://randomuser.me/api/portraits/men/36.jpg' },
+      { name: 'Release Tracker', role: 'New Music', avatar: 'https://randomuser.me/api/portraits/women/38.jpg' },
+    ],
+    tableOfContents: [
+      'Spring Sounds',
+      'Festival Guide',
+      'New Releases',
+      'Seasonal Playlists',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Festival Goer',
+        avatar: 'https://randomuser.me/api/portraits/men/37.jpg',
+        rating: 5,
+        date: '2027-03-20',
+        comment: 'Ready for festival season!',
+      },
+    ],
+    relatedMagazines: [9, 37],
+  },
+  {
+    id: 39,
+    title: 'Music Vibes 8',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 8 / April 2027',
+    coverImage: '/music7.jpeg',
+    coverImageLarge: '/music7.jpeg',
+    description: 'Music Production · Studio Life · Artist Development',
+    fullDescription: `Music Vibes 8 goes behind the scenes with music production and artist development.
+
+  Features:
+  • Studio Sessions
+  • Production Techniques
+  • Artist Development
+  • Music Business`,
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Studio Editor',
+    contributors: [
+      { name: 'Producer Pro', role: 'Production Expert', avatar: 'https://randomuser.me/api/portraits/men/38.jpg' },
+      { name: 'Artist Coach', role: 'Development', avatar: 'https://randomuser.me/api/portraits/women/39.jpg' },
+    ],
+    tableOfContents: [
+      'Studio Life',
+      'Production Tips',
+      'Artist Development',
+      'Music Business 101',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Aspiring Producer',
+        avatar: 'https://randomuser.me/api/portraits/men/39.jpg',
+        rating: 5,
+        date: '2027-04-15',
+        comment: 'Great production insights!',
+      },
+    ],
+    relatedMagazines: [9, 38],
+  },
+  {
+    id: 40,
+    title: 'Music Vibes 9',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 9 / May 2027',
+    coverImage: '/music8.jpeg',
+    coverImageLarge: '/music8.jpeg',
+    description: 'Summer Music · Outdoor Concerts · Beach Vibes',
+    fullDescription: `Music Vibes 9 brings summer music, outdoor concerts, and beach vibes.
+
+  Features:
+  • Summer Playlist
+  • Outdoor Concerts
+  • Beach Music
+  • Festival Highlights`,
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Summer Editor',
+    contributors: [
+      { name: 'Beach DJ', role: 'Summer Music', avatar: 'https://randomuser.me/api/portraits/men/40.jpg' },
+      { name: 'Concert Critic', role: 'Live Music', avatar: 'https://randomuser.me/api/portraits/women/40.jpg' },
+    ],
+    tableOfContents: [
+      'Summer Sounds',
+      'Concert Guide',
+      'Beach Playlist',
+      'Festival Recap',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Summer Lover',
+        avatar: 'https://randomuser.me/api/portraits/women/41.jpg',
+        rating: 5,
+        date: '2027-05-20',
+        comment: 'Perfect summer vibes!',
+      },
+    ],
+    relatedMagazines: [9, 39],
+  },
+  {
+    id: 41,
+    title: 'Music Vibes 10',
+    category: 'Music & Entertainment',
+    subcategory: 'Music',
+    issue: 'Vol. 10 / June 2027',
+    coverImage: '/music9.jpeg',
+    coverImageLarge: '/music9.jpeg',
+    description: 'Mid-Year Review · Top Artists · Music Awards',
+    fullDescription: `Music Vibes 10 is our mid-year review with top artists and music awards coverage.
+
+  Features:
+  • Mid-Year Top 10
+  • Artist Rankings
+  • Awards Season Preview
+  • Hit Songs Analysis`,
+    pages: 128,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Mid-Year Editor',
+    contributors: [
+      { name: 'Chart Master', role: 'Charts', avatar: 'https://randomuser.me/api/portraits/men/41.jpg' },
+      { name: 'Awards Writer', role: 'Awards Coverage', avatar: 'https://randomuser.me/api/portraits/women/42.jpg' },
+    ],
+    tableOfContents: [
+      'Mid-Year Charts',
+      'Top Artists',
+      'Awards Preview',
+      'Hit Analysis',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Chart Watcher',
+        avatar: 'https://randomuser.me/api/portraits/men/42.jpg',
+        rating: 5,
+        date: '2027-06-25',
+        comment: 'Great mid-year summary!',
+      },
+    ],
+    relatedMagazines: [9, 40],
+  },
+  {
+    id: 42,
+    title: 'Youth in Policy 2',
+    category: 'Politics & Policy',
+    subcategory: 'Politics',
+    issue: 'Vol. 2 / December 2026',
+    coverImage: '/youthinpolicy1.jpeg',
+    coverImageLarge: '/youthinpolicy1.jpeg',
+    description: 'Youth Leadership · Policy Changes · Civic Engagement',
+    fullDescription: `Youth in Policy 2 continues our coverage of youth leadership and policy changes.
+
+  Features:
+  • Youth Leaders Rising
+  • Policy Impact
+  • Civic Engagement
+  • Future of Politics`,
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'Policy Editor',
+    contributors: [
+      { name: 'Youth Advocate', role: 'Youth Issues', avatar: 'https://randomuser.me/api/portraits/women/43.jpg' },
+      { name: 'Policy Analyst', role: 'Policy Expert', avatar: 'https://randomuser.me/api/portraits/men/43.jpg' },
+    ],
+    tableOfContents: [
+      'Youth Leadership',
+      'Policy Changes',
+      'Civic Engagement',
+      'Political Future',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Youth Activist',
+        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+        rating: 5,
+        date: '2026-12-20',
+        comment: 'Inspiring youth leadership!',
+      },
+    ],
+    relatedMagazines: [11, 18],
+  },
+  {
+    id: 43,
+    title: 'Youth in Policy 3',
+    category: 'Politics & Policy',
+    subcategory: 'Politics',
+    issue: 'Vol. 3 / January 2027',
+    coverImage: '/youthinpolicy3.jpeg',
+    coverImageLarge: '/youthinpolicy3.jpeg',
+    description: 'New Year Policy · Youth Resolutions · Political Goals',
+    fullDescription: `Youth in Policy 3 explores new year policies, youth resolutions, and political goals.
+
+  Features:
+  • New Year Policy Agenda
+  • Youth Resolutions
+  • Political Goals for 2027
+  • Grassroots Movements`,
+    pages: 96,
+    language: 'English',
+    publisher: 'Trendorabay Media',
+    editor: 'New Year Policy',
+    contributors: [
+      { name: 'Goal Setter', role: 'Policy Goals', avatar: 'https://randomuser.me/api/portraits/men/44.jpg' },
+      { name: 'Grassroots Writer', role: 'Movements', avatar: 'https://randomuser.me/api/portraits/women/45.jpg' },
+    ],
+    tableOfContents: [
+      '2027 Policy Agenda',
+      'Youth Resolutions',
+      'Political Goals',
+      'Grassroots Power',
+    ],
+    previewPages: [1, 2, 3],
+    reviews: [
+      {
+        id: 1,
+        user: 'Policy Watcher',
+        avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+        rating: 5,
+        date: '2027-01-25',
+        comment: 'Great policy insights!',
+      },
+    ],
+    relatedMagazines: [11, 42],
+  },
 ];
 
 // Sample related magazines
