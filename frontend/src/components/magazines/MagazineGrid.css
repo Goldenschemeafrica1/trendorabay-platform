@@ -3,12 +3,13 @@
   padding: 40px 0 60px;
   background: #faf6f0;
   position: relative;
+  margin-top: 0;
 }
 
 /* ===== Filters Bar ===== */
 .magazine-filters {
   max-width: 1400px;
-  margin: 0 auto 40px;
+  margin: 0 auto 12px;
   padding: 0 24px;
 }
 
@@ -890,131 +891,134 @@
 
 @media (max-width: 768px) {
   .magazine-grid-section {
-    padding: 20px 0 40px;
+    padding: 8px 0 40px;
   }
   
   .magazines-container.grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
     max-width: 100%;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
-  
-  .magazine-cover-wrapper {
-    height: 180px;
-  }
-  
-  .magazine-details {
-    padding: 16px;
-  }
-  
-  .magazine-title {
-    font-size: 15px;
-  }
-  
-  .magazine-description {
-    font-size: 12px;
-  }
-  
-  .amount {
-    font-size: 18px;
-  }
-  
-  .add-to-cart-btn,
-  .details-btn {
-    font-size: 12px;
-    padding: 8px 10px;
-  }
-}
-
-@media (max-width: 600px) {
-  .magazines-container.grid {
-    grid-template-columns: 1fr;
-    max-width: 350px;
     margin: 0 auto;
     padding: 0 12px;
   }
   
   .magazine-cover-wrapper {
-    height: 220px;
-  }
-  
-  .magazine-card {
-    border-radius: 16px;
+    height: 140px;
   }
   
   .magazine-details {
-    padding: 18px;
+    padding: 10px;
   }
   
   .magazine-title {
-    font-size: 17px;
+    font-size: 12px;
   }
   
   .magazine-description {
-    font-size: 13px;
-    margin-bottom: 14px;
+    font-size: 10px;
   }
   
   .amount {
-    font-size: 22px;
-  }
-  
-  .magazine-actions {
-    gap: 10px;
+    font-size: 14px;
   }
   
   .add-to-cart-btn,
   .details-btn {
-    padding: 12px 16px;
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .magazine-grid-section {
+    padding: 6px 0 32px;
+  }
+  
+  .magazines-container.grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 0 10px;
+  }
+  
+  .magazine-cover-wrapper {
+    height: 120px;
+  }
+  
+  .magazine-card {
+    border-radius: 12px;
+  }
+  
+  .magazine-details {
+    padding: 8px;
+  }
+  
+  .magazine-title {
+    font-size: 11px;
+  }
+  
+  .magazine-description {
+    font-size: 9px;
+    margin-bottom: 8px;
+  }
+  
+  .amount {
     font-size: 13px;
+  }
+  
+  .magazine-actions {
+    gap: 4px;
+  }
+  
+  .add-to-cart-btn,
+  .details-btn {
+    padding: 6px 8px;
+    font-size: 9px;
   }
 }
 
 @media (max-width: 480px) {
   .magazine-grid-section {
-    padding: 16px 0 32px;
+    padding: 4px 0 32px;
   }
   
   .magazines-container.grid {
-    grid-template-columns: 1fr;
-    max-width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
     padding: 0 8px;
   }
   
   .magazine-cover-wrapper {
-    height: 200px;
+    height: 100px;
   }
   
   .magazine-details {
-    padding: 16px;
+    padding: 6px;
   }
   
   .magazine-title {
-    font-size: 16px;
+    font-size: 10px;
   }
   
   .magazine-description {
-    font-size: 13px;
+    font-size: 8px;
   }
   
   .amount {
-    font-size: 20px;
+    font-size: 12px;
   }
 }
 
 @media (max-width: 992px) {
   .magazine-filters {
     padding: 0 16px;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
   }
   
   .filters-container {
     flex-direction: column;
     align-items: stretch;
-    padding: 16px;
-    gap: 16px;
+    padding: 8px;
+    gap: 8px;
   }
 
   .filter-group {
@@ -1075,17 +1079,17 @@
 
 @media (max-width: 768px) {
   .magazine-grid-section {
-    padding: 16px 0 32px;
+    padding: 0 0 40px;
   }
   
   .magazine-filters {
     padding: 0 12px;
-    margin-bottom: 20px;
+    margin-bottom: 4px;
   }
   
   .filters-container {
-    padding: 12px;
-    gap: 12px;
+    padding: 4px;
+    gap: 4px;
   }
   
   .filter-group label {

@@ -46,6 +46,10 @@ body {
   .main-content:has(.podcast-page) {
     padding-top: 0;
   }
+
+  .main-content:has(.magazines-page) {
+    padding-top: 0;
+  }
 }
 
 /* Container */

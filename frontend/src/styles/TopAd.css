@@ -237,52 +237,63 @@
 @media (max-width: 768px) {
   .top-ad {
     height: auto;
-    min-height: 60px;
-    padding: 8px 0;
+    min-height: 44px;
+    padding: 4px 0;
   }
 
   .top-ad-container {
-    flex-direction: column;
-    gap: 8px;
+    flex-direction: row;
+    gap: 6px;
     padding: 0 12px;
   }
 
   .top-ad-content {
     width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 6px;
   }
 
   .ad-text-wrapper {
-    justify-content: center;
-    text-align: center;
+    justify-content: flex-start;
+    text-align: left;
+    flex-wrap: nowrap;
+    gap: 6px;
   }
 
   .ad-message {
-    font-size: 12px;
-    width: 100%;
-    text-align: center;
+    font-size: 11px;
+    width: auto;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .ad-cta-wrapper {
-    margin-left: 0;
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
   .ad-navigation {
-    order: 3;
-    margin: 4px 0;
+    display: none;
   }
 
   .ad-close-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
+    position: static;
+    margin-left: 6px;
+    flex-shrink: 0;
   }
 }
 
 @media (max-width: 480px) {
-  .top-ad-content {
-    flex-direction: column;
+  .top-ad {
+    min-height: 40px;
+    padding: 3px 0;
+  }
+
+  .top-ad-container {
+    padding: 0 8px;
     gap: 4px;
   }
 
@@ -291,19 +302,26 @@
   }
 
   .ad-label {
-    font-size: 9px;
+    font-size: 8px;
+    padding: 2px 6px;
   }
 
   .ad-message {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .ad-cta-wrapper {
-    padding: 2px 8px;
+    padding: 2px 6px;
   }
 
   .ad-cta-text {
-    font-size: 11px;
+    font-size: 9px;
+  }
+
+  .ad-close-btn {
+    width: 22px;
+    height: 22px;
+    margin-left: 4px;
   }
 }
 
