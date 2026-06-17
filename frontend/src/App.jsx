@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Analytics } from '@vercel/analytics/react';
 
 // Layout Components
 import Advert from './components/Advert';
@@ -181,6 +182,9 @@ function App() {
 
       {/* Quick View Modal (can be added here) */}
       {/* <QuickViewModal /> */}
+
+      {/* Vercel Analytics */}
+      <Analytics />
     </div>
   );
 }
