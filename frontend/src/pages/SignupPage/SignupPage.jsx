@@ -44,8 +44,14 @@ const SignupPage = () => {
     
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
+    } else if (!/[A-Z]/.test(formData.password)) {
+      newErrors.password = 'Password must contain at least one uppercase letter';
+    } else if (!/[a-z]/.test(formData.password)) {
+      newErrors.password = 'Password must contain at least one lowercase letter';
+    } else if (!/\d/.test(formData.password)) {
+      newErrors.password = 'Password must contain at least one number';
     }
     
     if (!formData.confirmPassword) {
@@ -78,7 +84,6 @@ const SignupPage = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Here you would normally make an API call to register
-      console.log('Signup attempt:', formData);
       
       // On successful signup, redirect to login or profile
       navigate('/login');

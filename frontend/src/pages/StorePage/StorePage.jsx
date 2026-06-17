@@ -328,9 +328,13 @@ const StorePage = () => {
 
   // Load wishlist from localStorage
   useEffect(() => {
-    const savedWishlist = localStorage.getItem('trendorabay_wishlist');
-    if (savedWishlist) {
-      setWishlist(JSON.parse(savedWishlist));
+    try {
+      const savedWishlist = localStorage.getItem('trendorabay_wishlist');
+      if (savedWishlist) {
+        setWishlist(JSON.parse(savedWishlist));
+      }
+    } catch {
+      localStorage.removeItem('trendorabay_wishlist');
     }
   }, []);
 

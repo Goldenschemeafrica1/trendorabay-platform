@@ -57,9 +57,13 @@ const CartPage = ({ onCheckoutComplete }) => {
 
   // Load cart from localStorage
   useEffect(() => {
-    const savedItemsData = localStorage.getItem('trendorabay_saved_items');
-    if (savedItemsData) {
-      setSavedItems(JSON.parse(savedItemsData));
+    try {
+      const savedItemsData = localStorage.getItem('trendorabay_saved_items');
+      if (savedItemsData) {
+        setSavedItems(JSON.parse(savedItemsData));
+      }
+    } catch {
+      localStorage.removeItem('trendorabay_saved_items');
     }
     
     setLoading(false);

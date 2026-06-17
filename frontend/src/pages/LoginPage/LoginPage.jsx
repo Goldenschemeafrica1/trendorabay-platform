@@ -32,8 +32,8 @@ const LoginPage = () => {
     
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
     }
     
     return newErrors;
@@ -56,7 +56,6 @@ const LoginPage = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Here you would normally make an API call to login
-      console.log('Login attempt:', formData);
       
       // On successful login, redirect to profile or home
       navigate('/profile');

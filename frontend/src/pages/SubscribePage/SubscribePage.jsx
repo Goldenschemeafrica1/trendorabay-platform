@@ -117,7 +117,6 @@ const SubscribePage = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      console.log('Subscription data:', { ...formData, plan: selectedPlan });
       setIsSubmitted(true);
     } catch (error) {
       setErrors({ general: 'Subscription failed. Please try again.' });

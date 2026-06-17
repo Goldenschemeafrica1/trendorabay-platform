@@ -1,4 +1,5 @@
 import React from 'react';
+import DOMPurify from 'dompurify';
 import { FaCalendarAlt, FaUser, FaTag, FaBookmark, FaHeart, FaShare, FaClock } from 'react-icons/fa';
 import Button from '../forms/Button';
 import './StoryDetails.css';
@@ -134,7 +135,7 @@ const StoryDetails = ({ story }) => {
         <div className="story-content">
           <div 
             className="story-text"
-            dangerouslySetInnerHTML={{ __html: story.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(story.content) }}
           />
         </div>
 
