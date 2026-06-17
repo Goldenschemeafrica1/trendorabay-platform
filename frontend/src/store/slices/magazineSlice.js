@@ -1,112 +1,52 @@
-import { createSlice } from '@reduxjs/toolkit';
+import createResourceSlice from './createResourceSlice';
 
-const initialState = {
-  magazines: [],
-  featuredMagazines: [],
-  currentMagazine: null,
-  categories: [],
-  subscriptions: [],
-  filters: {
+const { slice, selectors } = createResourceSlice({
+  name: 'magazines',
+  itemsKey: 'magazines',
+  initialFilters: {
     category: 'all',
     minPrice: 0,
     maxPrice: 100,
     search: '',
   },
-  pagination: {
-    currentPage: 1,
-    totalPages: 1,
-    totalItems: 0,
-    itemsPerPage: 12,
+  extraState: {
+    featuredMagazines: [],
+    subscriptions: [],
   },
-  isLoading: false,
-  error: null,
-};
-
-const magazineSlice = createSlice({
-  name: 'magazines',
-  initialState,
-  reducers: {
-    setMagazines: (state, action) => {
-      state.magazines = action.payload.items || [];
-      state.pagination = {
-        ...state.pagination,
-        ...action.payload.pagination,
-      };
-    },
-
+  extraReducers: {
     setFeaturedMagazines: (state, action) => {
       state.featuredMagazines = action.payload;
     },
-
-    setCurrentMagazine: (state, action) => {
-      state.currentMagazine = action.payload;
-    },
-
-    setCategories: (state, action) => {
-      state.categories = action.payload;
-    },
-
     setSubscriptions: (state, action) => {
       state.subscriptions = action.payload;
-    },
-
-    updateFilters: (state, action) => {
-      state.filters = {
-        ...state.filters,
-        ...action.payload,
-      };
-    },
-
-    resetFilters: (state) => {
-      state.filters = initialState.filters;
-    },
-
-    setCurrentPage: (state, action) => {
-      state.pagination.currentPage = action.payload;
-    },
-
-    setLoading: (state, action) => {
-      state.isLoading = action.payload;
-    },
-
-    setError: (state, action) => {
-      state.error = action.payload;
-    },
-
-    clearError: (state) => {
-      state.error = null;
-    },
-
-    clearCurrentMagazine: (state) => {
-      state.currentMagazine = null;
     },
   },
 });
 
 export const {
-  setMagazines,
-  setFeaturedMagazines,
-  setCurrentMagazine,
+  setItems: setMagazines,
+  setCurrentItem: setCurrentMagazine,
+  clearCurrentItem: clearCurrentMagazine,
   setCategories,
-  setSubscriptions,
   updateFilters,
   resetFilters,
   setCurrentPage,
   setLoading,
   setError,
   clearError,
-  clearCurrentMagazine,
-} = magazineSlice.actions;
+  setFeaturedMagazines,
+  setSubscriptions,
+} = slice.actions;
 
-export default magazineSlice.reducer;
+export default slice.reducer;
 
-// Selectors
-export const selectMagazines = (state) => state.magazines.magazines;
-export const selectFeaturedMagazines = (state) => state.magazines.featuredMagazines;
-export const selectCurrentMagazine = (state) => state.magazines.currentMagazine;
-export const selectMagazineCategories = (state) => state.magazines.categories;
+// Selectors — preserve the names the rest of the app already imports
+export const selectMagazines            = selectors.selectItems;
+export const selectCurrentMagazine      = selectors.selectCurrentItem;
+export const selectMagazineCategories   = selectors.selectCategories;
+export const selectMagazineFilters      = selectors.selectFilters;
+export const selectMagazinePagination   = selectors.selectPagination;
+export const selectMagazineLoading      = selectors.selectLoading;
+export const selectMagazineError        = selectors.selectError;
+export const selectFeaturedMagazines    = (state) => state.magazines.featuredMagazines;
 export const selectMagazineSubscriptions = (state) => state.magazines.subscriptions;
-export const selectMagazineFilters = (state) => state.magazines.filters;
-export const selectMagazinePagination = (state) => state.magazines.pagination;
-export const selectMagazineLoading = (state) => state.magazines.isLoading;
-export const selectMagazineError = (state) => state.magazines.error;

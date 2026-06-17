@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export const useLocalStorage = (key, initialValue) => {
   // Get value from localStorage or use initial value
@@ -37,72 +37,13 @@ export const useLocalStorage = (key, initialValue) => {
   return [storedValue, setValue, removeValue];
 };
 
-// Hook for managing cart in localStorage
-export const useCartStorage = () => {
-  const [cart, setCart] = useLocalStorage('trendorabay-cart', []);
-
-  const addToCart = (item) => {
-    setCart(prevCart => {
-      const existingItem = prevCart.find(
-        cartItem => cartItem.id === item.id && 
-        cartItem.size === item.size && 
-        cartItem.color === item.color
-      );
-
-      if (existingItem) {
-        return prevCart.map(cartItem =>
-          cartItem.id === item.id && 
-          cartItem.size === item.size && 
-          cartItem.color === item.color
-            ? { ...cartItem, quantity: cartItem.quantity + (item.quantity || 1) }
-            : cartItem
-        );
-      } else {
-        return [...prevCart, { ...item, quantity: item.quantity || 1 }];
-      }
-    });
-  };
-
-  const removeFromCart = (itemId, size = '', color = '') => {
-    setCart(prevCart =>
-      prevCart.filter(item =>
-        !(item.id === itemId && item.size === size && item.color === color)
-      )
-    );
-  };
-
-  const updateQuantity = (itemId, size = '', color = '', quantity) => {
-    setCart(prevCart =>
-      prevCart.map(item =>
-        item.id === itemId && item.size === size && item.color === color
-          ? { ...item, quantity: Math.max(1, quantity) }
-          : item
-      )
-    );
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
-
-  const getCartTotal = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
-
-  const getCartItemCount = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
-  };
-
-  return {
-    cart,
-    addToCart,
-    removeFromCart,
-    updateQuantity,
-    clearCart,
-    getCartTotal,
-    getCartItemCount,
-  };
-};
+/**
+ * @deprecated Use `useCart` from `store/hooks/useCart` instead.
+ * This hook duplicated the same add/remove/update/total logic that the
+ * Redux cart slice already provides.  Kept temporarily for backwards
+ * compatibility; will be removed in a future release.
+ */
+export { useCart as useCartStorage } from '../store/hooks/useCart';
 
 // Hook for managing user preferences
 export const usePreferences = () => {

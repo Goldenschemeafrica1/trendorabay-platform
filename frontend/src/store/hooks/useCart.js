@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { SHIPPING, TAX } from '../../utils/constants';
 import {
   addItem,
   removeItem,
@@ -71,14 +72,11 @@ export const useCart = () => {
   };
 
   const calculateShipping = () => {
-    const shippingThreshold = 50;
-    const shippingCost = 5.99;
-    return subtotal >= shippingThreshold ? 0 : shippingCost;
+    return subtotal >= SHIPPING.FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING.STANDARD_COST;
   };
 
   const calculateTax = () => {
-    const taxRate = 0.08; // 8% tax rate
-    return subtotal * taxRate;
+    return subtotal * TAX.DEFAULT_RATE;
   };
 
   const calculateTotal = () => {

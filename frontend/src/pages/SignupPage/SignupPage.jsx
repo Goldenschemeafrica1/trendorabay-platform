@@ -1,93 +1,60 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from '../../hooks/useForm';
+import { VALIDATION } from '../../utils/constants';
 import './SignupPage.css';
 
-const SignupPage = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    agreeToTerms: false,
-    subscribeToNewsletter: false
-  });
-  const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+const validate = (values) => {
+  const newErrors = {};
 
+  if (!values.firstName) newErrors.firstName = 'First name is required';
+  if (!values.lastName) newErrors.lastName = 'Last name is required';
+
+  if (!values.email) {
+    newErrors.email = 'Email is required';
+  } else if (!VALIDATION.EMAIL_REGEX.test(values.email)) {
+    newErrors.email = 'Email is invalid';
+  }
+
+  if (!values.password) {
+    newErrors.password = 'Password is required';
+  } else if (values.password.length < 6) {
+    newErrors.password = 'Password must be at least 6 characters';
+  }
+
+  if (!values.confirmPassword) {
+    newErrors.confirmPassword = 'Please confirm your password';
+  } else if (values.password !== values.confirmPassword) {
+    newErrors.confirmPassword = 'Passwords do not match';
+  }
+
+  if (!values.agreeToTerms) {
+    newErrors.agreeToTerms = 'You must agree to the terms and conditions';
+  }
+
+  return newErrors;
+};
+
+const SignupPage = () => {
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.firstName) {
-      newErrors.firstName = 'First name is required';
-    }
-    
-    if (!formData.lastName) {
-      newErrors.lastName = 'Last name is required';
-    }
-    
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-    
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-    
-    if (!formData.agreeToTerms) {
-      newErrors.agreeToTerms = 'You must agree to the terms and conditions';
-    }
-    
-    return newErrors;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newErrors = validateForm();
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    setIsLoading(true);
-    setErrors({});
-    
-    try {
-      // Simulate API call
+  const { formData, errors, isSubmitting: isLoading, handleChange, handleSubmit } = useForm({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      agreeToTerms: false,
+      subscribeToNewsletter: false,
+    },
+    validate,
+    onSubmit: async (data) => {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Here you would normally make an API call to register
-      console.log('Signup attempt:', formData);
-      
-      // On successful signup, redirect to login or profile
+      console.log('Signup attempt:', data);
       navigate('/login');
-    } catch (error) {
-      setErrors({ general: 'Registration failed. Please try again.' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   return (
     <div className="signup-page">

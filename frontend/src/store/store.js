@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { STORAGE_KEYS } from '../utils/constants';
 import cartReducer from './slices/cartSlice';
 import magazineReducer from './slices/magazineSlice';
 import merchReducer from './slices/merchSlice';
@@ -8,7 +9,7 @@ import uiReducer from './slices/uiSlice';
 // Load cart from localStorage
 const loadCartFromStorage = () => {
   try {
-    const serializedCart = localStorage.getItem('trendorabay-cart');
+    const serializedCart = localStorage.getItem(STORAGE_KEYS.CART);
     if (serializedCart === null) {
       return undefined;
     }
@@ -46,7 +47,7 @@ store.subscribe(() => {
   try {
     const state = store.getState();
     const serializedCart = JSON.stringify(state.cart);
-    localStorage.setItem('trendorabay-cart', serializedCart);
+    localStorage.setItem(STORAGE_KEYS.CART, serializedCart);
   } catch (error) {
     console.error('Error saving cart to localStorage:', error);
   }

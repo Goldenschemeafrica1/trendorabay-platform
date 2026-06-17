@@ -1,71 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from '../../hooks/useForm';
+import { VALIDATION } from '../../utils/constants';
 import './LoginPage.css';
 
-const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
-  });
-  const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+const validate = (values) => {
+  const newErrors = {};
 
+  if (!values.email) {
+    newErrors.email = 'Email is required';
+  } else if (!VALIDATION.EMAIL_REGEX.test(values.email)) {
+    newErrors.email = 'Email is invalid';
+  }
+
+  if (!values.password) {
+    newErrors.password = 'Password is required';
+  } else if (values.password.length < 6) {
+    newErrors.password = 'Password must be at least 6 characters';
+  }
+
+  return newErrors;
+};
+
+const LoginPage = () => {
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-    
-    return newErrors;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newErrors = validateForm();
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    setIsLoading(true);
-    setErrors({});
-    
-    try {
+  const { formData, errors, isSubmitting: isLoading, handleChange, handleSubmit } = useForm({
+    initialValues: { email: '', password: '', rememberMe: false },
+    validate,
+    onSubmit: async (data) => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Here you would normally make an API call to login
-      console.log('Login attempt:', formData);
-      
-      // On successful login, redirect to profile or home
+      console.log('Login attempt:', data);
       navigate('/profile');
-    } catch (error) {
-      setErrors({ general: 'Login failed. Please try again.' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   return (
     <div className="login-page">

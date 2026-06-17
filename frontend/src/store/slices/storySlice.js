@@ -1,130 +1,67 @@
-import { createSlice } from '@reduxjs/toolkit';
+import createResourceSlice from './createResourceSlice';
 
-const initialState = {
-  stories: [],
-  featuredStory: null,
-  currentStory: null,
-  authors: [],
-  currentAuthor: null,
-  categories: [],
-  popularStories: [],
-  filters: {
+const { slice, selectors } = createResourceSlice({
+  name: 'stories',
+  itemsKey: 'stories',
+  initialFilters: {
     category: 'all',
     author: '',
     search: '',
   },
-  pagination: {
-    currentPage: 1,
-    totalPages: 1,
-    totalItems: 0,
-    itemsPerPage: 12,
+  extraState: {
+    featuredStory: null,
+    authors: [],
+    currentAuthor: null,
+    popularStories: [],
   },
-  isLoading: false,
-  error: null,
-};
-
-const storySlice = createSlice({
-  name: 'stories',
-  initialState,
-  reducers: {
-    setStories: (state, action) => {
-      state.stories = action.payload.items || [];
-      state.pagination = {
-        ...state.pagination,
-        ...action.payload.pagination,
-      };
-    },
-
+  extraReducers: {
     setFeaturedStory: (state, action) => {
       state.featuredStory = action.payload;
     },
-
-    setCurrentStory: (state, action) => {
-      state.currentStory = action.payload;
-    },
-
     setAuthors: (state, action) => {
       state.authors = action.payload.items || [];
     },
-
     setCurrentAuthor: (state, action) => {
       state.currentAuthor = action.payload;
     },
-
-    setCategories: (state, action) => {
-      state.categories = action.payload;
-    },
-
-    setPopularStories: (state, action) => {
-      state.popularStories = action.payload;
-    },
-
-    updateFilters: (state, action) => {
-      state.filters = {
-        ...state.filters,
-        ...action.payload,
-      };
-    },
-
-    resetFilters: (state) => {
-      state.filters = initialState.filters;
-    },
-
-    setCurrentPage: (state, action) => {
-      state.pagination.currentPage = action.payload;
-    },
-
-    setLoading: (state, action) => {
-      state.isLoading = action.payload;
-    },
-
-    setError: (state, action) => {
-      state.error = action.payload;
-    },
-
-    clearError: (state) => {
-      state.error = null;
-    },
-
-    clearCurrentStory: (state) => {
-      state.currentStory = null;
-    },
-
     clearCurrentAuthor: (state) => {
       state.currentAuthor = null;
+    },
+    setPopularStories: (state, action) => {
+      state.popularStories = action.payload;
     },
   },
 });
 
 export const {
-  setStories,
-  setFeaturedStory,
-  setCurrentStory,
-  setAuthors,
-  setCurrentAuthor,
+  setItems: setStories,
+  setCurrentItem: setCurrentStory,
+  clearCurrentItem: clearCurrentStory,
   setCategories,
-  setPopularStories,
   updateFilters,
   resetFilters,
   setCurrentPage,
   setLoading,
   setError,
   clearError,
-  clearCurrentStory,
+  setFeaturedStory,
+  setAuthors,
+  setCurrentAuthor,
   clearCurrentAuthor,
-} = storySlice.actions;
+  setPopularStories,
+} = slice.actions;
 
-export default storySlice.reducer;
+export default slice.reducer;
 
-// Selectors
-export const selectStories = (state) => state.stories.stories;
-export const selectFeaturedStory = (state) => state.stories.featuredStory;
-export const selectCurrentStory = (state) => state.stories.currentStory;
-export const selectAuthors = (state) => state.stories.authors;
-export const selectCurrentAuthor = (state) => state.stories.currentAuthor;
-export const selectStoryCategories = (state) => state.stories.categories;
-export const selectPopularStories = (state) => state.stories.popularStories;
-export const selectStoryFilters = (state) => state.stories.filters;
-export const selectStoryPagination = (state) => state.stories.pagination;
-export const selectStoryLoading = (state) => state.stories.isLoading;
-export const selectStoryError = (state) => state.stories.error;
+// Selectors — preserve the names the rest of the app already imports
+export const selectStories         = selectors.selectItems;
+export const selectCurrentStory    = selectors.selectCurrentItem;
+export const selectStoryCategories = selectors.selectCategories;
+export const selectStoryFilters    = selectors.selectFilters;
+export const selectStoryPagination = selectors.selectPagination;
+export const selectStoryLoading    = selectors.selectLoading;
+export const selectStoryError      = selectors.selectError;
+export const selectFeaturedStory   = (state) => state.stories.featuredStory;
+export const selectAuthors         = (state) => state.stories.authors;
+export const selectCurrentAuthor   = (state) => state.stories.currentAuthor;
+export const selectPopularStories  = (state) => state.stories.popularStories;

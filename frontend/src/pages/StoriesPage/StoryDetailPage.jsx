@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { formatDate } from '../../utils/formatters';
 import './StoriesPage.css';
 
 const StoryDetailPage = () => {
@@ -92,15 +93,6 @@ const StoryDetailPage = () => {
 
     fetchStory();
   }, [id]);
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
 
   if (loading) {
     return (

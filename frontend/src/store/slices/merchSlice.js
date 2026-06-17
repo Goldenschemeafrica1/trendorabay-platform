@@ -1,11 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import createResourceSlice from './createResourceSlice';
 
-const initialState = {
-  products: [],
-  featuredProducts: [],
-  currentProduct: null,
-  categories: [],
-  filters: {
+const { slice, selectors } = createResourceSlice({
+  name: 'merch',
+  itemsKey: 'products',
+  initialFilters: {
     category: 'all',
     minPrice: 0,
     maxPrice: 500,
@@ -13,87 +11,26 @@ const initialState = {
     size: '',
     color: '',
   },
-  pagination: {
-    currentPage: 1,
-    totalPages: 1,
-    totalItems: 0,
-    itemsPerPage: 12,
+  extraState: {
+    featuredProducts: [],
   },
-  isLoading: false,
-  error: null,
-};
-
-const merchSlice = createSlice({
-  name: 'merch',
-  initialState,
-  reducers: {
-    setProducts: (state, action) => {
-      state.products = action.payload.items || [];
-      state.pagination = {
-        ...state.pagination,
-        ...action.payload.pagination,
-      };
-    },
-
+  extraReducers: {
     setFeaturedProducts: (state, action) => {
       state.featuredProducts = action.payload;
     },
-
-    setCurrentProduct: (state, action) => {
-      state.currentProduct = action.payload;
-    },
-
-    setCategories: (state, action) => {
-      state.categories = action.payload;
-    },
-
-    updateFilters: (state, action) => {
-      state.filters = {
-        ...state.filters,
-        ...action.payload,
-      };
-    },
-
-    resetFilters: (state) => {
-      state.filters = initialState.filters;
-    },
-
-    setCurrentPage: (state, action) => {
-      state.pagination.currentPage = action.payload;
-    },
-
-    setLoading: (state, action) => {
-      state.isLoading = action.payload;
-    },
-
-    setError: (state, action) => {
-      state.error = action.payload;
-    },
-
-    clearError: (state) => {
-      state.error = null;
-    },
-
-    clearCurrentProduct: (state) => {
-      state.currentProduct = null;
-    },
-
     updateProductOptions: (state, action) => {
       const { productId, options } = action.payload;
-      if (state.currentProduct && state.currentProduct.id === productId) {
-        state.currentProduct = {
-          ...state.currentProduct,
-          ...options,
-        };
+      if (state.currentItem && state.currentItem.id === productId) {
+        state.currentItem = { ...state.currentItem, ...options };
       }
     },
   },
 });
 
 export const {
-  setProducts,
-  setFeaturedProducts,
-  setCurrentProduct,
+  setItems: setProducts,
+  setCurrentItem: setCurrentProduct,
+  clearCurrentItem: clearCurrentProduct,
   setCategories,
   updateFilters,
   resetFilters,
@@ -101,18 +38,18 @@ export const {
   setLoading,
   setError,
   clearError,
-  clearCurrentProduct,
+  setFeaturedProducts,
   updateProductOptions,
-} = merchSlice.actions;
+} = slice.actions;
 
-export default merchSlice.reducer;
+export default slice.reducer;
 
-// Selectors
-export const selectProducts = (state) => state.merch.products;
+// Selectors — preserve the names the rest of the app already imports
+export const selectProducts        = selectors.selectItems;
+export const selectCurrentProduct  = selectors.selectCurrentItem;
+export const selectMerchCategories = selectors.selectCategories;
+export const selectMerchFilters    = selectors.selectFilters;
+export const selectMerchPagination = selectors.selectPagination;
+export const selectMerchLoading    = selectors.selectLoading;
+export const selectMerchError      = selectors.selectError;
 export const selectFeaturedProducts = (state) => state.merch.featuredProducts;
-export const selectCurrentProduct = (state) => state.merch.currentProduct;
-export const selectMerchCategories = (state) => state.merch.categories;
-export const selectMerchFilters = (state) => state.merch.filters;
-export const selectMerchPagination = (state) => state.merch.pagination;
-export const selectMerchLoading = (state) => state.merch.isLoading;
-export const selectMerchError = (state) => state.merch.error;

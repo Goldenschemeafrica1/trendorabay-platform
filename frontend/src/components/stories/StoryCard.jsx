@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaUser, FaCalendar, FaTag, FaClock } from 'react-icons/fa';
+import { FaUser, FaTag, FaClock } from 'react-icons/fa';
 import './StoryCard.css';
 
 const StoryCard = ({ 
@@ -9,20 +9,6 @@ const StoryCard = ({
   showCategory = true,
   compact = false 
 }) => {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    });
-  };
-
-  const calculateReadTime = (content) => {
-    const wordsPerMinute = 200;
-    const words = content ? content.split(' ').length : 100;
-    return Math.ceil(words / wordsPerMinute);
-  };
 
   return (
     <article className={`story-card ${compact ? 'compact' : ''}`}>
