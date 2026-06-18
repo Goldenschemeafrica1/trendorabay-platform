@@ -4,15 +4,21 @@ import './styles/Footer.css';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const footerLinks = [
+  const column1Links = [
     { name: 'Contact', path: '/contact' },
     { name: 'Write for Us', path: '/write-for-us' },
     { name: 'FAQs', path: '/faq' },
     { name: 'Subscribe', path: '/subscribe' },
+  ];
+
+  const column2Links = [
     { name: 'Community Hub', path: '/community' },
     { name: 'Events', path: '/community/events' },
     { name: 'Contributors', path: '/community/contributors' },
     { name: 'Stories', path: '/stories' },
+  ];
+
+  const column3Links = [
     { name: 'Podcast', path: '/podcast' },
     { name: 'Donate', path: '/donate' },
     { name: 'Merchandise', path: '/merchandise' },
@@ -58,15 +64,35 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Footer Links - 3 per row */}
-            <div className="footer-col footer-buttons-col">
-              <div className="footer-buttons-grid">
-                {footerLinks.map((link, index) => (
-                  <Link key={index} to={link.path} className="footer-btn">
-                    {link.name}
-                  </Link>
+            {/* Footer Link Columns */}
+            <div className="footer-col links-col">
+              <ul className="footer-links">
+                {column1Links.map((link, index) => (
+                  <li key={index}>
+                    <Link to={link.path}>{link.name}</Link>
+                  </li>
                 ))}
-              </div>
+              </ul>
+            </div>
+
+            <div className="footer-col links-col">
+              <ul className="footer-links">
+                {column2Links.map((link, index) => (
+                  <li key={index}>
+                    <Link to={link.path}>{link.name}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="footer-col links-col">
+              <ul className="footer-links">
+                {column3Links.map((link, index) => (
+                  <li key={index}>
+                    <Link to={link.path}>{link.name}</Link>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             </div>

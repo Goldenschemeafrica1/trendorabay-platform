@@ -71,7 +71,7 @@
 /* Footer Grid */
 .footer-grid {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto repeat(3, 1fr);
   gap: 2rem;
   align-items: start;
   margin-bottom: 1.5rem;
@@ -82,54 +82,13 @@
   flex-direction: column;
 }
 
-.footer-col-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: var(--color-cream, #faf6f0);
-  position: relative;
-  padding-bottom: 0.5rem;
+/* Link Columns */
+.links-col .footer-links li {
+  margin-bottom: 0.4rem;
 }
 
-/* Footer Buttons Column */
-.footer-buttons-col {
-  display: flex;
-  align-items: center;
-}
-
-.footer-buttons-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  width: 100%;
-}
-
-.footer-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 6px;
-  color: rgba(250, 246, 240, 0.85);
-  text-decoration: none;
+.links-col .footer-links a {
   font-size: 0.8rem;
-  transition: all 0.3s ease;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.footer-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--color-cream, #faf6f0);
-  border-color: var(--color-gold-accent, #b87c4b);
-  transform: translateY(-2px);
-}
-
-.footer-btn:focus-visible {
-  outline: 2px solid var(--color-gold-accent, #b87c4b);
-  outline-offset: 2px;
 }
 
 /* Fashion & Style Magazine Column */
@@ -414,8 +373,12 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
   .footer-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
+  }
+  
+  .fashion-col {
+    grid-column: 1 / -1;
   }
 }
 
@@ -430,12 +393,13 @@
   }
   
   .footer-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.2rem;
     margin-bottom: 1.2rem;
   }
   
   .fashion-col {
+    grid-column: 1 / -1;
     max-width: 280px;
   }
   
@@ -514,8 +478,8 @@
   }
   
   .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
   }
   
   .footer-col {
@@ -523,13 +487,8 @@
     width: 100%;
   }
   
-  .footer-buttons-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .footer-btn {
-    font-size: 0.7rem;
-    padding: 0.4rem 0.5rem;
+  .fashion-col {
+    grid-column: 1 / -1;
   }
   
   .fashion-magazine {
