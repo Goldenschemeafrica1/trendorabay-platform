@@ -71,7 +71,7 @@
 /* Footer Grid */
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr repeat(5, 1fr);
+  grid-template-columns: 2fr repeat(3, 1fr);
   gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -155,29 +155,13 @@
   margin: 0;
 }
 
-/* Quick Links Column - moved to the right */
-.quick-links-col {
-  margin-left: 1rem;
-  max-width: 120px;
-}
-
-/* Categories Column - moved to the right */
-.categories-col {
-  margin-left: 2rem;
-  max-width: 120px;
-}
-
-/* Community Column - moved to the right */
-.community-col {
-  margin-left: 1.5rem;
-  grid-column: span 1;
-  max-width: 140px;
-}
-
-/* Shop Column - moved to the right */
+/* Link Columns */
+.quick-links-col,
+.community-col,
 .shop-col {
-  margin-left: 0.5rem;
-  max-width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .footer-logo {
@@ -461,21 +445,6 @@
     margin-bottom: 0.6rem;
   }
   
-  .quick-links-col {
-    margin-left: 0.8rem;
-    max-width: 110px;
-  }
-  
-  .community-col {
-    margin-left: 1.2rem;
-    max-width: 130px;
-  }
-  
-  .shop-col {
-    margin-left: 0.4rem;
-    max-width: 90px;
-  }
-  
   .footer-links a {
     font-size: 0.8rem;
   }
@@ -547,10 +516,8 @@
   }
   
   .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
   }
   
   .footer-col {
@@ -558,18 +525,10 @@
     width: 100%;
   }
   
-  /* Ensure magazine column stays at top */
+  /* Magazine column spans full width on top */
   .fashion-col {
-    order: -1;
-    margin-bottom: 2rem;
-  }
-  
-  /* Reset all footer column margins on mobile for proper alignment */
-  .quick-links-col,
-  .categories-col,
-  .community-col,
-  .shop-col {
-    margin-left: 0;
+    grid-column: 1 / -1;
+    margin-bottom: 1rem;
   }
   
   .fashion-magazine {
