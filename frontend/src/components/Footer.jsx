@@ -8,18 +8,21 @@ const Footer = () => {
     { name: 'Contact', path: '/contact' },
     { name: 'Write for Us', path: '/write-for-us' },
     { name: 'FAQs', path: '/faq' },
-    { name: 'Subscribe', path: '/subscribe' },
   ];
 
   const column2Links = [
+    { name: 'Subscribe', path: '/subscribe' },
     { name: 'Community Hub', path: '/community' },
     { name: 'Events', path: '/community/events' },
-    { name: 'Contributors', path: '/community/contributors' },
-    { name: 'Stories', path: '/stories' },
   ];
 
   const column3Links = [
+    { name: 'Contributors', path: '/community/contributors' },
+    { name: 'Stories', path: '/stories' },
     { name: 'Podcast', path: '/podcast' },
+  ];
+
+  const column4Links = [
     { name: 'Donate', path: '/donate' },
     { name: 'Merchandise', path: '/merchandise' },
     { name: 'Gift Cards', path: '/gift-cards' },
@@ -88,6 +91,16 @@ const Footer = () => {
             <div className="footer-col links-col">
               <ul className="footer-links">
                 {column3Links.map((link, index) => (
+                  <li key={index}>
+                    <Link to={link.path}>{link.name}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="footer-col links-col">
+              <ul className="footer-links">
+                {column4Links.map((link, index) => (
                   <li key={index}>
                     <Link to={link.path}>{link.name}</Link>
                   </li>
