@@ -4,26 +4,20 @@ import './styles/Footer.css';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const quickLinks = [
+  const footerLinks = [
     { name: 'Contact', path: '/contact' },
     { name: 'Write for Us', path: '/write-for-us' },
     { name: 'FAQs', path: '/faq' },
     { name: 'Subscribe', path: '/subscribe' },
-  ];
-
-  const merchandiseLinks = [
-    { name: 'Merchandise', path: '/merchandise' },
-    { name: 'Gift Cards', path: '/gift-cards' },
-    { name: 'Cart', path: '/cart' },
-  ];
-
-  const communityLinks = [
     { name: 'Community Hub', path: '/community' },
     { name: 'Events', path: '/community/events' },
     { name: 'Contributors', path: '/community/contributors' },
     { name: 'Stories', path: '/stories' },
     { name: 'Podcast', path: '/podcast' },
     { name: 'Donate', path: '/donate' },
+    { name: 'Merchandise', path: '/merchandise' },
+    { name: 'Gift Cards', path: '/gift-cards' },
+    { name: 'Cart', path: '/cart' },
   ];
 
   const aboutLinks = [
@@ -64,37 +58,15 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Quick Links */}
-            <div className="footer-col quick-links-col">
-              <ul className="footer-links">
-                {quickLinks.map((link, index) => (
-                  <li key={index}>
-                    <Link to={link.path}>{link.name}</Link>
-                  </li>
+            {/* Footer Links - 3 per row */}
+            <div className="footer-col footer-buttons-col">
+              <div className="footer-buttons-grid">
+                {footerLinks.map((link, index) => (
+                  <Link key={index} to={link.path} className="footer-btn">
+                    {link.name}
+                  </Link>
                 ))}
-              </ul>
-            </div>
-
-            {/* Community */}
-            <div className="footer-col community-col">
-              <ul className="footer-links">
-                {communityLinks.map((link, index) => (
-                  <li key={index}>
-                    <Link to={link.path}>{link.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Shop */}
-            <div className="footer-col shop-col">
-              <ul className="footer-links">
-                {merchandiseLinks.map((link, index) => (
-                  <li key={index}>
-                    <Link to={link.path}>{link.name}</Link>
-                  </li>
-                ))}
-              </ul>
+              </div>
             </div>
 
             </div>

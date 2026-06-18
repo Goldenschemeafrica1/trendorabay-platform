@@ -71,8 +71,9 @@
 /* Footer Grid */
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr repeat(3, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  align-items: start;
   margin-bottom: 1.5rem;
 }
 
@@ -90,31 +91,45 @@
   padding-bottom: 0.5rem;
 }
 
-/* Compact styling for specific columns */
-.quick-links-col .footer-links a,
-.community-col .footer-links a,
-.shop-col .footer-links a {
-  font-size: 0.75rem;
+/* Footer Buttons Column */
+.footer-buttons-col {
+  display: flex;
+  align-items: center;
 }
 
-.quick-links-col .footer-links li,
-.community-col .footer-links li,
-.shop-col .footer-links li {
-  margin-bottom: 0.25rem;
+.footer-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  width: 100%;
 }
 
-.footer-col-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-gold-accent, #b87c4b), var(--color-gold-light, #d4a373));
+.footer-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: rgba(250, 246, 240, 0.85);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  white-space: nowrap;
 }
 
-.footer-col-title-secondary {
-  margin-top: 1.5rem;
+.footer-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--color-cream, #faf6f0);
+  border-color: var(--color-gold-accent, #b87c4b);
+  transform: translateY(-2px);
+}
+
+.footer-btn:focus-visible {
+  outline: 2px solid var(--color-gold-accent, #b87c4b);
+  outline-offset: 2px;
 }
 
 /* Fashion & Style Magazine Column */
@@ -155,14 +170,7 @@
   margin: 0;
 }
 
-/* Link Columns */
-.quick-links-col,
-.community-col,
-.shop-col {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
+
 
 .footer-logo {
   font-size: 1.6rem;
@@ -406,13 +414,8 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
   .footer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
-  }
-  
-  .brand-col {
-    grid-column: 1 / -1;
-    max-width: none;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
@@ -427,7 +430,7 @@
   }
   
   .footer-grid {
-    grid-template-columns: 2fr repeat(3, 1fr);
+    grid-template-columns: 1fr;
     gap: 1.2rem;
     margin-bottom: 1.2rem;
   }
@@ -449,11 +452,6 @@
     font-size: 0.8rem;
   }
   
-  .quick-links-col .footer-links li,
-  .community-col .footer-links li,
-  .shop-col .footer-links li {
-    margin-bottom: 0.3rem;
-  }
   
   .footer-bottom {
     padding: 0.4rem 0;
@@ -516,7 +514,7 @@
   }
   
   .footer-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
     gap: 1.5rem;
   }
   
@@ -525,10 +523,13 @@
     width: 100%;
   }
   
-  /* Magazine column spans full width on top */
-  .fashion-col {
-    grid-column: 1 / -1;
-    margin-bottom: 1rem;
+  .footer-buttons-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .footer-btn {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.5rem;
   }
   
   .fashion-magazine {
