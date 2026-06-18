@@ -91,13 +91,6 @@
 }
 
 /* Compact styling for specific columns */
-.quick-links-col .footer-col-title,
-.community-col .footer-col-title,
-.shop-col .footer-col-title {
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-}
-
 .quick-links-col .footer-links a,
 .community-col .footer-links a,
 .shop-col .footer-links a {
@@ -421,28 +414,7 @@
   50% { transform: scale(1.1); }
 }
 
-/* Dropdown Toggle Styles */
-.dropdown-toggle {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  user-select: none;
-  transition: color 0.3s ease;
-}
-
-.dropdown-toggle:hover {
-  color: var(--color-gold-accent, #b87c4b);
-}
-
-.dropdown-icon {
-  display: none;
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
-  transition: transform 0.3s ease;
-}
-
-/* Dropdown Links - Hidden by default on mobile */
+/* Footer Links - Always visible */
 .footer-links {
   display: block;
 }
@@ -489,13 +461,6 @@
     margin-bottom: 0.6rem;
   }
   
-  .quick-links-col .footer-col-title,
-  .community-col .footer-col-title,
-  .shop-col .footer-col-title {
-    font-size: 0.8rem;
-    margin-bottom: 0.4rem;
-  }
-  
   .quick-links-col {
     margin-left: 0.8rem;
     max-width: 110px;
@@ -537,9 +502,6 @@
     font-size: 0.65rem;
   }
   
-  .dropdown-icon {
-    font-size: 0.7rem;
-  }
 }
 
 @media (max-width: 768px) {
@@ -621,26 +583,9 @@
     transform: none;
   }
   
-  /* Remove underline from quick links, community, and shop in mobile */
-  .quick-links-col .footer-col-title::after,
-  .community-col .footer-col-title::after,
-  .shop-col .footer-col-title::after {
-    display: none;
-  }
-  
-  /* Mobile dropdown styles */
-  .dropdown-icon {
-    display: inline-block;
-  }
-  
   .footer-links {
-    display: none;
-    margin-top: 0.5rem;
-    padding-left: 0;
-  }
-  
-  .footer-links.dropdown-open {
     display: block;
+    padding-left: 0;
   }
   
   .footer-links li {

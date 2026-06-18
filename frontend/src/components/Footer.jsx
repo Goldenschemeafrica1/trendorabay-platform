@@ -1,31 +1,14 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaAngleDown,
-  FaAngleUp
-} from 'react-icons/fa';
 import './styles/Footer.css';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
-  const [activeDropdown, setActiveDropdown] = useState(null);
-
-  const toggleDropdown = (section) => {
-    setActiveDropdown(activeDropdown === section ? null : section);
-  };
 
   const quickLinks = [
     { name: 'Contact', path: '/contact' },
     { name: 'Write for Us', path: '/write-for-us' },
     { name: 'FAQs', path: '/faq' },
     { name: 'Subscribe', path: '/subscribe' },
-  ];
-
-  const magazineCategories = [
   ];
 
   const merchandiseLinks = [
@@ -83,16 +66,7 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div className="footer-col quick-links-col">
-              <h4 
-                className="footer-col-title dropdown-toggle"
-                onClick={() => toggleDropdown('quickLinks')}
-              >
-                Quick Links
-                <span className="dropdown-icon">
-                  {activeDropdown === 'quickLinks' ? <FaAngleUp /> : <FaAngleDown />}
-                </span>
-              </h4>
-              <ul className={`footer-links ${activeDropdown === 'quickLinks' ? 'dropdown-open' : ''}`}>
+              <ul className="footer-links">
                 {quickLinks.map((link, index) => (
                   <li key={index}>
                     <Link to={link.path}>{link.name}</Link>
@@ -103,16 +77,7 @@ const Footer = () => {
 
             {/* Community */}
             <div className="footer-col community-col">
-              <h4 
-                className="footer-col-title dropdown-toggle"
-                onClick={() => toggleDropdown('community')}
-              >
-                Community
-                <span className="dropdown-icon">
-                  {activeDropdown === 'community' ? <FaAngleUp /> : <FaAngleDown />}
-                </span>
-              </h4>
-              <ul className={`footer-links ${activeDropdown === 'community' ? 'dropdown-open' : ''}`}>
+              <ul className="footer-links">
                 {communityLinks.map((link, index) => (
                   <li key={index}>
                     <Link to={link.path}>{link.name}</Link>
@@ -121,18 +86,9 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Merchandise */}
+            {/* Shop */}
             <div className="footer-col shop-col">
-              <h4 
-                className="footer-col-title dropdown-toggle"
-                onClick={() => toggleDropdown('shop')}
-              >
-                Shop
-                <span className="dropdown-icon">
-                  {activeDropdown === 'shop' ? <FaAngleUp /> : <FaAngleDown />}
-                </span>
-              </h4>
-              <ul className={`footer-links ${activeDropdown === 'shop' ? 'dropdown-open' : ''}`}>
+              <ul className="footer-links">
                 {merchandiseLinks.map((link, index) => (
                   <li key={index}>
                     <Link to={link.path}>{link.name}</Link>
