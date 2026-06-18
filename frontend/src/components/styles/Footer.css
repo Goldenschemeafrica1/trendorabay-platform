@@ -71,8 +71,9 @@
 /* Footer Grid */
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr repeat(5, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: auto repeat(4, 1fr);
+  gap: 2rem;
+  align-items: start;
   margin-bottom: 1.5rem;
 }
 
@@ -81,47 +82,13 @@
   flex-direction: column;
 }
 
-.footer-col-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: var(--color-cream, #faf6f0);
-  position: relative;
-  padding-bottom: 0.5rem;
+/* Link Columns */
+.links-col .footer-links li {
+  margin-bottom: 0.4rem;
 }
 
-/* Compact styling for specific columns */
-.quick-links-col .footer-col-title,
-.community-col .footer-col-title,
-.shop-col .footer-col-title {
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-}
-
-.quick-links-col .footer-links a,
-.community-col .footer-links a,
-.shop-col .footer-links a {
-  font-size: 0.75rem;
-}
-
-.quick-links-col .footer-links li,
-.community-col .footer-links li,
-.shop-col .footer-links li {
-  margin-bottom: 0.25rem;
-}
-
-.footer-col-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-gold-accent, #b87c4b), var(--color-gold-light, #d4a373));
-}
-
-.footer-col-title-secondary {
-  margin-top: 1.5rem;
+.links-col .footer-links a {
+  font-size: 0.8rem;
 }
 
 /* Fashion & Style Magazine Column */
@@ -162,30 +129,7 @@
   margin: 0;
 }
 
-/* Quick Links Column - moved to the right */
-.quick-links-col {
-  margin-left: 1rem;
-  max-width: 120px;
-}
 
-/* Categories Column - moved to the right */
-.categories-col {
-  margin-left: 2rem;
-  max-width: 120px;
-}
-
-/* Community Column - moved to the right */
-.community-col {
-  margin-left: 1.5rem;
-  grid-column: span 1;
-  max-width: 140px;
-}
-
-/* Shop Column - moved to the right */
-.shop-col {
-  margin-left: 0.5rem;
-  max-width: 100px;
-}
 
 .footer-logo {
   font-size: 1.6rem;
@@ -421,28 +365,7 @@
   50% { transform: scale(1.1); }
 }
 
-/* Dropdown Toggle Styles */
-.dropdown-toggle {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  user-select: none;
-  transition: color 0.3s ease;
-}
-
-.dropdown-toggle:hover {
-  color: var(--color-gold-accent, #b87c4b);
-}
-
-.dropdown-icon {
-  display: none;
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
-  transition: transform 0.3s ease;
-}
-
-/* Dropdown Links - Hidden by default on mobile */
+/* Footer Links - Always visible */
 .footer-links {
   display: block;
 }
@@ -450,13 +373,12 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
   .footer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
   }
   
-  .brand-col {
+  .fashion-col {
     grid-column: 1 / -1;
-    max-width: none;
   }
 }
 
@@ -471,12 +393,13 @@
   }
   
   .footer-grid {
-    grid-template-columns: 2fr repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.2rem;
     margin-bottom: 1.2rem;
   }
   
   .fashion-col {
+    grid-column: 1 / -1;
     max-width: 280px;
   }
   
@@ -489,37 +412,10 @@
     margin-bottom: 0.6rem;
   }
   
-  .quick-links-col .footer-col-title,
-  .community-col .footer-col-title,
-  .shop-col .footer-col-title {
-    font-size: 0.8rem;
-    margin-bottom: 0.4rem;
-  }
-  
-  .quick-links-col {
-    margin-left: 0.8rem;
-    max-width: 110px;
-  }
-  
-  .community-col {
-    margin-left: 1.2rem;
-    max-width: 130px;
-  }
-  
-  .shop-col {
-    margin-left: 0.4rem;
-    max-width: 90px;
-  }
-  
   .footer-links a {
     font-size: 0.8rem;
   }
   
-  .quick-links-col .footer-links li,
-  .community-col .footer-links li,
-  .shop-col .footer-links li {
-    margin-bottom: 0.3rem;
-  }
   
   .footer-bottom {
     padding: 0.4rem 0;
@@ -537,9 +433,6 @@
     font-size: 0.65rem;
   }
   
-  .dropdown-icon {
-    font-size: 0.7rem;
-  }
 }
 
 @media (max-width: 768px) {
@@ -585,10 +478,8 @@
   }
   
   .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
   }
   
   .footer-col {
@@ -596,18 +487,8 @@
     width: 100%;
   }
   
-  /* Ensure magazine column stays at top */
   .fashion-col {
-    order: -1;
-    margin-bottom: 2rem;
-  }
-  
-  /* Reset all footer column margins on mobile for proper alignment */
-  .quick-links-col,
-  .categories-col,
-  .community-col,
-  .shop-col {
-    margin-left: 0;
+    grid-column: 1 / -1;
   }
   
   .fashion-magazine {
@@ -621,26 +502,9 @@
     transform: none;
   }
   
-  /* Remove underline from quick links, community, and shop in mobile */
-  .quick-links-col .footer-col-title::after,
-  .community-col .footer-col-title::after,
-  .shop-col .footer-col-title::after {
-    display: none;
-  }
-  
-  /* Mobile dropdown styles */
-  .dropdown-icon {
-    display: inline-block;
-  }
-  
   .footer-links {
-    display: none;
-    margin-top: 0.5rem;
-    padding-left: 0;
-  }
-  
-  .footer-links.dropdown-open {
     display: block;
+    padding-left: 0;
   }
   
   .footer-links li {
