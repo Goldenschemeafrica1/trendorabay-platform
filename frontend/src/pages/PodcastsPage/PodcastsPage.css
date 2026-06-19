@@ -896,7 +896,7 @@
 .episodes-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+  gap: 16px;
 }
 
 .episode-card {
