@@ -385,7 +385,7 @@ const PodcastPage = () => {
                   >
                     <i className={`fas ${currentEpisode?.id === episode.id && isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
                   </button>
-                  <span className="episode-duration-badge">{episode.duration}</span>
+
                 </div>
                 <div className="card-content">
                   <p className="episode-description">{episode.description}</p>
