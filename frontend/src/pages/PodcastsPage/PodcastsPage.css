@@ -895,12 +895,8 @@
 
 .episodes-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 32px;
-}
-
-.episodes-grid > .episode-card:nth-child(n+5) {
-  display: none;
 }
 
 .episode-card {
