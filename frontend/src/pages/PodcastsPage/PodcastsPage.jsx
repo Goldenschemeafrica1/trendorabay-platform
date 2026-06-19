@@ -255,6 +255,16 @@ const PodcastPage = () => {
     if (progressRef.current) progressRef.current.style.width = "0%";
   };
 
+  const formatDurationHHMMSS = (dur) => {
+    const parts = dur.split(':');
+    if (parts.length === 2) {
+      const mins = parts[0].padStart(2, '0');
+      const secs = parts[1].padStart(2, '0');
+      return `00:${mins}:${secs}`;
+    }
+    return dur;
+  };
+
   const getTrendingEpisodes = () => {
     return [...episodes].sort((a, b) => b.plays - a.plays).slice(0, 5);
   };
@@ -378,14 +388,8 @@ const PodcastPage = () => {
                   <span className="episode-duration-badge">{episode.duration}</span>
                 </div>
                 <div className="card-content">
-                  <span className="episode-category">{episode.category}</span>
-                  <h3>{episode.title}</h3>
-                  <p className="episode-guest">with {episode.guest}</p>
-                  <p className="episode-description">{episode.description.substring(0, 100)}...</p>
-                  <div className="card-meta">
-                    <span><i className="far fa-calendar"></i> {new Date(episode.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-                    <span><i className="fas fa-headphones"></i> {episode.plays.toLocaleString()} plays</span>
-                  </div>
+                  <p className="episode-description">{episode.description}</p>
+                  <span className="episode-duration"><i className="far fa-clock"></i> {formatDurationHHMMSS(episode.duration)}</span>
                 </div>
               </div>
             ))}
