@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DOMPurify from 'dompurify';
 import { FaShoppingCart, FaHeart, FaShare, FaStar, FaTruck, FaShieldAlt, FaUndo } from 'react-icons/fa';
 import Button from '../forms/Button';
 import './ProductDetails.css';
@@ -246,7 +247,7 @@ const ProductDetails = ({ product }) => {
                 <h3>Description</h3>
                 <p>{product.description}</p>
                 {product.fullDescription && (
-                  <div dangerouslySetInnerHTML={{ __html: product.fullDescription }} />
+                  <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.fullDescription) }} />
                 )}
               </div>
             )}

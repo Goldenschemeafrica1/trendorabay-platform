@@ -28,7 +28,6 @@ const CheckoutPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle checkout logic here
-    console.log('Checkout data:', formData);
     navigate('/checkout/success');
   };
 

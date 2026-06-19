@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 import { useParams, Link } from 'react-router-dom';
 import './StoriesPage.css';
 
@@ -160,7 +161,7 @@ const StoryDetailPage = () => {
           
           <div 
             className="story-body"
-            dangerouslySetInnerHTML={{ __html: story.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(story.content) }}
           />
 
           {/* Story Tags */}

@@ -10,11 +10,32 @@ import './MagazineDetails.css';
 const sampleMagazines = [
   {
     id: 1,
+    title: 'Tech & Innovation',
     category: 'Tech & Innovation',
     subcategory: 'Technology',
     issue: 'Vol. 12 / Q1 2026',
     coverImage: '/assets/Tech.jpeg',
     coverImageLarge: '/assets/Tech.jpeg',
+    description: 'AI Revolution · Fintech · 30 Under 30 Innovators',
+    fullDescription: `Tech & Innovation celebrates the cutting-edge technology transforming Africa. This issue dives deep into artificial intelligence, fintech, and the entrepreneurs driving change.
+
+  Features include:
+  • The AI Revolution in African Agriculture
+  • Fintech: The Next Frontier
+  • 30 Under 30: Tech Innovators
+  • Blockchain and Land Rights
+  • Investment Trends in African Tech`,
+    price: 14.99,
+    subscriptionPrice: 39.99,
+    digitalPrice: 14.99,
+    printPrice: 18.99,
+    readers: 1850,
+    rating: 4.8,
+    reviewCount: 98,
+    isNew: true,
+    isFeatured: true,
+    editorPick: true,
+    publishDate: '2026-01-15',
     pages: 128,
     language: 'English',
     publisher: 'Trendorabay Media',
@@ -2663,7 +2684,7 @@ const MagazineDetails = () => {
             {activeTab === 'description' && (
               <div className="description-tab">
                 <div className="full-description">
-                  {magazine.fullDescription.split('\n\n').map((paragraph, idx) => (
+                  {(magazine.fullDescription || '').split('\n\n').map((paragraph, idx) => (
                     <p key={idx}>{paragraph}</p>
                   ))}
                 </div>
