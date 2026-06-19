@@ -58,7 +58,6 @@ const AdvertisePage = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      console.log('Advertise inquiry:', formData);
       setIsSubmitted(true);
     } catch (error) {
       setErrors({ general: 'Submission failed. Please try again.' });

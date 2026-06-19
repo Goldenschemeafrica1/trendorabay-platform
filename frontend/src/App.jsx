@@ -63,8 +63,7 @@ function App() {
 
   // Track page views for analytics
   useEffect(() => {
-    // You can add analytics tracking here
-    console.log('Page viewed:', location.pathname);
+    // Analytics tracking can be added here via a proper analytics service
   }, [location]);
 
   // Prevent body scroll when cart drawer is open

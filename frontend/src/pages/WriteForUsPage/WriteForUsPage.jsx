@@ -125,7 +125,6 @@ const WriteForUsPage = () => {
     
     // Simulate API call
     setTimeout(() => {
-      console.log('Submission data:', formData);
       setIsSubmitting(false);
       setSubmitSuccess(true);
       

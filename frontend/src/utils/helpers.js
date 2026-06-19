@@ -123,7 +123,7 @@ export const getCookie = (name) => {
   const parts = value.split(`; ${name}=`);
   
   if (parts.length === 2) {
-    return parts.pop().split(';').shift();
+    return decodeURIComponent(parts.pop().split(';').shift());
   }
   
   return null;
@@ -133,7 +133,8 @@ export const getCookie = (name) => {
 export const setCookie = (name, value, days = 7) => {
   const expires = new Date();
   expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+  const secure = window.location.protocol === 'https:' ? ';Secure' : '';
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Lax${secure}`;
 };
 
 // Delete cookie
