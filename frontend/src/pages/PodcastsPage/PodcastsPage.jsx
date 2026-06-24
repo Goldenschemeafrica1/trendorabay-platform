@@ -297,8 +297,19 @@ const PodcastPage = () => {
       <section className="live-podcast-section">
         <div className="container">
           <div className="live-header">
-                                              </div>
-          
+            <div className="live-info-card">
+              <h3>MUSIC</h3>
+              <div className="episode-info">
+                <h4>Tech Innovation in Nairobi with guest speakers from Kenya's thriving startup ecosystem</h4>
+                <div className="episode-meta">
+                  <span><i className="fas fa-user"></i> Host: Akinyi Ochieng</span>
+                  <span><i className="far fa-clock"></i> Duration: 1:30:00</span>
+                  <span><i className="far fa-calendar"></i> Released: April 20, 2026</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="live-content">
             <div className="live-video-container">
               <div className="live-video">
@@ -324,17 +335,6 @@ const PodcastPage = () => {
                 </button>
               </div>
             </div>
-            
-            <div className="live-sidebar">
-              <div className="live-info-card">
-                <h3>MUSIC</h3>
-                <div className="episode-info">
-                  <h4>Tech Innovation in Nairobi</h4>
-                  <p>with guest speakers from Kenya's thriving startup ecosystem</p>
-                  </div>
-              </div>
-              
-                          </div>
           </div>
         </div>
       </section>
@@ -345,9 +345,13 @@ const PodcastPage = () => {
 
         {/* Featured Series Section - Expanded */}
         <div className="featured-series-section">
-          <div className="section-header">
-            <h2>Featured Series</h2>
-            <button className="view-all">View All Series <i className="fas fa-arrow-right"></i></button>
+          <div className="featured-series-header">
+            <div className="header-left">
+              <h2>
+                <span className="accent">✦</span> Featured Series
+              </h2>
+            </div>
+            <button className="view-all">View All <i className="fas fa-arrow-right"></i></button>
           </div>
           <div className="featured-series-grid">
             {featuredSeriesList.map(series => (
@@ -369,8 +373,12 @@ const PodcastPage = () => {
 
         {/* Episodes Grid */}
         <div className="episodes-section">
-          <div className="section-header">
-            <h2>Latest Episodes</h2>
+          <div className="episodes-header">
+            <div className="header-left">
+              <h2>
+                <span className="accent">✦</span> Latest Episodes
+              </h2>
+            </div>
             <span className="episode-count">{filteredEpisodes.length} episodes available</span>
           </div>
           
@@ -467,31 +475,67 @@ const PodcastPage = () => {
           </div>
         </div>
 
-        {/* Host Section */}
-        <div className="host-section">
-          <div className="host-card">
-            <div className="host-image">
-              <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop" alt="Akinyi Ochieng" />
-              <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop" alt="Brian Otieno" className="host-second" />
-            </div>
-            <div className="host-info">
-              <h2>Meet Your Hosts</h2>
-              <h3>Akinyi Ochieng <span>&</span> Brian Otieno</h3>
-              <p>Storytellers, entrepreneurs, and passionate advocates for African innovation. With combined decades of media and tech experience, Akinyi and Brian bring you unfiltered conversations with the continent's most exciting voices.</p>
-              <div className="host-quote">
-                <i className="fas fa-quote-left"></i>
-                <p>"We don't just interview — we archive the African dream. Every story shared is a seed planted for future generations."</p>
+        {/* Top Podcasters Section */}
+        <div className="top-podcasters-section">
+          <div className="section-header">
+            <h2>Our Top Podcasters</h2>
+          </div>
+          <div className="top-podcasters-grid">
+            <div className="top-podcaster-card">
+              <div className="podcaster-image">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Kingsley George" />
               </div>
-              <div className="host-social">
-                <a href="#"><i className="fab fa-twitter"></i></a>
-                <a href="#"><i className="fab fa-instagram"></i></a>
-                <a href="#"><i className="fab fa-linkedin"></i></a>
+              <div className="podcaster-info">
+                <h3>Kingsley George</h3>
+                <p className="podcaster-title">Tech Innovator</p>
+                <div className="podcaster-stats">
+                  <span><i className="fas fa-headphones"></i> 124K plays</span>
+                  <span><i className="fas fa-microphone"></i> 45 episodes</span>
+                </div>
+              </div>
+            </div>
+            <div className="top-podcaster-card">
+              <div className="podcaster-image">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop" alt="Declan Okeya" />
+              </div>
+              <div className="podcaster-info">
+                <h3>Declan Okeya</h3>
+                <p className="podcaster-title">Entrepreneur</p>
+                <div className="podcaster-stats">
+                  <span><i className="fas fa-headphones"></i> 98K plays</span>
+                  <span><i className="fas fa-microphone"></i> 38 episodes</span>
+                </div>
+              </div>
+            </div>
+            <div className="top-podcaster-card">
+              <div className="podcaster-image">
+                <img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=200&h=200&fit=crop" alt="Nia Johnson" />
+              </div>
+              <div className="podcaster-info">
+                <h3>Nia Johnson</h3>
+                <p className="podcaster-title">Creative Director</p>
+                <div className="podcaster-stats">
+                  <span><i className="fas fa-headphones"></i> 156K plays</span>
+                  <span><i className="fas fa-microphone"></i> 52 episodes</span>
+                </div>
+              </div>
+            </div>
+            <div className="top-podcaster-card">
+              <div className="podcaster-image">
+                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop" alt="Michael Okonkwo" />
+              </div>
+              <div className="podcaster-info">
+                <h3>Michael Okonkwo</h3>
+                <p className="podcaster-title">Climate Activist</p>
+                <div className="podcaster-stats">
+                  <span><i className="fas fa-headphones"></i> 87K plays</span>
+                  <span><i className="fas fa-microphone"></i> 31 episodes</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        
         {/* Newsletter */}
         <div className="newsletter-section">
           <div className="newsletter-content">

@@ -48,6 +48,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
 import AdvertisePage from './pages/AdvertisePage/AdvertisePage';
 import SubscribePage from './pages/SubscribePage/SubscribePage';
+import DonatePage from './pages/DonatePage/DonatePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
 function App() {
@@ -105,8 +106,8 @@ function App() {
       {/* Navigation Menu */}
       <Navigation />
 
-      {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, and signup pages */}
-      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && <Advert />}
+      {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, signup, and about pages */}
+      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && <Advert />}
 
       {/* Shopping Cart Drawer (Slides from right) */}
       <CartDrawer />
@@ -170,6 +171,7 @@ function App() {
           {/* Business Pages */}
           <Route path="/advertise" element={<AdvertisePage />} />
           <Route path="/subscribe" element={<SubscribePage />} />
+          <Route path="/donate" element={<DonatePage />} />
 
           {/* 404 Page */}
           <Route path="*" element={<NotFoundPage />} />

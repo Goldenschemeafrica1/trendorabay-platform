@@ -143,37 +143,37 @@ const AboutPage = () => {
   // Timeline milestones
   const milestones = [
     {
-      year: "2021",
+      year: "2019",
       title: "The Beginning",
       description: "Trendorabay Magazine launches as a digital-first publication spotlighting emerging Kenyan entrepreneurs.",
       icon: "🚀"
     },
     {
-      year: "2022",
+      year: "2020",
       title: "Expansion Across Africa",
       description: "Expanded coverage to 15 African countries, launching our first physical edition.",
       icon: "🌍"
     },
     {
-      year: "2023",
+      year: "2021",
       title: "TRENDORAFEST Launch",
       description: "Hosted our first annual festival celebrating African creativity and innovation in Nairobi.",
       icon: "🎉"
     },
     {
-      year: "2024",
+      year: "2022",
       title: "Creator Hub",
       description: "Launched the Creator Hub platform, connecting 200+ African content creators.",
       icon: "💡"
     },
     {
-      year: "2025",
+      year: "2023",
       title: "Global Recognition",
       description: "Featured in international media and recognized as a leading voice in African media.",
       icon: "🏆"
     },
     {
-      year: "2026",
+      year: "2024",
       title: "The Future",
       description: "Continuing to amplify African stories, launch new initiatives, and shape tomorrow's narrative.",
       icon: "✨"

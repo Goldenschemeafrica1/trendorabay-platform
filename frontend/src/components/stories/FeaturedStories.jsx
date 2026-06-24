@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './FeaturedStories.css';
 
 const FeaturedStories = () => {
@@ -208,17 +209,17 @@ const FeaturedStories = () => {
         <div className="editorial-header">
           <div className="header-left">
             <h1 className="main-headline">
-              <span className="headline-gold">Featured</span> Stories
+              <span className="accent">✦</span> Featured Stories
             </h1>
           </div>
           
           <div className="header-right">
-            <button className="elegant-button">
+            <Link to="/stories" className="elegant-button">
               <span>readmore</span>
               <svg className="button-arrow" viewBox="0 0 24 24" width="20" height="20">
                 <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" fill="none"/>
               </svg>
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -428,7 +429,7 @@ const FeaturedStories = () => {
         <div className="must-read-section-wrapper">
           <div className="must-read-header">
             <h2 className="must-read-title">
-              <span className="must-read-gold">Must</span> Read
+              <span className="accent">✦</span> Must Read
             </h2>
           </div>
           <div className="must-read-stories-container">

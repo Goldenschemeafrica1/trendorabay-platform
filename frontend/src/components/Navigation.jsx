@@ -10,7 +10,6 @@ const Navigation = () => {
     home: useRef(null),
     magazine: useRef(null),
     write: useRef(null),
-    creators: useRef(null),
     business: useRef(null),
     events: useRef(null),
   };
@@ -77,25 +76,10 @@ const Navigation = () => {
             </div>
           </div>
 
-          {/* Magazine Dropdown */}
-          <div 
-            className={`dropdown-container ${openDropdown === 'magazine' ? 'active' : ''}`}
-            ref={dropdownRefs.magazine}
-            onMouseEnter={() => handleMouseEnter('magazine')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button 
-              className="dropdown-trigger"
-            >
-              Magazine
-            </button>
-            <div className="dropdown-menu">
-              <Link to="/magazines" className="dropdown-item">Magazines</Link>
-              <Link to="/stories/latest" className="dropdown-item">Latest Stories</Link>
-              <Link to="/stories" className="dropdown-item">All Stories</Link>
-              <Link to="/community/contributors" className="dropdown-item">Contributors</Link>
-            </div>
-          </div>
+          {/* Magazine Link */}
+          <Link to="/magazines" className="nav-link">
+            Magazine
+          </Link>
 
           {/* Write Dropdown */}
           <div 
@@ -117,26 +101,6 @@ const Navigation = () => {
             </div>
           </div>
 
-          {/* Creators Hub Dropdown */}
-          <div 
-            className={`dropdown-container ${openDropdown === 'creators' ? 'active' : ''}`}
-            ref={dropdownRefs.creators}
-            onMouseEnter={() => handleMouseEnter('creators')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button 
-              className="dropdown-trigger"
-            >
-              Creators Hub
-            </button>
-            <div className="dropdown-menu">
-              <Link to="/community" className="dropdown-item">Join Community</Link>
-              <Link to="/community/contributors" className="dropdown-item">Contributors</Link>
-              <Link to="/community/events" className="dropdown-item">Events</Link>
-              <Link to="/write" className="dropdown-item">Write For Us</Link>
-            </div>
-          </div>
-
           {/* Business Hub Dropdown */}
           <div 
             className={`dropdown-container ${openDropdown === 'business' ? 'active' : ''}`}
@@ -150,9 +114,6 @@ const Navigation = () => {
               Business Hub
             </button>
             <div className="dropdown-menu">
-              <Link to="/about" className="dropdown-item">About Us</Link>
-              <Link to="/mission" className="dropdown-item">Mission</Link>
-              <Link to="/contact" className="dropdown-item">Contact</Link>
               <Link to="/write-for-us" className="dropdown-item">Partner With Us</Link>
               <Link to="/contact" className="dropdown-item">Advertise With Us</Link>
             </div>
@@ -179,7 +140,6 @@ const Navigation = () => {
               <Link to="/events" className="dropdown-item">Events</Link>
               <Link to="/community/events" className="dropdown-item">Community Events</Link>
               <Link to="/community" className="dropdown-item">Community Hub</Link>
-              <Link to="/contact" className="dropdown-item">Contact for Tickets</Link>
             </div>
           </div>
 

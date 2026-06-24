@@ -11,8 +11,8 @@
 }
 
 .page-header {
-  padding: 8px 0;
-  margin-bottom: 4px;
+  padding: 20px 0;
+  margin-bottom: 20px;
 }
 
 .page-header p {
@@ -20,6 +20,9 @@
   color: #6a7a6a;
   text-align: center;
   margin: 0;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .magazines-content {

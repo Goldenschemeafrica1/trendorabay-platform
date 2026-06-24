@@ -13,7 +13,6 @@ const Header = () => {
     home: useRef(null),
     magazine: useRef(null),
     write: useRef(null),
-    creators: useRef(null),
     business: useRef(null),
     podcasts: useRef(null),
     events: useRef(null),
@@ -156,19 +155,9 @@ const Header = () => {
           </div>
 
           <div className="mobile-nav-item">
-            <button 
-              className="mobile-nav-button"
-              onClick={(e) => toggleMobileDropdown('magazine', e)}
-            >
+            <Link to="/magazines" className="mobile-nav-link" onClick={(e) => handleMobileLinkClick(e)}>
               Magazine
-              <i className={`fas fa-chevron-${mobileOpenDropdown === 'magazine' ? 'up' : 'down'}`}></i>
-            </button>
-            <div className={`mobile-dropdown ${mobileOpenDropdown === 'magazine' ? 'open' : ''}`}>
-              <Link to="/magazines" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Magazines</Link>
-              <Link to="/stories/latest" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Latest Stories</Link>
-              <Link to="/stories" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>All Stories</Link>
-              <Link to="/community/contributors" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contributors</Link>
-            </div>
+            </Link>
           </div>
 
           <div className="mobile-nav-item">
@@ -190,31 +179,12 @@ const Header = () => {
           <div className="mobile-nav-item">
             <button 
               className="mobile-nav-button"
-              onClick={(e) => toggleMobileDropdown('creators', e)}
-            >
-              Creators Hub
-              <i className={`fas fa-chevron-${mobileOpenDropdown === 'creators' ? 'up' : 'down'}`}></i>
-            </button>
-            <div className={`mobile-dropdown ${mobileOpenDropdown === 'creators' ? 'open' : ''}`}>
-              <Link to="/community" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Join Community</Link>
-              <Link to="/community/contributors" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contributors</Link>
-              <Link to="/community/events" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Events</Link>
-              <Link to="/write" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Write For Us</Link>
-            </div>
-          </div>
-
-          <div className="mobile-nav-item">
-            <button 
-              className="mobile-nav-button"
               onClick={(e) => toggleMobileDropdown('business', e)}
             >
               Business Hub
               <i className={`fas fa-chevron-${mobileOpenDropdown === 'business' ? 'up' : 'down'}`}></i>
             </button>
             <div className={`mobile-dropdown ${mobileOpenDropdown === 'business' ? 'open' : ''}`}>
-              <Link to="/about" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>About Us</Link>
-              <Link to="/mission" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Mission</Link>
-              <Link to="/contact" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contact</Link>
               <Link to="/write-for-us" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Partner With Us</Link>
               <Link to="/contact" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Advertise With Us</Link>
             </div>
@@ -238,7 +208,6 @@ const Header = () => {
               <Link to="/events" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Events</Link>
               <Link to="/community/events" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Community Events</Link>
               <Link to="/community" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Community Hub</Link>
-              <Link to="/contact" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contact for Tickets</Link>
             </div>
           </div>
 

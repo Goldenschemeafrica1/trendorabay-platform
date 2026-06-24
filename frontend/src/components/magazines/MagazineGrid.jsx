@@ -568,27 +568,6 @@ const MagazineGrid = ({
               </div>
             )}
 
-            {/* View Toggle */}
-            <div className="filter-group view-toggle">
-              <label>View</label>
-              <div className="view-buttons">
-                <button
-                  className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-                  onClick={() => setViewMode('grid')}
-                  title="Grid View"
-                >
-                  <i className="fas fa-th"></i>
-                </button>
-                <button
-                  className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                  onClick={() => setViewMode('list')}
-                  title="List View"
-                >
-                  <i className="fas fa-list"></i>
-                </button>
-              </div>
-            </div>
-
             {/* Results Count */}
             <div className="results-count">
               <span>{filteredMagazines.length} magazines</span>

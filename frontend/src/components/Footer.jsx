@@ -25,14 +25,11 @@ const Footer = () => {
   const column4Links = [
     { name: 'Donate', path: '/donate' },
     { name: 'Merchandise', path: '/merchandise' },
-    { name: 'Gift Cards', path: '/gift-cards' },
-    { name: 'Cart', path: '/cart' },
+    { name: 'Gift Cards', path: '/gift-cards', disabled: true },
   ];
 
-  const aboutLinks = [
-    { name: 'Advertise', path: '/advertise' },
-    { name: 'Support', path: '/contact' },
-    { name: 'Shipping & Returns', path: '/shipping' },
+  const column5Links = [
+    { name: 'Cart', path: '/cart' },
     { name: 'Terms of Service', path: '/terms' },
     { name: 'Privacy Policy', path: '/privacy' },
   ];
@@ -102,6 +99,20 @@ const Footer = () => {
               <ul className="footer-links">
                 {column4Links.map((link, index) => (
                   <li key={index}>
+                    {link.disabled ? (
+                      <span className="footer-link-disabled">{link.name}</span>
+                    ) : (
+                      <Link to={link.path}>{link.name}</Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="footer-col links-col">
+              <ul className="footer-links">
+                {column5Links.map((link, index) => (
+                  <li key={index}>
                     <Link to={link.path}>{link.name}</Link>
                   </li>
                 ))}
@@ -119,13 +130,6 @@ const Footer = () => {
             <p className="copyright">
               &copy; {currentYear} Trendorabay Magazine. All rights reserved.
             </p>
-            <div className="company-links-horizontal">
-              {aboutLinks.map((link, index) => (
-                <Link key={index} to={link.path} className="company-link-item">
-                  {link.name}
-                </Link>
-              ))}
-            </div>
           </div>
         </div>
       </div>

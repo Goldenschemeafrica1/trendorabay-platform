@@ -55,6 +55,17 @@
   pointer-events: none;
 }
 
+/* Add invisible bridge to prevent dropdown from closing when moving mouse */
+.dropdown-container::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: transparent;
+}
+
 /* Dropdown Trigger Button */
 .dropdown-trigger {
   background: transparent;
@@ -108,7 +119,7 @@
 /* ===== Simple Dropdown Menu Styles ===== */
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 4px);
   left: 50%;
   transform: translateX(-50%);
   min-width: 200px;
@@ -130,7 +141,7 @@
 .dropdown-container.active .dropdown-menu {
   opacity: 1 !important;
   visibility: visible !important;
-  top: calc(100% + 4px);
+  top: calc(100% + 2px);
 }
 
 /* Dropdown Item with Submenu */
@@ -246,14 +257,16 @@
   color: #b87c4b;
 }
 
-/* Store and Podcasts link specific styling - no background */
+/* Store, Podcasts and Magazine link specific styling - no background */
 .nav-link[href="/store"],
-.nav-link[href="/podcast"] {
+.nav-link[href="/podcast"],
+.nav-link[href="/magazines"] {
   transition: opacity 0.3s ease;
 }
 
 .nav-link[href="/store"]:hover,
-.nav-link[href="/podcast"]:hover {
+.nav-link[href="/podcast"]:hover,
+.nav-link[href="/magazines"]:hover {
   background: transparent;
   color: #374151;
   opacity: 0.7;

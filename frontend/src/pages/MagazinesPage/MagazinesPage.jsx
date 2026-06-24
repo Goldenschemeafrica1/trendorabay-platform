@@ -1,15 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MagazineGrid from '../../components/magazines/MagazineGrid';
-import Pagination from '../../components/common/Pagination';
 import './MagazinesPage.css';
 
 const MagazinesPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
   return (
     <div className="magazines-page">
       <div className="container">
@@ -19,19 +12,11 @@ const MagazinesPage = () => {
 
         <div className="magazines-content">
           <main className="magazines-main">
-            <MagazineGrid 
+            <MagazineGrid
               limit={null} // Show all magazines
-              showFilters={false} // Filters are in sidebar
+              showFilters={true}
               showSearch={true}
             />
-            
-            <div className="pagination-container">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={10}
-                onPageChange={handlePageChange}
-              />
-            </div>
           </main>
         </div>
       </div>

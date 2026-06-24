@@ -2,7 +2,7 @@
 .footer {
   background: #1a1a1a;
   color: var(--color-cream, #faf6f0);
-  font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  font-family: Georgia, 'Times New Roman', Times, serif;
   position: relative;
   overflow: hidden;
 }
@@ -49,7 +49,7 @@
 
 /* Main Footer Content */
 .footer-main {
-  padding: 2rem 0 1.25rem;
+  padding: 0.25rem 0 0.25rem;
   position: relative;
 }
 
@@ -62,16 +62,16 @@
 
 /* Simple Divider */
 .adinkra-divider {
-  height: 1px;
-  background: #333333;
-  margin: 2rem 0;
+  height: 0;
+  background: transparent;
+  margin: 0;
   position: relative;
 }
 
 /* Footer Grid */
 .footer-grid {
   display: grid;
-  grid-template-columns: auto repeat(4, 1fr);
+  grid-template-columns: auto repeat(5, 1fr);
   gap: 2rem;
   align-items: start;
   margin-bottom: 1.5rem;
@@ -83,8 +83,12 @@
 }
 
 /* Link Columns */
+.links-col {
+  margin-top: 2.5rem;
+}
+
 .links-col .footer-links li {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0;
 }
 
 .links-col .footer-links a {
@@ -94,6 +98,7 @@
 /* Fashion & Style Magazine Column */
 .fashion-col {
   max-width: 350px;
+  margin-top: 1.5rem;
 }
 
 .fashion-magazine {
@@ -117,7 +122,7 @@
 
 .fashion-magazine-image {
   width: 100%;
-  max-width: 150px;
+  max-width: 100px;
   height: auto;
   display: block;
 }
@@ -232,7 +237,7 @@
 }
 
 .footer-links li {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0;
 }
 
 .footer-links a {
@@ -261,6 +266,12 @@
 .footer-links a:hover::before {
   opacity: 1;
   left: 0;
+}
+
+.footer-link-disabled {
+  color: rgba(250, 246, 240, 0.72);
+  cursor: not-allowed;
+  font-size: 0.9rem;
 }
 
 .footer-links a:focus-visible {
@@ -314,8 +325,8 @@
 /* Bottom Bar */
 .footer-bottom {
   background: rgba(26, 26, 26, 0.8);
-  padding: 0.5rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.15rem 0;
+  border-top: none;
 }
 
 .bottom-bar-content {
