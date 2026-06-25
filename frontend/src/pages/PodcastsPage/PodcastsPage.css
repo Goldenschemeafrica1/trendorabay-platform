@@ -940,6 +940,7 @@
   position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  /* Reduced height for better layout */
 }
 
 .card-image img {
