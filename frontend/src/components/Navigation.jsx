@@ -68,7 +68,6 @@ const Navigation = () => {
               EXPLORE
             </button>
             <div className="dropdown-menu">
-              <Link to="/stories/latest" className="dropdown-item">Latest Stories</Link>
               <Link to="/stories" className="dropdown-item">All Stories</Link>
               <Link to="/community/contributors" className="dropdown-item">Contributors</Link>
               <Link to="/community" className="dropdown-item">Community</Link>

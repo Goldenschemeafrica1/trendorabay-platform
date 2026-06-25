@@ -7,7 +7,6 @@ const TermsPage = () => {
       <div className="container">
         <div className="terms-header">
           <h1>Terms of Service</h1>
-          <p>Last updated: {new Date().toLocaleDateString()}</p>
         </div>
 
         <div className="terms-content">

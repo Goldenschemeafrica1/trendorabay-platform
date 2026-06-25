@@ -7,7 +7,6 @@ const PrivacyPage = () => {
       <div className="container">
         <div className="privacy-header">
           <h1>Privacy Policy</h1>
-          <p>Last updated: {new Date().toLocaleDateString()}</p>
         </div>
 
         <div className="privacy-content">

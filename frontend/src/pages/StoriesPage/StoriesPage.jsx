@@ -9,6 +9,21 @@ const StoriesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  // Helper function to format date as "X days ago"
+  const formatPublishedDate = (dateString) => {
+    const publishedDate = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - publishedDate);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return '1 day ago';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+    return `${Math.floor(diffDays / 365)} years ago`;
+  };
+
   // Categories based on your magazine sections
   const categories = [
     { id: 'all', name: 'All Stories', icon: '📚' },
@@ -30,7 +45,7 @@ const StoriesPage = () => {
       try {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
+
         // Mock stories data
         const mockStories = [
           {
@@ -108,6 +123,82 @@ const StoriesPage = () => {
             comments: 78,
             reads: 5600,
             featured: false
+          },
+          {
+            id: 5,
+            title: "African Startups: The Next Big Tech Revolution",
+            excerpt: "How African entrepreneurs are building innovative solutions for local challenges.",
+            author: {
+              name: "Chinedu Okafor",
+              avatar: "https://i.pravatar.cc/150?u=9",
+              bio: "Tech correspondent, Lagos"
+            },
+            category: "business",
+            categoryName: "Business & Entrepreneurship",
+            readTime: 8,
+            publishedDate: "2024-01-18",
+            imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&auto=format",
+            likes: 567,
+            comments: 34,
+            reads: 2100,
+            featured: false
+          },
+          {
+            id: 6,
+            title: "Afrobeats Goes Global: The Rise of African Music",
+            excerpt: "From Lagos to the world, how African music is conquering international charts.",
+            author: {
+              name: "Amani Johnson",
+              avatar: "https://i.pravatar.cc/150?u=10",
+              bio: "Music critic, Accra"
+            },
+            category: "music",
+            categoryName: "Music & Entertainment",
+            readTime: 9,
+            publishedDate: "2024-01-12",
+            imageUrl: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format",
+            likes: 923,
+            comments: 61,
+            reads: 3400,
+            featured: false
+          },
+          {
+            id: 7,
+            title: "Tech Innovation: Mobile Banking in Africa",
+            excerpt: "How mobile technology is revolutionizing financial access across the continent.",
+            author: {
+              name: "David Mensah",
+              avatar: "https://i.pravatar.cc/150?u=11",
+              bio: "Tech analyst, Nairobi"
+            },
+            category: "tech",
+            categoryName: "Tech & Innovation",
+            readTime: 11,
+            publishedDate: "2024-01-10",
+            imageUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&auto=format",
+            likes: 789,
+            comments: 45,
+            reads: 2900,
+            featured: false
+          },
+          {
+            id: 8,
+            title: "Urban Culture: Street Art in African Cities",
+            excerpt: "Exploring the vibrant street art scene transforming African urban landscapes.",
+            author: {
+              name: "Zara Hassan",
+              avatar: "https://i.pravatar.cc/150?u=12",
+              bio: "Cultural writer, Casablanca"
+            },
+            category: "urban-culture",
+            categoryName: "Urban Culture & Trends",
+            readTime: 7,
+            publishedDate: "2024-01-14",
+            imageUrl: "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=800&auto=format",
+            likes: 634,
+            comments: 38,
+            reads: 2300,
+            featured: false
           }
         ];
 
@@ -144,18 +235,16 @@ const StoriesPage = () => {
       {/* Category Filter */}
       <section className="category-filter">
         <div className="container">
-          <div className="category-dropdown">
-            <select
-              value={selectedCategory}
-              onChange={(e) => handleCategoryChange(e.target.value)}
-              className="category-select"
-            >
-              {categories.map(category => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+          <div className="category-buttons">
+            {categories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => handleCategoryChange(category.id)}
+                className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
+              >
+                <span className="category-name">{category.name}</span>
+              </button>
+            ))}
           </div>
         </div>
       </section>
@@ -186,15 +275,11 @@ const StoriesPage = () => {
                         <div className="story-content">
                           <div className="story-category">{story.categoryName}</div>
                           <h3 className="story-title">{story.title}</h3>
-                          <p className="story-excerpt">{story.excerpt}</p>
                           <div className="story-meta">
                             <div className="story-author">
                               <img src={story.author.avatar} alt={story.author.name} />
                               <span>{story.author.name}</span>
-                            </div>
-                            <div className="story-stats">
-                              <span>📖 {story.readTime} min</span>
-                              <span>❤️ {story.likes}</span>
+                              <span className="story-published-date">{formatPublishedDate(story.publishedDate)}</span>
                             </div>
                           </div>
                         </div>
@@ -246,24 +331,7 @@ const StoriesPage = () => {
         </div>
       </section>
 
-      {/* Call to Action - Write a Story */}
-      <section className="write-cta">
-        <div className="container">
-          <div className="cta-content">
-            <h2>Have a story to tell?</h2>
-            <p>Join our community of writers and share your perspective with the world.</p>
-            <div className="cta-buttons">
-              <Link to="/write" className="btn btn-primary btn-large">
-                <i className="fas fa-pen-fancy"></i> Start Writing
-              </Link>
-              <Link to="/contribute/guidelines" className="btn btn-secondary btn-large">
-                Read Guidelines
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+      </div>
   );
 };
 

@@ -106,8 +106,8 @@ function App() {
       {/* Navigation Menu */}
       <Navigation />
 
-      {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, signup, and about pages */}
-      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && <Advert />}
+      {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, signup, about, store, stories, author, contributors, terms, privacy, donate, events, contact, write-for-us, faq, and subscribe pages */}
+      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/author') && !location.pathname.startsWith('/community/contributors') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/events' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/faq' && location.pathname !== '/subscribe' && <Advert />}
 
       {/* Shopping Cart Drawer (Slides from right) */}
       <CartDrawer />

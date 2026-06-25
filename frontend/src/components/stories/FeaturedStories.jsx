@@ -212,15 +212,6 @@ const FeaturedStories = () => {
               <span className="accent">✦</span> Featured Stories
             </h1>
           </div>
-          
-          <div className="header-right">
-            <Link to="/stories" className="elegant-button">
-              <span>readmore</span>
-              <svg className="button-arrow" viewBox="0 0 24 24" width="20" height="20">
-                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" fill="none"/>
-              </svg>
-            </Link>
-          </div>
         </div>
 
         
@@ -291,9 +282,6 @@ const FeaturedStories = () => {
                   <h2 className="hot-topic-title">Afrobeats takes over the global music charts</h2>
                 </div>
               </div>
-              
-              <div className="main-story-content">
-              </div>
             </article>
             
             {/* Mobile SPORTS Story - After Hot Topic */}
@@ -353,7 +341,7 @@ const FeaturedStories = () => {
               <div className="mobile-trending-stories">
                 {featuredStories.slice(0, 6).map((story, index) => (
                   <div key={story.id} className="mobile-trending-story">
-                    <span className="mobile-trending-number">{index + 1}</span>
+                    <span className="mobile-trending-arrow">➤</span>
                     <h4 className="mobile-trending-title">{story.title}</h4>
                   </div>
                 ))}
@@ -376,12 +364,10 @@ const FeaturedStories = () => {
                     <div className="horizontal-story-content">
                       <span className={`horizontal-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'TECHNOLOGY' ? 'business-category' : ''} ${story.category === 'TRAVEL' ? 'travel-category' : ''} ${story.category === 'FOOD' ? 'food-category' : ''} ${story.category === 'MUSIC' ? 'music-category' : ''}`}>{story.category}</span>
                       <h3 className="horizontal-story-title">{story.title}</h3>
-                      <div className="horizontal-story-footer">
-                        <div className="horizontal-story-author">
-                          <span className={`horizontal-author-name ${story.category === 'BUSINESS' ? 'business-author-name' : ''} ${story.category === 'TECHNOLOGY' ? 'business-author-name' : ''} ${story.category === 'TRAVEL' ? 'travel-author-name' : ''} ${story.category === 'FOOD' ? 'food-author-name' : ''} ${story.category === 'HEALTH' ? 'health-author-name' : ''} ${story.category === 'MUSIC' ? 'music-author-name' : ''}`}>By {story.author}</span>
-                          <span className="horizontal-author-role">{story.authorTitle}</span>
-                        </div>
-                      </div>
+                    </div>
+                    <div className="horizontal-story-author">
+                      <span className={`horizontal-author-name ${story.category === 'BUSINESS' ? 'business-author-name' : ''} ${story.category === 'TECHNOLOGY' ? 'business-author-name' : ''} ${story.category === 'TRAVEL' ? 'travel-author-name' : ''} ${story.category === 'FOOD' ? 'food-author-name' : ''} ${story.category === 'HEALTH' ? 'health-author-name' : ''} ${story.category === 'MUSIC' ? 'music-author-name' : ''}`}>By {story.author}</span>
+                      <span className="horizontal-author-role">{story.authorTitle}</span>
                     </div>
                   </article>
                 ))}
@@ -403,7 +389,7 @@ const FeaturedStories = () => {
             <div className="trending-stories">
               {featuredStories.slice(0, 6).map((story, index) => (
                 <div key={story.id} className="trending-story">
-                  <span className="trending-number">{index + 1}</span>
+                  <span className="trending-arrow">➤</span>
                   <h4 className="trending-title">{story.title}</h4>
                 </div>
               ))}
@@ -427,28 +413,128 @@ const FeaturedStories = () => {
 
         {/* Must Read Section */}
         <div className="must-read-section-wrapper">
-          <div className="must-read-header">
-            <h2 className="must-read-title">
-              <span className="accent">✦</span> Must Read
-            </h2>
+          <div className="editorial-header">
+            <div className="header-left">
+              <h1 className="main-headline">
+                <span className="accent">✦</span> Must Read
+              </h1>
+            </div>
           </div>
-          <div className="must-read-stories-container">
-            {mustReadStories.map((story, index) => (
-              <article
-                key={story.id}
-                className="must-read-story-card"
-                style={{ transitionDelay: `${index * 0.1}s` }}
-              >
-                <img src={story.image} alt={story.title} loading="lazy" className="must-read-story-image" />
-                <div className="must-read-story-content">
-                  <span className="must-read-story-category">{story.category}</span>
-                  <h3 className="must-read-story-title">{story.title}</h3>
-                  <div className="must-read-story-footer">
-                    <span className="must-read-author">By {story.author}</span>
+
+          {/* Main Featured Story Layout */}
+          <div className="featured-stories-grid">
+            {/* Left Stories */}
+            <div className="left-stories">
+              {featuredStories.slice(1, 3).map((story, index) => (
+                <article
+                  key={story.id}
+                  id={`left-story-${index}`}
+                  className={`${(story.category === 'SPORTS' || story.category === 'BUSINESS') ? 'fashion-story-card' : 'side-story-card'} ${isVisible[`left-${index}`] ? 'visible' : ''}`}
+                  style={{ transitionDelay: `${(index + 1) * 0.1}s` }}
+                >
+                  {(story.category === 'SPORTS' || story.category === 'BUSINESS') ? (
+                    // Sports & Business stories with image on top
+                    <>
+                      <div className="side-story-image-wrapper">
+                        <img src={story.image} alt={story.title} loading="lazy" className="side-story-image" />
+                        <span className={`side-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'SPORTS' ? 'sports-category' : ''}`}>{story.category}</span>
+                      </div>
+
+                      <div className="fashion-story-content">
+                        <h3 className="side-story-title">{story.title}</h3>
+                        
+                        <div className="side-story-footer">
+                          <div className="side-story-author">
+                            <span className="side-author-name">By {story.author}</span>
+                            <span className="side-author-role">{story.authorTitle}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    // Regular side story layout
+                    <>
+                      <img src={story.image} alt={story.title} loading="lazy" className="side-story-image" />
+
+                      <div className="side-story-content">
+                        <span className="side-story-category">{story.category}</span>
+                        <h3 className="side-story-title">{story.title}</h3>
+                        
+                        <div className="side-story-footer">
+                          <div className="side-story-author">
+                            <span className="side-author-name">By {story.author}</span>
+                            <span className="side-author-role">{story.authorTitle}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </article>
+              ))}
+            </div>
+
+            {/* Cover Story - Center Large */}
+            <div className="cover-story">
+              <article className="main-story-card">
+                <div className="main-story-image-wrapper">
+                  <img 
+                    src={featuredStories[3].image} 
+                    alt={featuredStories[3].title} 
+                    loading="lazy" 
+                    className="main-story-image"
+                  />
+                  
+                  {/* HOT TOPIC Title Overlay */}
+                  <div className="hot-topic-overlay">
+                    <div className="hot-topic-badge">HOT TOPIC</div>
+                    <h2 className="hot-topic-title">Afrobeats takes over the global music charts</h2>
                   </div>
                 </div>
               </article>
-            ))}
+            </div>
+
+            {/* Right Advertisement Section */}
+            <div className="right-stories">
+              <div className="vertical-advertisement">
+                <div className="ad-label">Advertisement</div>
+                <div className="vertical-ad-section">
+                  <img
+                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=600&fit=crop"
+                    alt="Advertisement"
+                    className="vertical-ad-image"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Horizontal Stories Section */}
+          <div className="horizontal-stories-section">
+            {/* Top Horizontal Stories Divider */}
+            <div className="horizontal-stories-divider-top"></div>
+            
+            <div className="horizontal-stories-container must-read-horizontal-container">
+              {horizontalStories.slice(0, 3).map((story, index) => (
+                <article
+                  key={story.id}
+                  className={`horizontal-story-card ${story.category === 'TRAVEL' ? 'travel-card' : ''} ${story.category === 'FOOD' ? 'food-card' : ''} ${story.category === 'HEALTH' ? 'health-card' : ''} ${story.category === 'MUSIC' ? 'music-card' : ''}`}
+                  style={{ transitionDelay: `${index * 0.1}s` }}
+                >
+                  <div className="horizontal-story-image-wrapper">
+                    <img src={story.image} alt={story.title} loading="lazy" className="horizontal-story-image" />
+                    <span className={`horizontal-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'TECHNOLOGY' ? 'business-category' : ''} ${story.category === 'TRAVEL' ? 'travel-category' : ''} ${story.category === 'FOOD' ? 'food-category' : ''} ${story.category === 'MUSIC' ? 'music-category' : ''}`}>{story.category}</span>
+                  </div>
+                  <div className="horizontal-story-content">
+                    <h3 className="horizontal-story-title">{story.title}</h3>
+                  </div>
+                  <div className="horizontal-story-author">
+                    <span className={`horizontal-author-name ${story.category === 'BUSINESS' ? 'business-author-name' : ''} ${story.category === 'TECHNOLOGY' ? 'business-author-name' : ''} ${story.category === 'TRAVEL' ? 'travel-author-name' : ''} ${story.category === 'FOOD' ? 'food-author-name' : ''} ${story.category === 'HEALTH' ? 'health-author-name' : ''} ${story.category === 'MUSIC' ? 'music-author-name' : ''}`}>By {story.author}</span>
+                    <span className="horizontal-author-role">{story.authorTitle}</span>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
 

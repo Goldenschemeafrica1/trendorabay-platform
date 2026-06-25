@@ -10,10 +10,7 @@ const StorePage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
-  const [viewMode, setViewMode] = useState('grid');
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 500 });
-  const [selectedSizes, setSelectedSizes] = useState([]);
-  const [showFilters, setShowFilters] = useState(false);
+      const [showFilters, setShowFilters] = useState(false);
   const [wishlist, setWishlist] = useState([]);
 
   // Product categories
@@ -26,8 +23,7 @@ const StorePage = () => {
     { id: 'digital', name: 'Digital', icon: '💻', count: 0 }
   ];
 
-  const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-
+  
   // Sample product data (in production, this would come from an API)
   const productsData = [
     {
@@ -369,18 +365,6 @@ const StorePage = () => {
       );
     }
 
-    // Price range filter
-    filtered = filtered.filter(p =>
-      p.price >= priceRange.min && p.price <= priceRange.max
-    );
-
-    // Size filter
-    if (selectedSizes.length > 0) {
-      filtered = filtered.filter(p =>
-        p.sizes && p.sizes.some(size => selectedSizes.includes(size))
-      );
-    }
-
     // Sorting
     switch (sortBy) {
       case 'price-low':
@@ -400,7 +384,7 @@ const StorePage = () => {
     }
 
     setFilteredProducts(filtered);
-  }, [products, selectedCategory, searchQuery, sortBy, priceRange, selectedSizes]);
+  }, [products, selectedCategory, searchQuery, sortBy]);
 
   // Toggle wishlist
   const toggleWishlist = (productId) => {
@@ -515,64 +499,11 @@ const StorePage = () => {
             </div>
           </div>
 
-          {/* Price Range */}
-          <div className="filter-section">
-            <h4 className="filter-title">Price Range</h4>
-            <div className="price-range">
-              <div className="price-inputs">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={priceRange.min}
-                  onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) || 0 })}
-                />
-                <span>-</span>
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={priceRange.max}
-                  onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) || 500 })}
-                />
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="500"
-                value={priceRange.max}
-                onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-                className="price-slider"
-              />
-            </div>
-          </div>
-
-          {/* Sizes */}
-          <div className="filter-section">
-            <h4 className="filter-title">Sizes</h4>
-            <div className="size-filters">
-              {sizes.map(size => (
-                <button
-                  key={size}
-                  className={`size-filter-btn ${selectedSizes.includes(size) ? 'active' : ''}`}
-                  onClick={() => {
-                    if (selectedSizes.includes(size)) {
-                      setSelectedSizes(selectedSizes.filter(s => s !== size));
-                    } else {
-                      setSelectedSizes([...selectedSizes, size]);
-                    }
-                  }}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
-
+          
           {/* Clear Filters */}
           <button className="clear-filters" onClick={() => {
             setSelectedCategory('all');
             setSearchQuery('');
-            setPriceRange({ min: 0, max: 500 });
-            setSelectedSizes([]);
             setSortBy('featured');
           }}>
             Clear All Filters
@@ -607,27 +538,7 @@ const StorePage = () => {
               </select>
             </div>
 
-            <div className="view-toggle">
-              <button className={viewMode === 'grid' ? 'active' : ''} onClick={() => setViewMode('grid')}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="7" height="7"/>
-                  <rect x="14" y="3" width="7" height="7"/>
-                  <rect x="3" y="14" width="7" height="7"/>
-                  <rect x="14" y="14" width="7" height="7"/>
-                </svg>
-              </button>
-              <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="8" y1="6" x2="21" y2="6"/>
-                  <line x1="8" y1="12" x2="21" y2="12"/>
-                  <line x1="8" y1="18" x2="21" y2="18"/>
-                  <line x1="3" y1="6" x2="3.01" y2="6"/>
-                  <line x1="3" y1="12" x2="3.01" y2="12"/>
-                  <line x1="3" y1="18" x2="3.01" y2="18"/>
-                </svg>
-              </button>
-            </div>
-          </div>
+                      </div>
 
           {/* Results Count */}
           <div className="results-count">
@@ -650,9 +561,9 @@ const StorePage = () => {
               </button>
             </div>
           ) : (
-            <div className={`products-${viewMode}`}>
+            <div className="products-grid">
               {filteredProducts.map(product => (
-                <div key={product.id} className={`product-card ${viewMode}`}>
+                <div key={product.id} className="product-card">
                   <div className="product-image-wrapper">
                     <img 
                       src={product.image} 
@@ -690,7 +601,6 @@ const StorePage = () => {
                         <span className="original-price">{formatPrice(product.originalPrice)}</span>
                       )}
                     </div>
-                    <p className="product-description">{product.description}</p>
                     <button 
                       className={`add-to-cart-btn ${!product.inStock ? 'disabled' : ''}`}
                       onClick={() => handleAddToCart(product)}

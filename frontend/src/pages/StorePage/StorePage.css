@@ -549,7 +549,7 @@
 }
 
 .product-name {
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   font-weight: 700;
   margin-bottom: 0;
   color: var(--text-primary, #111111);
@@ -582,13 +582,13 @@
 }
 
 .current-price {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--accent, #C4451B);
 }
 
 .original-price {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-decoration: line-through;
   color: var(--text-secondary, #4a4a4a);
 }
@@ -812,6 +812,6 @@
   }
   
   .current-price {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
   }
 }
