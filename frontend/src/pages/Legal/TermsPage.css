@@ -1,0 +1,123 @@
+.terms-page {
+  padding: 120px 24px 80px;
+  min-height: 100vh;
+  background: #f8f9fc;
+}
+
+.terms-page .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.terms-header {
+  text-align: center;
+  margin-bottom: 48px;
+  padding-top: 20px;
+}
+
+.terms-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 12px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.terms-header p {
+  font-size: 1rem;
+  color: #666666;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #ffffff;
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 40px;
+  border: 1px solid #eaeef2;
+}
+
+.terms-content {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 48px;
+}
+
+.terms-content section {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #eaeef2;
+}
+
+.terms-content section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.terms-content h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #C4451B;
+  margin-bottom: 16px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.terms-content p {
+  font-size: 1rem;
+  color: #333333;
+  line-height: 1.8;
+  margin-bottom: 16px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.terms-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.terms-content ul li {
+  font-size: 1rem;
+  color: #333333;
+  padding: 10px 0;
+  padding-left: 24px;
+  position: relative;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+.terms-content ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #C4451B;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .terms-page {
+    padding: 100px 16px 60px;
+  }
+
+  .terms-header {
+    margin-bottom: 32px;
+    padding-top: 0;
+  }
+
+  .terms-header h1 {
+    font-size: 2rem;
+  }
+
+  .terms-content {
+    padding: 32px 24px;
+  }
+
+  .terms-content section {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+  }
+
+  .terms-content h2 {
+    font-size: 1.2rem;
+  }
+}
