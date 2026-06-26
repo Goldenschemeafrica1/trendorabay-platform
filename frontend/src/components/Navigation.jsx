@@ -94,7 +94,6 @@ const Navigation = () => {
             </button>
             <div className="dropdown-menu">
               <Link to="/write" className="dropdown-item">Start Writing</Link>
-              <Link to="/write-for-us" className="dropdown-item">Submit a Story</Link>
               <Link to="/community/contributors" className="dropdown-item">Contributors</Link>
               <Link to="/community" className="dropdown-item">Join Community</Link>
             </div>
@@ -113,8 +112,8 @@ const Navigation = () => {
               Business Hub
             </button>
             <div className="dropdown-menu">
-              <Link to="/write-for-us" className="dropdown-item">Partner With Us</Link>
-              <Link to="/contact" className="dropdown-item">Advertise With Us</Link>
+              <Link to="/partner-with-us" className="dropdown-item">Partner With Us</Link>
+              <Link to="/advertise" className="dropdown-item">Advertise With Us</Link>
             </div>
           </div>
 

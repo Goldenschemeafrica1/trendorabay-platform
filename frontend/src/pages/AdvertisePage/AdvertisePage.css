@@ -4,6 +4,7 @@
   background: #ffffff;
   padding: 40px 20px;
   font-family: 'Poppins', sans-serif;
+  margin-top: -20px;
 }
 
 .advertise-container {
@@ -18,14 +19,14 @@
 }
 
 .advertise-header h1 {
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 700;
   color: #1f2937;
   margin-bottom: 16px;
 }
 
 .advertise-header p {
-  font-size: 18px;
+  font-size: 14px;
   color: #6b7280;
   max-width: 600px;
   margin: 0 auto;
@@ -398,6 +399,7 @@
 @media (max-width: 768px) {
   .advertise-page {
     padding: 24px 16px;
+    margin-top: -100px;
   }
   
   .advertise-header h1 {

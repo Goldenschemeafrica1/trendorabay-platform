@@ -2,6 +2,10 @@
   padding: 32px 24px 80px;
   min-height: 100vh;
   background: #ffffff;
+  margin-top: -20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .contact-page .container {
@@ -16,7 +20,7 @@
 }
 
 .contact-header h1 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #111111;
   margin-bottom: 12px;
@@ -24,16 +28,16 @@
 }
 
 .contact-header p {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   color: #666666;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .contact-content {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 60px;
-  align-items: start;
   max-width: 1000px;
   margin: 0 auto;
 }
@@ -102,7 +106,8 @@
 
 @media (max-width: 768px) {
   .contact-page {
-    padding: 100px 16px 60px;
+    padding: 10px 16px 60px;
+    margin-top: -160px !important;
   }
 
   .contact-header {

@@ -62,9 +62,6 @@ const StoriesPage = () => {
             readTime: 7,
             publishedDate: "2024-01-20",
             imageUrl: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format",
-            likes: 723,
-            comments: 41,
-            reads: 2800,
             featured: false
           },
           {
@@ -81,9 +78,6 @@ const StoriesPage = () => {
             readTime: 10,
             publishedDate: "2024-01-15",
             imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format",
-            likes: 445,
-            comments: 67,
-            reads: 1900,
             featured: false
           },
           {
@@ -100,9 +94,6 @@ const StoriesPage = () => {
             readTime: 6,
             publishedDate: "2024-01-08",
             imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format",
-            likes: 834,
-            comments: 52,
-            reads: 3100,
             featured: false
           },
           {
@@ -119,9 +110,6 @@ const StoriesPage = () => {
             readTime: 15,
             publishedDate: "2024-01-02",
             imageUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&auto=format",
-            likes: 1123,
-            comments: 78,
-            reads: 5600,
             featured: false
           },
           {
@@ -138,9 +126,6 @@ const StoriesPage = () => {
             readTime: 8,
             publishedDate: "2024-01-18",
             imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&auto=format",
-            likes: 567,
-            comments: 34,
-            reads: 2100,
             featured: false
           },
           {
@@ -157,9 +142,6 @@ const StoriesPage = () => {
             readTime: 9,
             publishedDate: "2024-01-12",
             imageUrl: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format",
-            likes: 923,
-            comments: 61,
-            reads: 3400,
             featured: false
           },
           {
@@ -176,9 +158,6 @@ const StoriesPage = () => {
             readTime: 11,
             publishedDate: "2024-01-10",
             imageUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&auto=format",
-            likes: 789,
-            comments: 45,
-            reads: 2900,
             featured: false
           },
           {
@@ -195,9 +174,6 @@ const StoriesPage = () => {
             readTime: 7,
             publishedDate: "2024-01-14",
             imageUrl: "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=800&auto=format",
-            likes: 634,
-            comments: 38,
-            reads: 2300,
             featured: false
           }
         ];
@@ -235,6 +211,7 @@ const StoriesPage = () => {
       {/* Category Filter */}
       <section className="category-filter">
         <div className="container">
+          {/* Desktop: Button layout */}
           <div className="category-buttons">
             {categories.map(category => (
               <button
@@ -245,6 +222,21 @@ const StoriesPage = () => {
                 <span className="category-name">{category.name}</span>
               </button>
             ))}
+          </div>
+
+          {/* Mobile: Dropdown */}
+          <div className="category-dropdown">
+            <select
+              value={selectedCategory}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className="category-select"
+            >
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </section>

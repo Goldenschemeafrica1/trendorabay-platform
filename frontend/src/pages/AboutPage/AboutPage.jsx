@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './AboutPage.css';
 
 const AboutPage = () => {
-  const [activeTab, setActiveTab] = useState('story');
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -17,9 +16,9 @@ const AboutPage = () => {
   const teamData = [
     {
       id: 1,
-      name: "Wanjiku Mwangi",
+      name: "Kingsley George",
       role: "Founder & Editor-in-Chief",
-      bio: "Former financial journalist turned media entrepreneur. Wanjiku founded Trendorabay to amplify African voices in business and culture. She has been featured in Forbes Africa and serves on the board of the African Media Initiative.",
+      bio: "Former financial journalist turned media entrepreneur. Kingsley founded Trendorabay to amplify African voices in business and culture. He has been featured in Forbes Africa and serves on the board of the African Media Initiative.",
       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop",
       social: {
         twitter: "@wanjikumwangi",
@@ -28,76 +27,6 @@ const AboutPage = () => {
       },
       expertise: ["Editorial Strategy", "Business Journalism", "Brand Development"],
       quote: "Storytelling is the most powerful tool we have to shape Africa's narrative."
-    },
-    {
-      id: 2,
-      name: "James Kariuki",
-      role: "Creative Director",
-      bio: "Award-winning designer and visual artist with over a decade of experience in brand storytelling. James leads the creative vision for Trendorabay's print and digital presence.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop",
-      social: {
-        twitter: "@jameskariuki",
-        linkedin: "james-kariuki",
-        instagram: "@james.designs"
-      },
-      expertise: ["Visual Design", "Brand Identity", "Creative Direction"],
-      quote: "Design isn't just how it looks—it's how it works and how it makes you feel."
-    },
-    {
-      id: 3,
-      name: "Aisha Hassan",
-      role: "Head of Content",
-      bio: "Multi-award-winning journalist and podcast host. Aisha has covered tech innovation across 15 African countries and is passionate about elevating underrepresented voices.",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=500&fit=crop",
-      social: {
-        twitter: "@aishahassan",
-        linkedin: "aisha-hassan",
-        instagram: "@aisha.stories"
-      },
-      expertise: ["Content Strategy", "Audio Storytelling", "Investigative Journalism"],
-      quote: "Every story has the power to inspire change—we just need to tell it right."
-    },
-    {
-      id: 4,
-      name: "Michael Otieno",
-      role: "Head of Strategy & Partnerships",
-      bio: "Business development expert with a focus on African tech ecosystems. Michael has helped launch over 50 startup partnerships across the continent.",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=500&fit=crop",
-      social: {
-        twitter: "@michaelotieno",
-        linkedin: "michael-otieno",
-        instagram: "@michael.strategies"
-      },
-      expertise: ["Business Development", "Partnerships", "Strategic Planning"],
-      quote: "Collaboration is the key to unlocking Africa's potential."
-    },
-    {
-      id: 5,
-      name: "Zahara Kimathi",
-      role: "Community Manager",
-      bio: "Digital community builder and event strategist. Zahara leads TRENDORAFEST and our Creator Hub, connecting emerging talents across the continent.",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=500&fit=crop",
-      social: {
-        twitter: "@zaharakimathi",
-        linkedin: "zahara-kimathi",
-        instagram: "@zahara.community"
-      },
-      expertise: ["Community Building", "Event Management", "Social Media Strategy"],
-      quote: "Community is at the heart of everything we do at Trendorabay."
-    },
-    {
-      id: 6,
-      name: "Dr. Kwame Asante",
-      role: "Advisor, Innovation & Tech",
-      bio: "Tech entrepreneur and academic with expertise in African digital transformation. Dr. Asante advises on our innovation coverage and tech partnerships.",
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop",
-      social: {
-        twitter: "@kwameasante",
-        linkedin: "dr-kwame-asante",
-        instagram: "@kwame.tech"
-      },
-      expertise: ["Tech Innovation", "Digital Transformation", "Academic Research"],
-      quote: "Africa's tech future is being written by its young innovators today."
     }
   ];
 
@@ -145,60 +74,60 @@ const AboutPage = () => {
     {
       year: "2019",
       title: "The Beginning",
-      description: "Trendorabay Magazine launches as a digital-first publication spotlighting emerging Kenyan entrepreneurs.",
-      icon: "🚀"
+      description: "Trendorabay Magazine launches as a digital-first publication spotlighting emerging Kenyan entrepreneurs."
     },
     {
       year: "2020",
       title: "Expansion Across Africa",
-      description: "Expanded coverage to 15 African countries, launching our first physical edition.",
-      icon: "🌍"
+      description: "Expanded coverage to 15 African countries, launching our first physical edition."
     },
     {
       year: "2021",
       title: "TRENDORAFEST Launch",
-      description: "Hosted our first annual festival celebrating African creativity and innovation in Nairobi.",
-      icon: "🎉"
+      description: "Hosted our first annual festival celebrating African creativity and innovation in Nairobi."
     },
     {
       year: "2022",
       title: "Creator Hub",
-      description: "Launched the Creator Hub platform, connecting 200+ African content creators.",
-      icon: "💡"
+      description: "Launched the Creator Hub platform, connecting 200+ African content creators."
     },
     {
       year: "2023",
       title: "Global Recognition",
-      description: "Featured in international media and recognized as a leading voice in African media.",
-      icon: "🏆"
+      description: "Featured in international media and recognized as a leading voice in African media."
     },
     {
       year: "2024",
       title: "The Future",
-      description: "Continuing to amplify African stories, launch new initiatives, and shape tomorrow's narrative.",
-      icon: "✨"
+      description: "Continuing to amplify African stories, launch new initiatives, and shape tomorrow's narrative."
+    },
+    {
+      year: "2025",
+      title: "Global Expansion",
+      description: "Expanded to new markets and launched innovative digital platforms."
+    },
+    {
+      year: "2026",
+      title: "Present Day",
+      description: "Growing our community and expanding our reach across Africa and beyond."
     }
   ];
 
   // Values
   const values = [
     {
-      icon: "🎯",
       title: "Authenticity",
       description: "We tell real stories from real people, celebrating genuine African voices and experiences."
     },
     {
-      icon: "💡",
       title: "Innovation",
       description: "We embrace new ideas, technologies, and approaches to storytelling and media."
     },
     {
-      icon: "🤝",
       title: "Community",
       description: "We believe in the power of connection and collaboration across the continent."
     },
     {
-      icon: "⚡",
       title: "Impact",
       description: "We measure success by the positive change we create in our communities."
     }
@@ -254,70 +183,9 @@ const AboutPage = () => {
 
   return (
     <div className="about-page">
-      {/* Hero Section */}
-      <div className="about-hero">
-        <div className="about-hero-content">
-          <h1 className="about-hero-title">Shaping Tomorrow's<br />African Narrative</h1>
-          <p className="about-hero-subtitle">
-            Through stories, style, and solutions — we're building Africa's most dynamic media platform 
-            for emerging businesses, youth innovation, and impact-driven storytelling.
-          </p>
-          <div className="about-hero-stats">
-            <div className="hero-stat">
-              <span className="hero-stat-number">{stats.readers.toLocaleString()}+</span>
-              <span className="hero-stat-label">Monthly Readers</span>
-            </div>
-            <div className="hero-stat">
-              <span className="hero-stat-number">{stats.countries}+</span>
-              <span className="hero-stat-label">Countries</span>
-            </div>
-            <div className="hero-stat">
-              <span className="hero-stat-number">{stats.creators}+</span>
-              <span className="hero-stat-label">Creators</span>
-            </div>
-            <div className="hero-stat">
-              <span className="hero-stat-number">{stats.stories}+</span>
-              <span className="hero-stat-label">Stories Told</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Tabs Navigation */}
-      <div className="about-tabs">
-        <div className="about-tabs-container">
-          <button 
-            className={`tab-btn ${activeTab === 'story' ? 'active' : ''}`}
-            onClick={() => setActiveTab('story')}
-          >
-            Our Story
-          </button>
-          <button 
-            className={`tab-btn ${activeTab === 'mission' ? 'active' : ''}`}
-            onClick={() => setActiveTab('mission')}
-          >
-            Mission & Vision
-          </button>
-          <button 
-            className={`tab-btn ${activeTab === 'team' ? 'active' : ''}`}
-            onClick={() => setActiveTab('team')}
-          >
-            Team
-          </button>
-          <button 
-            className={`tab-btn ${activeTab === 'impact' ? 'active' : ''}`}
-            onClick={() => setActiveTab('impact')}
-          >
-            Impact
-          </button>
-        </div>
-      </div>
-
-      {/* Tab Content */}
       <div className="about-content">
-        {/* Our Story Tab */}
-        {activeTab === 'story' && (
-          <div className="story-tab">
+        {/* Our Story Section */}
+        <div className="story-tab">
             <div className="story-intro">
               <h2>A Movement, Not Just a Magazine</h2>
               <p>
@@ -333,7 +201,6 @@ const AboutPage = () => {
               <div className="timeline">
                 {milestones.map((milestone, index) => (
                   <div key={index} className="timeline-item">
-                    <div className="timeline-icon">{milestone.icon}</div>
                     <div className="timeline-content">
                       <div className="timeline-year">{milestone.year}</div>
                       <h4>{milestone.title}</h4>
@@ -349,7 +216,6 @@ const AboutPage = () => {
               <div className="values-grid">
                 {values.map((value, index) => (
                   <div key={index} className="value-card">
-                    <div className="value-icon">{value.icon}</div>
                     <h4>{value.title}</h4>
                     <p>{value.description}</p>
                   </div>
@@ -357,14 +223,11 @@ const AboutPage = () => {
               </div>
             </div>
           </div>
-        )}
 
-        {/* Mission & Vision Tab */}
-        {activeTab === 'mission' && (
-          <div className="mission-tab">
+        {/* Mission & Vision Section */}
+        <div className="mission-tab">
             <div className="mission-vision-grid">
               <div className="mission-card">
-                <div className="mission-icon">🎯</div>
                 <h2>Our Mission</h2>
                 <p>
                   To be the ultimate platform for emerging businesses and trendsetters in Africa, 
@@ -387,7 +250,6 @@ const AboutPage = () => {
               </div>
 
               <div className="vision-card">
-                <div className="vision-icon">🔮</div>
                 <h2>Our Vision</h2>
                 <p>
                   Shaping tomorrow's African narrative through stories, style, and solutions — 
@@ -444,11 +306,9 @@ const AboutPage = () => {
               </div>
             </div>
           </div>
-        )}
 
-        {/* Team Tab */}
-        {activeTab === 'team' && (
-          <div className="team-tab">
+        {/* Team Section */}
+        <div className="team-tab">
             <div className="team-intro">
               <h2>The People Behind Trendorabay</h2>
               <p>
@@ -469,11 +329,6 @@ const AboutPage = () => {
                   <div className="team-card-info">
                     <h3>{member.name}</h3>
                     <p>{member.role}</p>
-                    <div className="team-card-social">
-                      <span className="social-icon">𝕏</span>
-                      <span className="social-icon">in</span>
-                      <span className="social-icon">📷</span>
-                    </div>
                   </div>
                 </div>
               ))}
@@ -485,50 +340,25 @@ const AboutPage = () => {
               <button className="join-team-btn">View Open Positions →</button>
             </div>
           </div>
-        )}
 
-        {/* Impact Tab */}
-        {activeTab === 'impact' && (
-          <div className="impact-tab">
-            <div className="impact-stats">
-              <div className="impact-stat-card">
-                <div className="impact-stat-number">{stats.readers.toLocaleString()}+</div>
-                <div className="impact-stat-label">Monthly Readers</div>
-              </div>
-              <div className="impact-stat-card">
-                <div className="impact-stat-number">{stats.countries}+</div>
-                <div className="impact-stat-label">Countries Reached</div>
-              </div>
-              <div className="impact-stat-card">
-                <div className="impact-stat-number">₿2.5M+</div>
-                <div className="impact-stat-label">Funding Highlighted</div>
-              </div>
-              <div className="impact-stat-card">
-                <div className="impact-stat-number">150+</div>
-                <div className="impact-stat-label">Events Hosted</div>
-              </div>
-            </div>
-
+        {/* Impact Section */}
+        <div className="impact-tab">
             <div className="impact-stories">
               <h3>Success Stories</h3>
               <div className="impact-stories-grid">
                 <div className="impact-story-card">
-                  <div className="impact-story-icon">🚀</div>
                   <h4>Startup Spotlight</h4>
                   <p>Featured 50+ startups that went on to raise over $2.5M in combined funding</p>
                 </div>
                 <div className="impact-story-card">
-                  <div className="impact-story-icon">🎨</div>
                   <h4>Creator Program</h4>
                   <p>Trained 200+ creators across 12 African countries through our workshops</p>
                 </div>
                 <div className="impact-story-card">
-                  <div className="impact-story-icon">📰</div>
                   <h4>Media Recognition</h4>
                   <p>Cited by global publications and academic institutions for our reporting</p>
                 </div>
                 <div className="impact-story-card">
-                  <div className="impact-story-icon">🤝</div>
                   <h4>Partnerships</h4>
                   <p>Collaborated with 75+ brands and organizations across the continent</p>
                 </div>
@@ -548,7 +378,6 @@ const AboutPage = () => {
               </div>
             </div>
           </div>
-        )}
       </div>
 
       {/* Team Member Modal */}
@@ -575,13 +404,6 @@ const AboutPage = () => {
                 <div className="modal-quote">
                   <span className="quote-mark">"</span>
                   {selectedMember.quote}
-                </div>
-                <div className="modal-social">
-                  {Object.entries(selectedMember.social).map(([platform, handle]) => (
-                    <a key={platform} href="#" className="modal-social-link">
-                      {platform.charAt(0).toUpperCase() + platform.slice(1)}
-                    </a>
-                  ))}
                 </div>
               </div>
             </div>

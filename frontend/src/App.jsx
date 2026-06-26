@@ -40,6 +40,7 @@ import AboutPage from './pages/AboutPage/AboutPage';
 import MissionPage from './pages/MissionPage/MissionPage';
 import ContactPage from './pages/ContactPage/ContactPage';
 import WriteForUsPage from './pages/WriteForUsPage/WriteForUsPage';
+import PartnerPage from './pages/PartnerPage/PartnerPage';
 import FAQPage from './pages/FAQPage/FAQPage';
 import TermsPage from './pages/Legal/TermsPage';
 import PrivacyPage from './pages/Legal/PrivacyPage';
@@ -106,8 +107,8 @@ function App() {
       {/* Navigation Menu */}
       <Navigation />
 
-      {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, signup, about, store, stories, author, contributors, terms, privacy, donate, events, contact, write-for-us, faq, and subscribe pages */}
-      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/author') && !location.pathname.startsWith('/community/contributors') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/events' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/faq' && location.pathname !== '/subscribe' && <Advert />}
+      {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, signup, about, store, stories, author, contributors, terms, privacy, donate, events, contact, write-for-us, write, partner, partner-with-us, faq, and subscribe pages */}
+      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/author') && !location.pathname.startsWith('/community/contributors') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/events' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/write' && !location.pathname.startsWith('/partner') && location.pathname !== '/faq' && location.pathname !== '/subscribe' && <Advert />}
 
       {/* Shopping Cart Drawer (Slides from right) */}
       <CartDrawer />
@@ -157,6 +158,8 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/write" element={<WriteForUsPage />} />
           <Route path="/write-for-us" element={<WriteForUsPage />} />
+          <Route path="/partner" element={<PartnerPage />} />
+          <Route path="/partner-with-us" element={<PartnerPage />} />
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />

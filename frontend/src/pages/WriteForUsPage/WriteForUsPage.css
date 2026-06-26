@@ -6,6 +6,7 @@
 .write-for-us-page {
   background: var(--bg-primary, #ffffff);
   min-height: 100vh;
+  margin-top: -20px;
 }
 
 /* ============================================
@@ -630,14 +631,18 @@
 }
 
 @media (max-width: 768px) {
+  .write-for-us-page {
+    margin-top: -140px;
+  }
+
   .write-hero-content h1 {
     font-size: 2.2rem;
   }
-  
+
   .write-hero-content p {
     font-size: 1rem;
   }
-  
+
   .write-container {
     padding: 40px 20px;
   }

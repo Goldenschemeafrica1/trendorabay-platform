@@ -146,7 +146,6 @@ const Header = () => {
               <i className={`fas fa-chevron-${mobileOpenDropdown === 'home' ? 'up' : 'down'}`}></i>
             </button>
             <div className={`mobile-dropdown ${mobileOpenDropdown === 'home' ? 'open' : ''}`}>
-              <Link to="/stories/latest" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Latest Stories</Link>
               <Link to="/stories" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>All Stories</Link>
               <Link to="/community/contributors" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contributors</Link>
               <Link to="/community" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Community</Link>
@@ -170,7 +169,6 @@ const Header = () => {
             </button>
             <div className={`mobile-dropdown ${mobileOpenDropdown === 'write' ? 'open' : ''}`}>
               <Link to="/write" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Start Writing</Link>
-              <Link to="/write-for-us" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Submit a Story</Link>
               <Link to="/community/contributors" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Contributors</Link>
               <Link to="/community" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Join Community</Link>
             </div>
@@ -185,8 +183,8 @@ const Header = () => {
               <i className={`fas fa-chevron-${mobileOpenDropdown === 'business' ? 'up' : 'down'}`}></i>
             </button>
             <div className={`mobile-dropdown ${mobileOpenDropdown === 'business' ? 'open' : ''}`}>
-              <Link to="/write-for-us" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Partner With Us</Link>
-              <Link to="/contact" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Advertise With Us</Link>
+              <Link to="/partner-with-us" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Partner With Us</Link>
+              <Link to="/advertise" className="mobile-dropdown-item" onClick={(e) => handleMobileLinkClick(e)}>Advertise With Us</Link>
             </div>
           </div>
 
