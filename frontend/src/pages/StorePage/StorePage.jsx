@@ -464,160 +464,117 @@ const StorePage = () => {
 
   return (
     <div className="store-page">
-      <div className="store-container">
-        {/* Mobile Filter Toggle */}
-        <button className="filter-toggle" onClick={() => setShowFilters(!showFilters)}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="4" y1="6" x2="20" y2="6"/>
-            <line x1="4" y1="12" x2="20" y2="12"/>
-            <line x1="4" y1="18" x2="20" y2="18"/>
-          </svg>
-          Filters & Categories
-        </button>
-
-        {/* Sidebar Filters */}
-        <aside className={`store-sidebar ${showFilters ? 'open' : ''}`}>
-          <div className="filter-header">
-            <h3>Filters</h3>
-            <button className="close-filters" onClick={() => setShowFilters(false)}>×</button>
+      {/* Hero Section */}
+      <div className="store-hero">
+        <div className="store-hero-content">
+          <div className="store-hero-text">
+            <h1>Trendorabay Hoodie Collection</h1>
+            <p>Premium 100% cotton hoodies featuring the Trendorabay logo and African-inspired patterns. Perfect for casual wear and making a statement.</p>
+            <button className="shop-now-btn" onClick={() => {
+              const hoodie = productsData.find(p => p.id === 2);
+              if (hoodie) handleAddToCart(hoodie);
+            }}>
+              Shop Now <i className="fas fa-arrow-right"></i>
+            </button>
           </div>
-
-          {/* Categories */}
-          <div className="filter-section">
-            <h4 className="filter-title">Categories</h4>
-            <div className="category-list">
-              {categories.map(cat => (
-                <button
-                  key={cat.id}
-                  className={`category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory(cat.id)}
-                >
-                  <span className="category-icon">{cat.icon}</span>
-                  <span className="category-name">{cat.name}</span>
-                </button>
-              ))}
+          <div className="store-hero-images">
+            <div className="hoodie-item">
+              <img src="/hoodie.jpeg" alt="Trendorabay Hoodie Urban" />
+              <span className="hoodie-label">Urban Edition</span>
+            </div>
+            <div className="hoodie-item">
+              <img src="/hoodie7.jpeg" alt="Trendorabay Hoodie Street" />
+              <span className="hoodie-label">Street Style</span>
+            </div>
+            <div className="hoodie-item">
+              <img src="/hoodie5.jpeg" alt="Trendorabay Hoodie Limited" />
+              <span className="hoodie-label">Limited Edition</span>
             </div>
           </div>
-
-          
-          {/* Clear Filters */}
-          <button className="clear-filters" onClick={() => {
-            setSelectedCategory('all');
-            setSearchQuery('');
-            setSortBy('featured');
-          }}>
-            Clear All Filters
-          </button>
-        </aside>
-
-        {/* Main Content */}
-        <main className="store-main">
-          {/* Search and Sort Bar */}
-          <div className="store-toolbar">
-            <div className="search-bar">
-              <svg className="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="M21 21l-4.35-4.35"/>
-              </svg>
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            
-            <div className="sort-bar">
-              <span>Sort by:</span>
-              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="featured">Featured</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="rating">Best Rating</option>
-                <option value="newest">Newest</option>
-              </select>
-            </div>
-
-                      </div>
-
-          {/* Results Count */}
-          <div className="results-count">
-            <span>{filteredProducts.length} products found</span>
-          </div>
-
-          {/* Products Grid/List */}
-          {filteredProducts.length === 0 ? (
-            <div className="no-products">
-              <div className="no-products-icon">🔍</div>
-              <h3>No products found</h3>
-              <p>Try adjusting your filters or search term</p>
-              <button onClick={() => {
-                setSelectedCategory('all');
-                setSearchQuery('');
-                setPriceRange({ min: 0, max: 500 });
-                setSelectedSizes([]);
-              }}>
-                Clear Filters
-              </button>
-            </div>
-          ) : (
-            <div className="products-grid">
-              {filteredProducts.map(product => (
-                <div key={product.id} className="product-card">
-                  <div className="product-image-wrapper">
-                    <img 
-                      src={product.image} 
-                      alt={product.name} 
-                      className="product-image"
-                      loading="lazy"
-                    />
-                    {product.badge && (
-                      <span className="product-badge" style={{ backgroundColor: product.badgeColor }}>
-                        {product.badge}
-                      </span>
-                    )}
-                    {!product.inStock && (
-                      <div className="out-of-stock-overlay">
-                        <span>Out of Stock</span>
-                      </div>
-                    )}
-                    <button 
-                      className={`wishlist-btn ${wishlist.includes(product.id) ? 'active' : ''}`}
-                      onClick={() => toggleWishlist(product.id)}
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill={wishlist.includes(product.id) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="product-info">
-                    <div className="product-category">
-                      {categories.find(c => c.id === product.category)?.name || product.category}
-                    </div>
-                    <h3 className="product-name">{product.name}</h3>
-                    <div className="product-price">
-                      <span className="current-price">{formatPrice(product.price)}</span>
-                      {product.originalPrice && (
-                        <span className="original-price">{formatPrice(product.originalPrice)}</span>
-                      )}
-                    </div>
-                    <button 
-                      className={`add-to-cart-btn ${!product.inStock ? 'disabled' : ''}`}
-                      onClick={() => handleAddToCart(product)}
-                      disabled={!product.inStock}
-                    >
-                      {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </main>
+        </div>
       </div>
 
-      {/* Cart Sidebar Overlay (if needed) */}
-      {showFilters && <div className="filter-overlay" onClick={() => setShowFilters(false)}></div>}
+      {/* Best Selling Section */}
+      <div className="best-selling-section">
+        <div className="best-selling-header">
+          <h2>Best Selling</h2>
+          <p>Our most popular products loved by customers</p>
+        </div>
+        <div className="best-selling-grid">
+          {productsData.filter(p => p.category === 'apparel').slice(0, 4).map(product => (
+            <div key={product.id} className="best-selling-card">
+              <div className="best-selling-image-section">
+                <img src={product.image} alt={product.name} />
+                <span className="new-arrival-badge">New Arrival</span>
+              </div>
+              <div className="best-selling-content-section">
+                <h3>{product.name}</h3>
+                <p className="best-selling-price">{formatPrice(product.price)}</p>
+                <div className="best-selling-actions">
+                  <button 
+                    className="add-to-cart-btn"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
+                  <button 
+                    className={`wishlist-btn ${wishlist.includes(product.id) ? 'active' : ''}`}
+                    onClick={() => toggleWishlist(product.id)}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill={wishlist.includes(product.id) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Our Collection Section */}
+      <div className="our-collection-section">
+        <div className="our-collection-header">
+          <h2>Our Collection</h2>
+          <p>Explore our full range of products</p>
+        </div>
+        <div className="our-collection-grid">
+          {productsData.slice(0, 8).map(product => (
+            <div key={product.id} className="best-selling-card">
+              <div className="best-selling-image-section">
+                <img src={product.image} alt={product.name} />
+                {product.badge ? (
+                  <span className="new-arrival-badge" style={{ background: product.badgeColor || 'linear-gradient(135deg, #10B981 0%, #059669 100%)' }}>
+                    {product.badge}
+                  </span>
+                ) : (
+                  <span className="new-arrival-badge">New Arrival</span>
+                )}
+              </div>
+              <div className="best-selling-content-section">
+                <h3>{product.name}</h3>
+                <p className="best-selling-price">{formatPrice(product.price)}</p>
+                <div className="best-selling-actions">
+                  <button 
+                    className="add-to-cart-btn"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
+                  <button 
+                    className={`wishlist-btn ${wishlist.includes(product.id) ? 'active' : ''}`}
+                    onClick={() => toggleWishlist(product.id)}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill={wishlist.includes(product.id) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

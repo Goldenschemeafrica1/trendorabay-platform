@@ -181,8 +181,8 @@ function App() {
         </Routes>
       </main>
 
-      {/* Footer */}
-      <Footer />
+      {/* Footer - Hidden on login and signup pages */}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && <Footer />}
 
       {/* Quick View Modal (can be added here) */}
       {/* <QuickViewModal /> */}

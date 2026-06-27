@@ -97,7 +97,11 @@ const Header = () => {
                 <div className="logo-icons">
                   <div className="profile-login-section">
                     <Link to="/login" className="profile-login-link">
-                      <i className="fas fa-user"></i>
+                      <span className="desktop-only">Login</span>
+                      <i className="fas fa-user-circle mobile-only"></i>
+                    </Link>
+                    <Link to="/signup" className="register-link desktop-only">
+                      <span>Register</span>
                     </Link>
                   </div>
                   <div className="cart-with-amount">

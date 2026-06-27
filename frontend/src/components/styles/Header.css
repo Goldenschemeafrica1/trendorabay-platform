@@ -83,7 +83,7 @@
 .profile-login-section {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 0px;
   margin-left: 12px;
 }
 
@@ -96,7 +96,7 @@
   letter-spacing: 0.3px;
   font-family: 'Poppins', sans-serif;
   white-space: nowrap;
-  padding: 8px 12px;
+  padding: 8px 8px;
   border-radius: 6px;
   transition: all 0.2s ease;
   display: flex;
@@ -114,6 +114,30 @@
 
 .profile-login-link i {
   font-size: 16px;
+}
+
+/* Register Link */
+.register-link {
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+  padding: 8px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
 }
 
 /* Cart with Amount Container */
@@ -1149,4 +1173,36 @@
 
 .dropdown-item {
   position: relative;
+}
+
+/* ===== Mobile/Desktop Visibility Classes ===== */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: inline-block !important;
+    font-size: 1.5rem;
+  }
+
+  .profile-login-link {
+    padding: 8px !important;
+  }
+
+  .profile-login-link:hover {
+    background: transparent !important;
+  }
+
+  .profile-login-link .mobile-only {
+    color: #e63946;
+  }
 }

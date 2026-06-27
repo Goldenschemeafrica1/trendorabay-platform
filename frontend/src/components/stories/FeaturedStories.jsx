@@ -5,7 +5,6 @@ import './FeaturedStories.css';
 const FeaturedStories = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isVisible, setIsVisible] = useState({});
-  const [email, setEmail] = useState('');
 
   // Featured stories data with rich content
   const featuredStories = [
@@ -70,7 +69,7 @@ const FeaturedStories = () => {
       id: 6,
       category: 'TECHNOLOGY',
       title: 'African unicorns reshape investment landscape',
-      description: 'From startup hubs to billion-dollar valuations, explore how African tech companies are transforming the continent\'s economic future.',
+      description: '',
       author: 'SARAH JOHNSON',
       image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
     },
@@ -93,10 +92,10 @@ const FeaturedStories = () => {
     {
       id: 10,
       category: 'MUSIC',
-      title: 'Afrobeats artists sign major record deals',
-      description: 'From Lagos to Los Angeles, African musicians are landing contracts with global music giants.',
+      title: 'Emerging African musicians break into the global scene',
+      description: 'From Lagos to Los Angeles, new African artists are making waves and launching their music careers worldwide.',
       author: 'ALEXA MELODY',
-      image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
+      image: '/assets/musicstory.jpeg'
     }
   ];
 
@@ -129,6 +128,52 @@ const FeaturedStories = () => {
       title: 'Renewable energy projects transform African landscapes',
       author: 'MICHAEL GREEN',
       image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
+    }
+  ];
+
+  // Text-only stories for must read section
+  const textOnlyStories = [
+    {
+      id: 15,
+      category: 'POLITICS',
+      title: 'African leaders convene for continental trade summit',
+      description: 'Key discussions focus on strengthening cross-border commerce and economic integration across member states.',
+      author: 'JAMES KUMARO'
+    },
+    {
+      id: 16,
+      category: 'CULTURE',
+      title: 'African fashion week showcases traditional textiles',
+      description: 'Designers blend ancient weaving techniques with modern silhouettes to create stunning contemporary collections.',
+      author: 'AMARA DIALLO'
+    },
+    {
+      id: 17,
+      category: 'EDUCATION',
+      title: 'Digital literacy programs expand across rural schools',
+      description: 'New initiatives bring tablets and internet access to remote villages, bridging the educational divide.',
+      author: 'DR. SARAH MBANE'
+    },
+    {
+      id: 18,
+      category: 'ENVIRONMENT',
+      title: 'Sustainable farming practices gain momentum',
+      description: 'Smallholder farmers adopt eco-friendly techniques to boost yields while protecting the ecosystem.',
+      author: 'MICHAEL GREEN'
+    },
+    {
+      id: 19,
+      category: 'HEALTH',
+      title: 'Telemedicine revolutionizes healthcare access',
+      description: 'Remote areas benefit from virtual consultations and digital health services bridging the healthcare gap.',
+      author: 'DR. FATIMA ALI'
+    },
+    {
+      id: 20,
+      category: 'SPORTS',
+      title: 'African sports infrastructure development accelerates',
+      description: 'New stadiums and training facilities emerge across the continent to nurture athletic talent.',
+      author: 'SAMUEL ODE'
     }
   ];
 
@@ -177,24 +222,6 @@ const FeaturedStories = () => {
     return () => clearInterval(interval);
   }, [featuredStories.length]);
 
-  // Handle newsletter submission
-  const handleNewsletterSubmit = (e) => {
-    e.preventDefault();
-    if (email) {
-      alert(`Thank you for subscribing with email: ${email}`);
-      setEmail('');
-    }
-  };
-
-  // Handle writer button clicks
-  const handleBecomeWriter = () => {
-    alert('Redirecting to writer application form...');
-  };
-
-  const handleSubmissionGuidelines = () => {
-    alert('Opening submission guidelines...');
-  };
-
   return (
     <section className="most-read-section">
       {/* Ambient Background */}
@@ -229,10 +256,12 @@ const FeaturedStories = () => {
                 {(story.category === 'SPORTS' || story.category === 'BUSINESS') ? (
                   // Sports & Business stories with image on top
                   <>
-                    <img src={story.image} alt={story.title} loading="lazy" className="side-story-image" />
+                    <div className="side-story-image-wrapper">
+                      <img src={story.image} alt={story.title} loading="lazy" className="side-story-image" />
+                      <span className={`side-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'SPORTS' ? 'sports-category' : ''}`}>{story.category}</span>
+                    </div>
 
                     <div className="fashion-story-content">
-                      <span className={`side-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'SPORTS' ? 'sports-category' : ''}`}>{story.category}</span>
                       <h3 className="side-story-title">{story.title}</h3>
                       
                       <div className="side-story-footer">
@@ -246,10 +275,12 @@ const FeaturedStories = () => {
                 ) : (
                   // Regular side story layout
                   <>
-                    <img src={story.image} alt={story.title} loading="lazy" className="side-story-image" />
+                    <div className="side-story-image-wrapper">
+                      <img src={story.image} alt={story.title} loading="lazy" className="side-story-image" />
+                      <span className="side-story-category">{story.category}</span>
+                    </div>
 
                     <div className="side-story-content">
-                      <span className="side-story-category">{story.category}</span>
                       <h3 className="side-story-title">{story.title}</h3>
                       
                       <div className="side-story-footer">
@@ -269,16 +300,20 @@ const FeaturedStories = () => {
           <div className="cover-story">
             <article className="main-story-card">
               <div className="main-story-image-wrapper">
-                <img 
-                  src={featuredStories[3].image} 
-                  alt={featuredStories[3].title} 
-                  loading="lazy" 
+                <img
+                  src={featuredStories[3].image}
+                  alt={featuredStories[3].title}
+                  loading="lazy"
                   className="main-story-image"
                 />
-                
+
+                {/* HOT TOPIC Badge - Desktop */}
+                <div className="hot-topic-badge desktop-hot-topic-badge">HOT TOPIC</div>
+
                 {/* HOT TOPIC Title Overlay */}
                 <div className="hot-topic-overlay">
-                  <div className="hot-topic-badge">HOT TOPIC</div>
+                  {/* HOT TOPIC Badge - Mobile */}
+                  <div className="hot-topic-badge mobile-hot-topic-badge">HOT TOPIC</div>
                   <h2 className="hot-topic-title">Afrobeats takes over the global music charts</h2>
                 </div>
               </div>
@@ -288,14 +323,16 @@ const FeaturedStories = () => {
             <div className="mobile-sports-story">
               {featuredStories.find(story => story.category === 'SPORTS') && (
                 <article className="mobile-sports-card">
-                  <img 
-                    src={featuredStories.find(story => story.category === 'SPORTS').image} 
-                    alt={featuredStories.find(story => story.category === 'SPORTS').title} 
-                    loading="lazy" 
-                    className="mobile-sports-image" 
-                  />
-                  <div className="mobile-sports-content">
+                  <div className="mobile-sports-image-wrapper">
+                    <img 
+                      src={featuredStories.find(story => story.category === 'SPORTS').image} 
+                      alt={featuredStories.find(story => story.category === 'SPORTS').title} 
+                      loading="lazy" 
+                      className="mobile-sports-image" 
+                    />
                     <span className="mobile-sports-category">SPORTS</span>
+                  </div>
+                  <div className="mobile-sports-content">
                     <h3 className="mobile-sports-title">
                       {featuredStories.find(story => story.category === 'SPORTS').title}
                     </h3>
@@ -311,14 +348,16 @@ const FeaturedStories = () => {
             <div className="mobile-business-story">
               {featuredStories.find(story => story.category === 'BUSINESS') && (
                 <article className="mobile-business-card">
-                  <img 
-                    src={featuredStories.find(story => story.category === 'BUSINESS').image} 
-                    alt={featuredStories.find(story => story.category === 'BUSINESS').title} 
-                    loading="lazy" 
-                    className="mobile-business-image" 
-                  />
-                  <div className="mobile-business-content">
+                  <div className="mobile-business-image-wrapper">
+                    <img 
+                      src={featuredStories.find(story => story.category === 'BUSINESS').image} 
+                      alt={featuredStories.find(story => story.category === 'BUSINESS').title} 
+                      loading="lazy" 
+                      className="mobile-business-image" 
+                    />
                     <span className="mobile-business-category">BUSINESS</span>
+                  </div>
+                  <div className="mobile-business-content">
                     <h3 className="mobile-business-title">
                       {featuredStories.find(story => story.category === 'BUSINESS').title}
                     </h3>
@@ -360,9 +399,11 @@ const FeaturedStories = () => {
                     className={`horizontal-story-card ${story.category === 'TRAVEL' ? 'travel-card' : ''} ${story.category === 'FOOD' ? 'food-card' : ''} ${story.category === 'HEALTH' ? 'health-card' : ''} ${story.category === 'MUSIC' ? 'music-card' : ''}`}
                     style={{ transitionDelay: `${index * 0.1}s` }}
                   >
-                    <img src={story.image} alt={story.title} loading="lazy" className="horizontal-story-image" />
-                    <div className="horizontal-story-content">
+                    <div className="horizontal-story-image-wrapper">
+                      <img src={story.image} alt={story.title} loading="lazy" className="horizontal-story-image" />
                       <span className={`horizontal-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'TECHNOLOGY' ? 'business-category' : ''} ${story.category === 'TRAVEL' ? 'travel-category' : ''} ${story.category === 'FOOD' ? 'food-category' : ''} ${story.category === 'MUSIC' ? 'music-category' : ''}`}>{story.category}</span>
+                    </div>
+                    <div className="horizontal-story-content">
                       <h3 className="horizontal-story-title">{story.title}</h3>
                     </div>
                     <div className="horizontal-story-author">
@@ -515,7 +556,7 @@ const FeaturedStories = () => {
             <div className="horizontal-stories-divider-top"></div>
             
             <div className="horizontal-stories-container must-read-horizontal-container">
-              {horizontalStories.slice(0, 3).map((story, index) => (
+              {horizontalStories.slice(0, 1).map((story, index) => (
                 <article
                   key={story.id}
                   className={`horizontal-story-card ${story.category === 'TRAVEL' ? 'travel-card' : ''} ${story.category === 'FOOD' ? 'food-card' : ''} ${story.category === 'HEALTH' ? 'health-card' : ''} ${story.category === 'MUSIC' ? 'music-card' : ''}`}
@@ -523,72 +564,69 @@ const FeaturedStories = () => {
                 >
                   <div className="horizontal-story-image-wrapper">
                     <img src={story.image} alt={story.title} loading="lazy" className="horizontal-story-image" />
-                    <span className={`horizontal-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'TECHNOLOGY' ? 'business-category' : ''} ${story.category === 'TRAVEL' ? 'travel-category' : ''} ${story.category === 'FOOD' ? 'food-category' : ''} ${story.category === 'MUSIC' ? 'music-category' : ''}`}>{story.category}</span>
                   </div>
                   <div className="horizontal-story-content">
+                    <span className={`horizontal-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'TECHNOLOGY' ? 'business-category' : ''} ${story.category === 'TRAVEL' ? 'travel-category' : ''} ${story.category === 'FOOD' ? 'food-category' : ''} ${story.category === 'MUSIC' ? 'music-category' : ''}`}>{story.category}</span>
                     <h3 className="horizontal-story-title">{story.title}</h3>
-                  </div>
-                  <div className="horizontal-story-author">
-                    <span className={`horizontal-author-name ${story.category === 'BUSINESS' ? 'business-author-name' : ''} ${story.category === 'TECHNOLOGY' ? 'business-author-name' : ''} ${story.category === 'TRAVEL' ? 'travel-author-name' : ''} ${story.category === 'FOOD' ? 'food-author-name' : ''} ${story.category === 'HEALTH' ? 'health-author-name' : ''} ${story.category === 'MUSIC' ? 'music-author-name' : ''}`}>By {story.author}</span>
-                    <span className="horizontal-author-role">{story.authorTitle}</span>
+                    <p className="horizontal-story-description">{story.description}</p>
+                    <div className="horizontal-story-author">
+                      <span className={`horizontal-author-name ${story.category === 'BUSINESS' ? 'business-author-name' : ''} ${story.category === 'TECHNOLOGY' ? 'business-author-name' : ''} ${story.category === 'TRAVEL' ? 'travel-author-name' : ''} ${story.category === 'FOOD' ? 'food-author-name' : ''} ${story.category === 'HEALTH' ? 'health-author-name' : ''} ${story.category === 'MUSIC' ? 'music-author-name' : ''}`}>By {story.author}</span>
+                      <span className="horizontal-author-role">{story.authorTitle}</span>
+                    </div>
                   </div>
                 </article>
               ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Newsletter Section */}
-        <div className="newsletter-writers-section-wrapper">
-          <div className="newsletter-writers-container">
-            <div className="newsletter-section">
-              <div className="newsletter-content">
-                <h3 className="newsletter-title">
-                  <span className="newsletter-gold">Stay</span> Connected
-                </h3>
-                <p className="newsletter-description">
-                  Get the latest African stories, exclusive content, and cultural insights delivered to your inbox weekly.
-                </p>
-                <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
-                  <div className="form-group">
-                    <input 
-                      type="email" 
-                      placeholder="Enter your email address" 
-                      className="newsletter-input"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                    <button type="submit" className="newsletter-button">
-                      Subscribe
-                    </button>
-                  </div>
-                                  </form>
-
-                {/* Share Your Voice Section - Now inside newsletter */}
-                <div className="share-voice-section">
-                  <div className="share-voice-card">
-                    <h4 className="share-voice-title">
-                      <span className="share-voice-gold">Share</span> Your Voice
-                    </h4>
-                    <p className="share-voice-description">
-                      Share your African stories with our global writer community.
-                    </p>
-                    <div className="share-voice-buttons">
-                      <button className="share-voice-btn-primary" onClick={handleBecomeWriter}>Become a Writer</button>
-                      <button className="share-voice-btn-secondary" onClick={handleSubmissionGuidelines}>Submission Guidelines</button>
-                    </div>
-                  </div>
-                  
-                  <div className="membership-card">
-                    <h4 className="membership-title">
-                      <span className="membership-gold">Join</span> Our Community
-                    </h4>
-                    <p className="membership-description">
-                      Get exclusive access to premium content, workshops, and networking with African creators.
-                    </p>
-                    <button className="membership-btn" onClick={handleBecomeWriter}>Become a Member</button>
-                  </div>
+              <div className="text-only-stories-grid">
+                <div className="text-only-column">
+                  {textOnlyStories.slice(0, 2).map((story, index) => (
+                    <article
+                      key={story.id}
+                      className="horizontal-story-card text-only-card"
+                      style={{ transitionDelay: `${(index + 1) * 0.1}s` }}
+                    >
+                      <div className="horizontal-story-content text-only-content">
+                        <span className="horizontal-story-category">{story.category}</span>
+                        <h3 className="horizontal-story-title">{story.title}</h3>
+                        <div className="horizontal-story-author">
+                          <span className="horizontal-author-name">By {story.author}</span>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                <div className="text-only-column">
+                  {textOnlyStories.slice(2, 4).map((story, index) => (
+                    <article
+                      key={story.id}
+                      className="horizontal-story-card text-only-card"
+                      style={{ transitionDelay: `${(index + 3) * 0.1}s` }}
+                    >
+                      <div className="horizontal-story-content text-only-content">
+                        <span className="horizontal-story-category">{story.category}</span>
+                        <h3 className="horizontal-story-title">{story.title}</h3>
+                        <div className="horizontal-story-author">
+                          <span className="horizontal-author-name">By {story.author}</span>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                <div className="text-only-column">
+                  {textOnlyStories.slice(4, 6).map((story, index) => (
+                    <article
+                      key={story.id}
+                      className="horizontal-story-card text-only-card"
+                      style={{ transitionDelay: `${(index + 5) * 0.1}s` }}
+                    >
+                      <div className="horizontal-story-content text-only-content">
+                        <span className="horizontal-story-category">{story.category}</span>
+                        <h3 className="horizontal-story-title">{story.title}</h3>
+                        <div className="horizontal-story-author">
+                          <span className="horizontal-author-name">By {story.author}</span>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
                 </div>
               </div>
             </div>

@@ -305,12 +305,6 @@ const CartPage = ({ onCheckoutComplete }) => {
                               </button>
                             </div>
                             <button
-                              className="save-for-later-btn"
-                              onClick={() => moveToSaved(item)}
-                            >
-                              Save for Later
-                            </button>
-                            <button
                               className="remove-btn"
                               onClick={() => handleRemoveItem(item.id, item.size, item.color)}
                             >
@@ -364,19 +358,23 @@ const CartPage = ({ onCheckoutComplete }) => {
               <div className="recommended-section">
                 <h2 className="section-title">You Might Also Like</h2>
                 <div className="recommended-grid">
-                  {recommendedProducts.map(product => (
-                    <div key={product.id} className="recommended-card">
-                      <img src={product.image} alt={product.name} className="recommended-image" />
-                      <div className="recommended-info">
-                        <span className="recommended-category">{product.category}</span>
-                        <h4>{product.name}</h4>
-                        <p>${product.price.toFixed(2)}</p>
-                        <button 
-                          className="add-recommended-btn"
-                          onClick={() => addRecommendedToCart(product)}
-                        >
-                          Add to Cart
-                        </button>
+                  {recommendedProducts.slice(0, 2).map(product => (
+                    <div key={product.id} className="best-selling-card">
+                      <div className="best-selling-image-section">
+                        <img src={product.image} alt={product.name} />
+                        <span className="new-arrival-badge">New Arrival</span>
+                      </div>
+                      <div className="best-selling-content-section">
+                        <h3>{product.name}</h3>
+                        <p className="best-selling-price">${product.price.toFixed(2)}</p>
+                        <div className="best-selling-actions">
+                          <button 
+                            className="add-to-cart-btn"
+                            onClick={() => addRecommendedToCart(product)}
+                          >
+                            Add to Cart
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}

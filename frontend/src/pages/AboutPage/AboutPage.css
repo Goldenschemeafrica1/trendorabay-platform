@@ -245,8 +245,8 @@
 }
 
 .timeline-content {
-  width: 400px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 400px;
   background: var(--bg-card, #ffffff);
   padding: 4px;
   border-radius: 6px;
@@ -854,59 +854,74 @@
     padding-top: 0;
     margin-top: -100px;
   }
-  
+
   .story-intro {
     margin-top: 0;
   }
-  
+
   .about-hero {
     padding: 50px 20px;
   }
-  
+
   .about-hero-title {
     font-size: 1.8rem;
   }
-  
+
   .about-hero-stats {
     gap: 24px;
   }
-  
+
   .hero-stat-number {
     font-size: 1.5rem;
   }
-  
+
   .about-tabs-container {
     padding: 0 16px;
     gap: 20px;
   }
-  
+
   .about-content {
     padding: 0 16px;
   }
-  
+
   .story-intro h2,
   .story-milestones h3,
   .story-values h3 {
     font-size: 1.5rem;
   }
-  
+
   .timeline {
-    padding-left: 20px;
+    padding-left: 0;
+    align-items: flex-start;
   }
-  
+
+  .timeline::before {
+    left: 16px;
+  }
+
+  .timeline-item {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .timeline-content {
+    max-width: calc(100% - 50px);
+    margin-left: 24px;
+  }
+
   .mission-card,
   .vision-card {
     padding: 24px;
   }
-  
+
   .team-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .impact-stats {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .modal-info {
     padding: 24px;
   }

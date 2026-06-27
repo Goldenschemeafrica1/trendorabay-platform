@@ -11,7 +11,7 @@ const episodesData = [
     category: "Startup Stories",
     series: "Startup Stories",
     description: "How a Nairobi-based fintech startup raised $2M and changed local savings. Raw, inspiring, and real.",
-    coverImage: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&h=400&fit=crop",
+    coverImage: "/assets/story1.jpeg",
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     date: "2026-04-20",
     trending: true,
@@ -20,12 +20,12 @@ const episodesData = [
   {
     id: 2,
     title: "The Creative Economy Renaissance",
-    guest: "Eliud Kipchoge (artist)",
+    guest: "Eliud Kipchoge",
     duration: "38:42",
     category: "Culture & Lifestyle",
     series: "Culture Talks",
     description: "Exploring how African artists are reshaping global culture and building sustainable careers.",
-    coverImage: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop",
+    coverImage: "/assets/musicstory.jpeg",
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
     date: "2026-04-15",
     trending: true,
@@ -39,7 +39,7 @@ const episodesData = [
     category: "Innovation & Tech",
     series: "Young Founders",
     description: "Inside the minds building Africa's most innovative financial solutions for the unbanked.",
-    coverImage: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400&h=400&fit=crop",
+    coverImage: "/assets/story2.jpeg",
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
     date: "2026-04-10",
     trending: false,
@@ -90,9 +90,9 @@ const episodesData = [
   {
     id: 7,
     title: "Afrobeat to the World",
-    guest: "Makena Njeri (music exec)",
+    guest: "Makena Njeri",
     duration: "47:12",
-    category: "Culture & Lifestyle",
+    category: "music",
     series: "Culture Talks",
     description: "How African music conquered global charts and built a new industry.",
     coverImage: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=400&fit=crop",
@@ -145,15 +145,6 @@ const featuredSeriesList = [
     color: "#E67E22",
     episodeCount: 18,
     coverImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop"
-  },
-  {
-    id: 4,
-    name: "Culture Talks",
-    description: "Art, music & modern African identity",
-    icon: "🎨",
-    color: "#E67E22",
-    episodeCount: 27,
-    coverImage: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=300&fit=crop"
   },
   ];
 
@@ -293,81 +284,91 @@ const PodcastPage = () => {
         onLoadedMetadata={handleTimeUpdate}
       />
 
-      {/* Live Podcast Section */}
-      <section className="live-podcast-section">
+      {/* Hero Section */}
+      <section className="hero-section">
         <div className="container">
-          <div className="live-header">
-            <div className="live-info-card">
-              <h3>MUSIC</h3>
-              <div className="episode-info">
-                <h4>Tech Innovation in Nairobi with guest speakers from Kenya's thriving startup ecosystem</h4>
-                <div className="episode-meta">
-                  <span><i className="fas fa-user"></i> Host: Akinyi Ochieng</span>
-                  <span><i className="far fa-clock"></i> Duration: 1:30:00</span>
-                  <span><i className="far fa-calendar"></i> Released: April 20, 2026</span>
-                </div>
+          <div className="hero-content">
+            <div className="hero-text">
+              <h1>Amplifying African Voices to the World</h1>
+              <p>Join thousands of listeners discovering authentic stories from across the continent. From groundbreaking entrepreneurs to cultural visionaries, experience the narratives shaping Africa's future.</p>
+              <div className="hero-actions">
+                <button className="hero-cta primary">Start Listening <i className="fas fa-play"></i></button>
+                <button className="hero-cta secondary">Explore Episodes <i className="fas fa-arrow-right"></i></button>
               </div>
             </div>
-          </div>
-
-          <div className="live-content">
-            <div className="live-video-container">
-              <div className="live-video">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/OMRVcaWzYFc"
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen>
-                </iframe>
-              </div>
-              <div className="live-controls">
-                <button className="live-control-btn">
-                  <i className="fas fa-expand"></i>
-                </button>
-                <button className="live-control-btn">
-                  <i className="fas fa-volume-up"></i>
-                </button>
-                <button className="live-control-btn">
-                  <i className="fas fa-cog"></i>
-                </button>
+            <div className="hero-image">
+              <div className="hero-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=600&h=500&fit=crop" alt="Podcast Studio" />
+                <div className="hero-image-overlay">
+                  <div className="floating-card">
+                    <i className="fas fa-headphones"></i>
+                    <span>Now Streaming</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      
       {/* Main Content */}
       <div className="container">
 
-        {/* Featured Series Section - Expanded */}
-        <div className="featured-series-section">
-          <div className="featured-series-header">
+        {/* Most Listened Episodes */}
+        <div className="most-listened-section">
+          <div className="section-header">
             <div className="header-left">
               <h2>
-                <span className="accent">✦</span> Featured Series
+                <span className="accent">✦</span> Most Listened Episodes
               </h2>
             </div>
-            <button className="view-all">View All <i className="fas fa-arrow-right"></i></button>
           </div>
-          <div className="featured-series-grid">
-            {featuredSeriesList.map(series => (
-              <div key={series.id} className="featured-series-card">
-                <div className="series-image-wrapper">
-                  <img src={series.coverImage} alt={series.name} className="series-cover" />
+          <div className="most-listened-grid">
+            {getTrendingEpisodes().slice(0, 3).map((episode, index) => (
+              <div key={episode.id} className="most-listened-card">
+                <div className="card-image">
+                  <img src={episode.coverImage} alt={episode.title} />
                 </div>
-                <div className="series-info">
-                  <h3>{series.name}</h3>
-                  <p>{series.description}</p>
-                  <div className="series-meta">
-                    <span><i className="fas fa-headphones"></i> {series.episodeCount} episodes</span>
+                <div className="card-content">
+                  <div className="card-header">
+                    <span className="episode-number">EPISODE {String(index + 1).padStart(2, '0')}</span>
+                    <span className="episode-category">{episode.category}</span>
+                  </div>
+                  <h3>{episode.title}</h3>
+                  <div className="card-footer">
+                    <button
+                      className="play-button"
+                      onClick={() => playEpisode(episode)}
+                    >
+                      <i className={`fas ${currentEpisode?.id === episode.id && isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+                      <span>Play</span>
+                    </button>
+                    <div className="author-info">
+                      <i className="fas fa-user-circle"></i>
+                      <span>{episode.guest}</span>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Live Podcast Banner */}
+        <div className="live-podcast-banner">
+          <div className="live-podcast-content">
+            <div className="live-podcast-text">
+              <div className="live-indicator">
+                <div className="live-dot"></div>
+                <span className="live-text">LIVE NOW</span>
+              </div>
+              <h2>Live Podcast Sessions</h2>
+              <p>Join our live podcast sessions with industry leaders and innovators. Real conversations, real insights, real-time engagement.</p>
+              <button className="live-podcast-btn">Join Live <i className="fas fa-play"></i></button>
+            </div>
+            <div className="live-podcast-image">
+              <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=600&h=400&fit=crop" alt="Live Podcast" />
+            </div>
           </div>
         </div>
 
@@ -379,15 +380,14 @@ const PodcastPage = () => {
                 <span className="accent">✦</span> Latest Episodes
               </h2>
             </div>
-            <span className="episode-count">{filteredEpisodes.length} episodes available</span>
           </div>
           
           <div className="episodes-grid">
-            {filteredEpisodes.map(episode => (
+            {filteredEpisodes.slice(0, 3).map(episode => (
               <div key={episode.id} className="episode-card">
                 <div className="card-image">
                   <img src={episode.coverImage} alt={episode.title} />
-                  <button 
+                  <button
                     className="play-overlay"
                     onClick={() => playEpisode(episode)}
                   >
@@ -412,12 +412,130 @@ const PodcastPage = () => {
           )}
         </div>
 
+        {/* Meet Our Podcast Hosts */}
+        <div className="hosts-section">
+          <div className="section-header">
+            <div className="header-left">
+              <h2>
+                <span className="accent">✦</span> Meet Our Podcast Hosts
+              </h2>
+            </div>
+          </div>
+          <div className="hosts-grid">
+            <div className="host-card">
+              <div className="card-image">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop" alt="Host" />
+              </div>
+              <div className="card-content">
+                <h3>Kingsley George</h3>
+                <p className="host-title">Lead Host</p>
+              </div>
+            </div>
+            <div className="host-card">
+              <div className="card-image">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop" alt="Host" />
+              </div>
+              <div className="card-content">
+                <h3>Sarah Chen</h3>
+                <p className="host-title">Co-Host</p>
+              </div>
+            </div>
+            <div className="host-card">
+              <div className="card-image">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop" alt="Host" />
+              </div>
+              <div className="card-content">
+                <h3>David Okonkwo</h3>
+                <p className="host-title">Guest Host</p>
+              </div>
+            </div>
+            <div className="host-card">
+              <div className="card-image">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop" alt="Host" />
+              </div>
+              <div className="card-content">
+                <h3>Amara Okafor</h3>
+                <p className="host-title">Producer</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         
+        {/* From the Best Blog Posts */}
+        <div className="blog-posts-section">
+          <div className="section-header">
+            <div className="header-left">
+              <h2>
+                <span className="accent">✦</span> From the Best Blog Posts
+              </h2>
+            </div>
+          </div>
+          <div className="blog-posts-grid">
+            <div className="blog-post-card">
+              <div className="card-image">
+                <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=400&h=250&fit=crop" alt="Blog Post" />
+              </div>
+              <div className="card-content">
+                <div className="card-header">
+                  <span className="blog-category">Technology</span>
+                  <span className="blog-date">June 15, 2024</span>
+                </div>
+                <h3>The Future of African Tech Innovation</h3>
+                <button className="read-more">Read More</button>
+              </div>
+            </div>
+            <div className="blog-post-card">
+              <div className="card-image">
+                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=250&fit=crop" alt="Blog Post" />
+              </div>
+              <div className="card-content">
+                <div className="card-header">
+                  <span className="blog-category">Business</span>
+                  <span className="blog-date">June 12, 2024</span>
+                </div>
+                <h3>Building Sustainable Startups in Africa</h3>
+                <button className="read-more">Read More</button>
+              </div>
+            </div>
+            <div className="blog-post-card">
+              <div className="card-image">
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=250&fit=crop" alt="Blog Post" />
+              </div>
+              <div className="card-content">
+                <div className="card-header">
+                  <span className="blog-category">Digital</span>
+                  <span className="blog-date">June 10, 2024</span>
+                </div>
+                <h3>Digital Transformation in Nigerian Businesses</h3>
+                <button className="read-more">Read More</button>
+              </div>
+            </div>
+            <div className="blog-post-card">
+              <div className="card-image">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=250&fit=crop" alt="Blog Post" />
+              </div>
+              <div className="card-content">
+                <div className="card-header">
+                  <span className="blog-category">Finance</span>
+                  <span className="blog-date">June 8, 2024</span>
+                </div>
+                <h3>Investment Opportunities in African Markets</h3>
+                <button className="read-more">Read More</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Featured Guest Section */}
         <div className="featured-guest-section">
           <div className="section-header">
-            <h2>Featured Guests</h2>
-            <span className="guest-count">Amazing voices shaping Africa's future</span>
+            <div className="header-left">
+              <h2>
+                <span className="accent">✦</span> Featured Guests
+              </h2>
+              <span className="guest-count">Amazing voices shaping Africa's future</span>
+            </div>
           </div>
           <div className="featured-guests-grid">
             <div className="guest-card">
@@ -427,7 +545,6 @@ const PodcastPage = () => {
               <div className="guest-info">
                 <h3>Kingsley George</h3>
                 <p className="guest-title">Tech Innovator & CEO</p>
-                <p className="guest-description">Leading Africa's digital transformation with groundbreaking fintech solutions.</p>
                 <div className="guest-episode">
                   <span><i className="fas fa-microphone"></i> Featured in: "Fintech Disruptors"</span>
                 </div>
@@ -435,12 +552,11 @@ const PodcastPage = () => {
             </div>
             <div className="guest-card">
               <div className="guest-image">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop" alt="Declan Okeya" />
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop" alt="Maria Kim" />
               </div>
               <div className="guest-info">
-                <h3>Declan Okeya</h3>
+                <h3>Maria Kim</h3>
                 <p className="guest-title">Entrepreneur & Investor</p>
-                <p className="guest-description">From startup founder to venture capitalist, funding the next generation of African innovators.</p>
                 <div className="guest-episode">
                   <span><i className="fas fa-microphone"></i> Featured in: "From Side Hustle to CEO"</span>
                 </div>
@@ -453,7 +569,6 @@ const PodcastPage = () => {
               <div className="guest-info">
                 <h3>Nia Johnson</h3>
                 <p className="guest-title">Creative Director</p>
-                <p className="guest-description">Redefining African art and culture on the global stage through innovative creative expression.</p>
                 <div className="guest-episode">
                   <span><i className="fas fa-microphone"></i> Featured in: "The Creative Economy Renaissance"</span>
                 </div>
@@ -466,7 +581,6 @@ const PodcastPage = () => {
               <div className="guest-info">
                 <h3>Michael Okonkwo</h3>
                 <p className="guest-title">Climate Activist</p>
-                <p className="guest-description">Championing environmental justice and sustainable solutions across the African continent.</p>
                 <div className="guest-episode">
                   <span><i className="fas fa-microphone"></i> Featured in: "Climate Warriors: Youth Taking Action"</span>
                 </div>
@@ -475,89 +589,16 @@ const PodcastPage = () => {
           </div>
         </div>
 
-        {/* Top Podcasters Section */}
-        <div className="top-podcasters-section">
-          <div className="section-header">
-            <h2>Our Top Podcasters</h2>
-          </div>
-          <div className="top-podcasters-grid">
-            <div className="top-podcaster-card">
-              <div className="podcaster-image">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Kingsley George" />
-              </div>
-              <div className="podcaster-info">
-                <h3>Kingsley George</h3>
-                <p className="podcaster-title">Tech Innovator</p>
-                <div className="podcaster-stats">
-                  <span><i className="fas fa-headphones"></i> 124K plays</span>
-                  <span><i className="fas fa-microphone"></i> 45 episodes</span>
-                </div>
-              </div>
+        {/* Call for Guest Banner */}
+        <div className="call-for-guest-banner">
+          <div className="call-for-guest-content">
+            <div className="call-for-guest-text">
+              <h2>Be Our Next Guest</h2>
+              <p>Share your story with thousands of listeners across Africa and beyond. We're looking for innovators, creators, and changemakers who are shaping the future.</p>
+              <button className="call-for-guest-btn">Apply Now <i className="fas fa-arrow-right"></i></button>
             </div>
-            <div className="top-podcaster-card">
-              <div className="podcaster-image">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop" alt="Declan Okeya" />
-              </div>
-              <div className="podcaster-info">
-                <h3>Declan Okeya</h3>
-                <p className="podcaster-title">Entrepreneur</p>
-                <div className="podcaster-stats">
-                  <span><i className="fas fa-headphones"></i> 98K plays</span>
-                  <span><i className="fas fa-microphone"></i> 38 episodes</span>
-                </div>
-              </div>
-            </div>
-            <div className="top-podcaster-card">
-              <div className="podcaster-image">
-                <img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=200&h=200&fit=crop" alt="Nia Johnson" />
-              </div>
-              <div className="podcaster-info">
-                <h3>Nia Johnson</h3>
-                <p className="podcaster-title">Creative Director</p>
-                <div className="podcaster-stats">
-                  <span><i className="fas fa-headphones"></i> 156K plays</span>
-                  <span><i className="fas fa-microphone"></i> 52 episodes</span>
-                </div>
-              </div>
-            </div>
-            <div className="top-podcaster-card">
-              <div className="podcaster-image">
-                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop" alt="Michael Okonkwo" />
-              </div>
-              <div className="podcaster-info">
-                <h3>Michael Okonkwo</h3>
-                <p className="podcaster-title">Climate Activist</p>
-                <div className="podcaster-stats">
-                  <span><i className="fas fa-headphones"></i> 87K plays</span>
-                  <span><i className="fas fa-microphone"></i> 31 episodes</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Newsletter */}
-        <div className="newsletter-section">
-          <div className="newsletter-content">
-            <h3>Never Miss an Episode</h3>
-            <p>Get the latest stories delivered straight to your inbox</p>
-            <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-              <input type="email" id="podcast-newsletter-email" name="email" placeholder="Enter your email address" />
-              <button type="submit">Subscribe <i className="fas fa-arrow-right"></i></button>
-            </form>
-          </div>
-          <div className="community-grid">
-            <div className="community-card">
-              <h4>Call for Guests</h4>
-              <p>Have a story worth sharing? Apply to be featured on the show.</p>
-            </div>
-            <div className="community-card">
-              <h4>Submit Your Story</h4>
-              <p>Share your journey, impact, or idea with our global audience.</p>
-            </div>
-            <div className="community-card">
-              <h4>Partner With Us</h4>
-              <p>Align your brand with Africa's most exciting voices.</p>
+            <div className="call-for-guest-icon">
+              <i className="fas fa-microphone-alt"></i>
             </div>
           </div>
         </div>
