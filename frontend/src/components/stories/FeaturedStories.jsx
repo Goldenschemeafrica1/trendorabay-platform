@@ -427,8 +427,7 @@ const FeaturedStories = () => {
               ))}
             </div>
           </div>
-
-                  </div>
+        </div>
 
         {/* Advertisement Section */}
         <div className="advertisement-section-wrapper">
@@ -474,7 +473,7 @@ const FeaturedStories = () => {
 
                       <div className="fashion-story-content">
                         <h3 className="side-story-title">{story.title}</h3>
-                        
+
                         <div className="side-story-footer">
                           <div className="side-story-author">
                             <span className="side-author-name">By {story.author}</span>
@@ -491,7 +490,7 @@ const FeaturedStories = () => {
                       <div className="side-story-content">
                         <span className="side-story-category">{story.category}</span>
                         <h3 className="side-story-title">{story.title}</h3>
-                        
+
                         <div className="side-story-footer">
                           <div className="side-story-author">
                             <span className="side-author-name">By {story.author}</span>
@@ -509,13 +508,13 @@ const FeaturedStories = () => {
             <div className="cover-story">
               <article className="main-story-card">
                 <div className="main-story-image-wrapper">
-                  <img 
-                    src={featuredStories[3].image} 
-                    alt={featuredStories[3].title} 
-                    loading="lazy" 
+                  <img
+                    src={featuredStories[3].image}
+                    alt={featuredStories[3].title}
+                    loading="lazy"
                     className="main-story-image"
                   />
-                  
+
                   {/* HOT TOPIC Title Overlay */}
                   <div className="hot-topic-overlay">
                     <div className="hot-topic-badge">HOT TOPIC</div>
@@ -545,7 +544,7 @@ const FeaturedStories = () => {
           <div className="horizontal-stories-section">
             {/* Top Horizontal Stories Divider */}
             <div className="horizontal-stories-divider-top"></div>
-            
+
             <div className="horizontal-stories-container must-read-horizontal-container">
               {horizontalStories.slice(0, 1).map((story, index) => (
                 <article
@@ -623,8 +622,7 @@ const FeaturedStories = () => {
             </div>
           </div>
         </div>
-
-              </div>
+      </div>
     </section>
   );
 };
