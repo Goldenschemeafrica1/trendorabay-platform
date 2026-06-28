@@ -71,7 +71,8 @@ const FeaturedStories = () => {
       title: 'African unicorns reshape investment landscape',
       description: '',
       author: 'SARAH JOHNSON',
-      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      isLarger: true
     },
     {
       id: 7,
@@ -99,7 +100,7 @@ const FeaturedStories = () => {
     }
   ];
 
-  // Must read stories data
+  // More to explore stories data
   const mustReadStories = [
     {
       id: 11,
@@ -131,51 +132,41 @@ const FeaturedStories = () => {
     }
   ];
 
-  // Text-only stories for must read section
+  // Text-only stories for more to explore section
   const textOnlyStories = [
     {
       id: 15,
       category: 'POLITICS',
       title: 'African leaders convene for continental trade summit',
       description: 'Key discussions focus on strengthening cross-border commerce and economic integration across member states.',
-      author: 'JAMES KUMARO'
+      author: 'JAMES KUMARO',
+      isLarger: true
     },
     {
       id: 16,
       category: 'CULTURE',
       title: 'African fashion week showcases traditional textiles',
       description: 'Designers blend ancient weaving techniques with modern silhouettes to create stunning contemporary collections.',
-      author: 'AMARA DIALLO'
+      author: 'AMARA DIALLO',
+      isLarger: true
     },
     {
       id: 17,
       category: 'EDUCATION',
       title: 'Digital literacy programs expand across rural schools',
       description: 'New initiatives bring tablets and internet access to remote villages, bridging the educational divide.',
-      author: 'DR. SARAH MBANE'
+      author: 'DR. SARAH MBANE',
+      isLarger: true
     },
     {
       id: 18,
       category: 'ENVIRONMENT',
       title: 'Sustainable farming practices gain momentum',
       description: 'Smallholder farmers adopt eco-friendly techniques to boost yields while protecting the ecosystem.',
-      author: 'MICHAEL GREEN'
+      author: 'MICHAEL GREEN',
+      isLarger: true
     },
-    {
-      id: 19,
-      category: 'HEALTH',
-      title: 'Telemedicine revolutionizes healthcare access',
-      description: 'Remote areas benefit from virtual consultations and digital health services bridging the healthcare gap.',
-      author: 'DR. FATIMA ALI'
-    },
-    {
-      id: 20,
-      category: 'SPORTS',
-      title: 'African sports infrastructure development accelerates',
-      description: 'New stadiums and training facilities emerge across the continent to nurture athletic talent.',
-      author: 'SAMUEL ODE'
-    }
-  ];
+      ];
 
   // Intersection observer for scroll animations
   useEffect(() => {
@@ -452,12 +443,12 @@ const FeaturedStories = () => {
           </div>
         </div>
 
-        {/* Must Read Section */}
+        {/* More to Explore Section */}
         <div className="must-read-section-wrapper">
           <div className="editorial-header">
             <div className="header-left">
               <h1 className="main-headline">
-                <span className="accent">✦</span> Must Read
+                <span className="accent">✦</span> More to explore
               </h1>
             </div>
           </div>
@@ -559,7 +550,7 @@ const FeaturedStories = () => {
               {horizontalStories.slice(0, 1).map((story, index) => (
                 <article
                   key={story.id}
-                  className={`horizontal-story-card ${story.category === 'TRAVEL' ? 'travel-card' : ''} ${story.category === 'FOOD' ? 'food-card' : ''} ${story.category === 'HEALTH' ? 'health-card' : ''} ${story.category === 'MUSIC' ? 'music-card' : ''}`}
+                  className={`horizontal-story-card ${story.category === 'TRAVEL' ? 'travel-card' : ''} ${story.category === 'FOOD' ? 'food-card' : ''} ${story.category === 'HEALTH' ? 'health-card' : ''} ${story.category === 'MUSIC' ? 'music-card' : ''} ${story.isLarger ? 'larger-text-card' : ''}`}
                   style={{ transitionDelay: `${index * 0.1}s` }}
                 >
                   <div className="horizontal-story-image-wrapper">
@@ -581,7 +572,7 @@ const FeaturedStories = () => {
                   {textOnlyStories.slice(0, 2).map((story, index) => (
                     <article
                       key={story.id}
-                      className="horizontal-story-card text-only-card"
+                      className={`horizontal-story-card text-only-card ${story.isLarger ? 'larger-text-card' : ''}`}
                       style={{ transitionDelay: `${(index + 1) * 0.1}s` }}
                     >
                       <div className="horizontal-story-content text-only-content">
@@ -598,7 +589,7 @@ const FeaturedStories = () => {
                   {textOnlyStories.slice(2, 4).map((story, index) => (
                     <article
                       key={story.id}
-                      className="horizontal-story-card text-only-card"
+                      className={`horizontal-story-card text-only-card ${story.isLarger ? 'larger-text-card' : ''}`}
                       style={{ transitionDelay: `${(index + 3) * 0.1}s` }}
                     >
                       <div className="horizontal-story-content text-only-content">
@@ -615,7 +606,7 @@ const FeaturedStories = () => {
                   {textOnlyStories.slice(4, 6).map((story, index) => (
                     <article
                       key={story.id}
-                      className="horizontal-story-card text-only-card"
+                      className={`horizontal-story-card text-only-card ${story.isLarger ? 'larger-text-card' : ''}`}
                       style={{ transitionDelay: `${(index + 5) * 0.1}s` }}
                     >
                       <div className="horizontal-story-content text-only-content">
