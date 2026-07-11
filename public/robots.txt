@@ -1,5 +1,0 @@
-# Robots.txt for trendorabay.com
-User-agent: *
-Allow: /
-
-Sitemap: https://trendorabay.com/sitemap.xml
