@@ -93,13 +93,19 @@ router.get('/', cache(300), async (req, res, next) => {
       'Automotive': '/automotives.jpeg'
     };
 
-    // Helper function to get image URL (serve CMS uploads)
+    // Helper function to get image URL (handle Cloudinary and local uploads)
     const getImageUrl = (url, category) => {
-      if (!url) return categoryImageMap[category] || '/music.jpeg';
+      if (!url || url === 'undefined' || url === '/uploads/stories/undefined') return categoryImageMap[category] || '/music.jpeg';
+      
+      // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      
+      // For relative paths, construct full URL using backend base
+      const baseUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+      
       // If it's a relative path starting with /uploads, serve from backend
       if (url.startsWith('/uploads/')) {
-        return `http://localhost:3001${url}`;
+        return `${baseUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {

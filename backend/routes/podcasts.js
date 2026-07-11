@@ -41,9 +41,11 @@ router.get('/', cache(300), async (req, res, next) => {
       'Business Insights': '/financeandinvestment.jpeg'
     };
 
-    // Helper function to get image URL - serve exact database URLs
+    // Helper function to get image URL (handle Cloudinary and local uploads)
     const getImageUrl = (url, title, guest) => {
-      if (!url) {
+      const baseUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+      
+      if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
         // Check title first
         for (const [key, value] of Object.entries(podcastImageMap)) {
           if (title && title.toLowerCase().includes(key.toLowerCase())) {
@@ -58,10 +60,13 @@ router.get('/', cache(300), async (req, res, next) => {
         }
         return '/music.jpeg';
       }
+      
+      // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      
       // If it's a relative path starting with /uploads, serve from backend
       if (url.startsWith('/uploads/')) {
-        return `http://localhost:3001${url}`;
+        return `${baseUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {
@@ -146,9 +151,11 @@ router.get('/:id', async (req, res, next) => {
       'Business Insights': '/financeandinvestment.jpeg'
     };
 
-    // Helper function to get image URL - serve exact database URLs
+    // Helper function to get image URL (handle Cloudinary and local uploads)
     const getImageUrl = (url, title, guest) => {
-      if (!url) {
+      const baseUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+      
+      if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
         // Check title first
         for (const [key, value] of Object.entries(podcastImageMap)) {
           if (title && title.toLowerCase().includes(key.toLowerCase())) {
@@ -163,10 +170,13 @@ router.get('/:id', async (req, res, next) => {
         }
         return '/music.jpeg';
       }
+      
+      // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      
       // If it's a relative path starting with /uploads, serve from backend
       if (url.startsWith('/uploads/')) {
-        return `http://localhost:3001${url}`;
+        return `${baseUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {

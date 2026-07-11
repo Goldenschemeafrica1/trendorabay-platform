@@ -3,23 +3,31 @@ import pool from '../config/database.js';
 
 const router = express.Router();
 
-// Helper function to get image URL - serve CMS uploads
+// Helper function to get image URL - handle Cloudinary and local uploads
 const getImageUrl = (url) => {
-  if (!url) return url;
+  if (!url || url === 'undefined' || url === '/uploads/stories/undefined') return null;
+  
+  // Return full URLs as-is (Cloudinary, external images)
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  
+  // For relative paths, construct full URL using backend base
+  const baseUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+  
   // If it's a relative path starting with /uploads, serve from backend
   if (url.startsWith('/uploads/')) {
-    const baseUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
     return `${baseUrl}${url}`;
   }
+  
   // If it starts with / but not /uploads, return as-is
   if (url.startsWith('/')) {
     return url;
   }
+  
   // If it's just a filename, it's in the frontend public folder
   if (!url.includes('/')) {
     return `/${url}`;
   }
+  
   // If it has a path, return as-is
   return url;
 };
