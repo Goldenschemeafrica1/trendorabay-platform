@@ -22,8 +22,15 @@ const Advert = ({
         const response = await advertisementService.getAdvertisements({ 
           status: 'active'
         });
-        if (response.success && response.data && response.data.length > 0) {
-          setAdData(response.data[0]);
+        console.log('Advertisement response:', response);
+        let ads = [];
+        if (Array.isArray(response)) {
+          ads = response;
+        } else if (response && Array.isArray(response.data)) {
+          ads = response.data;
+        }
+        if (ads.length > 0) {
+          setAdData(ads[0]);
         }
       } catch (error) {
         console.error('Error fetching advertisement:', error);
