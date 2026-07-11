@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../store/hooks/useCart';
 import merchService from '../../services/merchService';
 import './StorePage.css';
 
 const StorePage = () => {
+  const navigate = useNavigate();
   const { addToCart, openCartDrawer } = useCart();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -437,6 +439,13 @@ const StorePage = () => {
 
   // Handle add to cart
   const handleAddToCart = (product, size = null) => {
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     const cartItem = {
       id: product.id,
       name: product.name,
@@ -446,10 +455,10 @@ const StorePage = () => {
       color: '',
       quantity: 1
     };
-    
+
     addToCart(cartItem);
     openCartDrawer();
-    
+
     // Show notification
     showNotification(`${product.name} added to cart!`);
   };
