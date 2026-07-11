@@ -38,7 +38,7 @@ const getImageUrl = (url) => {
 // Get all advertisements
 router.get('/', async (req, res, next) => {
   try {
-    const { position, status } = req.query;
+    const { position } = req.query;
 
     let query = 'SELECT * FROM advertisements WHERE 1=1';
     const params = [];
@@ -46,11 +46,6 @@ router.get('/', async (req, res, next) => {
     if (position) {
       query += ' AND position = ?';
       params.push(position);
-    }
-
-    if (status) {
-      query += ' AND status = ?';
-      params.push(status);
     }
 
     query += ' ORDER BY created_at DESC';
