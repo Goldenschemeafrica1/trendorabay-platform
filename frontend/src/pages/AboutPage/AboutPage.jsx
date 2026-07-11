@@ -51,9 +51,9 @@ const AboutPage = () => {
         // Transform data to match frontend expectations
         const transformed = members.map(member => {
           const avatarUrl = member.avatar || member.avatar_url || member.image_url || member.profile_image;
-          const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:3001';
+          const cmsUrl = import.meta.env.VITE_CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
           const image = avatarUrl
-            ? (avatarUrl.startsWith('http') ? avatarUrl : `${baseUrl}${avatarUrl}`)
+            ? (avatarUrl.startsWith('http') ? avatarUrl : `${cmsUrl}${avatarUrl}`)
             : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop';
 
           return {

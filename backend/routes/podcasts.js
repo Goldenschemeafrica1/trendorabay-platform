@@ -41,9 +41,9 @@ router.get('/', cache(300), async (req, res, next) => {
       'Business Insights': '/financeandinvestment.jpeg'
     };
 
-    // Helper function to get image URL (handle Cloudinary and local uploads)
+    // Helper function to get image URL (handle Cloudinary and CMS uploads)
     const getImageUrl = (url, title, guest) => {
-      const baseUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
       
       if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
         // Check title first
@@ -64,9 +64,9 @@ router.get('/', cache(300), async (req, res, next) => {
       // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       
-      // If it's a relative path starting with /uploads, serve from backend
+      // If it's a relative path starting with /uploads, serve from CMS
       if (url.startsWith('/uploads/')) {
-        return `${baseUrl}${url}`;
+        return `${cmsUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {
@@ -151,9 +151,9 @@ router.get('/:id', async (req, res, next) => {
       'Business Insights': '/financeandinvestment.jpeg'
     };
 
-    // Helper function to get image URL (handle Cloudinary and local uploads)
+    // Helper function to get image URL (handle Cloudinary and CMS uploads)
     const getImageUrl = (url, title, guest) => {
-      const baseUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
       
       if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
         // Check title first
@@ -174,9 +174,9 @@ router.get('/:id', async (req, res, next) => {
       // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       
-      // If it's a relative path starting with /uploads, serve from backend
+      // If it's a relative path starting with /uploads, serve from CMS
       if (url.startsWith('/uploads/')) {
-        return `${baseUrl}${url}`;
+        return `${cmsUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {

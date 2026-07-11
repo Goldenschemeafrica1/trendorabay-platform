@@ -58,19 +58,19 @@ router.get('/:id', async (req, res, next) => {
       'Automotive': '/automotives.jpeg'
     };
 
-    // Helper function to get image URL (handle Cloudinary and local uploads)
+    // Helper function to get image URL (handle Cloudinary and CMS uploads)
     const getImageUrl = (url, category) => {
       if (!url || url === 'undefined' || url === '/uploads/stories/undefined') return categoryImageMap[category] || '/music.jpeg';
       
       // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       
-      // For relative paths, construct full URL using backend base
-      const baseUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+      // For relative paths, construct full URL using CMS base
+      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
       
-      // If it's a relative path starting with /uploads, serve from backend
+      // If it's a relative path starting with /uploads, serve from CMS
       if (url.startsWith('/uploads/')) {
-        return `${baseUrl}${url}`;
+        return `${cmsUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {
