@@ -484,7 +484,9 @@ const StorePage = () => {
 
   // Format price
   const formatPrice = (price) => {
+    if (price === undefined || price === null) return '$0.00';
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    if (isNaN(numPrice)) return '$0.00';
     return `$${numPrice.toFixed(2)}`;
   };
 
