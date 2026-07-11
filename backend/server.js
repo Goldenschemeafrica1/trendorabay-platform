@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 import compression from 'compression';
 import { testConnection } from './config/database.js';
 import { corsMiddleware } from './middleware/cors.js';
@@ -73,12 +74,24 @@ const upload = multer({
   }
 });
 
-// Serve static files from CMS uploads directory with CORS and security headers
-const cmsUploadsPath = process.env.UPLOADS_PATH || path.join(__dirname, '../../cms/backend/uploads');
+// Serve static files from backend uploads directory with CORS and security headers
 const backendUploadsPath = path.join(__dirname, 'uploads');
 
+// Ensure uploads directory exists
+if (!fs.existsSync(backendUploadsPath)) {
+  fs.mkdirSync(backendUploadsPath, { recursive: true });
+  // Create subdirectories
+  const subdirs = ['profiles', 'stories', 'magazines', 'podcasts', 'merchandise'];
+  subdirs.forEach(dir => {
+    const dirPath = path.join(backendUploadsPath, dir);
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+  });
+}
+
 app.use('/uploads', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL || 'http://localhost:5173');
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   // Security headers for static files
@@ -87,16 +100,6 @@ app.use('/uploads', (req, res, next) => {
   res.header('X-XSS-Protection', '1; mode=block');
   res.header('Referrer-Policy', 'strict-origin-when-cross-origin');
   // Cache control for static assets
-  res.header('Cache-Control', 'public, max-age=31536000, immutable');
-  next();
-}, express.static(cmsUploadsPath));
-
-// Serve static files from backend uploads directory with security headers
-app.use('/uploads', (req, res, next) => {
-  res.header('X-Content-Type-Options', 'nosniff');
-  res.header('X-Frame-Options', 'DENY');
-  res.header('X-XSS-Protection', '1; mode=block');
-  res.header('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.header('Cache-Control', 'public, max-age=31536000, immutable');
   next();
 }, express.static(backendUploadsPath));

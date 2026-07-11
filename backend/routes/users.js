@@ -370,8 +370,8 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
 
     // Handle profile image upload
     if (req.file) {
-      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
-      const profileImageUrl = `${cmsUrl}/uploads/profiles/${req.file.filename}`;
+      const backendUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+      const profileImageUrl = `${backendUrl}/uploads/profiles/${req.file.filename}`;
       
       try {
         // Test if profile_image column exists, create it if it doesn't
