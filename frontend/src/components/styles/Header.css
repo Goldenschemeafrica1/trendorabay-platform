@@ -301,8 +301,9 @@
   letter-spacing: -0.5px;
   white-space: nowrap;
   margin-left: 0; /* Reset margin for vertical layout */
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  width: auto;
 }
 
 .logo span {
@@ -322,6 +323,7 @@
   user-select: none;
   -webkit-user-drag: none;
   -moz-user-drag: none;
+  pointer-events: auto;
 }
 
 /* ===== Desktop Navigation ===== */
@@ -1196,6 +1198,11 @@
   .logo span {
     font-size: 18px;
   }
+
+  .logo-image {
+    height: 120px;
+    width: 380px;
+  }
   
   /* Show only menu toggle on mobile, hide desktop actions */
   .desktop-only {
@@ -1252,17 +1259,22 @@
   .header-container {
     padding: 0 12px;
   }
-  
+
   .header-top-section .header-container {
     padding: 6px 12px;
   }
-  
+
   .logo {
     font-size: 18px;
   }
-  
+
   .logo span {
     font-size: 14px;
+  }
+
+  .logo-image {
+    height: 80px;
+    width: 250px;
   }
   
   .header-actions {
