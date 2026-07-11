@@ -157,20 +157,41 @@ router.post('/login', async (req, res, next) => {
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    // Check if account is locked
-    const [lockedAccounts] = await pool.query(
-      'SELECT * FROM login_attempts WHERE email = ? AND locked_until > NOW()',
-      [normalizedEmail]
-    );
+    // Create login_attempts table if it doesn't exist
+    try {
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS login_attempts (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          email VARCHAR(255) NOT NULL,
+          attempts INT DEFAULT 1,
+          last_attempt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          locked_until TIMESTAMP NULL,
+          INDEX idx_email (email)
+        )
+      `);
+    } catch (error) {
+      console.error('Error creating login_attempts table:', error);
+    }
 
-    if (lockedAccounts.length > 0) {
-      const lockedAccount = lockedAccounts[0];
-      const remainingTime = Math.ceil((new Date(lockedAccount.locked_until) - new Date()) / 1000 / 60);
-      logAccountLockout(normalizedEmail, ip, userAgent);
-      return res.status(423).json({ 
-        success: false, 
-        error: `Account locked due to too many failed attempts. Try again in ${remainingTime} minutes.` 
-      });
+    // Check if account is locked
+    try {
+      const [lockedAccounts] = await pool.query(
+        'SELECT * FROM login_attempts WHERE email = ? AND locked_until > NOW()',
+        [normalizedEmail]
+      );
+
+      if (lockedAccounts.length > 0) {
+        const lockedAccount = lockedAccounts[0];
+        const remainingTime = Math.ceil((new Date(lockedAccount.locked_until) - new Date()) / 1000 / 60);
+        logAccountLockout(normalizedEmail, ip, userAgent);
+        return res.status(423).json({ 
+          success: false, 
+          error: `Account locked due to too many failed attempts. Try again in ${remainingTime} minutes.` 
+        });
+      }
+    } catch (error) {
+      console.error('Error checking locked accounts:', error);
+      // Continue with login if table check fails
     }
 
     // Find user
