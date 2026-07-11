@@ -370,16 +370,20 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
 
     // Handle profile image upload
     if (req.file) {
-      const profileImageUrl = `http://localhost:3001/uploads/profiles/${req.file.filename}`;
+      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
+      const profileImageUrl = `${cmsUrl}/uploads/profiles/${req.file.filename}`;
+      
       try {
-        // Test if profile_image column exists
+        // Test if profile_image column exists, create it if it doesn't
         await pool.query('SELECT profile_image FROM users LIMIT 1');
-        query += `, profile_image = ?`;
-        params.push(profileImageUrl);
       } catch (error) {
-        // Column doesn't exist, skip profile_image update
-        console.log('profile_image column does not exist, skipping update');
+        // Column doesn't exist, create it
+        console.log('Creating profile_image column...');
+        await pool.query('ALTER TABLE users ADD COLUMN profile_image VARCHAR(500)');
       }
+      
+      query += `, profile_image = ?`;
+      params.push(profileImageUrl);
     }
 
     query += ` WHERE id = ?`;
