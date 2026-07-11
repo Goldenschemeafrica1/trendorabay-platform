@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Helper function to get image URL - handle Cloudinary and CMS uploads
 const getImageUrl = (url) => {
-  if (!url || url === 'undefined' || url === '/uploads/stories/undefined') return null;
+  if (!url || url === 'undefined' || url === '/uploads/advertisements/undefined' || url === '/uploads/stories/undefined') return null;
   
   // Return full URLs as-is (Cloudinary, external images)
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
@@ -18,7 +18,7 @@ const getImageUrl = (url) => {
     return `${cmsUrl}${url}`;
   }
   
-  // If it starts with / but not /uploads, return as-is
+  // If it starts with /, it's in the frontend public folder - return as-is
   if (url.startsWith('/')) {
     return url;
   }
