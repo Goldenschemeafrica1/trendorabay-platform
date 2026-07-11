@@ -36,7 +36,7 @@ const getImageUrl = (url) => {
 };
 
 // Get all advertisements
-router.get('/', cache(300), async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const { position, status } = req.query;
     
