@@ -324,7 +324,7 @@ const PodcastPage = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://192.168.100.4:3001/api/podcast-guest-applications', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/podcast-guest-applications`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -85,7 +85,7 @@ const ContributorsPage = () => {
         const followStatus = new Set();
         for (const contributor of contributors) {
           try {
-            const followResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/contributors/${contributor.id}/follow/${userId}`);
+            const followResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/contributors/${contributor.id}/follow/${userId}`);
             const followData = await followResponse.json();
             if (followData.success && followData.isFollowing) {
               followStatus.add(contributor.id);
@@ -174,7 +174,7 @@ const ContributorsPage = () => {
     try {
       if (following.has(contributorId)) {
         // Unfollow
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/contributors/${contributorId}/follow`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/contributors/${contributorId}/follow`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: userId })
@@ -192,7 +192,7 @@ const ContributorsPage = () => {
         }
       } else {
         // Follow
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/contributors/${contributorId}/follow`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/contributors/${contributorId}/follow`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: userId })

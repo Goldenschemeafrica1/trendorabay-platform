@@ -60,7 +60,7 @@ const OrdersPage = () => {
           return;
         }
 
-        const response = await fetch(`http://192.168.100.4:3001/api/orders/user/${userData.id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/orders/user/${userData.id}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

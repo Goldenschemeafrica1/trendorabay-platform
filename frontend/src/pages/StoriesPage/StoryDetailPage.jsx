@@ -32,7 +32,7 @@ const StoryDetailPage = () => {
           const authorId = response.data.author?.id || response.data.author_id;
           if (authorId) {
             try {
-              const followResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/authors/${authorId}/follow/${userId}`);
+              const followResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/authors/${authorId}/follow/${userId}`);
               const followData = await followResponse.json();
               if (followData.success) {
                 setIsFollowing(followData.isFollowing);
@@ -71,7 +71,7 @@ const StoryDetailPage = () => {
 
     const fetchAdvertisement = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/advertisements?status=active`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/advertisements?status=active`);
         const data = await response.json();
         if (data.success && data.data && data.data.length > 0) {
           setAdvertisement(data.data[0]);
@@ -116,7 +116,7 @@ const StoryDetailPage = () => {
 
     try {
       const userObj = JSON.parse(user);
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/like`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/like`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ const StoryDetailPage = () => {
 
     try {
       const userObj = JSON.parse(user);
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/comments`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/comments`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ const StoryDetailPage = () => {
       }
 
       // Track share in backend
-      await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/share`, {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/share`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: userId, platform: 'web' })
@@ -231,7 +231,7 @@ const StoryDetailPage = () => {
     try {
       if (isFollowing) {
         // Unfollow
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/authors/${authorId}/follow`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/authors/${authorId}/follow`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: userId })
@@ -245,7 +245,7 @@ const StoryDetailPage = () => {
         }
       } else {
         // Follow
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/authors/${authorId}/follow`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/authors/${authorId}/follow`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: userId })
@@ -267,7 +267,7 @@ const StoryDetailPage = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/comments`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/comments`);
         const data = await response.json();
         if (data.success) {
           setComments(data.data || []);
@@ -280,7 +280,7 @@ const StoryDetailPage = () => {
 
     const fetchLikes = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/likes`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/likes`);
         const data = await response.json();
         if (data.success) {
           setLikesCount(data.likes || 0);
