@@ -9,7 +9,8 @@ const getImageUrl = (url) => {
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
   // If it's a relative path starting with /uploads, serve from backend
   if (url.startsWith('/uploads/')) {
-    return `http://localhost:3001${url}`;
+    const baseUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+    return `${baseUrl}${url}`;
   }
   // If it starts with / but not /uploads, return as-is
   if (url.startsWith('/')) {
