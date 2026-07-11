@@ -39,9 +39,23 @@ router.get('/', async (req, res, next) => {
       query += ' AND position = ?';
       params.push(position);
     }
+    // Only add status filter if the column exists
     if (status) {
-      query += ' AND status = ?';
-      params.push(status);
+      try {
+        // Check if status column exists
+        const [columns] = await pool.query(`
+          SELECT COLUMN_NAME 
+          FROM INFORMATION_SCHEMA.COLUMNS 
+          WHERE TABLE_NAME = 'advertisements' 
+          AND COLUMN_NAME = 'status'
+        `);
+        if (columns.length > 0) {
+          query += ' AND status = ?';
+          params.push(status);
+        }
+      } catch (err) {
+        // Ignore column check errors
+      }
     }
     
     query += ' ORDER BY created_at DESC';
