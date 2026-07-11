@@ -85,7 +85,7 @@ const fetchContributorsWithCache = async (contributorIds) => {
 router.get('/', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(`
-      SELECT * FROM magazines
+      SELECT id, title, category_id, issue, cover_image_url, pdf_url, preview_pages, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, published_date, description, created_at FROM magazines
       ORDER BY created_at DESC
     `);
 
