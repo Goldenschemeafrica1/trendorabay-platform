@@ -80,10 +80,12 @@ const SettingsPage = () => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // For now, just store the file object and upload it when saving
+      // Create a preview URL for the selected file
+      const previewUrl = URL.createObjectURL(file);
       setAccountSettings({
         ...accountSettings,
-        profileImage: file
+        profileImage: previewUrl,
+        profileImageFile: file // Store the actual file for upload
       });
     }
   };
@@ -111,9 +113,9 @@ const SettingsPage = () => {
         formData.append('first_name', accountSettings.firstName);
         formData.append('last_name', accountSettings.lastName);
         
-        // Only append profile image if it's a file object (not a string URL)
-        if (accountSettings.profileImage instanceof File) {
-          formData.append('profile_image', accountSettings.profileImage);
+        // Only append profile image if a new file was selected
+        if (accountSettings.profileImageFile) {
+          formData.append('profile_image', accountSettings.profileImageFile);
         }
         
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/profile`, {
