@@ -39,55 +39,30 @@ const getImageUrl = (url) => {
 router.get('/', async (req, res, next) => {
   try {
     const { position, status } = req.query;
-    
-    let query = `
-      SELECT id, title, image_url, link_url, position, status, start_date, end_date, created_at FROM advertisements 
-      WHERE 1=1
-    `;
+
+    let query = 'SELECT * FROM advertisements WHERE 1=1';
     const params = [];
-    
+
     if (position) {
       query += ' AND position = ?';
       params.push(position);
     }
-    // Only add status filter if the column exists
+
     if (status) {
-      try {
-        // Check if status column exists
-        const [columns] = await pool.query(`
-          SELECT COLUMN_NAME 
-          FROM INFORMATION_SCHEMA.COLUMNS 
-          WHERE TABLE_NAME = 'advertisements' 
-          AND COLUMN_NAME = 'status'
-        `);
-        if (columns.length > 0) {
-          query += ' AND status = ?';
-          params.push(status);
-        }
-      } catch (err) {
-        // Ignore column check errors
-      }
+      query += ' AND status = ?';
+      params.push(status);
     }
-    
+
     query += ' ORDER BY created_at DESC';
-    
+
     const [rows] = await pool.query(query, params);
-    
-    console.log('=== Advertisements from database ===');
-    console.log('Number of ads:', rows.length);
-    
-    const transformed = rows.map(ad => {
-      const originalImage = ad.image_url;
-      const transformedImage = getImageUrl(ad.image_url);
-      console.log('Ad ID:', ad.id, 'Original image:', originalImage, 'Transformed image:', transformedImage);
-      
-      return {
-        ...ad,
-        image_url: transformedImage,
-        mobile_image_url: ad.mobile_image_url ? getImageUrl(ad.mobile_image_url) : null
-      };
-    });
-    
+
+    const transformed = rows.map(ad => ({
+      ...ad,
+      image_url: getImageUrl(ad.image_url),
+      mobile_image_url: ad.mobile_image_url ? getImageUrl(ad.mobile_image_url) : null
+    }));
+
     res.json({ success: true, data: transformed });
   } catch (error) {
     next(error);
