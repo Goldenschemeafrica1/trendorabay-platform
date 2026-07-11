@@ -390,7 +390,7 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
 
     // Handle profile image upload
     if (req.file) {
-      const backendUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
+      const backendUrl = process.env.API_BASE_URL?.replace('/api', '') || process.env.BACKEND_URL || 'https://trendorabay-platform.onrender.com';
       const profileImageUrl = `${backendUrl}/uploads/profiles/${req.file.filename}`;
       
       console.log('Backend URL:', backendUrl);
