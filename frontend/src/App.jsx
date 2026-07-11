@@ -71,6 +71,20 @@ function App() {
     // Analytics tracking can be added here via a proper analytics service
   }, [location]);
 
+  // Suppress Vercel Analytics console errors when blocked by ad blockers
+  useEffect(() => {
+    const originalError = console.error;
+    console.error = (...args) => {
+      if (typeof args[0] === 'string' && args[0].includes('Vercel Web Analytics')) {
+        return;
+      }
+      originalError.apply(console, args);
+    };
+    return () => {
+      console.error = originalError;
+    };
+  }, []);
+
   // Prevent body scroll when cart drawer is open
   useEffect(() => {
     if (isDrawerOpen) {
