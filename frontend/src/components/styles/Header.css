@@ -1,19 +1,116 @@
 /* ===== Header Styles ===== */
 .trendorabay-header {
-  position: static;
-  top: auto;
+  position: sticky;
+  top: 0;
   left: auto;
   right: auto;
   z-index: 100;
   width: 100%;
   display: flex;
   flex-direction: column;
+  pointer-events: none;
+}
+
+.trendorabay-header a,
+.trendorabay-header button,
+.trendorabay-header .logo-icons,
+.trendorabay-header .profile-login-section {
+  pointer-events: auto;
+}
+
+/* ===== Profile Dropdown Styles ===== */
+.profile-dropdown-container {
+  position: relative;
+}
+
+.profile-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  color: #333;
+  font-size: 11px;
+}
+
+.profile-icon-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.profile-icon-btn i {
+  font-size: 20px;
+}
+
+.profile-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #eaeef2;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  padding: 8px 0;
+  margin-top: 8px;
+  z-index: 1000;
+}
+
+.profile-dropdown a,
+.profile-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+  background-color: #f5f5f5;
+}
+
+.profile-dropdown i {
+  width: 16px;
+  color: #666;
+}
+
+.logout-btn {
+  border-top: 1px solid #e5e5e5;
+  margin-top: 4px;
+  color: #dc3545 !important;
+}
+
+.logout-btn:hover {
+  background-color: #fff5f5 !important;
+}
+
+.logout-btn i {
+  color: #dc3545 !important;
 }
 
 /* ===== Header Sections ===== */
 .header-top-section {
   background: #ffffff; /* White background */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 .header-bottom-section {
@@ -31,8 +128,8 @@
 }
 
 .header-top-section .header-container {
-  height: 80px; /* Fixed height to prevent expansion */
-  padding: 4px 24px; /* Reduced padding for tighter spacing */
+  height: 60px; /* Fixed height to prevent expansion */
+  padding: 2px 24px; /* Reduced padding for tighter spacing */
   overflow: visible; /* Allow logo to extend beyond container */
 }
 
@@ -65,7 +162,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
   position: relative;
 }
@@ -218,6 +315,7 @@
 .logo-image {
   height: 250px;
   width: 800px;
+  max-width: 100%;
   display: block;
   object-fit: contain;
   margin-top: 20px;
@@ -470,7 +568,8 @@
 }
 
 .nav-link[href="/store"]:hover,
-.nav-link[href="/podcasts"]:hover {
+.nav-link[href="/podcasts"]:hover,
+.nav-link[href="/events"]:hover {
   background: transparent;
   color: #374151;
   opacity: 0.7;
@@ -978,27 +1077,96 @@
 }
 
 /* ===== Responsive Design ===== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Tablet specific - keep desktop layout */
+  .logo-nav-container {
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .logo-section {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .logo-with-icons {
+    justify-content: center;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  .header-left-actions {
+    left: 20px;
+    position: absolute;
+  }
+
+  /* Prevent horizontal scroll on tablets */
+  .logo-image {
+    width: 200px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .header-container {
+    overflow-x: hidden;
+    max-width: 100%;
+    padding: 0 12px;
+    width: 100%;
+  }
+
+  .header-top-section .header-container {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .header-bottom-section .header-container {
+    padding-left: 12px;
+  }
+
+  /* Keep desktop navigation visible on tablets */
+  .desktop-nav {
+    display: flex;
+  }
+
+  /* Keep desktop-only elements visible on tablets */
+  .desktop-only {
+    display: block;
+  }
+
+  /* Adjust logo icons positioning */
+  .logo-icons {
+    right: 10px;
+    position: absolute;
+  }
+}
+
 @media (max-width: 1200px) {
   .desktop-nav {
     gap: 4px;
   }
-  
+
   .dropdown-trigger,
   .nav-link {
     padding: 8px 12px;
     font-size: 14px;
   }
-  
+
   .dropdown-menu {
     min-width: 180px;
     max-width: 220px;
   }
-  
+
   /* Adjust header container for medium screens */
   .header-container {
     padding: 0 20px;
   }
-  
+
   .header-top-section .header-container {
     padding: 7px 20px;
   }

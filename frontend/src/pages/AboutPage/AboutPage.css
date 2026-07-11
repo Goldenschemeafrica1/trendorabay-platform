@@ -128,6 +128,14 @@
   display: none;
 }
 
+/* Tablet specific - prevent horizontal scroll */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .about-tabs-container {
+    overflow-x: hidden;
+    flex-wrap: wrap;
+  }
+}
+
 .about-tabs .tab-btn {
   padding: 16px 0;
   background: none;
@@ -190,8 +198,26 @@
   color: var(--text-secondary, #4a4a4a);
 }
 
-.story-milestones {
+.story-journey-values-container {
+  display: flex;
+  gap: 40px;
   margin-bottom: 40px;
+  align-items: flex-start;
+}
+
+.story-milestones {
+  flex: 1;
+  min-width: 0;
+}
+
+.story-values {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.story-milestones {
+  margin-bottom: 0;
 }
 
 .story-milestones h3 {
@@ -273,6 +299,10 @@
   line-height: 1.2;
 }
 
+.story-values {
+  width: 100%;
+}
+
 .story-values h3 {
   font-size: 1.2rem;
   font-weight: 700;
@@ -281,19 +311,17 @@
   color: var(--text-primary, #111111);
 }
 
-.values-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 12px;
-}
-
-.value-card {
-  text-align: center;
-  padding: 10px 8px;
+.story-values .value-card {
+  text-align: left;
+  padding: 16px 20px;
   background: var(--bg-card, #ffffff);
   border: 1px solid var(--border-light, #eaeef2);
   border-radius: 8px;
   transition: all 0.3s ease;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  width: 100%;
+  display: block;
 }
 
 .value-card:hover {
@@ -479,14 +507,18 @@
 
 .team-card-image {
   position: relative;
-  height: 250px;
+  height: 180px;
   overflow: hidden;
+  border-radius: 50%;
+  width: 180px;
+  margin: 0 auto;
 }
 
 .team-card-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 }
 
 .team-card-overlay {
@@ -855,6 +887,10 @@
     margin-top: -100px;
   }
 
+  .story-journey-values-container {
+    flex-direction: column;
+  }
+
   .story-intro {
     margin-top: 0;
   }
@@ -944,7 +980,6 @@
     font-size: 0.7rem;
   }
   
-  .values-grid,
   .commitment-grid,
   .impact-stories-grid,
   .press-grid {

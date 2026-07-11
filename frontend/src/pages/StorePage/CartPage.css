@@ -7,6 +7,22 @@
   background: var(--bg-primary, #ffffff);
   min-height: 100vh;
   padding-bottom: 60px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .cart-page {
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-page {
+    width: 100%;
+    overflow-x: hidden;
+  }
 }
 
 .cart-page-loading {
@@ -63,10 +79,15 @@
 .cart-container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 24px;
   display: grid;
   grid-template-columns: 1fr 380px;
-  gap: 0;
+  gap: 32px;
+}
+
+.cart-main {
+  padding: 20px 0;
+  width: 100%;
 }
 
 /* ============================================
@@ -133,6 +154,7 @@
 .saved-items-section,
 .recommended-section {
   margin-bottom: 0;
+  width: 100%;
 }
 
 .recommended-section {
@@ -156,6 +178,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
 
 .cart-item-card {
@@ -166,8 +189,7 @@
   border: 1px solid var(--border-light, #eaeef2);
   border-radius: 20px;
   transition: all 0.2s ease;
-  max-width: 500px;
-  max-height: 100px;
+  max-width: 100%;
 }
 
 .cart-item-card:hover {
@@ -474,7 +496,6 @@
   border: 1px solid var(--border-light, #eaeef2);
   border-radius: 24px;
   padding: 16px;
-  transform: translateX(-350px);
 }
 
 .summary-title {
@@ -678,11 +699,12 @@
   .cart-container {
     grid-template-columns: 1fr;
     gap: 32px;
+    padding: 0 20px;
   }
 
   .cart-summary {
     position: static;
-    max-width: 500px;
+    max-width: 100%;
     margin: 0 auto;
   }
 }
@@ -695,7 +717,7 @@
   }
 
   .cart-header-section {
-    padding: 0 16px 0 16px;
+    padding: 16px;
   }
 
   .cart-title {
@@ -705,14 +727,20 @@
   .cart-container {
     padding: 0 16px;
     gap: 24px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
   }
 
   .cart-main {
     margin-top: 0;
+    width: 100%;
   }
 
   .cart-items-section {
     margin-top: 0;
+    width: 100%;
   }
 
   .empty-cart {
@@ -911,6 +939,8 @@
   .cart-summary {
     padding: 20px;
     border-radius: 20px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .summary-title {
@@ -987,11 +1017,6 @@
   .cart-container {
     padding: 0 12px;
     gap: 20px;
-    transform: translateY(-40px);
-  }
-
-  .empty-cart {
-    transform: translateY(0);
   }
 
   .cart-header-section {

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { apiRequest } from '../../services/api';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './SignupPage.css';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
+    username: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -27,21 +31,29 @@ const SignupPage = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
+    if (!formData.username) {
+      newErrors.username = 'Username is required';
+    } else if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters';
+    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      newErrors.username = 'Username can only contain letters, numbers, and underscores';
+    }
+
     if (!formData.firstName) {
       newErrors.firstName = 'First name is required';
     }
-    
+
     if (!formData.lastName) {
       newErrors.lastName = 'Last name is required';
     }
-    
+
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
@@ -53,42 +65,62 @@ const SignupPage = () => {
     } else if (!/\d/.test(formData.password)) {
       newErrors.password = 'Password must contain at least one number';
     }
-    
+
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     if (!formData.agreeToTerms) {
       newErrors.agreeToTerms = 'You must agree to the terms and conditions';
     }
-    
+
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     setIsLoading(true);
     setErrors({});
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Here you would normally make an API call to register
-      
-      // On successful signup, redirect to login or profile
-      navigate('/login');
+      console.log('Sending registration request...');
+      const response = await apiRequest.post('/users/register', {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        first_name: formData.firstName,
+        last_name: formData.lastName
+      });
+
+      console.log('Registration response:', response);
+      console.log('Response data:', response?.data);
+      console.log('Response success:', response?.data?.success);
+
+      // Check if response exists and has success property (axios wraps in data)
+      if (response?.data?.success === true) {
+        toast.success('Account created successfully! Redirecting to login...');
+        setTimeout(() => {
+          navigate('/login');
+        }, 1500);
+      } else {
+        console.log('Registration failed, response:', response);
+        setErrors({ general: response?.data?.error || response?.data?.message || 'Registration failed' });
+      }
     } catch (error) {
-      setErrors({ general: 'Registration failed. Please try again.' });
+      console.error('Registration error:', error);
+      console.error('Error response:', error.response);
+      console.error('Error data:', error.response?.data);
+      const errorMessage = error.response?.data?.error || error.message || 'Registration failed. Please try again.';
+      setErrors({ general: errorMessage });
     } finally {
       setIsLoading(false);
     }
@@ -108,6 +140,23 @@ const SignupPage = () => {
               {errors.general}
             </div>
           )}
+
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className={errors.username ? 'error' : ''}
+              placeholder="Choose a username"
+              disabled={isLoading}
+            />
+            {errors.username && (
+              <span className="error-text">{errors.username}</span>
+            )}
+          </div>
 
           <div className="form-row">
             <div className="form-group">

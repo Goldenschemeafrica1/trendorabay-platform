@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { apiRequest } from '../../services/api';
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -52,15 +53,24 @@ const LoginPage = () => {
     setErrors({});
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await apiRequest.post('/users/login', {
+        email: formData.email,
+        password: formData.password
+      });
       
-      // Here you would normally make an API call to login
-      
-      // On successful login, redirect to profile or home
-      navigate('/profile');
+      if (response.data.success) {
+        // Save user data and token to localStorage
+        localStorage.setItem('user', JSON.stringify(response.data.data.user));
+        localStorage.setItem('token', response.data.data.token);
+        
+        // Redirect to profile or home
+        navigate('/');
+        // Reload the page to update header
+        window.location.reload();
+      }
     } catch (error) {
-      setErrors({ general: 'Login failed. Please try again.' });
+      const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
+      setErrors({ general: errorMessage });
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +80,7 @@ const LoginPage = () => {
     <div className="login-page">
       <div className="login-container">
         <div className="login-header">
-          <h1>Welcome Back</h1>
+          <h1>Login to Your Account</h1>
           <p>Sign in to access your account</p>
         </div>
 

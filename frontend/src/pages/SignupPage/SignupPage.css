@@ -108,6 +108,10 @@
   opacity: 0.6;
 }
 
+.form-group input::placeholder {
+  font-size: 12px;
+}
+
 .error-text {
   display: block;
   color: #dc2626;
@@ -134,12 +138,12 @@
 
 .checkbox-container {
   display: flex;
-  align-items: flex-start;
-  font-size: 14px;
+  align-items: center;
+  font-size: 11px !important;
   color: #374151;
   cursor: pointer;
   position: relative;
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 .checkbox-container input[type="checkbox"] {
@@ -157,7 +161,6 @@
   border: 2px solid #d1d5db;
   border-radius: 4px;
   margin-right: 8px;
-  margin-top: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -185,6 +188,7 @@
   color: #b87c4b;
   text-decoration: none;
   font-weight: 500;
+  font-size: 9px;
 }
 
 .checkbox-container a:hover {

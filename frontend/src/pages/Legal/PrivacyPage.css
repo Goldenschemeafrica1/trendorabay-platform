@@ -1,49 +1,49 @@
 .privacy-page {
-  padding: 48px 24px 80px;
+  padding: 24px 16px 40px;
   min-height: 100vh;
   background: #f8f9fc;
 }
 
 .privacy-page .container {
-  max-width: 900px;
+  max-width: 700px;
   margin: 0 auto;
 }
 
 .privacy-header {
   text-align: center;
-  margin-bottom: 48px;
-  padding-top: 20px;
+  margin-bottom: 24px;
+  padding-top: 10px;
 }
 
 .privacy-header h1 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #111111;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .privacy-header p {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #666666;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: #ffffff;
   display: inline-block;
-  padding: 8px 20px;
+  padding: 6px 16px;
   border-radius: 40px;
   border: 1px solid #eaeef2;
 }
 
 .privacy-content {
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  padding: 48px;
+  padding: 24px;
 }
 
 .privacy-content section {
-  margin-bottom: 32px;
-  padding-bottom: 32px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
   border-bottom: 1px solid #eaeef2;
 }
 
@@ -54,27 +54,27 @@
 }
 
 .privacy-content h2 {
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #C4451B;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .privacy-content h3 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #111111;
-  margin-bottom: 12px;
-  margin-top: 24px;
+  margin-bottom: 10px;
+  margin-top: 20px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .privacy-content p {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #333333;
-  line-height: 1.8;
-  margin-bottom: 16px;
+  line-height: 1.6;
+  margin-bottom: 12px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -85,13 +85,13 @@
 }
 
 .privacy-content ul li {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #333333;
-  padding: 10px 0;
-  padding-left: 24px;
+  padding: 8px 0;
+  padding-left: 20px;
   position: relative;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .privacy-content ul li::before {
@@ -100,7 +100,7 @@
   left: 0;
   color: #C4451B;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .privacy-content ul li strong {
@@ -109,15 +109,16 @@
 }
 
 .contact-info {
-  margin-top: 16px;
-  padding: 20px;
+  margin-top: 12px;
+  padding: 16px;
   background: #f8f9fc;
   border-radius: 8px;
 }
 
 .contact-info p {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   color: #333333;
+  font-size: 0.9rem;
 }
 
 .contact-info p:last-child {
@@ -126,32 +127,40 @@
 
 @media (max-width: 768px) {
   .privacy-page {
-    padding: 100px 16px 60px;
+    padding: 80px 12px 40px;
   }
 
   .privacy-header {
-    margin-bottom: 32px;
+    margin-bottom: 20px;
     padding-top: 0;
   }
 
   .privacy-header h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .privacy-content {
-    padding: 32px 24px;
+    padding: 20px 16px;
   }
 
   .privacy-content section {
-    margin-bottom: 24px;
-    padding-bottom: 24px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
   }
 
   .privacy-content h2 {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .privacy-content h3 {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+  }
+
+  .privacy-content p {
+    font-size: 0.85rem;
+  }
+
+  .privacy-content ul li {
+    font-size: 0.85rem;
   }
 }

@@ -3,7 +3,7 @@
   padding: 0;
   background: #ffffff;
   position: relative;
-  margin-top: 0px;
+  margin-top: 30px;
 }
 
 
@@ -16,9 +16,10 @@
 /* ===== Header Styles ===== */
 .latest-magazines-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 15px;
+  position: relative;
 }
 
 .header-left h2 {
@@ -51,6 +52,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  position: absolute;
+  right: 0;
 }
 
 .view-all-link i {
@@ -450,6 +453,44 @@
 }
 
 /* ===== Responsive Design ===== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Tablet specific */
+  .container {
+    max-width: 700px;
+    padding: 0 16px;
+  }
+
+  .magazines-scroll-container {
+    margin: 0 -16px;
+    padding: 10px 0;
+  }
+
+  .magazines-grid-wrapper {
+    padding: 0 16px;
+  }
+
+  .magazines-grid {
+    gap: 10px;
+  }
+
+  .magazine-card {
+    height: 180px;
+    width: 120px;
+  }
+
+  .magazine-cover {
+    height: 100px;
+  }
+
+  .magazine-category {
+    font-size: 8px !important;
+  }
+
+  .rating-number {
+    font-size: 10px !important;
+  }
+}
+
 @media (max-width: 1024px) {
   .container {
     padding: 0 15px;
@@ -459,7 +500,7 @@
     margin: 0 -15px;
     padding: 10px 0;
   }
-  
+
   .magazines-grid-wrapper {
     padding: 0 15px;
   }
@@ -504,13 +545,13 @@
   .rating-number {
     font-size: 9px !important;
   }
-  
+
 }
 
 @media (max-width: 768px) {
   .latest-magazines {
     padding: 0 0;
-    margin-top: -90px;
+    margin-top: -60px;
   }
 
   .container {
@@ -610,7 +651,7 @@
 
 @media (max-width: 480px) {
   .latest-magazines {
-    margin-top: -105px;
+    margin-top: -75px;
   }
 
   .latest-magazines-header {
@@ -716,7 +757,7 @@
 /* Extra small mobile devices */
 @media (max-width: 360px) {
   .latest-magazines {
-    margin-top: -120px;
+    margin-top: -90px;
   }
 
   .latest-magazines-header {

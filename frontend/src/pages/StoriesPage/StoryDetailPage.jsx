@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import { useParams, Link } from 'react-router-dom';
+import storyService from '../../services/storyService';
+import { toast } from 'react-toastify';
 import './StoriesPage.css';
 
 const StoryDetailPage = () => {
@@ -8,100 +10,297 @@ const StoryDetailPage = () => {
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [relatedStories, setRelatedStories] = useState([]);
-
-  // Sample story data - in a real app, this would come from an API
-  const storiesData = [
-    {
-      id: 1,
-      title: "How Kenyan Youth Are Redefining The Pan-African Startup Economy",
-      content: `
-        <p>From Nairobi to Lagos, a new wave of young entrepreneurs is reshaping Africa's economic landscape. These founders aren't just building companies; they're crafting solutions to some of the continent's most pressing challenges.</p>
-        
-        <h2>The Numbers Don't Lie</h2>
-        <p>African startups raised over $5 billion in funding last year, with Kenyan youth leading the charge. The fintech sector alone saw a 300% increase in investment, proving that innovation thrives when necessity meets opportunity.</p>
-        
-        <h2>Breaking Barriers</h2>
-        <p>What makes these founders remarkable isn't just their technical prowess, but their deep understanding of local contexts. They're not copying Silicon Valley models; they're creating uniquely African solutions that address real needs.</p>
-        
-        <h2>The Road Ahead</h2>
-        <p>As we look toward the future, one thing is clear: the African startup ecosystem is just getting started. With increased access to capital, mentorship, and global markets, the next decade promises even greater breakthroughs.</p>
-      `,
-      excerpt: "From Nairobi to Lagos, a new wave of founders is shaping tomorrow's fintech, climate, and culture. The numbers are staggering...",
-      category: "startups",
-      subcategory: "Impact Stories",
-      image: "https://images.unsplash.com/photo-1523800503107-5bc3ba2a6f81?w=1200&h=600&fit=crop",
-      author: {
-        name: "Makena Njeri",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop",
-        role: "Senior Editor",
-        bio: "Makena is an award-winning journalist covering African innovation and entrepreneurship. Based in Nairobi, she has reported on tech ecosystems across the continent."
-      },
-      publishDate: "2026-04-24",
-      readTime: "8 min read",
-      views: 15420,
-      likes: 2341,
-      comments: 156,
-      featured: true,
-      tags: ["Startups", "Innovation", "Kenya", "Pan-African"]
-    },
-    {
-      id: 2,
-      title: "The Rise of Neo-African Streetwear: From Kenya to NY",
-      content: `<p>African streetwear is having a moment on global runways...</p>`,
-      excerpt: "African streetwear is having a moment on global runways. Local designers blend traditional textiles with modern silhouettes...",
-      category: "fashion",
-      subcategory: "Fashion & Style",
-      image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&h=500&fit=crop",
-      author: {
-        name: "Zuri Makena",
-        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop",
-        role: "Fashion Editor"
-      },
-      publishDate: "2026-04-22",
-      readTime: "6 min read",
-      views: 9820,
-      likes: 1567,
-      comments: 89,
-      featured: false,
-      tags: ["Fashion", "Streetwear", "Design", "Culture"]
-    }
-  ];
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
+  const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState('');
+  const [showComments, setShowComments] = useState(false);
+  const [userId] = useState(1); // In real app, get from auth context
+  const [advertisement, setAdvertisement] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     const fetchStory = async () => {
       setLoading(true);
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
+        const response = await storyService.getStoryById(id);
         
-        const foundStory = storiesData.find(s => s.id === parseInt(id));
-        setStory(foundStory);
-        
-        // Set related stories (same category, excluding current story)
-        if (foundStory) {
-          const related = storiesData.filter(s => 
-            s.category === foundStory.category && s.id !== foundStory.id
-          );
-          setRelatedStories(related);
+        if (response && response.data) {
+          setStory(response.data);
+          
+          // Check if user is following this author
+          const authorId = response.data.author?.id || response.data.author_id;
+          if (authorId) {
+            try {
+              const followResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/authors/${authorId}/follow/${userId}`);
+              const followData = await followResponse.json();
+              if (followData.success) {
+                setIsFollowing(followData.isFollowing);
+              }
+            } catch (error) {
+              console.error('Error checking follow status:', error);
+            }
+          }
+          
+          // Fetch related stories
+          const relatedResponse = await storyService.getStories({ status: 'published', limit: 4 });
+          let relatedStories = [];
+          
+          if (Array.isArray(relatedResponse)) {
+            relatedStories = relatedResponse;
+          } else if (relatedResponse && Array.isArray(relatedResponse.data)) {
+            relatedStories = relatedResponse.data;
+          }
+          
+          // Filter out current story and limit to 3
+          const filteredRelated = relatedStories
+            .filter(s => s.id !== parseInt(id))
+            .slice(0, 3);
+          
+          setRelatedStories(filteredRelated);
+        } else {
+          setStory(null);
         }
       } catch (error) {
         console.error('Error fetching story:', error);
+        setStory(null);
       } finally {
         setLoading(false);
       }
     };
 
+    const fetchAdvertisement = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/advertisements?status=active`);
+        const data = await response.json();
+        if (data.success && data.data && data.data.length > 0) {
+          setAdvertisement(data.data[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching advertisement:', error);
+      }
+    };
+
     fetchStory();
+    fetchAdvertisement();
   }, [id]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
   };
+
+  const calculateReadTime = (content) => {
+    const wordsPerMinute = 200;
+    if (!content || typeof content !== 'string') {
+      return 5; // Default to 5 minutes if content is missing
+    }
+    const words = content.split(' ').length;
+    return Math.ceil(words / wordsPerMinute);
+  };
+
+  const handleLike = async () => {
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+      toast.error('Please login to like stories', {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    try {
+      const userObj = JSON.parse(user);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/like`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userObj.token}`
+        }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setLiked(data.liked);
+        setLikesCount(data.likes);
+        toast.success(data.liked ? 'Story liked!' : 'Like removed');
+      } else {
+        toast.error(data.error || 'Failed to like story');
+      }
+    } catch (error) {
+      console.error('Like error:', error);
+      toast.error('Failed to like story');
+    }
+  };
+
+  const handleComment = async (e) => {
+    e.preventDefault();
+    if (!commentText.trim()) return;
+
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+      toast.error('Please login to comment on stories', {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    try {
+      const userObj = JSON.parse(user);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/comments`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userObj.token}`
+        },
+        body: JSON.stringify({ content: commentText })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Comment post error:', errorData);
+        toast.error(errorData.error || `Server error: ${response.status}`);
+        return;
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        setComments([data.data, ...comments]);
+        setCommentText('');
+        toast.success('Comment added!');
+      } else {
+        toast.error(data.error || 'Failed to add comment');
+      }
+    } catch (error) {
+      console.error('Comment error:', error);
+      toast.error('Failed to add comment - check console for details');
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: story.title,
+          text: story.content?.substring(0, 200) || story.title,
+          url: window.location.href
+        });
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success('Link copied to clipboard!');
+      }
+
+      // Track share in backend
+      await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/share`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, platform: 'web' })
+      });
+    } catch (error) {
+      console.error('Share error:', error);
+      toast.error('Failed to share story');
+    }
+  };
+
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
+
+  const handleFollowAuthor = async () => {
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+      toast.error('Please login to follow authors', {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      navigate('/login');
+      return;
+    }
+
+    const authorId = story.author?.id || story.author_id;
+    if (!authorId) return;
+
+    try {
+      if (isFollowing) {
+        // Unfollow
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/authors/${authorId}/follow`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId })
+        });
+        const data = await response.json();
+        if (data.success) {
+          setIsFollowing(false);
+          toast.success('Unfollowed author');
+        } else {
+          toast.error(data.error || 'Failed to unfollow');
+        }
+      } else {
+        // Follow
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/authors/${authorId}/follow`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId })
+        });
+        const data = await response.json();
+        if (data.success) {
+          setIsFollowing(true);
+          toast.success('Following author');
+        } else {
+          toast.error(data.error || 'Failed to follow');
+        }
+      }
+    } catch (error) {
+      console.error('Follow error:', error);
+      toast.error('Failed to follow author');
+    }
+  };
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/comments`);
+        const data = await response.json();
+        if (data.success) {
+          setComments(data.data || []);
+        }
+      } catch (error) {
+        console.error('Failed to fetch comments:', error);
+        setComments([]); // Set empty array on error
+      }
+    };
+
+    const fetchLikes = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://192.168.100.4:3001'}/api/stories/${id}/likes`);
+        const data = await response.json();
+        if (data.success) {
+          setLikesCount(data.likes || 0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch likes:', error);
+        setLikesCount(0); // Set 0 on error
+      }
+    };
+
+    if (id) {
+      fetchComments();
+      fetchLikes();
+    }
+  }, [id]);
+
+  // Scroll to top when story ID changes (mobile navigation)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   if (loading) {
     return (
@@ -126,105 +325,172 @@ const StoryDetailPage = () => {
 
   return (
     <div className="story-detail-page">
-      {/* Hero Section */}
-      <div className="story-hero">
-        <div className="story-hero-image">
-          <img src={story.image} alt={story.title} />
-          <div className="image-overlay"></div>
-        </div>
-        <div className="story-hero-content">
-          <div className="story-category">{story.subcategory}</div>
-          <h1 className="story-title">{story.title}</h1>
-          <div className="story-meta">
-            <div className="story-author">
-              <img src={story.author.avatar} alt={story.author.name} />
-              <div>
-                <span className="author-name">{story.author.name}</span>
-                <span className="author-role">{story.author.role}</span>
+      <div className="story-content-wrapper">
+        <div className="story-content-container">
+          {/* Main Content */}
+          <article className="story-content">
+            {/* Story Meta */}
+            <div className="story-meta-bar">
+              <div className="story-author-mini">
+                <img
+                  src={story.author_avatar || '/logo.jpeg'}
+                  alt={story.author_name || 'Author'}
+                  className="author-avatar-mini"
+                  onError={(e) => {
+                    e.target.src = '/logo.jpeg';
+                  }}
+                />
+                <span className="author-name-mini">
+                  {story.author_name || 'Unknown Author'}
+                </span>
+              </div>
+              <div className="story-meta-info">
+                {story.published_at && (
+                  <span className="story-date-mini">
+                    📅 {formatDate(story.published_at)}
+                  </span>
+                )}
+                <span className="read-time-mini">
+                  ⏱️ {calculateReadTime(story.content)} min read
+                </span>
               </div>
             </div>
-            <div className="story-stats">
-              <span>📅 {formatDate(story.publishDate)}</span>
-              <span>📖 {story.readTime}</span>
-              <span>👁️ {story.views.toLocaleString()} views</span>
+
+            {/* Story Title */}
+            <h1 className="story-title">{story.title}</h1>
+
+            {/* Featured Image */}
+            {story.imageUrl && (
+              <div className="story-featured-image">
+                <img
+                  src={story.imageUrl.startsWith('/') ? story.imageUrl : `/${story.imageUrl}`}
+                  alt={story.title}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
+
+            <div
+              className="story-body"
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(story.content) }}
+            />
+
+            {/* Story Tags */}
+            <div className="story-tags">
+              {story.tags && Array.isArray(story.tags) && story.tags.map(tag => (
+                <span key={tag} className="story-tag">
+                  #{tag}
+                </span>
+              ))}
             </div>
-          </div>
+
+            {/* Engagement Bar */}
+            <div className="story-engagement">
+              <div className="engagement-stats">
+                <button
+                  className={`engagement-btn like-btn ${liked ? 'liked' : ''}`}
+                  onClick={handleLike}
+                >
+                  ❤️ {likesCount || 0}
+                </button>
+                <button className="engagement-btn comment-btn" onClick={toggleComments}>
+                  💬 {comments.length}
+                </button>
+                <button className="engagement-btn share-btn" onClick={handleShare}>
+                  📤 Share
+                </button>
+              </div>
+            </div>
+
+            {/* Comments Section */}
+            {showComments && (
+              <div className="comments-section">
+                <h3>Comments ({comments.length})</h3>
+
+                {/* Comment Form */}
+                <form className="comment-form" onSubmit={handleComment}>
+                  <textarea
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder="Write a comment..."
+                    className="comment-input"
+                    rows="3"
+                  />
+                  <button type="submit" className="comment-submit-btn">
+                    Post Comment
+                  </button>
+                </form>
+
+                {/* Comments List */}
+                <div className="comments-list">
+                  {comments.length === 0 ? (
+                    <p className="no-comments">No comments yet. Be the first to comment!</p>
+                  ) : (
+                    comments.map((comment) => (
+                      <div key={comment.id} className="comment-item">
+                        <div className="comment-header">
+                          <span className="comment-author">
+                            {comment.first_name || comment.email || 'Anonymous'}
+                          </span>
+                          <span className="comment-date">
+                            {new Date(comment.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="comment-content">{comment.content}</p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </article>
         </div>
-      </div>
-
-      <div className="story-content-container">
-        {/* Main Content */}
-        <article className="story-content">
-          <div className="story-excerpt">
-            <p>{story.excerpt}</p>
-          </div>
-          
-          <div 
-            className="story-body"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(story.content) }}
-          />
-
-          {/* Story Tags */}
-          <div className="story-tags">
-            {story.tags.map(tag => (
-              <span key={tag} className="story-tag">
-                #{tag}
-              </span>
-            ))}
-          </div>
-
-          {/* Engagement Bar */}
-          <div className="story-engagement">
-            <div className="engagement-stats">
-              <button className="engagement-btn like-btn">
-                ❤️ {story.likes.toLocaleString()}
-              </button>
-              <button className="engagement-btn comment-btn">
-                💬 {story.comments}
-              </button>
-              <button className="engagement-btn share-btn">
-                📤 Share
-              </button>
-            </div>
-          </div>
-        </article>
 
         {/* Sidebar */}
         <aside className="story-sidebar">
           {/* Author Card */}
-          <div className="author-card">
-            <img src={story.author.avatar} alt={story.author.name} />
-            <div className="author-info">
-              <h3>{story.author.name}</h3>
-              <p className="author-role">{story.author.role}</p>
-              {story.author.bio && <p className="author-bio">{story.author.bio}</p>}
-              <Link to={`/author/${story.author.name.toLowerCase().replace(' ', '-')}`} className="follow-author-btn">
-                Follow Author
-              </Link>
+          {story.author_name && (
+            <div className="author-card">
+              <img 
+                src={story.author_avatar || '/logo.jpeg'} 
+                alt={story.author_name || 'Author'} 
+                onError={(e) => {
+                  e.target.src = '/logo.jpeg';
+                }}
+              />
+              <div className="author-info">
+                <h3>{story.author_name || 'Unknown Author'}</h3>
+                <p className="author-role">Author</p>
+                {story.author_bio && <p className="author-bio">{story.author_bio}</p>}
+                <button 
+                  onClick={handleFollowAuthor}
+                  className={`follow-author-btn ${isFollowing ? 'following' : ''}`}
+                >
+                  {isFollowing ? 'Following' : 'Follow Author'}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Related Stories */}
-          {relatedStories.length > 0 && (
-            <div className="related-stories">
-              <h3>Related Stories</h3>
-              <div className="related-stories-list">
-                {relatedStories.map(relatedStory => (
-                  <Link 
-                    key={relatedStory.id} 
-                    to={`/stories/${relatedStory.id}`}
-                    className="related-story-card"
-                  >
-                    <img src={relatedStory.image} alt={relatedStory.title} />
-                    <div className="related-story-info">
-                      <h4>{relatedStory.title}</h4>
-                      <p>{relatedStory.excerpt}</p>
-                      <span className="related-story-meta">
-                        {relatedStory.readTime} • {relatedStory.likes.toLocaleString()} likes
-                      </span>
-                    </div>
-                  </Link>
-                ))}
+          {/* Ad Section */}
+          {advertisement && (
+            <div className="ad-section">
+              <div className="ad-content">
+                {advertisement.image_url ? (
+                  <a href={advertisement.link_url || advertisement.destination_url || '#'} target="_blank" rel="noopener noreferrer">
+                    <img 
+                      src={advertisement.image_url} 
+                      alt={advertisement.title || 'Advertisement'} 
+                      className="ad-image"
+                    />
+                  </a>
+                ) : (
+                  <div className="ad-placeholder">
+                    <p>{advertisement.title || 'Advertisement Space'}</p>
+                  </div>
+                )}
               </div>
             </div>
           )}

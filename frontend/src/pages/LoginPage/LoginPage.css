@@ -341,17 +341,47 @@
 }
 
 /* ===== Responsive Design ===== */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .login-page {
-    padding: 0 16px;
+    padding: 16px;
+    align-items: center;
   }
   
   .login-container {
-    padding: 0 24px 5px 24px;
+    padding: 32px 24px;
+    max-width: 100%;
+  }
+  
+  .login-header h1 {
+    font-size: 26px;
+  }
+  
+  .login-header p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 0;
+    align-items: flex-start;
+  }
+  
+  .login-container {
+    padding: 24px 20px;
+    border-radius: 0;
+    min-height: 100vh;
+    box-shadow: none;
+  }
+  
+  .login-header {
+    margin-bottom: 24px;
+    padding-top: 20px;
   }
   
   .login-logo {
     font-size: 20px;
+    margin-bottom: 20px;
   }
   
   .login-logo span {
@@ -362,14 +392,84 @@
     font-size: 24px;
   }
   
+  .login-header p {
+    font-size: 13px;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-group label {
+    font-size: 13px;
+  }
+  
+  .form-group input {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+  
   .form-options {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  
+  .checkbox-container {
+    font-size: 13px;
+  }
+  
+  .forgot-password {
+    font-size: 13px;
+  }
+  
+  .login-button {
+    padding: 16px 24px;
+    font-size: 16px;
+  }
+  
+  .login-divider {
+    margin: 20px 0;
   }
   
   .social-button {
     padding: 14px 16px;
+    font-size: 14px;
+  }
+  
+  .signup-link p {
+    font-size: 13px;
+  }
+  
+  .signup-link {
+    margin-bottom: 16px;
+  }
+  
+  .back-to-home {
+    padding-top: 16px;
+  }
+  
+  .back-to-home a {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-container {
+    padding: 20px 16px;
+  }
+  
+  .login-header h1 {
+    font-size: 22px;
+  }
+  
+  .form-group input {
+    padding: 12px 14px;
+  }
+  
+  .login-button {
+    padding: 14px 20px;
   }
 }
 

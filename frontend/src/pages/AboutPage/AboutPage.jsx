@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AboutPage.css';
+import teamService from '../../services/teamService';
 
 const AboutPage = () => {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -12,24 +13,6 @@ const AboutPage = () => {
     stories: 0
   });
 
-  // Team member data
-  const teamData = [
-    {
-      id: 1,
-      name: "Kingsley George",
-      role: "Founder & Editor-in-Chief",
-      bio: "Former financial journalist turned media entrepreneur. Kingsley founded Trendorabay to amplify African voices in business and culture. He has been featured in Forbes Africa and serves on the board of the African Media Initiative.",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop",
-      social: {
-        twitter: "@wanjikumwangi",
-        linkedin: "wanjiku-mwangi",
-        instagram: "@wanjiku.creates"
-      },
-      expertise: ["Editorial Strategy", "Business Journalism", "Brand Development"],
-      quote: "Storytelling is the most powerful tool we have to shape Africa's narrative."
-    }
-  ];
-
   // Impact statistics (animated counter)
   const targetStats = {
     readers: 50000,
@@ -39,7 +22,83 @@ const AboutPage = () => {
   };
 
   useEffect(() => {
-    setTeamMembers(teamData);
+    // Fetch team members from API
+    const fetchTeamMembers = async () => {
+      try {
+        console.log('=== AboutPage: Fetching team members from API ===');
+        const response = await teamService.getTeamMembers();
+        console.log('=== AboutPage: API response received ===', response);
+
+        let members = [];
+
+        // Handle axios response structure
+        if (response && response.data && Array.isArray(response.data.data)) {
+          members = response.data.data;
+          console.log('=== AboutPage: Response has data.data array, using response.data.data ===');
+        } else if (response && Array.isArray(response.data)) {
+          members = response.data;
+          console.log('=== AboutPage: Response has data array, using response.data ===');
+        } else if (Array.isArray(response)) {
+          members = response;
+          console.log('=== AboutPage: Response is an array, using directly ===');
+        } else {
+          console.log('=== AboutPage: Response structure unexpected ===', typeof response, response);
+        }
+
+        console.log('=== AboutPage: Team members from API ===', members);
+        console.log('=== AboutPage: Number of team members ===', members.length);
+
+        // Transform data to match frontend expectations
+        const transformed = members.map(member => {
+          const avatarUrl = member.avatar || member.avatar_url || member.image_url || member.profile_image;
+          const image = avatarUrl
+            ? (avatarUrl.startsWith('http') ? avatarUrl : `http://localhost:3001${avatarUrl}`)
+            : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop';
+
+          return {
+            id: member.id,
+            name: member.name || member.full_name,
+            role: member.role || member.position || member.title,
+            image: image,
+            bio: member.bio || member.description || member.about || '',
+            social: {
+              twitter: member.twitter || '',
+              linkedin: member.linkedin || '',
+              instagram: member.instagram || ''
+            },
+            expertise: member.expertise ? (Array.isArray(member.expertise) ? member.expertise : [member.expertise]) : [],
+            quote: member.quote || ''
+          };
+        });
+
+        console.log('=== AboutPage: Transformed team members ===', transformed);
+        console.log('=== AboutPage: Setting teamMembers state ===');
+        setTeamMembers(transformed);
+      } catch (error) {
+        console.error('=== AboutPage: Error fetching team members ===', error);
+        console.error('=== AboutPage: Error details ===', error.message, error.stack);
+        // Set fallback data if API fails
+        console.log('=== AboutPage: Using fallback data due to error ===');
+        setTeamMembers([
+          {
+            id: 1,
+            name: "Kingsley George",
+            role: "Founder & Editor-in-Chief",
+            bio: "Former financial journalist turned media entrepreneur. Kingsley founded Trendorabay to amplify African voices in business and culture. He has been featured in Forbes Africa and serves on the board of the African Media Initiative.",
+            image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop",
+            social: {
+              twitter: "@wanjikumwangi",
+              linkedin: "wanjiku-mwangi",
+              instagram: "@wanjiku.creates"
+            },
+            expertise: ["Editorial Strategy", "Business Journalism", "Brand Development"],
+            quote: "Storytelling is the most powerful tool we have to shape Africa's narrative."
+          }
+        ]);
+      }
+    };
+
+    fetchTeamMembers();
     
     // Animated counter for stats
     const duration = 2000;
@@ -196,24 +255,24 @@ const AboutPage = () => {
               </p>
             </div>
 
-            <div className="story-milestones">
-              <h3>Our Journey</h3>
-              <div className="timeline">
-                {milestones.map((milestone, index) => (
-                  <div key={index} className="timeline-item">
-                    <div className="timeline-content">
-                      <div className="timeline-year">{milestone.year}</div>
-                      <h4>{milestone.title}</h4>
-                      <p>{milestone.description}</p>
+            <div className="story-journey-values-container">
+              <div className="story-milestones">
+                <h3>Our Journey</h3>
+                <div className="timeline">
+                  {milestones.map((milestone, index) => (
+                    <div key={index} className="timeline-item">
+                      <div className="timeline-content">
+                        <div className="timeline-year">{milestone.year}</div>
+                        <h4>{milestone.title}</h4>
+                        <p>{milestone.description}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="story-values">
-              <h3>What We Stand For</h3>
-              <div className="values-grid">
+              <div className="story-values">
+                <h3>What We Stand For</h3>
                 {values.map((value, index) => (
                   <div key={index} className="value-card">
                     <h4>{value.title}</h4>

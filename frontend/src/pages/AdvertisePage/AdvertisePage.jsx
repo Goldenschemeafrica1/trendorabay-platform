@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import inquiryService from '../../services/inquiryService';
 import './AdvertisePage.css';
 
 const AdvertisePage = () => {
@@ -55,8 +56,15 @@ const AdvertisePage = () => {
     setErrors({});
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await inquiryService.submitInquiry({
+        name: formData.name,
+        company: formData.company,
+        email: formData.email,
+        phone: formData.phone,
+        budget: formData.budget,
+        campaignType: formData.campaignType,
+        message: formData.message
+      });
       
       setIsSubmitted(true);
     } catch (error) {

@@ -1,37 +1,44 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import './styles/Footer.css';
+import magazineService from '../services/magazineService';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [featuredMagazines, setFeaturedMagazines] = useState([]);
+
+  useEffect(() => {
+    const fetchMagazines = async () => {
+      try {
+        const data = await magazineService.getMagazines();
+        // Get first 2 magazines for footer display
+        setFeaturedMagazines(data.slice(0, 2));
+      } catch (error) {
+        console.error('Error fetching magazines for footer:', error);
+      }
+    };
+    fetchMagazines();
+  }, []);
 
   const column1Links = [
-    { name: 'Contact', path: '/contact' },
+    { name: 'About', path: '/about' },
     { name: 'Write for Us', path: '/write-for-us' },
     { name: 'FAQs', path: '/faq' },
+    { name: 'Magazines', path: '/magazines' },
   ];
 
   const column2Links = [
     { name: 'Subscribe', path: '/subscribe' },
-    { name: 'Community Hub', path: '/community' },
-    { name: 'Events', path: '/community/events' },
+    { name: 'Events', path: '/events' },
+    { name: 'Partner With Us', path: '/partner' },
+    { name: 'Advertise With Us', path: '/advertise' },
   ];
 
   const column3Links = [
+    { name: 'Store', path: '/store' },
     { name: 'Contributors', path: '/community/contributors' },
     { name: 'Stories', path: '/stories' },
     { name: 'Podcast', path: '/podcast' },
-  ];
-
-  const column4Links = [
-    { name: 'Donate', path: '/donate' },
-    { name: 'Merchandise', path: '/merchandise' },
-    { name: 'Gift Cards', path: '/gift-cards', disabled: true },
-  ];
-
-  const column5Links = [
-    { name: 'Cart', path: '/cart' },
-    { name: 'Terms of Service', path: '/terms' },
-    { name: 'Privacy Policy', path: '/privacy' },
   ];
 
   return (
@@ -47,20 +54,34 @@ const Footer = () => {
             {/* Fashion & Style Magazine Column */}
             <div className="footer-col fashion-col">
               <div className="fashion-magazine">
-                <Link to="/magazines/2" className="magazine-link">
-                  <img 
-                    src="/assets/fashion.jpeg" 
-                    alt="Fashion & Style Magazine" 
-                    className="fashion-magazine-image"
-                  />
-                </Link>
-                <Link to="/magazines/1" className="magazine-link">
-                  <img 
-                    src="/assets/Tech.jpeg" 
-                    alt="Tech Magazine" 
-                    className="fashion-magazine-image"
-                  />
-                </Link>
+                {featuredMagazines.length > 0 ? (
+                  featuredMagazines.map((magazine) => (
+                    <Link key={magazine.id} to={`/magazines/${magazine.id}`} className="magazine-link">
+                      <img 
+                        src={magazine.coverImage} 
+                        alt={magazine.title} 
+                        className="fashion-magazine-image"
+                      />
+                    </Link>
+                  ))
+                ) : (
+                  <>
+                    <Link to="/magazines" className="magazine-link">
+                      <img 
+                        src="/assets/fashion.jpeg" 
+                        alt="Fashion & Style Magazine" 
+                        className="fashion-magazine-image"
+                      />
+                    </Link>
+                    <Link to="/magazines" className="magazine-link">
+                      <img 
+                        src="/assets/Tech.jpeg" 
+                        alt="Tech Magazine" 
+                        className="fashion-magazine-image"
+                      />
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
 
@@ -73,7 +94,12 @@ const Footer = () => {
                       <Link to={link.path}>{link.name}</Link>
                     </li>
                   ))}
-                  {column2Links.slice(0, 2).map((link, index) => (
+                </ul>
+              </div>
+
+              <div className="footer-col links-col">
+                <ul className="footer-links">
+                  {column2Links.map((link, index) => (
                     <li key={index + 100}>
                       <Link to={link.path}>{link.name}</Link>
                     </li>
@@ -83,37 +109,8 @@ const Footer = () => {
 
               <div className="footer-col links-col">
                 <ul className="footer-links">
-                  {column2Links.slice(2).map((link, index) => (
-                    <li key={index + 200}>
-                      <Link to={link.path}>{link.name}</Link>
-                    </li>
-                  ))}
                   {column3Links.map((link, index) => (
-                    <li key={index + 300}>
-                      <Link to={link.path}>{link.name}</Link>
-                    </li>
-                  ))}
-                  {column4Links.slice(0, 1).map((link, index) => (
-                    <li key={index + 400}>
-                      <Link to={link.path}>{link.name}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="footer-col links-col">
-                <ul className="footer-links">
-                  {column4Links.slice(1).map((link, index) => (
-                    <li key={index + 500}>
-                      {link.disabled ? (
-                        <span className="footer-link-disabled">{link.name}</span>
-                      ) : (
-                        <Link to={link.path}>{link.name}</Link>
-                      )}
-                    </li>
-                  ))}
-                  {column5Links.map((link, index) => (
-                    <li key={index + 600}>
+                    <li key={index + 200}>
                       <Link to={link.path}>{link.name}</Link>
                     </li>
                   ))}
@@ -160,6 +157,11 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="container">
           <div className="bottom-bar-content">
+            <div className="bottom-bar-links">
+              <Link to="/contact">Contact</Link>
+              <Link to="/terms">Terms of Service</Link>
+              <Link to="/privacy">Privacy Policy</Link>
+            </div>
             <p className="copyright">
               &copy; {currentYear} Trendorabay Magazine. All rights reserved.
             </p>

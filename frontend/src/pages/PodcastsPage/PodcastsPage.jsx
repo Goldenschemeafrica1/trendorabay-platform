@@ -1,121 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import podcastService from '../../services/podcastService';
+import podcastHostService from '../../services/podcastHostService';
 import './PodcastsPage.css';
-
-// Expanded podcast data with more featured series content
-const episodesData = [
-  {
-    id: 1,
-    title: "From Kibera to Silicon Savannah",
-    guest: "Wanjiru Mwangi",
-    duration: "42:15",
-    category: "Startup Stories",
-    series: "Startup Stories",
-    description: "How a Nairobi-based fintech startup raised $2M and changed local savings. Raw, inspiring, and real.",
-    coverImage: "/assets/story1.jpeg",
-    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    date: "2026-04-20",
-    trending: true,
-    plays: 12450
-  },
-  {
-    id: 2,
-    title: "The Creative Economy Renaissance",
-    guest: "Eliud Kipchoge",
-    duration: "38:42",
-    category: "Culture & Lifestyle",
-    series: "Culture Talks",
-    description: "Exploring how African artists are reshaping global culture and building sustainable careers.",
-    coverImage: "/assets/musicstory.jpeg",
-    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-    date: "2026-04-15",
-    trending: true,
-    plays: 8920
-  },
-  {
-    id: 3,
-    title: "Fintech Disruptors: The African Wave",
-    guest: "Tumaini Mboya",
-    duration: "51:08",
-    category: "Innovation & Tech",
-    series: "Young Founders",
-    description: "Inside the minds building Africa's most innovative financial solutions for the unbanked.",
-    coverImage: "/assets/story2.jpeg",
-    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-    date: "2026-04-10",
-    trending: false,
-    plays: 5670
-  },
-  {
-    id: 4,
-    title: "Climate Warriors: Youth Taking Action",
-    guest: "Vanessa Nakat",
-    duration: "46:22",
-    category: "Impact Stories",
-    series: "Voices of Africa",
-    description: "Young activists leading climate movements across the continent and inspiring global change.",
-    coverImage: "https://images.unsplash.com/photo-1536700503339-1e4b06520771?w=400&h=400&fit=crop",
-    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-    date: "2026-04-05",
-    trending: true,
-    plays: 7340
-  },
-  {
-    id: 5,
-    title: "From Side Hustle to CEO",
-    guest: "James Maina",
-    duration: "55:30",
-    category: "Business & Entrepreneurship",
-    series: "Startup Stories",
-    description: "The untold journey of scaling a small business into a multi-million dollar enterprise.",
-    coverImage: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=400&fit=crop",
-    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-    date: "2026-03-28",
-    trending: false,
-    plays: 4450
-  },
-  {
-    id: 6,
-    title: "EdTech: Reimagining African Classrooms",
-    guest: "Dr. Aisha Kenyatta",
-    duration: "49:18",
-    category: "Youth & Education",
-    series: "Young Founders",
-    description: "How technology is bridging education gaps across the continent.",
-    coverImage: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&h=400&fit=crop",
-    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
-    date: "2026-03-22",
-    trending: false,
-    plays: 3210
-  },
-  {
-    id: 7,
-    title: "Afrobeat to the World",
-    guest: "Makena Njeri",
-    duration: "47:12",
-    category: "music",
-    series: "Culture Talks",
-    description: "How African music conquered global charts and built a new industry.",
-    coverImage: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=400&fit=crop",
-    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
-    date: "2026-03-15",
-    trending: true,
-    plays: 15680
-  },
-  {
-    id: 8,
-    title: "AI for Social Good",
-    guest: "Dr. Kwame Asante",
-    duration: "52:45",
-    category: "Innovation & Tech",
-    series: "Tech Unboxed",
-    description: "How artificial intelligence is solving real problems across Africa.",
-    coverImage: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=400&fit=crop",
-    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
-    date: "2026-03-08",
-    trending: false,
-    plays: 2890
-  }
-];
 
 // Expanded featured series collection
 const featuredSeriesList = [
@@ -154,8 +41,9 @@ const categoriesList = [
 ];
 
 const PodcastPage = () => {
-  const [episodes, setEpisodes] = useState(episodesData);
-  const [filteredEpisodes, setFilteredEpisodes] = useState(episodesData);
+  const navigate = useNavigate();
+  const [episodes, setEpisodes] = useState([]);
+  const [filteredEpisodes, setFilteredEpisodes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentEpisode, setCurrentEpisode] = useState(null);
@@ -163,9 +51,97 @@ const PodcastPage = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showMiniPlayer, setShowMiniPlayer] = useState(false);
-  
+  const [loading, setLoading] = useState(true);
+  const [hosts, setHosts] = useState([]);
+  const [featuredGuests, setFeaturedGuests] = useState([]);
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
+  const [applicationForm, setApplicationForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    bio: '',
+    topic: '',
+    social_media: ''
+  });
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [audioError, setAudioError] = useState(null);
+  const playTimeoutRef = useRef(null);
+
   const audioRef = useRef(null);
   const progressRef = useRef(null);
+
+  // Fetch podcasts from API
+  useEffect(() => {
+    const fetchPodcasts = async () => {
+      setLoading(true);
+      try {
+        const podcasts = await podcastService.getPodcasts();
+        console.log('Fetched podcasts:', podcasts);
+        setEpisodes(podcasts);
+        setFilteredEpisodes(podcasts);
+      } catch (error) {
+        console.error('Error fetching podcasts:', error);
+        setEpisodes([]);
+        setFilteredEpisodes([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPodcasts();
+  }, []);
+
+  // Fetch hosts from API
+  useEffect(() => {
+    const fetchHosts = async () => {
+      try {
+        const response = await podcastHostService.getHosts({ status: 'active' });
+        let hosts = [];
+        
+        if (Array.isArray(response)) {
+          hosts = response;
+        } else if (response && Array.isArray(response.data)) {
+          hosts = response.data;
+        } else if (response && response.data && Array.isArray(response.data.data)) {
+          hosts = response.data.data;
+        }
+        
+        setHosts(hosts);
+      } catch (error) {
+        console.error('Error fetching hosts:', error);
+        setHosts([]);
+      }
+    };
+    
+    fetchHosts();
+  }, []);
+
+  // Fetch featured guests from API
+  useEffect(() => {
+    const fetchFeaturedGuests = async () => {
+      try {
+        const response = await podcastHostService.getFeaturedGuests(10);
+        let guests = [];
+        
+        if (Array.isArray(response)) {
+          guests = response;
+        } else if (response && Array.isArray(response.data)) {
+          guests = response.data;
+        } else if (response && response.data && Array.isArray(response.data.data)) {
+          guests = response.data.data;
+        }
+        
+        setFeaturedGuests(guests);
+      } catch (error) {
+        console.error('Error fetching featured guests:', error);
+        setFeaturedGuests([]);
+      }
+    };
+    
+    fetchFeaturedGuests();
+  }, []);
 
   // Filter episodes
   useEffect(() => {
@@ -188,12 +164,18 @@ const PodcastPage = () => {
 
   // Audio handlers
   const playEpisode = (episode) => {
+    setAudioError(null);
+    
     if (currentEpisode?.id === episode.id && audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
         setIsPlaying(false);
       } else {
-        audioRef.current.play();
+        audioRef.current.play().catch(err => {
+          console.error('Audio play error:', err);
+          setAudioError('Failed to play audio. The source may not be available.');
+          setIsPlaying(false);
+        });
         setIsPlaying(true);
       }
     } else {
@@ -201,10 +183,14 @@ const PodcastPage = () => {
       setShowMiniPlayer(true);
       setIsPlaying(true);
       
-      setTimeout(() => {
+      playTimeoutRef.current = setTimeout(() => {
         if (audioRef.current) {
           audioRef.current.src = episode.audioUrl;
-          audioRef.current.play();
+          audioRef.current.play().catch(err => {
+            console.error('Audio play error:', err);
+            setAudioError('Failed to play audio. The source may not be available.');
+            setIsPlaying(false);
+          });
         }
       }, 100);
     }
@@ -247,6 +233,7 @@ const PodcastPage = () => {
   };
 
   const formatDurationHHMMSS = (dur) => {
+    if (!dur || typeof dur !== 'string') return '00:00:00';
     const parts = dur.split(':');
     if (parts.length === 2) {
       const mins = parts[0].padStart(2, '0');
@@ -257,7 +244,16 @@ const PodcastPage = () => {
   };
 
   const getTrendingEpisodes = () => {
-    return [...episodes].sort((a, b) => b.plays - a.plays).slice(0, 5);
+    if (!Array.isArray(episodes) || episodes.length === 0) return [];
+    return [...episodes]
+      .filter(episode => !episode.videoUrl)
+      .sort((a, b) => (b.plays || 0) - (a.plays || 0))
+      .slice(0, 5);
+  };
+
+  const getVideoEpisodes = () => {
+    if (!Array.isArray(episodes) || episodes.length === 0) return [];
+    return [...episodes].filter(episode => episode.videoUrl);
   };
 
   const nextEpisode = () => {
@@ -274,18 +270,143 @@ const PodcastPage = () => {
     playEpisode(episodes[prevIndex]);
   };
 
+  const handleApplicationFormChange = (e) => {
+    const { name, value } = e.target;
+    setApplicationForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error for this field when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const validateApplicationForm = () => {
+    const errors = {};
+    
+    if (!applicationForm.name.trim()) {
+      errors.name = 'Name is required';
+    }
+    
+    if (!applicationForm.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(applicationForm.email)) {
+      errors.email = 'Please enter a valid email';
+    }
+    
+    if (!applicationForm.bio.trim()) {
+      errors.bio = 'Bio is required';
+    } else if (applicationForm.bio.length < 50) {
+      errors.bio = 'Bio must be at least 50 characters';
+    }
+    
+    if (!applicationForm.topic.trim()) {
+      errors.topic = 'Topic is required';
+    } else if (applicationForm.topic.length < 20) {
+      errors.topic = 'Topic must be at least 20 characters';
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleApplicationSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateApplicationForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('http://192.168.100.4:3001/api/podcast-guest-applications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(applicationForm)
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSubmitSuccess(true);
+        setApplicationForm({
+          name: '',
+          email: '',
+          phone: '',
+          bio: '',
+          topic: '',
+          social_media: ''
+        });
+        
+        // Close modal after success message
+        setTimeout(() => {
+          setShowApplicationModal(false);
+          setSubmitSuccess(false);
+        }, 3000);
+      } else {
+        setFormErrors({ submit: data.error || 'Failed to submit application' });
+      }
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      setFormErrors({ submit: 'Failed to submit application. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const openApplicationModal = () => {
+    setShowApplicationModal(true);
+    setSubmitSuccess(false);
+    setFormErrors({});
+  };
+
+  const handleEpisodeClick = (episode) => {
+    console.log('Selected episode:', JSON.stringify(episode, null, 2));
+    // Navigate to podcast detail page
+    navigate(`/podcast/${episode.id}`);
+  };
+
   return (
     <div className="podcast-page">
       {/* Hidden audio element */}
-      <audio
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={handleEpisodeEnd}
-        onLoadedMetadata={handleTimeUpdate}
-      />
+      {currentEpisode?.audioUrl && (
+        <audio
+          ref={audioRef}
+          src={currentEpisode.audioUrl}
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={handleEpisodeEnd}
+          onLoadedMetadata={handleTimeUpdate}
+          onError={() => {
+            console.error('Audio loading error - no audio data in database');
+            setAudioError('Audio not available in database. Please upload audio file.');
+            setIsPlaying(false);
+          }}
+        />
+      )}
 
-      {/* Hero Section */}
-      <section className="hero-section">
+      {/* Coming Soon Section */}
+      <section className="coming-soon-section">
+        <div className="coming-soon-content">
+          <div className="coming-soon-icon">
+            <i className="fas fa-podcast"></i>
+          </div>
+          <h1>Coming Soon</h1>
+          <p>We're working on bringing you amazing podcast content featuring inspiring voices from across Africa. Stay tuned for incredible stories and conversations.</p>
+          <button className="apply-guest-btn" onClick={() => setShowGuestApplication(true)}>
+            <i className="fas fa-microphone"></i> Apply to be a Guest
+          </button>
+        </div>
+      </section>
+
+      {/* Hero Section - Hidden for now */}
+      {/* <section className="hero-section">
         <div className="container">
           <div className="hero-content">
             <div className="hero-text">
@@ -309,17 +430,16 @@ const PodcastPage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* Main Content */}
+      {/* Main Content - Hidden for now */}
+      {/*
       <div className="container">
-
-        {/* Most Listened Episodes */}
         <div className="most-listened-section">
           <div className="section-header">
             <div className="header-left">
               <h2>
-                <span className="accent">✦</span> Most Listened Episodes
+                <span className="accent">✦</span> Featured Episodes
               </h2>
             </div>
           </div>
@@ -354,7 +474,6 @@ const PodcastPage = () => {
           </div>
         </div>
 
-        {/* Live Podcast Banner */}
         <div className="live-podcast-banner">
           <div className="live-podcast-content">
             <div className="live-podcast-text">
@@ -372,7 +491,6 @@ const PodcastPage = () => {
           </div>
         </div>
 
-        {/* Episodes Grid */}
         <div className="episodes-section">
           <div className="episodes-header">
             <div className="header-left">
@@ -383,17 +501,12 @@ const PodcastPage = () => {
           </div>
           
           <div className="episodes-grid">
-            {filteredEpisodes.slice(0, 3).map(episode => (
-              <div key={episode.id} className="episode-card">
+            {getVideoEpisodes().slice(0, 3).map(episode => (
+              <div key={episode.id} className="episode-card" onClick={() => handleEpisodeClick(episode)} style={{ cursor: 'pointer' }}>
                 <div className="card-image">
-                  <img src={episode.coverImage} alt={episode.title} />
-                  <button
-                    className="play-overlay"
-                    onClick={() => playEpisode(episode)}
-                  >
-                    <i className={`fas ${currentEpisode?.id === episode.id && isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
-                  </button>
-
+                  <div className="video-wrapper">
+                    <img src={episode.coverImage} alt={episode.title} className="video-poster" />
+                  </div>
                 </div>
                 <div className="card-content">
                   <p className="episode-description">{episode.description}</p>
@@ -412,7 +525,6 @@ const PodcastPage = () => {
           )}
         </div>
 
-        {/* Meet Our Podcast Hosts */}
         <div className="hosts-section">
           <div className="section-header">
             <div className="header-left">
@@ -422,47 +534,30 @@ const PodcastPage = () => {
             </div>
           </div>
           <div className="hosts-grid">
-            <div className="host-card">
-              <div className="card-image">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop" alt="Host" />
+            {hosts.length > 0 ? hosts.map((host) => (
+              <div key={host.id} className="host-card">
+                <div className="card-image">
+                  <img 
+                    src={host.photo_url || '/images/podcast-placeholder.jpg'} 
+                    alt={host.name} 
+                    onError={(e) => {
+                      e.target.src = '/images/podcast-placeholder.jpg';
+                    }}
+                  />
+                </div>
+                <div className="card-content">
+                  <h3>{host.name}</h3>
+                  <p className="host-title">{host.bio || 'Podcast Host'}</p>
+                </div>
               </div>
-              <div className="card-content">
-                <h3>Kingsley George</h3>
-                <p className="host-title">Lead Host</p>
+            )) : (
+              <div className="no-hosts">
+                <p>No hosts available</p>
               </div>
-            </div>
-            <div className="host-card">
-              <div className="card-image">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop" alt="Host" />
-              </div>
-              <div className="card-content">
-                <h3>Sarah Chen</h3>
-                <p className="host-title">Co-Host</p>
-              </div>
-            </div>
-            <div className="host-card">
-              <div className="card-image">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop" alt="Host" />
-              </div>
-              <div className="card-content">
-                <h3>David Okonkwo</h3>
-                <p className="host-title">Guest Host</p>
-              </div>
-            </div>
-            <div className="host-card">
-              <div className="card-image">
-                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop" alt="Host" />
-              </div>
-              <div className="card-content">
-                <h3>Amara Okafor</h3>
-                <p className="host-title">Producer</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
-        
-        {/* From the Best Blog Posts */}
         <div className="blog-posts-section">
           <div className="section-header">
             <div className="header-left">
@@ -527,7 +622,6 @@ const PodcastPage = () => {
           </div>
         </div>
 
-        {/* Featured Guest Section */}
         <div className="featured-guest-section">
           <div className="section-header">
             <div className="header-left">
@@ -538,64 +632,39 @@ const PodcastPage = () => {
             </div>
           </div>
           <div className="featured-guests-grid">
-            <div className="guest-card">
-              <div className="guest-image">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop" alt="Kingsley George" />
-              </div>
-              <div className="guest-info">
-                <h3>Kingsley George</h3>
-                <p className="guest-title">Tech Innovator & CEO</p>
-                <div className="guest-episode">
-                  <span><i className="fas fa-microphone"></i> Featured in: "Fintech Disruptors"</span>
+            {featuredGuests.length > 0 ? featuredGuests.map((guest) => (
+              <div key={guest.id || guest.name} className="guest-card">
+                <div className="guest-image">
+                  <img 
+                    src={guest.image_url || '/images/podcast-placeholder.jpg'} 
+                    alt={guest.name} 
+                    onError={(e) => {
+                      e.target.src = '/images/podcast-placeholder.jpg';
+                    }}
+                  />
+                </div>
+                <div className="guest-info">
+                  <h3>{guest.name}</h3>
+                  <p className="guest-title">{guest.bio || 'Featured Guest'}</p>
+                  <div className="guest-episode">
+                    <span><i className="fas fa-microphone"></i> Featured in {guest.episode_count} episode{guest.episode_count !== 1 ? 's' : ''}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="guest-card">
-              <div className="guest-image">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop" alt="Maria Kim" />
+            )) : (
+              <div className="no-guests">
+                <p>No featured guests available</p>
               </div>
-              <div className="guest-info">
-                <h3>Maria Kim</h3>
-                <p className="guest-title">Entrepreneur & Investor</p>
-                <div className="guest-episode">
-                  <span><i className="fas fa-microphone"></i> Featured in: "From Side Hustle to CEO"</span>
-                </div>
-              </div>
-            </div>
-            <div className="guest-card">
-              <div className="guest-image">
-                <img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=300&h=300&fit=crop" alt="Nia Johnson" />
-              </div>
-              <div className="guest-info">
-                <h3>Nia Johnson</h3>
-                <p className="guest-title">Creative Director</p>
-                <div className="guest-episode">
-                  <span><i className="fas fa-microphone"></i> Featured in: "The Creative Economy Renaissance"</span>
-                </div>
-              </div>
-            </div>
-            <div className="guest-card">
-              <div className="guest-image">
-                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300&h=300&fit=crop" alt="Michael Okonkwo" />
-              </div>
-              <div className="guest-info">
-                <h3>Michael Okonkwo</h3>
-                <p className="guest-title">Climate Activist</p>
-                <div className="guest-episode">
-                  <span><i className="fas fa-microphone"></i> Featured in: "Climate Warriors: Youth Taking Action"</span>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Call for Guest Banner */}
         <div className="call-for-guest-banner">
           <div className="call-for-guest-content">
             <div className="call-for-guest-text">
               <h2>Be Our Next Guest</h2>
               <p>Share your story with thousands of listeners across Africa and beyond. We're looking for innovators, creators, and changemakers who are shaping the future.</p>
-              <button className="call-for-guest-btn">Apply Now <i className="fas fa-arrow-right"></i></button>
+              <button className="call-for-guest-btn" onClick={openApplicationModal}>Apply Now <i className="fas fa-arrow-right"></i></button>
             </div>
             <div className="call-for-guest-icon">
               <i className="fas fa-microphone-alt"></i>
@@ -603,6 +672,7 @@ const PodcastPage = () => {
           </div>
         </div>
       </div>
+      */}
 
       {/* Mini Player */}
       {showMiniPlayer && currentEpisode && (
@@ -612,12 +682,13 @@ const PodcastPage = () => {
             <div className="mini-player-info">
               <h4>{currentEpisode.title}</h4>
               <p>{currentEpisode.guest}</p>
+              {audioError && <span className="audio-error">{audioError}</span>}
             </div>
             <div className="mini-player-controls">
               <button className="control-btn" onClick={prevEpisode}>
                 <i className="fas fa-step-backward"></i>
               </button>
-              <button className="play-pause-btn" onClick={() => playEpisode(currentEpisode)}>
+              <button className="play-pause-btn" onClick={() => playEpisode(currentEpisode)} disabled={!!audioError}>
                 <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
               </button>
               <button className="control-btn" onClick={nextEpisode}>
@@ -637,9 +708,134 @@ const PodcastPage = () => {
               setShowMiniPlayer(false);
               setCurrentEpisode(null);
               setIsPlaying(false);
+              setAudioError(null);
             }}>
               <i className="fas fa-times"></i>
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Guest Application Modal */}
+      {showApplicationModal && (
+        <div className="modal-overlay" onClick={() => setShowApplicationModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Apply to Be a Guest</h2>
+              <button className="modal-close" onClick={() => setShowApplicationModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            
+            {submitSuccess ? (
+              <div className="success-message">
+                <i className="fas fa-check-circle"></i>
+                <h3>Application Submitted!</h3>
+                <p>Thank you for your interest. We'll review your application and get back to you soon.</p>
+              </div>
+            ) : (
+              <form className="application-form" onSubmit={handleApplicationSubmit}>
+                <div className="form-group">
+                  <label htmlFor="name">Full Name *</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={applicationForm.name}
+                    onChange={handleApplicationFormChange}
+                    className={formErrors.name ? 'error' : ''}
+                    placeholder="Enter your full name"
+                  />
+                  {formErrors.name && <span className="error-message">{formErrors.name}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Email Address *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={applicationForm.email}
+                    onChange={handleApplicationFormChange}
+                    className={formErrors.email ? 'error' : ''}
+                    placeholder="Enter your email address"
+                  />
+                  {formErrors.email && <span className="error-message">{formErrors.email}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="phone">Phone Number</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={applicationForm.phone}
+                    onChange={handleApplicationFormChange}
+                    placeholder="Enter your phone number (optional)"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="bio">About You * (min. 50 characters)</label>
+                  <textarea
+                    id="bio"
+                    name="bio"
+                    value={applicationForm.bio}
+                    onChange={handleApplicationFormChange}
+                    className={formErrors.bio ? 'error' : ''}
+                    placeholder="Tell us about yourself, your background, and what makes you unique..."
+                    rows="4"
+                  ></textarea>
+                  {formErrors.bio && <span className="error-message">{formErrors.bio}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="topic">Podcast Topic * (min. 20 characters)</label>
+                  <textarea
+                    id="topic"
+                    name="topic"
+                    value={applicationForm.topic}
+                    onChange={handleApplicationFormChange}
+                    className={formErrors.topic ? 'error' : ''}
+                    placeholder="What topic would you like to discuss on the podcast? What insights can you share?"
+                    rows="3"
+                  ></textarea>
+                  {formErrors.topic && <span className="error-message">{formErrors.topic}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="social_media">Social Media Links</label>
+                  <textarea
+                    id="social_media"
+                    name="social_media"
+                    value={applicationForm.social_media}
+                    onChange={handleApplicationFormChange}
+                    placeholder="Share your LinkedIn, Twitter, Instagram, or other social media profiles (optional)"
+                    rows="2"
+                  ></textarea>
+                </div>
+
+                {formErrors.submit && <div className="submit-error">{formErrors.submit}</div>}
+
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => setShowApplicationModal(false)}
+                    disabled={isSubmitting}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn-primary"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Submit Application'}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}

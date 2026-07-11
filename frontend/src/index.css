@@ -151,6 +151,9 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 body {
@@ -162,6 +165,8 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   position: relative;
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* African pattern background overlay */
@@ -531,14 +536,61 @@ input::placeholder, textarea::placeholder {
   .no-print {
     display: none !important;
   }
-  
+
   body {
     background-color: white;
     color: black;
   }
-  
+
   a[href]::after {
     content: " (" attr(href) ")";
+  }
+}
+
+/* ========== TABLET SPECIFIC - PREVENT HORIZONTAL SCROLL ========== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  html, body {
+    overflow-x: hidden !important;
+    width: 100vw;
+    max-width: 100vw;
+    position: relative;
+  }
+
+  #root, .app {
+    overflow-x: hidden !important;
+    max-width: 100vw;
+    width: 100%;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ========== MOBILE SPECIFIC - PREVENT HORIZONTAL SCROLL ========== */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden !important;
+    width: 100vw;
+    max-width: 100vw;
+    position: relative;
+  }
+
+  #root, .app {
+    overflow-x: hidden !important;
+    max-width: 100vw;
+    width: 100%;
+  }
+
+  img, video, iframe, canvas, svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 

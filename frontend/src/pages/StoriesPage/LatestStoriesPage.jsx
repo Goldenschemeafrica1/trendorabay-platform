@@ -281,7 +281,6 @@ const LatestStoriesPage = () => {
                   <div className="story-content">
                     <div className="story-category">{story.categoryName}</div>
                     <h3 className="story-title">{story.title}</h3>
-                    <p className="story-excerpt">{story.excerpt}</p>
                     <div className="story-meta">
                       <div className="story-author">
                         <img src={story.author.avatar} alt={story.author.name} />

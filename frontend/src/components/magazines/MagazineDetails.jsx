@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addItem } from '../../store/slices/cartSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../../store/hooks/useCart';
 import { toast } from 'react-toastify';
-import { sampleMagazines as magazinesFromGrid } from './MagazineGrid';
 import './MagazineDetails.css';
 
 // Sample magazine data - same as LatestMagazine component
@@ -1674,8 +1672,8 @@ const sampleMagazines = [
     category: 'Fashion & Business',
     subcategory: 'Fashion',
     issue: 'Vol. 2 / April 2028',
-    coverImage: '/fashinandbusiness..jpeg',
-    coverImageLarge: '/fashinandbusiness..jpeg',
+    coverImage: '/fashionandbusiness.jpeg',
+    coverImageLarge: '/fashionandbusiness.jpeg',
     description: 'Trend Forecast · Designer Spotlight · Business of Fashion',
     fullDescription: `Fashion Forward explores the intersection of style and business in the fashion industry.
 
@@ -1717,8 +1715,8 @@ const sampleMagazines = [
     category: 'Fashion & Business',
     subcategory: 'Fashion',
     issue: 'Vol. 3 / May 2028',
-    coverImage: '/fashionandbusiness...jpeg',
-    coverImageLarge: '/fashionandbusiness...jpeg',
+    coverImage: '/fashionandbusiness.jpeg',
+    coverImageLarge: '/fashionandbusiness.jpeg',
     description: 'Fashion Industry · Brand Building · Marketing',
     fullDescription: `Style & Business covers the business side of fashion, from brand building to marketing strategies.
 
@@ -2347,14 +2345,10 @@ const relatedMagazinesData = {
   },
 };
 
-const MagazineDetails = () => {
-  const { id } = useParams();
+const MagazineDetails = ({ magazine }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  
-  const [magazine, setMagazine] = useState(null);
-  const [relatedMagazines, setRelatedMagazines] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart();
+
   const [activeTab, setActiveTab] = useState('description');
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -2362,45 +2356,53 @@ const MagazineDetails = () => {
   const [previewPage, setPreviewPage] = useState(0);
   const [selectedFormat, setSelectedFormat] = useState('digital');
 
-  useEffect(() => {
-    // Simulate API fetch
-    const fetchMagazine = () => {
-      setLoading(true);
-      setTimeout(() => {
-        const foundMagazine = sampleMagazines.find(m => m.id === parseInt(id));
-        setMagazine(foundMagazine || null);
-        
-        if (foundMagazine) {
-          // Fetch related magazines from MagazineGrid
-          const related = magazinesFromGrid.filter(m => 
-            foundMagazine.relatedMagazines.includes(m.id)
-          );
-          setRelatedMagazines(related);
-        }
-        
-        setLoading(false);
-      }, 500);
-    };
+  // Generate preview pages if not available
+  const previewImages = magazine.previewPages && magazine.previewPages.length > 0
+    ? magazine.previewPages.slice(0, 3)
+    : [magazine.coverImage, magazine.coverImage, magazine.coverImage];
 
-    fetchMagazine();
-    
-    // Scroll to top when component mounts
+  // Scroll to top when component mounts
+  useEffect(() => {
     window.scrollTo(0, 0);
-  }, [id]);
+  }, []);
+
+  if (!magazine) {
+    return (
+      <div className="magazine-details-error">
+        <div className="container">
+          <h2>Magazine not found</h2>
+          <Link to="/magazines" className="back-link">← Back to Magazines</Link>
+        </div>
+      </div>
+    );
+  }
 
   const handleAddToCart = () => {
-    const formatPrice = selectedFormat === 'digital' ? magazine.digitalPrice : magazine.printPrice;
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+      toast.error('Please login to add items to cart', {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      navigate('/login');
+      return;
+    }
+
+    const formatPrice = selectedFormat === 'digital'
+      ? (magazine.digitalPrice || magazine.price || 9.99)
+      : (magazine.printPrice || (magazine.price || 9.99) + 4);
     const formatName = selectedFormat === 'digital' ? 'Digital' : 'Print';
-    
-    dispatch(addItem({
+
+    addToCart({
       id: `${magazine.id}-${selectedFormat}`,
       name: `${magazine.title} (${formatName})`,
       price: formatPrice,
       type: 'magazine',
       format: selectedFormat,
       image: magazine.coverImage,
-      quantity: quantity,
-    }));
+    }, quantity);
+    
     toast.success(`${magazine.title} (${formatName}) added to cart!`, {
       position: "bottom-right",
       autoClose: 3000,
@@ -2413,14 +2415,25 @@ const MagazineDetails = () => {
   };
 
   const handleSubscribe = () => {
-    dispatch(addItem({
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+      toast.error('Please login to subscribe', {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      navigate('/login');
+      return;
+    }
+
+    addToCart({
       id: magazine.id,
       name: `${magazine.title} - Yearly Subscription`,
-      price: magazine.subscriptionPrice,
+      price: magazine.subscriptionPrice || (magazine.price || 9.99) * 12,
       type: 'subscription',
       image: magazine.coverImage,
-      quantity: 1,
-    }));
+    }, 1);
+    
     toast.success(`Subscription to ${magazine.title} added to cart!`);
     navigate('/cart');
   };
@@ -2458,15 +2471,6 @@ const MagazineDetails = () => {
     toast.info('Preview download started...');
   };
 
-  if (loading) {
-    return (
-      <div className="magazine-details-loading">
-        <div className="loader"></div>
-        <p>Loading magazine details...</p>
-      </div>
-    );
-  }
-
   if (!magazine) {
     return (
       <div className="magazine-not-found">
@@ -2487,29 +2491,28 @@ const MagazineDetails = () => {
         {/* Main Content */}
         <div className="magazine-details-main">
           {/* Left Column - Images */}
-          <div className="magazine-gallery">
-            <div className="main-image">
-              <img 
-                src={magazine.coverImageLarge || magazine.coverImage} 
-                alt={magazine.title}
-              />
-              {magazine.isNew && <span className="main-badge new">New Issue</span>}
-              {magazine.editorPick && <span className="main-badge editor">Editor's Pick</span>}
-              
-              {/* Preview Button */}
-              <button 
-                className="preview-btn"
-                onClick={() => setShowPreview(true)}
-              >
-                <i className="fas fa-eye"></i> Preview Issue
-              </button>
-            </div>
+          <div className="magazine-gallery-section">
+            <img
+              src={magazine.coverImageLarge || magazine.coverImage}
+              alt={magazine.title}
+              className="magazine-cover-image"
+            />
+            {magazine.isNew && <span className="main-badge new">New Issue</span>}
+            {magazine.editorPick && <span className="main-badge editor">Editor's Pick</span>}
+
+            {/* Preview Button */}
+            <button
+              className="preview-btn"
+              onClick={() => setShowPreview(true)}
+            >
+              <i className="fas fa-eye"></i> Preview Issue
+            </button>
 
             {/* Thumbnail Gallery */}
             {magazine.previewPages && magazine.previewPages.length > 0 && (
               <div className="thumbnail-gallery">
                 {magazine.previewPages.map((img, index) => (
-                  <div 
+                  <div
                     key={index}
                     className={`thumbnail ${selectedImage === index ? 'active' : ''}`}
                     onClick={() => setSelectedImage(index)}
@@ -2528,9 +2531,9 @@ const MagazineDetails = () => {
               <span className="info-category">{magazine.category}</span>
               <h1 className="info-title">{magazine.title}</h1>
               <div className="info-meta">
-                <span><i className="fas fa-calendar"></i> {new Date(magazine.publishDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
-                <span><i className="fas fa-book-open"></i> {magazine.pages} pages</span>
-                <span><i className="fas fa-globe"></i> {magazine.language}</span>
+                <span><i className="fas fa-calendar"></i> {magazine.publishDate ? new Date(magazine.publishDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'N/A'}</span>
+                <span><i className="fas fa-book-open"></i> {magazine.pages || 'N/A'} pages</span>
+                <span><i className="fas fa-globe"></i> {magazine.language || 'English'}</span>
               </div>
             </div>
 
@@ -2538,23 +2541,23 @@ const MagazineDetails = () => {
             <div className="info-rating">
               <div className="stars">
                 {[...Array(5)].map((_, i) => (
-                  <i 
-                    key={i} 
-                    className={`fas fa-star ${i < Math.floor(magazine.rating) ? 'filled' : i < magazine.rating ? 'half' : ''}`}
+                  <i
+                    key={i}
+                    className={`fas fa-star ${i < Math.floor(magazine.rating || 0) ? 'filled' : i < (magazine.rating || 0) ? 'half' : ''}`}
                   ></i>
                 ))}
               </div>
-              <span className="rating-value">{magazine.rating}</span>
-              <span className="review-count">({magazine.reviewCount} reviews)</span>
+              <span className="rating-value">{magazine.rating || 0}</span>
+              <span className="review-count">({magazine.reviewCount || 0} reviews)</span>
             </div>
 
             {/* Issue and ISSN */}
             <div className="info-identifiers">
               <span className="identifier">
-                <strong>Issue:</strong> {magazine.issue}
+                <strong>Issue:</strong> {magazine.issue || 'N/A'}
               </span>
               <span className="identifier">
-                <strong>Publisher:</strong> {magazine.publisher}
+                <strong>Publisher:</strong> {magazine.publisher || 'N/A'}
               </span>
             </div>
 
@@ -2569,17 +2572,17 @@ const MagazineDetails = () => {
                   <div className="format-info">
                     <h4>Digital</h4>
                     <p>Instant download, access on all devices</p>
-                    <div className="format-price">${magazine.digitalPrice}</div>
+                    <div className="format-price">${magazine.digitalPrice || magazine.price || 9.99}</div>
                   </div>
                 </div>
-                <div 
+                <div
                   className={`format-option ${selectedFormat === 'print' ? 'active' : ''}`}
                   onClick={() => setSelectedFormat('print')}
                 >
                   <div className="format-info">
                     <h4>Print</h4>
                     <p>Physical copy delivered to your door</p>
-                    <div className="format-price">${magazine.printPrice}</div>
+                    <div className="format-price">${magazine.printPrice || (magazine.price || 9.99) + 4}</div>
                   </div>
                 </div>
               </div>
@@ -2619,8 +2622,8 @@ const MagazineDetails = () => {
                 <i className="fas fa-bolt"></i>
                 Buy Now
               </button>
-              <button className="subscribe-btn" onClick={handleSubscribe}>
-                <i className="fas fa-calendar-alt"></i>
+              <button className="buy-now-btn" onClick={handleSubscribe}>
+                <i className="fas fa-bell"></i>
                 Subscribe
               </button>
             </div>
@@ -2634,7 +2637,7 @@ const MagazineDetails = () => {
                 <button onClick={() => handleShare('linkedin')}><i className="fab fa-linkedin"></i></button>
                 <button onClick={() => handleShare('whatsapp')}><i className="fab fa-whatsapp"></i></button>
               </div>
-              <button className="print-btn" onClick={handlePrint}>
+              <button className="print-btn" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
                 <i className="fas fa-print"></i> Print
               </button>
             </div>
@@ -2684,7 +2687,7 @@ const MagazineDetails = () => {
             {activeTab === 'description' && (
               <div className="description-tab">
                 <div className="full-description">
-                  {(magazine.fullDescription || '').split('\n\n').map((paragraph, idx) => (
+                  {(magazine.description || '').split('\n\n').map((paragraph, idx) => (
                     <p key={idx}>{paragraph}</p>
                   ))}
                 </div>
@@ -2708,12 +2711,16 @@ const MagazineDetails = () => {
               <div className="contents-tab">
                 <h3>Table of Contents</h3>
                 <div className="toc-list">
-                  {magazine.tableOfContents.map((item, idx) => (
-                    <div key={idx} className="toc-item">
-                      <span className="toc-title">{item.title}</span>
-                      <span className="toc-page">p. {item.page}</span>
-                    </div>
-                  ))}
+                  {Array.isArray(magazine.tableOfContents) && magazine.tableOfContents.length > 0 ? (
+                    magazine.tableOfContents.map((item, idx) => (
+                      <div key={idx} className="toc-item">
+                        <span className="toc-title">{item.title}</span>
+                        <span className="toc-page">p. {item.page}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No table of contents available</p>
+                  )}
                 </div>
               </div>
             )}
@@ -2723,15 +2730,19 @@ const MagazineDetails = () => {
               <div className="contributors-tab">
                 <h3>Contributors</h3>
                 <div className="contributors-grid">
-                  {magazine.contributors.map((contributor, idx) => (
-                    <div key={idx} className="contributor-card">
-                      <img src={contributor.avatar} alt={contributor.name} />
-                      <div className="contributor-info">
-                        <h4>{contributor.name}</h4>
-                        <p>{contributor.role}</p>
+                  {Array.isArray(magazine.contributors) && magazine.contributors.length > 0 ? (
+                    magazine.contributors.map((contributor, idx) => (
+                      <div key={idx} className="contributor-card">
+                        <img src={contributor.avatar} alt={contributor.name} />
+                        <div className="contributor-info">
+                          <h4>{contributor.name}</h4>
+                          <p>{contributor.role}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p>No contributors listed</p>
+                  )}
                 </div>
               </div>
             )}
@@ -2755,7 +2766,7 @@ const MagazineDetails = () => {
                 </div>
 
                 <div className="reviews-list">
-                  {magazine.reviews.map(review => (
+                  {magazine.reviews?.map(review => (
                     <div key={review.id} className="review-item">
                       <img src={review.avatar} alt={review.user} />
                       <div className="review-content">
@@ -2777,24 +2788,6 @@ const MagazineDetails = () => {
             )}
           </div>
         </div>
-
-        {/* Related Magazines */}
-        {relatedMagazines.length > 0 && (
-          <div className="related-magazines">
-            <h2>You Might Also Like</h2>
-            <div className="related-grid">
-              {relatedMagazines.map(related => (
-                <Link to={`/magazines/${related.id}`} key={related.id} className="related-card">
-                  <img src={related.coverImage} alt={related.title} />
-                  <div className="related-info">
-                    <span className="related-category">{related.category}</span>
-                    <h3>{related.title}</h3>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Preview Modal */}
@@ -2809,28 +2802,13 @@ const MagazineDetails = () => {
             </div>
             
             <div className="preview-body">
-              <div className="preview-navigation">
-                <button 
-                  className="preview-nav-btn"
-                  onClick={() => setPreviewPage(Math.max(0, previewPage - 1))}
-                  disabled={previewPage === 0}
-                >
-                  <i className="fas fa-chevron-left"></i>
-                </button>
-                <div className="preview-page">
-                  <img 
-                    src={magazine.previewPages[previewPage] || magazine.coverImage} 
-                    alt={`Preview page ${previewPage + 1}`}
-                  />
-                  <span className="page-number">Page {previewPage + 1} of {magazine.previewPages.length}</span>
-                </div>
-                <button 
-                  className="preview-nav-btn"
-                  onClick={() => setPreviewPage(Math.min(magazine.previewPages.length - 1, previewPage + 1))}
-                  disabled={previewPage === magazine.previewPages.length - 1}
-                >
-                  <i className="fas fa-chevron-right"></i>
-                </button>
+              <div className="preview-grid">
+                {previewImages.map((page, index) => (
+                  <div key={index} className="preview-grid-item">
+                    <img src={page} alt={`Preview page ${index + 1}`} />
+                    <span className="preview-page-label">Page {index + 1}</span>
+                  </div>
+                ))}
               </div>
             </div>
 

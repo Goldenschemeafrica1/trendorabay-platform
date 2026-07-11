@@ -9,12 +9,12 @@ const CartDrawer = () => {
   const { cartItems, removeFromCart, updateItemQuantity, subtotal, calculateTotal, closeCartDrawer, isOpen } = useCart();
 
   const handleRemove = (item) => {
-    removeFromCart(item.id, item.size, item.color);
+    removeFromCart(item.id, item.size, item.color, item.format);
   };
 
   const handleQuantityChange = (item, newQuantity) => {
     if (newQuantity > 0) {
-      updateItemQuantity(item.id, item.size, item.color, newQuantity);
+      updateItemQuantity(item.id, item.size, item.color, item.format, newQuantity);
     }
   };
 
@@ -57,7 +57,7 @@ const CartDrawer = () => {
                     <div className="cart-item-details">
                       <h4 className="cart-item-name">{item.name}</h4>
                       {item.size && <p className="cart-item-size">Size: {item.size}</p>}
-                      <p className="cart-item-price">${(item.price || 0).toFixed(2)}</p>
+                      <p className="cart-item-price">${(parseFloat(item.price) || 0).toFixed(2)}</p>
                       <div className="cart-item-quantity">
                         <button 
                           className="quantity-btn"
@@ -85,11 +85,11 @@ const CartDrawer = () => {
               <div className="cart-summary">
                 <div className="cart-subtotal">
                   <span>Subtotal:</span>
-                  <span className="subtotal-amount">${(subtotal || 0).toFixed(2)}</span>
+                  <span className="subtotal-amount">${(parseFloat(subtotal) || 0).toFixed(2)}</span>
                 </div>
                 <div className="cart-total">
                   <span>Total:</span>
-                  <span className="total-amount">${(calculateTotal() || 0).toFixed(2)}</span>
+                  <span className="total-amount">${(parseFloat(calculateTotal()) || 0).toFixed(2)}</span>
                 </div>
                 <div className="cart-actions">
                   <Button onClick={handleClose} variant="outline" fullWidth>

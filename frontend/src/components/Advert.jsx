@@ -1,5 +1,6 @@
 // components/Advert.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import advertisementService from '../services/advertisementService';
 import './Advert.css';
 
 const Advert = ({ 
@@ -9,13 +10,54 @@ const Advert = ({
   badge = "Ad",
   badgeColor = '#01ace0', 
   variant = 'default',
-  sponsored = true
+  sponsored = true,
+  position = 'banner'
 }) => {
+  const [adData, setAdData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAdvertisement = async () => {
+      try {
+        const response = await advertisementService.getAdvertisements({ 
+          status: 'active'
+        });
+        if (response.success && response.data && response.data.length > 0) {
+          setAdData(response.data[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching advertisement:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdvertisement();
+  }, []);
+
+  if (loading) {
+    return null;
+  }
+
+  const displayTitle = adData?.title || title;
+  const displayImageUrl = (adData?.image_url && adData.image_url.trim() !== '') ? adData.image_url : (adData?.mobile_image_url && adData.mobile_image_url.trim() !== '') ? adData.mobile_image_url : imageUrl;
+  const displayLinkUrl = adData?.link_url || adData?.destination_url || '#';
+
   return (
-    <div className="advert">
-      {sponsored && <span className="advert__sponsored-tag">Ad</span>}
-      <img src={imageUrl} alt="Advertisement" className="advert__image" />
-    </div>
+    <a 
+      href={displayLinkUrl} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="advert-link"
+      style={{ width: '100%', height: '120px', display: 'block', margin: '20px auto' }}
+    >
+      <img 
+        src={displayImageUrl} 
+        alt={displayTitle} 
+        className="advert__image"
+        style={{ width: '100%', height: '120px', objectFit: 'cover', objectPosition: 'center' }}
+      />
+    </a>
   );
 };
 

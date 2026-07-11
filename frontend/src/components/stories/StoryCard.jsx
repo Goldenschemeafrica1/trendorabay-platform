@@ -41,11 +41,11 @@ const StoryCard = ({
       
       <div className="story-content">
         <h3 className="story-title">
-          <a href={`/stories/${story.slug || story.id}`}>{story.title}</a>
+          <a href={`/stories/${story.id}`}>{story.title}</a>
         </h3>
         
         <p className="story-excerpt">
-          {story.excerpt || story.description}
+          {story.description}
         </p>
         
         {story.tags && story.tags.length > 0 && (

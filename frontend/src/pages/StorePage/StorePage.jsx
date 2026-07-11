@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../../store/hooks/useCart';
+import merchService from '../../services/merchService';
 import './StorePage.css';
 
 const StorePage = () => {
@@ -341,15 +342,54 @@ const StorePage = () => {
 
   // Load products
   useEffect(() => {
-    setTimeout(() => {
-      setProducts(productsData);
-      setFilteredProducts(productsData);
-      setLoading(false);
-    }, 500);
+    const fetchProducts = async () => {
+      try {
+        const response = await merchService.getProducts();
+        let products = [];
+        
+        if (Array.isArray(response)) {
+          products = response;
+        } else if (response && Array.isArray(response.data)) {
+          products = response.data;
+        }
+        
+        // Transform data to match frontend expectations
+        const transformed = products.map(product => ({
+          ...product,
+          image: product.image_url || product.image || '/images/product-placeholder.jpg',
+          hoverImage: product.hover_image_url || product.hoverImage || product.image_url || product.image || '/images/product-placeholder.jpg',
+          originalPrice: product.original_price || product.originalPrice || null,
+          inStock: product.in_stock !== undefined ? product.in_stock : (product.stock !== undefined ? product.stock > 0 : (product.inStock !== undefined ? product.inStock : true)),
+          badge: product.badge || null,
+          badgeColor: product.badge_color || product.badgeColor || null,
+          featured: product.featured ? 1 : 0,
+          new: product.new_product || product.new || false,
+          sale: product.on_sale || product.sale || false,
+          rating: product.rating || 4.5,
+          reviews: product.reviews || 0
+        }));
+        
+        setProducts(transformed);
+        setFilteredProducts(transformed);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setProducts([]);
+        setFilteredProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProducts();
   }, []);
 
   // Filter and sort products
   useEffect(() => {
+    if (!Array.isArray(products)) {
+      setFilteredProducts([]);
+      return;
+    }
+    
     let filtered = [...products];
 
     // Category filter
@@ -435,7 +475,8 @@ const StorePage = () => {
 
   // Format price
   const formatPrice = (price) => {
-    return `$${price.toFixed(2)}`;
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return `$${numPrice.toFixed(2)}`;
   };
 
   // Render stars for rating
@@ -471,7 +512,7 @@ const StorePage = () => {
             <h1>Trendorabay Hoodie Collection</h1>
             <p>Premium 100% cotton hoodies featuring the Trendorabay logo and African-inspired patterns. Perfect for casual wear and making a statement.</p>
             <button className="shop-now-btn" onClick={() => {
-              const hoodie = productsData.find(p => p.id === 2);
+              const hoodie = products.find(p => p.id === 2);
               if (hoodie) handleAddToCart(hoodie);
             }}>
               Shop Now <i className="fas fa-arrow-right"></i>
@@ -494,18 +535,24 @@ const StorePage = () => {
         </div>
       </div>
 
-      {/* Best Selling Section */}
-      <div className="best-selling-section">
-        <div className="best-selling-header">
-          <h2>Best Selling</h2>
-          <p>Our most popular products loved by customers</p>
+      {/* Our Collection Section */}
+      <div className="our-collection-section">
+        <div className="our-collection-header">
+          <h2>Our Collection</h2>
+          <p>Explore our full range of products</p>
         </div>
-        <div className="best-selling-grid">
-          {productsData.filter(p => p.category === 'apparel').slice(0, 4).map(product => (
+        <div className="our-collection-grid">
+          {filteredProducts.slice(0, 8).map(product => (
             <div key={product.id} className="best-selling-card">
               <div className="best-selling-image-section">
                 <img src={product.image} alt={product.name} />
-                <span className="new-arrival-badge">New Arrival</span>
+                {product.badge ? (
+                  <span className="new-arrival-badge" style={{ background: product.badgeColor || 'linear-gradient(135deg, #10B981 0%, #059669 100%)' }}>
+                    {product.badge}
+                  </span>
+                ) : (
+                  <span className="new-arrival-badge">New Arrival</span>
+                )}
               </div>
               <div className="best-selling-content-section">
                 <h3>{product.name}</h3>
@@ -532,24 +579,18 @@ const StorePage = () => {
         </div>
       </div>
 
-      {/* Our Collection Section */}
-      <div className="our-collection-section">
-        <div className="our-collection-header">
-          <h2>Our Collection</h2>
-          <p>Explore our full range of products</p>
+      {/* Best Selling Section */}
+      <div className="best-selling-section">
+        <div className="best-selling-header">
+          <h2>Best Selling</h2>
+          <p>Our most popular products loved by customers</p>
         </div>
-        <div className="our-collection-grid">
-          {productsData.slice(0, 8).map(product => (
+        <div className="best-selling-grid">
+          {filteredProducts.filter(p => p.category === 'apparel').slice(0, 4).map(product => (
             <div key={product.id} className="best-selling-card">
               <div className="best-selling-image-section">
                 <img src={product.image} alt={product.name} />
-                {product.badge ? (
-                  <span className="new-arrival-badge" style={{ background: product.badgeColor || 'linear-gradient(135deg, #10B981 0%, #059669 100%)' }}>
-                    {product.badge}
-                  </span>
-                ) : (
-                  <span className="new-arrival-badge">New Arrival</span>
-                )}
+                <span className="new-arrival-badge">New Arrival</span>
               </div>
               <div className="best-selling-content-section">
                 <h3>{product.name}</h3>

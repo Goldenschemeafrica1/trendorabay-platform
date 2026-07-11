@@ -28,12 +28,12 @@ export const useCart = () => {
     dispatch(addItem({ item, quantity }));
   };
 
-  const removeFromCart = (itemId, size = '', color = '') => {
-    dispatch(removeItem({ itemId, size, color }));
+  const removeFromCart = (itemId, size = '', color = '', format = '') => {
+    dispatch(removeItem({ itemId, size, color, format }));
   };
 
-  const updateItemQuantity = (itemId, size = '', color = '', quantity) => {
-    dispatch(updateQuantity({ itemId, size, color, quantity }));
+  const updateItemQuantity = (itemId, size = '', color = '', format = '', quantity) => {
+    dispatch(updateQuantity({ itemId, size, color, format, quantity }));
   };
 
   const clearAllItems = () => {

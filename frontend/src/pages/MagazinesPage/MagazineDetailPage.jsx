@@ -1,25 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import MagazineDetails from '../../components/magazines/MagazineDetails';
+import magazineService from '../../services/magazineService';
 
-const MagazineDetailPage = ({ magazineId }) => {
-  // Mock data - replace with actual API call
-  const magazine = {
-    id: magazineId,
-    title: "African Fashion Today",
-    category: "Fashion",
-    price: 12.99,
-    coverImage: "/images/magazine-covers/fashion-today.jpg",
-    description: "Explore the vibrant world of African fashion",
-    fullDescription: "A comprehensive look at contemporary African fashion, featuring emerging designers, traditional textiles, and the global influence of African style.",
-    content: "This issue delves deep into the heart of African fashion, showcasing how traditional patterns and modern design come together to create something truly unique...",
-    specifications: [
-      { label: "Pages", value: "120" },
-      { label: "Language", value: "English" },
-      { label: "Format", value: "Digital & Print" },
-      { label: "Publisher", value: "Trendorabay Media" }
-    ]
-  };
+const MagazineDetailPage = () => {
+  const { id } = useParams();
+  const [magazine, setMagazine] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const fetchMagazine = async () => {
+      try {
+        setLoading(true);
+        const data = await magazineService.getMagazineById(id);
+        setMagazine(data);
+      } catch (err) {
+        console.error('Error fetching magazine:', err);
+        setError('Failed to load magazine details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchMagazine();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    document.body.classList.add('magazine-detail-page-body');
+    return () => {
+      document.body.classList.remove('magazine-detail-page-body');
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="magazine-detail-page">
+        <div className="container">
+          <div className="loading">Loading magazine details...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !magazine) {
+    return (
+      <div className="magazine-detail-page">
+        <div className="container">
+          <div className="error">{error || 'Magazine not found'}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="magazine-detail-page">

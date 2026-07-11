@@ -15,6 +15,11 @@ const cartSlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       const { item, quantity = 1 } = action.payload;
+      if (!item || !item.id) {
+        console.error('Invalid item added to cart:', action.payload);
+        return;
+      }
+
       const existingItem = state.items.find(cartItem =>
         cartItem.id === item.id &&
         cartItem.size === item.size &&
@@ -31,21 +36,32 @@ const cartSlice = createSlice({
     },
 
     removeItem: (state, action) => {
-      const { itemId, size, color } = action.payload;
-      state.items = state.items.filter(item => 
-        !(item.id === itemId && item.size === size && item.color === color)
-      );
+      const { itemId, size, color, format } = action.payload;
+      console.log('removeItem called with:', { itemId, size, color, format });
+      console.log('Current cart items:', state.items);
+      state.items = state.items.filter(item => {
+        const match = item.id === itemId && 
+                      (item.size === size || (!item.size && !size)) && 
+                      (item.color === color || (!item.color && !color)) && 
+                      (item.format === format || (!item.format && !format));
+        console.log('Item match check:', item.id, match);
+        return !match;
+      });
+      console.log('Items after removal:', state.items);
       cartSlice.caseReducers.calculateTotals(state);
     },
 
     updateQuantity: (state, action) => {
-      const { itemId, size, color, quantity } = action.payload;
+      const { itemId, size, color, format, quantity } = action.payload;
+      console.log('updateQuantity called with:', { itemId, size, color, format, quantity });
       const item = state.items.find(cartItem => 
         cartItem.id === itemId && 
-        cartItem.size === size && 
-        cartItem.color === color
+        (cartItem.size === size || (!cartItem.size && !size)) && 
+        (cartItem.color === color || (!cartItem.color && !color)) &&
+        (cartItem.format === format || (!cartItem.format && !format))
       );
 
+      console.log('Found item:', item);
       if (item) {
         item.quantity = Math.max(1, quantity);
         cartSlice.caseReducers.calculateTotals(state);

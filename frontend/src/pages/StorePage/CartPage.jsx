@@ -244,7 +244,7 @@ const CartPage = ({ onCheckoutComplete }) => {
     if (onCheckoutComplete) {
       onCheckoutComplete(orderData);
     } else {
-      alert(`Order placed successfully!\nOrder #: ${orderData.orderNumber}\nTotal: $${total.toFixed(2)}\n\nThank you for shopping with Trendorabay!`);
+      alert(`Order placed successfully!\nOrder #: ${orderData.orderNumber}\nTotal: $${(parseFloat(total) || 0).toFixed(2)}\n\nThank you for shopping with Trendorabay!`);
       // Clear cart
       clearAllItems();
       navigate('/checkout/success');
@@ -287,7 +287,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                         <div className="cart-item-details">
                           <h3 className="cart-item-name">{item.name}</h3>
                           {item.size && <span className="cart-item-size">Size: {item.size}</span>}
-                          <div className="cart-item-price">${item.price.toFixed(2)}</div>
+                          <div className="cart-item-price">${(parseFloat(item.price) || 0).toFixed(2)}</div>
                           <div className="cart-item-actions">
                             <div className="quantity-selector">
                               <button
@@ -313,7 +313,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                           </div>
                         </div>
                         <div className="cart-item-total">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          ${((parseFloat(item.price) || 0) * item.quantity).toFixed(2)}
                         </div>
                       </div>
                     ))}
@@ -332,7 +332,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                         <div className="saved-item-info">
                           <h4>{item.name}</h4>
                           {item.size && <span>Size: {item.size}</span>}
-                          <p>${item.price.toFixed(2)}</p>
+                          <p>${(parseFloat(item.price) || 0).toFixed(2)}</p>
                           <div className="saved-item-actions">
                             <button 
                               className="move-to-cart-btn"
@@ -366,7 +366,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                       </div>
                       <div className="best-selling-content-section">
                         <h3>{product.name}</h3>
-                        <p className="best-selling-price">${product.price.toFixed(2)}</p>
+                        <p className="best-selling-price">${(parseFloat(product.price) || 0).toFixed(2)}</p>
                         <div className="best-selling-actions">
                           <button 
                             className="add-to-cart-btn"
@@ -392,7 +392,7 @@ const CartPage = ({ onCheckoutComplete }) => {
             <div className="summary-details">
               <div className="summary-row">
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>${(parseFloat(subtotal) || 0).toFixed(2)}</span>
               </div>
               
               <div className="summary-row">
@@ -449,7 +449,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                   </div>
                 ) : (
                   <div className="promo-applied">
-                    <span>{discount.name}: -${discountAmount.toFixed(2)}</span>
+                    <span>{discount.name}: -${(parseFloat(discountAmount) || 0).toFixed(2)}</span>
                     <button onClick={removePromoCode} className="remove-promo-btn">
                       Remove
                     </button>
@@ -461,7 +461,7 @@ const CartPage = ({ onCheckoutComplete }) => {
               {discountAmount > 0 && (
                 <div className="summary-row discount-row">
                   <span>Discount</span>
-                  <span>-${discountAmount.toFixed(2)}</span>
+                  <span>-${(parseFloat(discountAmount) || 0).toFixed(2)}</span>
                 </div>
               )}
               
@@ -469,7 +469,7 @@ const CartPage = ({ onCheckoutComplete }) => {
               
               <div className="summary-row total-row">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>${(parseFloat(total) || 0).toFixed(2)}</span>
               </div>
               
               <div className="checkout-note">
@@ -480,7 +480,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                 <span>Free shipping on orders over $100</span>
               </div>
               
-              <button className="checkout-button" onClick={handleCheckout}>
+              <button className="checkout-button" disabled>
                 Proceed to Checkout
               </button>
               

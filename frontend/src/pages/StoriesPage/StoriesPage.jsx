@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import storyService from '../../services/storyService';
 import './StoriesPage.css';
 
 const StoriesPage = () => {
@@ -38,161 +39,28 @@ const StoriesPage = () => {
     { id: 'art', name: 'Art & Photography', icon: '🎨' },
   ];
 
-  // Mock data - replace with API call
+  // Fetch stories from API
   useEffect(() => {
     const fetchStories = async () => {
       setLoading(true);
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Mock stories data
-        const mockStories = [
-          {
-            id: 1,
-            title: "Sustainable Living: Traditional Wellness Practices Making a Comeback",
-            excerpt: "From shea butter to herbal remedies, how ancient African wellness traditions are being rediscovered by a new generation.",
-            author: {
-              name: "Fatoumata Diallo",
-              avatar: "https://i.pravatar.cc/150?u=5",
-              bio: "Wellness writer, Dakar"
-            },
-            category: "lifestyle",
-            categoryName: "Lifestyle & Wellness",
-            readTime: 7,
-            publishedDate: "2024-01-20",
-            imageUrl: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format",
-            featured: false
-          },
-          {
-            id: 2,
-            title: "The Property Boom: Investing in African Real Estate",
-            excerpt: "With rapid urbanization, African real estate is attracting global investors. Here's what you need to know.",
-            author: {
-              name: "James Omondi",
-              avatar: "https://i.pravatar.cc/150?u=6",
-              bio: "Real estate analyst, Nairobi"
-            },
-            category: "real-estate",
-            categoryName: "Real Estate & Property",
-            readTime: 10,
-            publishedDate: "2024-01-15",
-            imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format",
-            featured: false
-          },
-          {
-            id: 3,
-            title: "From Cape Town to Cairo: The Best Coffee Shops for Remote Work",
-            excerpt: "Digital nomad shares his favorite spots across the continent with great coffee and reliable WiFi.",
-            author: {
-              name: "Thabo Ndlovu",
-              avatar: "https://i.pravatar.cc/150?u=7",
-              bio: "Digital nomad, Johannesburg"
-            },
-            category: "lifestyle",
-            categoryName: "Lifestyle & Wellness",
-            readTime: 6,
-            publishedDate: "2024-01-08",
-            imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format",
-            featured: false
-          },
-          {
-            id: 4,
-            title: "Interview: How This Founder Built a Fintech Empire",
-            excerpt: "Exclusive interview with the CEO of one of Africa's fastest-growing fintech companies.",
-            author: {
-              name: "Sarah Kimani",
-              avatar: "https://i.pravatar.cc/150?u=8",
-              bio: "Business journalist"
-            },
-            category: "interviews",
-            categoryName: "Interviews & Features",
-            readTime: 15,
-            publishedDate: "2024-01-02",
-            imageUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&auto=format",
-            featured: false
-          },
-          {
-            id: 5,
-            title: "African Startups: The Next Big Tech Revolution",
-            excerpt: "How African entrepreneurs are building innovative solutions for local challenges.",
-            author: {
-              name: "Chinedu Okafor",
-              avatar: "https://i.pravatar.cc/150?u=9",
-              bio: "Tech correspondent, Lagos"
-            },
-            category: "business",
-            categoryName: "Business & Entrepreneurship",
-            readTime: 8,
-            publishedDate: "2024-01-18",
-            imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&auto=format",
-            featured: false
-          },
-          {
-            id: 6,
-            title: "Afrobeats Goes Global: The Rise of African Music",
-            excerpt: "From Lagos to the world, how African music is conquering international charts.",
-            author: {
-              name: "Amani Johnson",
-              avatar: "https://i.pravatar.cc/150?u=10",
-              bio: "Music critic, Accra"
-            },
-            category: "music",
-            categoryName: "Music & Entertainment",
-            readTime: 9,
-            publishedDate: "2024-01-12",
-            imageUrl: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format",
-            featured: false
-          },
-          {
-            id: 7,
-            title: "Tech Innovation: Mobile Banking in Africa",
-            excerpt: "How mobile technology is revolutionizing financial access across the continent.",
-            author: {
-              name: "David Mensah",
-              avatar: "https://i.pravatar.cc/150?u=11",
-              bio: "Tech analyst, Nairobi"
-            },
-            category: "tech",
-            categoryName: "Tech & Innovation",
-            readTime: 11,
-            publishedDate: "2024-01-10",
-            imageUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&auto=format",
-            featured: false
-          },
-          {
-            id: 8,
-            title: "Urban Culture: Street Art in African Cities",
-            excerpt: "Exploring the vibrant street art scene transforming African urban landscapes.",
-            author: {
-              name: "Zara Hassan",
-              avatar: "https://i.pravatar.cc/150?u=12",
-              bio: "Cultural writer, Casablanca"
-            },
-            category: "urban-culture",
-            categoryName: "Urban Culture & Trends",
-            readTime: 7,
-            publishedDate: "2024-01-14",
-            imageUrl: "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=800&auto=format",
-            featured: false
-          }
-        ];
-
-        const all = selectedCategory === 'all' 
-          ? mockStories 
-          : mockStories.filter(story => story.category === selectedCategory);
-
-        setStories(all);
-        setTotalPages(Math.ceil(all.length / 6));
+        const response = await storyService.getStories({
+          category: selectedCategory !== 'all' ? selectedCategory : undefined,
+          page: currentPage,
+          limit: 12
+        });
+        setStories(response.data || []);
+        setTotalPages(response.totalPages || 1);
       } catch (error) {
         console.error('Error fetching stories:', error);
+        setStories([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchStories();
-  }, [selectedCategory]);
+  }, [selectedCategory, currentPage]);
 
   // Handle category change
   const handleCategoryChange = (categoryId) => {
@@ -203,44 +71,10 @@ const StoriesPage = () => {
   // Get current stories for pagination
   const indexOfLastStory = currentPage * 6;
   const indexOfFirstStory = indexOfLastStory - 6;
-  const currentStories = stories.slice(indexOfFirstStory, indexOfLastStory);
+  const currentStories = Array.isArray(stories) ? stories.slice(indexOfFirstStory, indexOfLastStory) : [];
 
   return (
     <div className="stories-page">
-
-      {/* Category Filter */}
-      <section className="category-filter">
-        <div className="container">
-          {/* Desktop: Button layout */}
-          <div className="category-buttons">
-            {categories.map(category => (
-              <button
-                key={category.id}
-                onClick={() => handleCategoryChange(category.id)}
-                className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
-              >
-                <span className="category-name">{category.name}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Mobile: Dropdown */}
-          <div className="category-dropdown">
-            <select
-              value={selectedCategory}
-              onChange={(e) => handleCategoryChange(e.target.value)}
-              className="category-select"
-            >
-              {categories.map(category => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </section>
-      
       {/* All Stories Section */}
       <section className="all-stories">
         <div className="container">
@@ -259,23 +93,30 @@ const StoriesPage = () => {
                 <>
                   <div className="stories-grid">
                     {currentStories.map(story => (
-                      <div key={story.id} className="story-card">
+                      <Link key={story.id} to={`/stories/${story.id}`} className="story-card">
                         <div className="story-image">
-                          <img src={story.imageUrl} alt={story.title} />
-                          {story.featured && <span className="featured-badge">Featured</span>}
+                          <img
+                            src={story.imageUrl || '/music.jpeg'}
+                            alt={story.title}
+                            onError={(e) => {
+                              e.target.src = '/music.jpeg';
+                            }}
+                          />
                         </div>
                         <div className="story-content">
-                          <div className="story-category">{story.categoryName}</div>
-                          <h3 className="story-title">{story.title}</h3>
+                          <span style={{ fontSize: '9px', fontWeight: '600', color: '#b87c4b', backgroundColor: 'transparent', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0', padding: '4px 8px', borderRadius: '8px', display: 'inline-block', maxWidth: 'fit-content', whiteSpace: 'nowrap' }}>{story.categoryName}</span>
+                          <h3 className="story-title" style={{ '--text-3xl': '10px', marginTop: '8px' }}>{story.title}</h3>
                           <div className="story-meta">
                             <div className="story-author">
-                              <img src={story.author.avatar} alt={story.author.name} />
-                              <span>{story.author.name}</span>
-                              <span className="story-published-date">{formatPublishedDate(story.publishedDate)}</span>
+                              <Link to={`/author/${story.author?.id}`} className="author-link" onClick={(e) => e.stopPropagation()}>
+                                <img src={story.author?.avatar || '/images/default-avatar.png'} alt={story.author?.name || 'Author'} />
+                                <span style={{ fontSize: '9px !important' }}>{story.author?.name || 'Unknown Author'}</span>
+                              </Link>
+                              <span className="story-published-date" style={{ fontSize: '8px !important' }}>{formatPublishedDate(story.publishedDate)}</span>
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
 

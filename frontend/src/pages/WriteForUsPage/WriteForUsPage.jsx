@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import pitchService from '../../services/pitchService';
 import './WriteForUsPage.css';
 
 const WriteForUsPage = () => {
@@ -123,8 +124,21 @@ const WriteForUsPage = () => {
     
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await pitchService.submitPitch({
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        topic: formData.topic,
+        pitchTitle: formData.pitchTitle,
+        pitchDescription: formData.pitchDescription,
+        authorBio: formData.authorBio,
+        socialMedia: formData.socialMedia,
+        topicsOfInterest: formData.topicsOfInterest,
+        previousPublications: formData.previousPublications,
+        experience: formData.experience
+      }, formData.articleAttachment);
+      
       setIsSubmitting(false);
       setSubmitSuccess(true);
       
@@ -151,9 +165,12 @@ const WriteForUsPage = () => {
           agreeToTerms: false
         });
         setSubmitSuccess(false);
-        setActiveTab('pitch');
       }, 3000);
-    }, 1500);
+    } catch (error) {
+      console.error('Error submitting pitch:', error);
+      setIsSubmitting(false);
+      alert('Failed to submit pitch. Please try again.');
+    }
   };
 
   // Guidelines content

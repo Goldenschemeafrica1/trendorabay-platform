@@ -1,0 +1,493 @@
+/* OrdersPage.css - Premium Orders Page for Trendorabay Magazine */
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+.orders-page {
+  min-height: 60vh;
+  padding: 16px 24px;
+}
+
+.orders-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  min-height: 400px;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #eaeef2;
+  border-top-color: #C4451B;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.orders-loading p {
+  color: #4a4a4a;
+  font-size: 0.95rem;
+}
+
+/* ============================================
+   ORDERS CONTAINER
+   ============================================ */
+.orders-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   ORDERS HEADER
+   ============================================ */
+.orders-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.orders-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.orders-header p {
+  color: #4a4a4a;
+  font-size: 0.95rem;
+}
+
+/* ============================================
+   FILTER TABS
+   ============================================ */
+.orders-filter {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.filter-btn {
+  padding: 10px 24px;
+  background: #ffffff;
+  border: 1px solid #eaeef2;
+  border-radius: 40px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4a4a4a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.filter-btn:hover {
+  border-color: #C4451B;
+  color: #C4451B;
+}
+
+.filter-btn.active {
+  background: #C4451B;
+  border-color: #C4451B;
+  color: white;
+}
+
+/* ============================================
+   ORDERS LIST
+   ============================================ */
+.orders-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .orders-list {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.orders-list:has(.no-orders) {
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================================
+   ORDER CARD
+   ============================================ */
+.order-card {
+  background: #ffffff;
+  border: 1px solid #eaeef2;
+  border-radius: 16px;
+  padding: 14px;
+}
+
+/* ============================================
+   ORDER HEADER
+   ============================================ */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eaeef2;
+}
+
+.order-info h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 4px;
+}
+
+.order-date {
+  font-size: 0.85rem;
+  color: #4a4a4a;
+}
+
+.order-status {
+  flex-shrink: 0;
+}
+
+.status-badge {
+  padding: 6px 16px;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   ORDER ITEMS
+   ============================================ */
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: #f8f9fc;
+  border-radius: 8px;
+}
+
+.item-info h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111111;
+  margin-bottom: 4px;
+}
+
+.item-info p {
+  font-size: 0.8rem;
+  color: #4a4a4a;
+}
+
+.item-price {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #C4451B;
+}
+
+/* ============================================
+   ORDER FOOTER
+   ============================================ */
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid #eaeef2;
+}
+
+.order-total {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #4a4a4a;
+}
+
+.total-amount {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111111;
+}
+
+.order-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.view-details-btn,
+.reorder-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  border: none;
+}
+
+.view-details-btn {
+  background: #f8f9fc;
+  color: #111111;
+  border: 1px solid #eaeef2;
+}
+
+.view-details-btn:hover {
+  background: #eaeef2;
+}
+
+.reorder-btn {
+  background: #C4451B;
+  color: white;
+}
+
+.reorder-btn:hover {
+  background: #b33b16;
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   NO ORDERS STATE
+   ============================================ */
+.no-orders {
+  text-align: center;
+  padding: 60px 24px;
+  background: #ffffff;
+  border: 1px solid #eaeef2;
+  border-radius: 16px;
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+.no-orders-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.no-orders h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+.no-orders p {
+  color: #4a4a4a;
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.shop-now-btn {
+  padding: 12px 32px;
+  background: #C4451B;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.shop-now-btn:hover {
+  background: #b33b16;
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+@media (max-width: 768px) {
+  .orders-page {
+    padding: 24px 16px;
+  }
+
+  .orders-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .orders-header p {
+    font-size: 0.85rem;
+  }
+
+  .orders-filter {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .order-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .order-footer {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .order-actions {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .view-details-btn,
+  .reorder-btn {
+    flex: 1;
+    padding: 8px 12px;
+  }
+
+  .no-orders {
+    padding: 40px 20px;
+    max-width: 100%;
+  }
+
+  .no-orders-icon {
+    font-size: 3rem;
+  }
+
+  .no-orders h3 {
+    font-size: 1.1rem;
+  }
+
+  .no-orders p {
+    font-size: 0.85rem;
+  }
+
+  .shop-now-btn {
+    padding: 10px 24px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-page {
+    padding: 20px 12px;
+  }
+
+  .orders-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .orders-header p {
+    font-size: 0.8rem;
+  }
+
+  .orders-filter {
+    gap: 6px;
+  }
+
+  .filter-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    min-width: 100px;
+  }
+
+  .order-card {
+    padding: 12px;
+  }
+
+  .order-header h3 {
+    font-size: 0.9rem;
+  }
+
+  .order-date {
+    font-size: 0.75rem;
+  }
+
+  .status-badge {
+    padding: 4px 12px;
+    font-size: 0.7rem;
+  }
+
+  .order-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px;
+  }
+
+  .item-info h4 {
+    font-size: 0.85rem;
+  }
+
+  .item-info p {
+    font-size: 0.75rem;
+  }
+
+  .item-price {
+    font-size: 0.85rem;
+    align-self: flex-end;
+  }
+
+  .order-total {
+    font-size: 0.75rem;
+  }
+
+  .total-amount {
+    font-size: 0.85rem;
+  }
+
+  .view-details-btn,
+  .reorder-btn {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+
+  .no-orders {
+    padding: 32px 16px;
+  }
+
+  .no-orders-icon {
+    font-size: 2.5rem;
+  }
+
+  .no-orders h3 {
+    font-size: 1rem;
+  }
+
+  .no-orders p {
+    font-size: 0.8rem;
+  }
+
+  .shop-now-btn {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+  }
+}

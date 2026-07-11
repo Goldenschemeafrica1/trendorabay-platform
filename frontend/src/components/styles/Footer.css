@@ -131,6 +131,7 @@
   font-weight: 700;
   color: #FFFFFF;
   margin: 0 0 15px 0;
+  transform: translateX(100px);
 }
 
 .app-store-buttons {
@@ -220,6 +221,7 @@
   max-width: 100px;
   height: auto;
   display: block;
+  border-radius: 4px;
 }
 
 .fashion-description {
@@ -432,6 +434,23 @@
   gap: 0.5rem;
 }
 
+.bottom-bar-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.bottom-bar-links a {
+  color: rgba(250, 246, 240, 0.72);
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition: color 0.2s ease;
+}
+
+.bottom-bar-links a:hover {
+  color: rgba(250, 246, 240, 1);
+}
+
 .copyright {
   color: rgba(250, 246, 240, 0.72);
   font-size: 0.75rem;
@@ -602,20 +621,12 @@
   }
 
   .fashion-col {
-    grid-column: 1 / -1;
-    margin-bottom: 1rem;
-    max-width: 100%;
+    display: none;
   }
 
   .download-app-col {
     margin-left: 0;
     margin-top: 2rem;
-  }
-
-  .fashion-magazine {
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
   }
 
   .footer-col-title::after {

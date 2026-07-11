@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import partnerService from '../../services/partnerService';
 import './PartnerPage.css';
 
 const PartnerPage = () => {
@@ -85,8 +86,16 @@ const PartnerPage = () => {
     
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await partnerService.submitProposal({
+        companyName: formData.companyName,
+        contactPerson: formData.contactPerson,
+        email: formData.email,
+        phone: formData.phone,
+        partnershipType: formData.partnershipType,
+        message: formData.message
+      });
+      
       setIsSubmitting(false);
       setSubmitSuccess(true);
       
@@ -103,7 +112,11 @@ const PartnerPage = () => {
         });
         setSubmitSuccess(false);
       }, 3000);
-    }, 1500);
+    } catch (error) {
+      console.error('Error submitting proposal:', error);
+      setIsSubmitting(false);
+      alert('Failed to submit proposal. Please try again.');
+    }
   };
 
   if (submitSuccess) {

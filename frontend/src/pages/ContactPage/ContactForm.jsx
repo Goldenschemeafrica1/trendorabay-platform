@@ -3,6 +3,7 @@ import Input from '../../components/forms/Input';
 import Textarea from '../../components/forms/Textarea';
 import Button from '../../components/forms/Button';
 import FormError from '../../components/forms/FormError';
+import contactService from '../../services/contactService';
 
 const ContactForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -68,8 +69,7 @@ const ContactForm = ({ onSubmit }) => {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await contactService.submitMessage(formData);
       
       onSubmit(formData);
       

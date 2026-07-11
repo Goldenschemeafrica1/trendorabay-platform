@@ -234,6 +234,12 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .top-ad-container {
+    max-width: 700px;
+  }
+}
+
 @media (max-width: 768px) {
   .top-ad {
     height: auto;
@@ -245,6 +251,7 @@
     flex-direction: row;
     gap: 6px;
     padding: 0 12px;
+    max-width: 100%;
   }
 
   .top-ad-content {

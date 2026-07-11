@@ -9,20 +9,20 @@
 /* ===== Filters Bar ===== */
 .magazine-filters {
   max-width: 1400px;
-  margin: -20px auto 12px;
+  margin: -40px auto 12px;
   padding: 0 24px;
 }
 
 .filters-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px;
   align-items: flex-end;
-  background: white;
-  padding: 8px;
+  background: transparent;
+  padding: 4px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-  border: 1px solid #e9dac9;
+  box-shadow: none;
+  border: none;
 }
 
 .filter-group {
@@ -32,17 +32,17 @@
 
 .filter-group label {
   display: block;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #333;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 }
 
 .filter-select {
   width: 100%;
-  padding: 14px 16px;
+  padding: 8px 12px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   font-family: 'Inter', sans-serif;
@@ -67,8 +67,8 @@
 
 /* Search Group */
 .search-group {
-  flex: 2;
-  min-width: 250px;
+  flex: 1;
+  min-width: 200px;
 }
 
 .search-input-wrapper {
@@ -77,22 +77,23 @@
 
 .search-icon {
   position: absolute;
-  left: 16px;
+  left: 6px;
   top: 50%;
   transform: translateY(-50%);
   color: #8a9a8a;
-  font-size: 14px;
+  font-size: 10px;
 }
 
 .search-input {
   width: 100%;
-  padding: 14px 16px 14px 45px;
+  padding: 2px 6px 2px 24px;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 6px;
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 11px;
   color: #333;
   transition: all 0.2s ease;
+  height: 28px;
 }
 
 .search-input:focus {
@@ -159,7 +160,7 @@
 .results-count {
   display: flex;
   align-items: center;
-  padding: 12px 0;
+  padding: 6px 0;
   color: #6a7a6a;
   font-size: 14px;
   font-weight: 500;
@@ -167,12 +168,12 @@
 
 /* Active Filters */
 .active-filters {
-  margin-top: 16px;
+  margin-top: 8px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  padding: 16px 24px;
+  padding: 8px 16px;
   background: #f5efe6;
   border-radius: 40px;
 }
@@ -277,7 +278,7 @@
 /* ===== Magazines Container ===== */
 .magazines-container {
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 20px auto 0;
   padding: 0 24px;
 }
 
@@ -898,7 +899,7 @@
 @media (max-width: 768px) {
   .magazine-grid-section {
     padding: 8px 0 40px;
-    margin-top: -40px;
+    margin-top: 0;
   }
 
   .magazine-filters {
@@ -906,11 +907,11 @@
   }
 
   .magazines-container.grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 12px;
+    padding: 0 16px;
   }
 
   .magazine-cover-wrapper {
@@ -950,40 +951,40 @@
   }
 
   .magazines-container.grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
-    padding: 0 10px;
+    padding: 0 12px;
   }
-  
+
   .magazine-cover-wrapper {
     height: 120px;
   }
-  
+
   .magazine-card {
     border-radius: 12px;
   }
-  
+
   .magazine-details {
     padding: 8px;
   }
-  
+
   .magazine-title {
     font-size: 11px;
   }
-  
+
   .magazine-description {
     font-size: 9px;
     margin-bottom: 8px;
   }
-  
+
   .amount {
     font-size: 13px;
   }
-  
+
   .magazine-actions {
     gap: 4px;
   }
-  
+
   .add-to-cart-btn,
   .details-btn {
     padding: 6px 8px;
@@ -1001,29 +1002,41 @@
   }
 
   .magazines-container.grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 4px;
-    padding: 0 8px;
+    padding: 0 10px;
   }
-  
+
   .magazine-cover-wrapper {
-    height: 100px;
+    height: 110px;
   }
-  
+
   .magazine-details {
-    padding: 6px;
+    padding: 8px;
   }
-  
+
   .magazine-title {
     font-size: 10px;
   }
-  
+
   .magazine-description {
     font-size: 8px;
   }
-  
+
   .amount {
     font-size: 12px;
+  }
+
+  .magazine-actions {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .add-to-cart-btn,
+  .details-btn {
+    width: 100%;
+    font-size: 9px;
+    padding: 6px 8px;
   }
 }
 

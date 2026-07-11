@@ -1,126 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import './StoriesPage.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import { apiRequest } from '../../services/api';
+import { toast } from 'react-toastify';
+import '../CommunityPage/ContributorDetailsPage.css';
 
 const AuthorPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [author, setAuthor] = useState(null);
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
 
-  // Sample authors data
-  const authorsData = {
-    'makena-njeri': {
-      id: 'makena-njeri',
-      name: 'Makena Njeri',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
-      role: 'Senior Editor',
-      bio: 'Makena is an award-winning journalist covering African innovation and entrepreneurship. Based in Nairobi, she has reported on tech ecosystems across the continent for over a decade. Her work focuses on the intersection of technology, culture, and economic development in Africa.',
-      email: 'makena.njeri@trendorabay.com',
-      social: {
-        twitter: '@makenanjeri',
-        linkedin: 'makena-njeri',
-        instagram: '@makenawrites'
-      },
-      stats: {
-        stories: 47,
-        views: '1.2M',
-        followers: 15420
-      }
-    },
-    'zuri-makena': {
-      id: 'zuri-makena',
-      name: 'Zuri Makena',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop',
-      role: 'Fashion Editor',
-      bio: 'Zuri is a fashion journalist and cultural commentator who explores the intersection of African traditional aesthetics and contemporary design. She has been instrumental in bringing African fashion to global audiences.',
-      email: 'zuri.makena@trendorabay.com',
-      social: {
-        twitter: '@zurimakena',
-        instagram: '@zuristyle'
-      },
-      stats: {
-        stories: 32,
-        views: '890K',
-        followers: 8930
-      }
-    }
+  // Placeholder user ID - replace with actual user authentication
+  const currentUserId = 1;
+
+  const formatNumber = (num) => {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(0) + 'k';
+    return num.toString();
   };
 
-  // Sample stories data
-  const allStories = [
-    {
-      id: 1,
-      title: "How Kenyan Youth Are Redefining The Pan-African Startup Economy",
-      excerpt: "From Nairobi to Lagos, a new wave of founders is shaping tomorrow's fintech, climate, and culture. The numbers are staggering...",
-      category: "startups",
-      subcategory: "Impact Stories",
-      image: "https://images.unsplash.com/photo-1523800503107-5bc3ba2a6f81?w=800&h=500&fit=crop",
-      author: 'makena-njeri',
-      publishDate: "2026-04-24",
-      readTime: "8 min read",
-      views: 15420,
-      likes: 2341,
-      comments: 156,
-      featured: true,
-      tags: ["Startups", "Innovation", "Kenya", "Pan-African"]
-    },
-    {
-      id: 2,
-      title: "The Rise of Neo-African Streetwear: From Kenya to NY",
-      excerpt: "African streetwear is having a moment on global runways. Local designers blend traditional textiles with modern silhouettes...",
-      category: "fashion",
-      subcategory: "Fashion & Style",
-      image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&h=500&fit=crop",
-      author: 'zuri-makena',
-      publishDate: "2026-04-22",
-      readTime: "6 min read",
-      views: 9820,
-      likes: 1567,
-      comments: 89,
-      featured: false,
-      tags: ["Fashion", "Streetwear", "Design", "Culture"]
-    },
-    {
-      id: 3,
-      title: "From Refugee to Tech CEO: The Inspiring Story of Mamadou Diallo",
-      excerpt: "How one man's journey from a refugee camp to building a multi-million dollar tech company is inspiring a generation...",
-      category: "impact",
-      subcategory: "Impact Stories",
-      image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&h=500&fit=crop",
-      author: 'makena-njeri',
-      publishDate: "2026-04-03",
-      readTime: "11 min read",
-      views: 25430,
-      likes: 4123,
-      comments: 289,
-      featured: true,
-      tags: ["Impact", "Inspiration", "Entrepreneurship"]
+  const getRandomColor = (name) => {
+    const colors = [
+      '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+      '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9',
+      '#F8B500', '#FF6F61', '#6B5B95', '#88B04B', '#F7CAC9'
+    ];
+    let hash = 0;
+    for (let i = 0; i < (name || '').length; i++) {
+      hash = (name || '').charCodeAt(i) + ((hash << 5) - hash);
     }
-  ];
+    return colors[Math.abs(hash) % colors.length];
+  };
 
   useEffect(() => {
     const fetchAuthorData = async () => {
       setLoading(true);
+      setError(null);
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const authorData = authorsData[id];
-        setAuthor(authorData);
-        
-        // Get stories by this author
-        const authorStories = allStories.filter(story => story.author === id);
-        setStories(authorStories);
+        const response = await apiRequest.get(`/authors/${id}`);
+        console.log('Full API Response:', JSON.stringify(response, null, 2));
+        console.log('Response data:', response.data);
+        console.log('Response data.data:', response.data?.data);
+        console.log('Author avatar_url:', response.data?.data?.avatar_url);
+
+        if (response && response.data && response.data.success) {
+          setAuthor(response.data.data);
+          setStories(response.data.data.stories || []);
+          
+          // Check if user is following this author
+          const followResponse = await apiRequest.get(`/authors/${id}/follow/${currentUserId}`);
+          if (followResponse && followResponse.data && followResponse.data.success) {
+            setIsFollowing(followResponse.data.isFollowing);
+          }
+        } else {
+          console.log('Invalid response structure:', response);
+          setError('Author not found');
+        }
       } catch (error) {
         console.error('Error fetching author data:', error);
+        setError('Failed to load author data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAuthorData();
-  }, [id]);
+    if (id) {
+      fetchAuthorData();
+    }
+  }, [id, currentUserId]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -131,155 +82,170 @@ const AuthorPage = () => {
     });
   };
 
+  const handleFollowToggle = async () => {
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+      toast.error('Please login to follow authors', {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      navigate('/login');
+      return;
+    }
+
+    setFollowLoading(true);
+    try {
+      if (isFollowing) {
+        // Unfollow
+        await apiRequest.delete(`/authors/${id}/follow`, { data: { user_id: currentUserId } });
+        setIsFollowing(false);
+        toast.success('Unfollowed author');
+      } else {
+        // Follow
+        await apiRequest.post(`/authors/${id}/follow`, { user_id: currentUserId });
+        setIsFollowing(true);
+        toast.success('Following author');
+      }
+    } catch (error) {
+      console.error('Error toggling follow:', error);
+      toast.error('Failed to follow author');
+    } finally {
+      setFollowLoading(false);
+    }
+  };
+
   if (loading) {
     return (
-      <div className="author-page-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading author profile...</p>
+      <div className="contributor-details-page">
+        <div className="contributor-details-loading">
+          <div className="skeleton-avatar" style={{ width: '130px', height: '130px', margin: '0 auto 20px' }}></div>
+          <div className="skeleton-text" style={{ width: '60%', margin: '0 auto 10px' }}></div>
+          <div className="skeleton-text short" style={{ width: '40%', margin: '0 auto' }}></div>
+        </div>
       </div>
     );
   }
 
   if (!author) {
     return (
-      <div className="author-not-found">
-        <h2>Author Not Found</h2>
-        <p>The author you're looking for doesn't exist or has been removed.</p>
-        <Link to="/stories" className="back-to-stories">
-          ← Back to Stories
-        </Link>
+      <div className="contributor-details-page">
+        <div className="contributor-not-found">
+          <h2>Author not found</h2>
+          <button onClick={() => navigate('/stories')}>Back to Stories</button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="author-page">
-      {/* Author Header */}
-      <div className="author-header">
-        <div className="author-hero">
-          <div className="author-avatar">
-            <img src={author.avatar} alt={author.name} />
+    <div className="contributor-details-page">
+      <div className="contributor-details-container">
+        {/* Back Button */}
+        <button className="back-button" onClick={() => navigate('/stories')}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Back to Stories
+        </button>
+
+        {/* Header Section */}
+        <div className="contributor-header">
+          <div className="contributor-avatar-wrapper">
+            {author.avatar_url ? (
+              <img 
+                src={author.avatar_url} 
+                alt={author.name} 
+                className="contributor-avatar-large"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextElementSibling.style.display = 'flex';
+                }}
+              />
+            ) : null}
+            <div 
+              className="contributor-avatar-fallback-large"
+              style={{ 
+                display: author.avatar_url ? 'none' : 'flex',
+                backgroundColor: getRandomColor(author.name)
+              }}
+            >
+              {author.name?.charAt(0) || '?'}
+            </div>
           </div>
-          <div className="author-hero-content">
-            <h1 className="author-name">{author.name}</h1>
-            <p className="author-role">{author.role}</p>
-            <p className="author-bio">{author.bio}</p>
-            
-            {/* Author Stats */}
-            <div className="author-stats">
-              <div className="stat-item">
-                <span className="stat-number">{author.stats.stories}</span>
-                <span className="stat-label">Stories</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">{author.stats.views}</span>
-                <span className="stat-label">Views</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">{author.stats.followers.toLocaleString()}</span>
-                <span className="stat-label">Followers</span>
-              </div>
+          
+          <div className="contributor-header-info">
+            <div className="contributor-name-row">
+              <h1 className="contributor-name-large">{author.name}</h1>
+              <button 
+                className={`follow-btn-large ${isFollowing ? 'following' : ''}`}
+                onClick={handleFollowToggle}
+                disabled={followLoading}
+              >
+                {followLoading ? 'Loading...' : isFollowing ? 'Following' : 'Follow'}
+              </button>
             </div>
-
-            {/* Social Links */}
-            <div className="author-social">
-              <a href={`https://twitter.com/${author.social.twitter}`} target="_blank" rel="noopener noreferrer">
-                Twitter
-              </a>
-              {author.social.linkedin && (
-                <a href={`https://linkedin.com/in/${author.social.linkedin}`} target="_blank" rel="noopener noreferrer">
-                  LinkedIn
-                </a>
-              )}
-              {author.social.instagram && (
-                <a href={`https://instagram.com/${author.social.instagram}`} target="_blank" rel="noopener noreferrer">
-                  Instagram
-                </a>
-              )}
-              <a href={`mailto:${author.email}`}>
-                Contact
-              </a>
-            </div>
-
-            <button className="follow-author-btn">Follow Author</button>
+            <p className="contributor-role-large">{author.role || 'Author'}</p>
           </div>
         </div>
-      </div>
 
-      <div className="author-content">
-        {/* Author's Stories */}
-        <section className="author-stories">
-          <h2>Stories by {author.name}</h2>
-          
-          {stories.length > 0 ? (
-            <div className="author-stories-grid">
-              {stories.map(story => (
-                <article key={story.id} className="story-card">
-                  <Link to={`/stories/${story.id}`} className="story-link">
-                    <div className="story-image">
-                      <img src={story.image} alt={story.title} />
-                      {story.featured && <span className="featured-tag">Featured</span>}
-                    </div>
-                    <div className="story-content">
-                      <div className="story-category">{story.subcategory}</div>
-                      <h3 className="story-title">{story.title}</h3>
-                      <p className="story-excerpt">{story.excerpt}</p>
-                      <div className="story-meta">
-                        <span>📅 {formatDate(story.publishDate)}</span>
-                        <span>📖 {story.readTime}</span>
-                        <span>👁️ {story.views.toLocaleString()}</span>
-                        <span>❤️ {story.likes.toLocaleString()}</span>
-                      </div>
-                      <div className="story-tags">
-                        {story.tags.slice(0, 3).map(tag => (
-                          <span key={tag} className="story-tag">
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </Link>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="no-stories">
-              <p>No stories published by this author yet.</p>
+        {/* Content Sections */}
+        <div className="contributor-content">
+          {author.bio && (
+            <div className="content-section">
+              <h2 className="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                About
+              </h2>
+              <p className="section-text">{author.bio}</p>
             </div>
           )}
-        </section>
 
-        {/* Sidebar */}
-        <aside className="author-sidebar">
-          {/* Newsletter */}
-          <div className="newsletter-card">
-            <h3>Subscribe to {author.name}</h3>
-            <p>Get notified when {author.name} publishes new stories.</p>
-            <div className="newsletter-form">
-              <input type="email" placeholder="Your email address" />
-              <button>Subscribe</button>
+          <div className="content-section">
+            <h2 className="section-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              Stories ({stories.length})
+            </h2>
+            <div className="articles-list">
+              {stories.length > 0 ? (
+                stories.map((story) => (
+                  <a 
+                    key={story.id} 
+                    href={`/stories/${story.id}`} 
+                    className="article-item"
+                  >
+                    <div className="article-info">
+                      <h4 className="article-title">{story.title}</h4>
+                      <div className="article-meta">
+                        <span className="article-category">{story.category_name || 'Story'}</span>
+                        <span className="article-date">
+                          {story.published_at ? new Date(story.published_at).toLocaleDateString() : 'Not published'}
+                        </span>
+                      </div>
+                    </div>
+                    <svg className="article-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                      <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                  </a>
+                ))
+              ) : (
+                <div className="articles-loading">No stories published yet</div>
+              )}
             </div>
           </div>
-
-          {/* Popular Categories */}
-          <div className="categories-card">
-            <h3>Popular Categories</h3>
-            <div className="category-list">
-              {['Startups', 'Fashion', 'Innovation', 'Culture', 'Technology'].map(category => (
-                <Link key={category} to={`/stories?category=${category.toLowerCase()}`} className="category-link">
-                  {category}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Back to Stories */}
-          <div className="back-navigation">
-            <Link to="/stories" className="back-to-stories">
-              ← Back to All Stories
-            </Link>
-          </div>
-        </aside>
+        </div>
       </div>
     </div>
   );

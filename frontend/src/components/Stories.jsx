@@ -51,7 +51,6 @@ const Stories = () => {
     if (searchTerm) {
       filtered = filtered.filter(story =>
         story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        story.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
         story.author?.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
