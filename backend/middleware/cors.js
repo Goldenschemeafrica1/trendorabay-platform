@@ -4,7 +4,8 @@ const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:5173',
   'https://trendorabay-platform-j5j0e39eq-golden-scheme-africa-s-projects.vercel.app',
   'https://trendorabay-platform.vercel.app',
-  'https://trendorabay.com'
+  'https://trendorabay.com',
+  'https://www.trendorabay.com'
 ];
 
 export const corsMiddleware = cors({
