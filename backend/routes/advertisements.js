@@ -1,39 +1,53 @@
 import express from 'express';
 import pool from '../config/database.js';
+import { cache } from '../middleware/cacheMiddleware.js';
 
 const router = express.Router();
 
 // Helper function to get image URL - handle Cloudinary and CMS uploads
 const getImageUrl = (url) => {
+  console.log('getImageUrl called with:', url);
+  console.log('CMS_URL from env:', process.env.CMS_URL);
+  
   if (!url || url === 'undefined' || url === '/uploads/advertisements/undefined' || url === '/uploads/stories/undefined') return null;
   
   // Return full URLs as-is (Cloudinary, external images)
-  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    console.log('URL is full URL, returning as-is');
+    return url;
+  }
   
   // For relative paths, construct full URL using CMS base
   const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
+  console.log('Using CMS URL:', cmsUrl);
   
   // If it's a relative path starting with /uploads, serve from CMS
   if (url.startsWith('/uploads/')) {
-    return `${cmsUrl}${url}`;
+    const fullUrl = `${cmsUrl}${url}`;
+    console.log('URL starts with /uploads/, constructing CMS URL:', fullUrl);
+    return fullUrl;
   }
   
   // If it starts with /, it's in the frontend public folder - return as-is
   if (url.startsWith('/')) {
+    console.log('URL starts with /, returning as-is (frontend public folder)');
     return url;
   }
   
   // If it's just a filename, it's in the frontend public folder
   if (!url.includes('/')) {
-    return `/${url}`;
+    const publicUrl = `/${url}`;
+    console.log('URL is filename, constructing public folder URL:', publicUrl);
+    return publicUrl;
   }
   
   // If it has a path, return as-is
+  console.log('URL has path, returning as-is');
   return url;
 };
 
 // Get all advertisements
-router.get('/', async (req, res, next) => {
+router.get('/', cache(300), async (req, res, next) => {
   try {
     const { position, status } = req.query;
     
