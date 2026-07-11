@@ -2439,7 +2439,7 @@ const MagazineDetails = ({ magazine }) => {
   };
 
   const handleShare = (platform) => {
-    const url = window.location.href;
+    const url = window.location.origin;
     const text = `Check out ${magazine.title} on Trendorabay!`;
     
     let shareUrl = '';
