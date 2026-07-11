@@ -69,11 +69,22 @@ router.get('/', async (req, res, next) => {
     query += ' ORDER BY created_at DESC';
     
     const [rows] = await pool.query(query, params);
-    const transformed = rows.map(ad => ({
-      ...ad,
-      image_url: getImageUrl(ad.image_url),
-      mobile_image_url: ad.mobile_image_url ? getImageUrl(ad.mobile_image_url) : null
-    }));
+    
+    console.log('=== Advertisements from database ===');
+    console.log('Number of ads:', rows.length);
+    
+    const transformed = rows.map(ad => {
+      const originalImage = ad.image_url;
+      const transformedImage = getImageUrl(ad.image_url);
+      console.log('Ad ID:', ad.id, 'Original image:', originalImage, 'Transformed image:', transformedImage);
+      
+      return {
+        ...ad,
+        image_url: transformedImage,
+        mobile_image_url: ad.mobile_image_url ? getImageUrl(ad.mobile_image_url) : null
+      };
+    });
+    
     res.json({ success: true, data: transformed });
   } catch (error) {
     next(error);
