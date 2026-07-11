@@ -11,17 +11,22 @@ import { logFailedLogin, logSuccessfulLogin, logAccountLockout } from '../middle
 const router = express.Router();
 
 // Configure multer for file uploads
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = 'uploads/profiles';
+    const uploadDir = path.join(__dirname, 'uploads/profiles');
+    console.log('Profile upload directory:', uploadDir);
     if (!fs.existsSync(uploadDir)) {
+      console.log('Creating upload directory:', uploadDir);
       fs.mkdirSync(uploadDir, { recursive: true });
     }
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'profile-' + uniqueSuffix + path.extname(file.originalname));
+    const filename = 'profile-' + uniqueSuffix + path.extname(file.originalname);
+    console.log('Profile filename:', filename);
+    cb(null, filename);
   }
 });
 
@@ -365,6 +370,21 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
     const userId = req.userId; // Set by auth middleware
     const { first_name, last_name } = req.body;
 
+    console.log('=== Profile Update Request ===');
+    console.log('User ID:', userId);
+    console.log('Request body:', { first_name, last_name });
+    console.log('File received:', req.file ? 'Yes' : 'No');
+    
+    if (req.file) {
+      console.log('File details:', {
+        originalname: req.file.originalname,
+        filename: req.file.filename,
+        path: req.file.path,
+        size: req.file.size,
+        mimetype: req.file.mimetype
+      });
+    }
+
     let query = `UPDATE users SET first_name = ?, last_name = ?`;
     const params = [first_name, last_name];
 
@@ -373,9 +393,13 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
       const backendUrl = process.env.API_BASE_URL?.replace('/api', '') || `http://localhost:${process.env.PORT || 3001}`;
       const profileImageUrl = `${backendUrl}/uploads/profiles/${req.file.filename}`;
       
+      console.log('Backend URL:', backendUrl);
+      console.log('Profile image URL:', profileImageUrl);
+      
       try {
         // Test if profile_image column exists, create it if it doesn't
         await pool.query('SELECT profile_image FROM users LIMIT 1');
+        console.log('profile_image column exists');
       } catch (error) {
         // Column doesn't exist, create it
         console.log('Creating profile_image column...');
@@ -389,7 +413,11 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
     query += ` WHERE id = ?`;
     params.push(userId);
 
+    console.log('Executing query:', query);
+    console.log('Query params:', params);
+
     await pool.query(query, params);
+    console.log('Profile update successful');
 
     let updatedUser;
     try {
