@@ -4,7 +4,7 @@ import { useCart } from '../../store/hooks/useCart';
 import { toast } from 'react-toastify';
 import './MagazineDetails.css';
 
-// Sample magazine data - same as LatestMagazine component
+// Sample magazine data - same as LatestMagazine component - updated for fresh deployment
 const sampleMagazines = [
   {
     id: 1,
