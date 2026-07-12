@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import compression from 'compression';
 import { testConnection } from './config/database.js';
+import pool from './config/database.js';
 import { getRedisClient } from './config/redis.js';
 import { corsMiddleware } from './middleware/cors.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -227,12 +228,39 @@ app.use(notFound);
 // Error handler
 app.use(errorHandler);
 
+// Create advertisement_inquiries table if it doesn't exist
+const createInquiriesTable = async () => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS advertisement_inquiries (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        company VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(50),
+        budget VARCHAR(100) NOT NULL,
+        campaign_type VARCHAR(100) NOT NULL,
+        message TEXT,
+        status ENUM('pending', 'reviewed', 'contacted', 'closed') DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
+    console.log('Advertisement inquiries table checked/created successfully');
+  } catch (error) {
+    console.error('Error creating advertisement_inquiries table:', error);
+  }
+};
+
 // Start server
 const startServer = async () => {
   try {
     const dbConnected = await testConnection();
     if (!dbConnected) {
       console.warn('Warning: Database connection failed. Server will start but database operations will fail.');
+    } else {
+      // Create tables if they don't exist
+      await createInquiriesTable();
     }
     
     app.listen(PORT, '0.0.0.0', () => {
