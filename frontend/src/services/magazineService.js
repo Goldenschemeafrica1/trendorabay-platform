@@ -1,5 +1,24 @@
 import { apiRequest } from './api';
 
+// Simple in-memory cache
+const cache = new Map();
+const CACHE_DURATION = 30000; // 30 seconds
+
+const getCached = (key) => {
+  const cached = cache.get(key);
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.data;
+  }
+  return null;
+};
+
+const setCached = (key, data) => {
+  cache.set(key, {
+    data,
+    timestamp: Date.now()
+  });
+};
+
 const magazineService = {
   // Transform magazine data from backend to frontend format
   transformMagazine: (mag) => {
@@ -29,77 +48,114 @@ const magazineService = {
 
   // Get all magazines with optional filters
   getMagazines: async (filters = {}) => {
+    const cacheKey = `magazines_${JSON.stringify(filters)}`;
+    const cached = getCached(cacheKey);
+    if (cached) return cached;
+
     const params = new URLSearchParams();
-    
+
     if (filters.category) params.append('category', filters.category);
     if (filters.minPrice) params.append('minPrice', filters.minPrice);
     if (filters.maxPrice) params.append('maxPrice', filters.maxPrice);
     if (filters.page) params.append('page', filters.page);
     if (filters.limit) params.append('limit', filters.limit);
-    
+
     const response = await apiRequest.get(`/magazines?${params.toString()}`);
     const magazines = response.data?.data || response.data || [];
-    
+
     // Transform data if it exists
-    if (magazines.length > 0) {
-      return magazines.map(mag => magazineService.transformMagazine(mag));
-    }
-    
-    return magazines;
+    const result = magazines.length > 0
+      ? magazines.map(mag => magazineService.transformMagazine(mag))
+      : magazines;
+
+    setCached(cacheKey, result);
+    return result;
   },
 
   // Get magazine by ID
   getMagazineById: async (id) => {
+    const cacheKey = `magazine_${id}`;
+    const cached = getCached(cacheKey);
+    if (cached) return cached;
+
     const response = await apiRequest.get(`/magazines/${id}`);
     const magazine = response.data?.data || response.data;
-    return magazineService.transformMagazine(magazine);
+    const result = magazineService.transformMagazine(magazine);
+
+    setCached(cacheKey, result);
+    return result;
   },
 
   // Get magazines by category
   getMagazinesByCategory: async (category, page = 1, limit = 12) => {
+    const cacheKey = `magazines_category_${category}_${page}_${limit}`;
+    const cached = getCached(cacheKey);
+    if (cached) return cached;
+
     const response = await apiRequest.get(`/magazines/category/${category}?page=${page}&limit=${limit}`);
     const magazines = response.data?.data || response.data || [];
-    
-    if (magazines.length > 0) {
-      return magazines.map(mag => magazineService.transformMagazine(mag));
-    }
-    
-    return magazines;
+
+    const result = magazines.length > 0
+      ? magazines.map(mag => magazineService.transformMagazine(mag))
+      : magazines;
+
+    setCached(cacheKey, result);
+    return result;
   },
 
   // Get featured magazines
   getFeaturedMagazines: async (limit = 6) => {
+    const cacheKey = `magazines_featured_${limit}`;
+    const cached = getCached(cacheKey);
+    if (cached) return cached;
+
     const response = await apiRequest.get(`/magazines/featured?limit=${limit}`);
     const magazines = response.data?.data || response.data || [];
-    
-    if (magazines.length > 0) {
-      return magazines.map(mag => magazineService.transformMagazine(mag));
-    }
-    
-    return magazines;
+
+    const result = magazines.length > 0
+      ? magazines.map(mag => magazineService.transformMagazine(mag))
+      : magazines;
+
+    setCached(cacheKey, result);
+    return result;
   },
 
   // Search magazines
   searchMagazines: async (query, page = 1, limit = 12) => {
+    const cacheKey = `magazines_search_${query}_${page}_${limit}`;
+    const cached = getCached(cacheKey);
+    if (cached) return cached;
+
     const response = await apiRequest.get(`/magazines/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
     const magazines = response.data?.data || response.data || [];
-    
-    if (magazines.length > 0) {
-      return magazines.map(mag => magazineService.transformMagazine(mag));
-    }
-    
-    return magazines;
+
+    const result = magazines.length > 0
+      ? magazines.map(mag => magazineService.transformMagazine(mag))
+      : magazines;
+
+    setCached(cacheKey, result);
+    return result;
   },
 
   // Get magazine categories
   getCategories: async () => {
+    const cacheKey = 'magazines_categories';
+    const cached = getCached(cacheKey);
+    if (cached) return cached;
+
     const response = await apiRequest.get('/magazines/categories');
+    setCached(cacheKey, response.data);
     return response.data;
   },
 
   // Get subscription options
   getSubscriptionOptions: async () => {
+    const cacheKey = 'magazines_subscriptions';
+    const cached = getCached(cacheKey);
+    if (cached) return cached;
+
     const response = await apiRequest.get('/magazines/subscriptions');
+    setCached(cacheKey, response.data);
     return response.data;
   },
 
