@@ -16,6 +16,7 @@ const PartnerPage = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const partnershipTypes = [
     'Sponsorship',
@@ -98,6 +99,7 @@ const PartnerPage = () => {
       
       setIsSubmitting(false);
       setSubmitSuccess(true);
+      setShowSuccessPopup(true);
       
       // Reset form after successful submission
       setTimeout(() => {
@@ -111,7 +113,8 @@ const PartnerPage = () => {
           agreeToTerms: false
         });
         setSubmitSuccess(false);
-      }, 3000);
+        setShowSuccessPopup(false);
+      }, 5000);
     } catch (error) {
       console.error('Error submitting proposal:', error);
       setIsSubmitting(false);
@@ -119,37 +122,34 @@ const PartnerPage = () => {
     }
   };
 
-  if (submitSuccess) {
-    return (
-      <div className="partner-success">
-        <div className="success-container">
-          <div className="success-icon">✓</div>
-          <h1>Partnership Proposal Submitted!</h1>
-          <p>Thank you for your interest in partnering with Trendorabay Magazine.</p>
-          <p>Our partnership team will review your proposal and get back to you within 5-7 business days.</p>
-          <div className="success-details">
-            <h3>What happens next?</h3>
-            <ul>
-              <li>📧 You'll receive a confirmation email shortly</li>
-              <li>👥 Our team will review your proposal</li>
-              <li>💬 We may reach out with questions or to schedule a call</li>
-              <li>🎉 If approved, we'll work together to create a successful partnership</li>
-            </ul>
-          </div>
-          <button 
-            className="submit-another-btn"
-            onClick={() => setSubmitSuccess(false)}
-          >
-            Submit Another Proposal
-          </button>
-          <a href="/" className="home-link">← Back to Homepage</a>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="partner-page">
+      {/* Success Popup */}
+      {showSuccessPopup && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: '#10B981',
+          color: 'white',
+          padding: '16px 24px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          zIndex: '9999',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          animation: 'slideDown 0.3s ease-out'
+        }}>
+          <span style={{ fontSize: '20px' }}>✓</span>
+          <div>
+            <div style={{ fontWeight: 'bold', fontSize: '16px' }}>Partnership Proposal Submitted!</div>
+            <div style={{ fontSize: '14px', opacity: 0.9 }}>Our partnership team will review your proposal and get back to you within 5-7 business days.</div>
+          </div>
+        </div>
+      )}
+
       <div className="partner-container">
         {/* Benefits Section */}
         <div className="benefits-section">

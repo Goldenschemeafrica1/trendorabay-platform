@@ -17,6 +17,7 @@ const AdvertisePage = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -67,6 +68,23 @@ const AdvertisePage = () => {
       });
       
       setIsSubmitted(true);
+      setShowSuccessPopup(true);
+      
+      // Reset form after successful submission
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          company: '',
+          email: '',
+          phone: '',
+          budget: '',
+          campaignType: '',
+          message: '',
+          agreeToTerms: false
+        });
+        setIsSubmitted(false);
+        setShowSuccessPopup(false);
+      }, 5000);
     } catch (error) {
       console.error('Submission error:', error);
       const errorMessage = error.response?.data?.error || error.message || 'Submission failed. Please try again.';
@@ -76,25 +94,34 @@ const AdvertisePage = () => {
     }
   };
 
-  if (isSubmitted) {
-    return (
-      <div className="advertise-page">
-        <div className="advertise-container">
-          <div className="success-message">
-            <div className="success-icon">
-              <i className="fas fa-check-circle"></i>
-            </div>
-            <h1>Thank You!</h1>
-            <p>Your advertising inquiry has been submitted successfully. Our team will contact you within 24-48 hours.</p>
-            <Link to="/" className="back-home-btn">Back to Home</Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="advertise-page">
+      {/* Success Popup */}
+      {showSuccessPopup && (
+        <div style={{
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: '#10B981',
+          color: 'white',
+          padding: '16px 24px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          zIndex: '9999',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          animation: 'slideDown 0.3s ease-out'
+        }}>
+          <span style={{ fontSize: '20px' }}>✓</span>
+          <div>
+            <div style={{ fontWeight: 'bold', fontSize: '16px' }}>Advertising Inquiry Submitted!</div>
+            <div style={{ fontSize: '14px', opacity: 0.9 }}>Our advertising team will contact you within 24-48 hours.</div>
+          </div>
+        </div>
+      )}
+
       <div className="advertise-container">
         <div className="advertise-header">
           <h1>Advertise with Trendorabay</h1>
