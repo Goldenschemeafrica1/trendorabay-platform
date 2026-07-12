@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import pool from '../config/database.js';
 import auth from '../middleware/auth.js';
 import { logFailedLogin, logSuccessfulLogin, logAccountLockout } from '../middleware/securityLogger.js';
@@ -11,10 +12,11 @@ import { logFailedLogin, logSuccessfulLogin, logAccountLockout } from '../middle
 const router = express.Router();
 
 // Configure multer for file uploads
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, 'uploads/profiles');
+    const uploadDir = path.join(process.cwd(), 'uploads/profiles');
     console.log('Profile upload directory:', uploadDir);
     if (!fs.existsSync(uploadDir)) {
       console.log('Creating upload directory:', uploadDir);
