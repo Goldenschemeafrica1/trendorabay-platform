@@ -11,7 +11,6 @@ import Advert from './components/Advert';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
-import NewsletterPopup from './components/common/NewsletterPopup';
 import ScrollToTop from './components/common/ScrollToTop';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import './App.css';
@@ -127,8 +126,6 @@ function App() {
       {/* Shopping Cart Drawer (Slides from right) */}
       <CartDrawer />
 
-      {/* Newsletter Popup (Appears after 30 seconds) */}
-      <NewsletterPopup delay={30000} />
 
       {/* Scroll to Top Button */}
       <ScrollToTop />
