@@ -16,17 +16,8 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
     const fetchMagazines = async () => {
       try {
         setLoading(true);
-        const data = await magazineService.getMagazines();
-        console.log('Fetched magazines:', data);
-        console.log('First magazine coverImage:', data[0]?.coverImage);
-        let filtered = data;
-        if (category) {
-          filtered = data.filter(m => 
-            (m.category && m.category.toLowerCase().includes(category.toLowerCase())) ||
-            (m.subcategory && m.subcategory.toLowerCase().includes(category.toLowerCase()))
-          );
-        }
-        setMagazines(filtered);
+        const data = await magazineService.getMagazines({ limit, category });
+        setMagazines(data);
       } catch (error) {
         console.error('Error fetching magazines:', error);
         setMagazines([]);
@@ -36,7 +27,7 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
     };
     
     fetchMagazines();
-  }, [category]);
+  }, [category, limit]);
 
   const handleAddToCart = (magazine) => {
     dispatch(addToCart({
@@ -78,7 +69,7 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
         <div className="magazines-scroll-container" ref={scrollContainerRef}>
           <div className="magazines-grid-wrapper">
           <div className="magazines-grid">
-          {magazines.slice(0, limit).map((magazine, index) => (
+          {magazines.map((magazine, index) => (
             <div
               key={magazine.id}
               className="magazine-card"

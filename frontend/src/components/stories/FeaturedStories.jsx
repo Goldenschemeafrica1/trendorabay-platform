@@ -19,7 +19,7 @@ const FeaturedStories = () => {
   useEffect(() => {
     const fetchFeaturedStories = async () => {
       try {
-        const response = await storyService.getStories({ featured: true, status: 'published' });
+        const response = await storyService.getStories({ featured: true, status: 'published', limit: 10 });
         let stories = [];
 
         if (Array.isArray(response)) {

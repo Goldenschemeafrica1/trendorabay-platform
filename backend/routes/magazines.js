@@ -84,10 +84,27 @@ const fetchContributorsWithCache = async (contributorIds) => {
 // Get all magazines
 router.get('/', cache(300), async (req, res, next) => {
   try {
-    const [rows] = await pool.query(`
+    const limit = parseInt(req.query.limit) || null;
+    const category = req.query.category || null;
+    
+    let query = `
       SELECT id, title, category_id, issue, cover_image_url, pdf_url, preview_pages, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, published_date, description, created_at FROM magazines
-      ORDER BY created_at DESC
-    `);
+    `;
+    const params = [];
+    
+    if (category) {
+      query += ` WHERE category_id = ?`;
+      params.push(category);
+    }
+    
+    query += ` ORDER BY created_at DESC`;
+    
+    if (limit) {
+      query += ` LIMIT ?`;
+      params.push(limit);
+    }
+    
+    const [rows] = await pool.query(query, params);
 
     // Map categories to actual image files in frontend public folder
     const categoryImageMap = {
