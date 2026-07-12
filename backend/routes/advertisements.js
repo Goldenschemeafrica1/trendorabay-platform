@@ -18,7 +18,9 @@ const getImageUrl = (url) => {
   
   // If it's a relative path starting with /uploads, serve from CMS
   if (url.startsWith('/uploads/')) {
-    return `${cmsUrl}${url}`;
+    const fullUrl = `${cmsUrl}${url}`;
+    console.log(`Image URL construction: ${url} -> ${fullUrl} (CMS_URL: ${cmsUrl})`);
+    return fullUrl;
   }
   
   // If it starts with /, it's in the frontend public folder - return as-is
