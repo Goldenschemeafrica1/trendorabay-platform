@@ -2,13 +2,21 @@ import express from 'express';
 import pool from '../config/database.js';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 
 const router = express.Router();
 
 // Configure multer for file uploads
+const uploadDir = process.env.UPLOADS_PATH || path.join(process.cwd(), 'uploads', 'pitches');
+
+// Ensure upload directory exists
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '/Users/macbook/Downloads/web 1/cms/backend/uploads/pitches');
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -75,22 +83,32 @@ router.get('/:id', async (req, res, next) => {
 // Create pitch
 router.post('/', upload.single('articleAttachment'), async (req, res, next) => {
   try {
-    const { 
-      fullName, 
-      email, 
-      phone, 
-      topic, 
-      pitchTitle, 
-      pitchDescription, 
-      authorBio, 
-      socialMedia, 
-      topicsOfInterest, 
-      previousPublications, 
-      experience 
+    console.log('Received pitch submission:', req.body);
+    const {
+      fullName,
+      email,
+      phone,
+      topic,
+      pitchTitle,
+      pitchDescription,
+      authorBio,
+      socialMedia,
+      topicsOfInterest,
+      previousPublications,
+      experience
     } = req.body;
-    
+
+    // Validate required fields
+    if (!fullName || !email || !pitchTitle) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields: fullName, email, and pitchTitle are required'
+      });
+    }
+
     const articleAttachment = req.file ? `/uploads/pitches/${req.file.filename}` : null;
-    
+
+    console.log('Attempting to insert pitch into database...');
     const [result] = await pool.query(
       `INSERT INTO pitch_submissions (
         full_name, 
@@ -114,20 +132,31 @@ router.post('/', upload.single('articleAttachment'), async (req, res, next) => {
         pitchTitle,
         pitchDescription,
         authorBio,
-        JSON.stringify(socialMedia),
-        JSON.stringify(topicsOfInterest),
+        socialMedia ? JSON.stringify(socialMedia) : null,
+        topicsOfInterest ? JSON.stringify(topicsOfInterest) : null,
         previousPublications,
         experience,
         articleAttachment
       ]
     );
-    
+    console.log('Pitch inserted successfully, ID:', result.insertId);
+
     const [newPitch] = await pool.query(
       'SELECT * FROM pitch_submissions WHERE id = ?',
       [result.insertId]
     );
     res.status(201).json({ success: true, data: newPitch[0] });
   } catch (error) {
+    console.error('Pitch submission error:', error);
+
+    // Check if table doesn't exist
+    if (error.code === 'ER_NO_SUCH_TABLE') {
+      return res.status(500).json({
+        success: false,
+        error: 'Database table does not exist. Please contact administrator.'
+      });
+    }
+
     next(error);
   }
 });
