@@ -3,37 +3,15 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
 import pool from '../config/database.js';
 import auth from '../middleware/auth.js';
 import { logFailedLogin, logSuccessfulLogin, logAccountLockout } from '../middleware/securityLogger.js';
 
 const router = express.Router();
 
-// Configure multer for file uploads
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join(process.cwd(), 'uploads/profiles');
-    console.log('Profile upload directory:', uploadDir);
-    if (!fs.existsSync(uploadDir)) {
-      console.log('Creating upload directory:', uploadDir);
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const filename = 'profile-' + uniqueSuffix + path.extname(file.originalname);
-    console.log('Profile filename:', filename);
-    cb(null, filename);
-  }
-});
-
+// Configure multer for file uploads (memory storage for production)
 const upload = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 5 * 1024 * 1024 // 5MB limit
   },
@@ -41,7 +19,7 @@ const upload = multer({
     const allowedTypes = /jpeg|jpg|png|gif|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
-    
+
     if (mimetype && extname) {
       return cb(null, true);
     } else {
@@ -49,6 +27,36 @@ const upload = multer({
     }
   }
 });
+
+// Helper function to upload image to CMS
+const uploadToCMS = async (file, filename) => {
+  try {
+    const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
+    const formData = new FormData();
+    formData.append('file', file.buffer, {
+      filename: filename,
+      contentType: file.mimetype
+    });
+    formData.append('folder', 'profiles');
+
+    const response = await fetch(`${cmsUrl}/api/upload`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('CMS upload failed');
+    }
+
+    const data = await response.json();
+    return data.url; // Assuming CMS returns { url: '...' }
+  } catch (error) {
+    console.error('Error uploading to CMS:', error);
+    // Fallback: store as base64 data URL (temporary solution)
+    const base64 = file.buffer.toString('base64');
+    return `data:${file.mimetype};base64,${base64}`;
+  }
+};
 
 // Register new user
 router.post('/register', async (req, res, next) => {
@@ -376,28 +384,25 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
     console.log('User ID:', userId);
     console.log('Request body:', { first_name, last_name });
     console.log('File received:', req.file ? 'Yes' : 'No');
-    
-    if (req.file) {
-      console.log('File details:', {
-        originalname: req.file.originalname,
-        filename: req.file.filename,
-        path: req.file.path,
-        size: req.file.size,
-        mimetype: req.file.mimetype
-      });
-    }
 
     let query = `UPDATE users SET first_name = ?, last_name = ?`;
     const params = [first_name, last_name];
 
     // Handle profile image upload
     if (req.file) {
-      const backendUrl = process.env.API_BASE_URL?.replace('/api', '') || process.env.BACKEND_URL || 'https://trendorabay-platform.onrender.com';
-      const profileImageUrl = `${backendUrl}/uploads/profiles/${req.file.filename}`;
-      
-      console.log('Backend URL:', backendUrl);
+      console.log('File details:', {
+        originalname: req.file.originalname,
+        size: req.file.size,
+        mimetype: req.file.mimetype
+      });
+
+      // Upload to CMS
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const filename = 'profile-' + uniqueSuffix + path.extname(req.file.originalname);
+      const profileImageUrl = await uploadToCMS(req.file, filename);
+
       console.log('Profile image URL:', profileImageUrl);
-      
+
       try {
         // Test if profile_image column exists, create it if it doesn't
         await pool.query('SELECT profile_image FROM users LIMIT 1');
@@ -407,7 +412,7 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
         console.log('Creating profile_image column...');
         await pool.query('ALTER TABLE users ADD COLUMN profile_image VARCHAR(500)');
       }
-      
+
       query += `, profile_image = ?`;
       params.push(profileImageUrl);
     }
