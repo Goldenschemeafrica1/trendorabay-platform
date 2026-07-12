@@ -81,8 +81,8 @@ const StoryDetailPage = () => {
       }
     };
 
-    fetchStory();
-    fetchAdvertisement();
+    // Make API calls in parallel for faster loading
+    Promise.all([fetchStory(), fetchAdvertisement()]);
   }, [id]);
 
   const formatDate = (dateString) => {

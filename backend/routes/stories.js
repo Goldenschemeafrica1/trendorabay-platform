@@ -170,7 +170,7 @@ router.get('/', cache(300), async (req, res, next) => {
 });
 
 // Get story by ID
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
@@ -217,7 +217,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Get latest stories
-router.get('/latest', async (req, res, next) => {
+router.get('/latest', cache(300), async (req, res, next) => {
   try {
     const limit = req.query.limit || 10;
     const [rows] = await pool.query(
@@ -236,7 +236,7 @@ router.get('/latest', async (req, res, next) => {
 });
 
 // Get featured story
-router.get('/featured', async (req, res, next) => {
+router.get('/featured', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       `SELECT s.*, a.name as author_name 
@@ -256,7 +256,7 @@ router.get('/featured', async (req, res, next) => {
 });
 
 // Get recent stories
-router.get('/recent', async (req, res, next) => {
+router.get('/recent', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     const [rows] = await pool.query(
@@ -275,7 +275,7 @@ router.get('/recent', async (req, res, next) => {
 });
 
 // Search stories
-router.get('/search', async (req, res, next) => {
+router.get('/search', cache(60), async (req, res, next) => {
   try {
     const { q } = req.query;
     const page = parseInt(req.query.page) || 1;

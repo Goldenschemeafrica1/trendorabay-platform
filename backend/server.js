@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import compression from 'compression';
 import { testConnection } from './config/database.js';
+import { getRedisClient } from './config/redis.js';
 import { corsMiddleware } from './middleware/cors.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { securityMiddleware } from './middleware/security.js';
@@ -139,6 +140,37 @@ app.get('/api/ready', async (req, res) => {
     res.json({ ready: true });
   } else {
     res.status(503).json({ ready: false, reason: 'database disconnected' });
+  }
+});
+
+// Redis health check endpoint
+app.get('/api/redis-health', async (req, res) => {
+  try {
+    const client = await getRedisClient();
+    
+    if (client) {
+      await client.set('health-check', 'ok');
+      const value = await client.get('health-check');
+      res.json({ 
+        success: true,
+        redis: 'connected', 
+        test: value,
+        timestamp: new Date().toISOString()
+      });
+    } else {
+      res.status(503).json({ 
+        success: false,
+        redis: 'disconnected',
+        timestamp: new Date().toISOString()
+      });
+    }
+  } catch (error) {
+    res.status(503).json({ 
+      success: false,
+      redis: 'error',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
   }
 });
 

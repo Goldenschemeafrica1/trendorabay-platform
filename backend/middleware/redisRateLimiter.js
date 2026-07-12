@@ -33,7 +33,7 @@ export const redisRateLimiter = async (req, res, next) => {
     const client = await getRedisClient();
     const ip = req.ip || req.connection.remoteAddress;
     const windowMs = 15 * 60 * 1000; // 15 minutes
-    const maxRequests = 100;
+    const maxRequests = 300;
     let current;
 
     if (client) {
@@ -79,7 +79,7 @@ export const redisRateLimiter = async (req, res, next) => {
     // Fallback to in-memory rate limiting on error
     const ip = req.ip || req.connection.remoteAddress;
     const windowMs = 15 * 60 * 1000;
-    const maxRequests = 100;
+    const maxRequests = 300;
     const key = `ratelimit:${ip}`;
     const current = getInMemoryCount(key, windowMs);
 
