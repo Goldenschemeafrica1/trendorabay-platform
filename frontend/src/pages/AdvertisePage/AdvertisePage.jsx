@@ -68,7 +68,9 @@ const AdvertisePage = () => {
       
       setIsSubmitted(true);
     } catch (error) {
-      setErrors({ general: 'Submission failed. Please try again.' });
+      console.error('Submission error:', error);
+      const errorMessage = error.response?.data?.error || error.message || 'Submission failed. Please try again.';
+      setErrors({ general: errorMessage });
     } finally {
       setIsLoading(false);
     }

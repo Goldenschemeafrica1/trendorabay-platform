@@ -46,18 +46,41 @@ router.get('/:id', async (req, res, next) => {
 // Create inquiry
 router.post('/', async (req, res, next) => {
   try {
+    console.log('Received inquiry submission:', req.body);
     const { name, company, email, phone, budget, campaignType, message } = req.body;
+    
+    // Validate required fields
+    if (!name || !company || !email) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Missing required fields: name, company, email are required' 
+      });
+    }
+    
+    console.log('Attempting to insert inquiry into database...');
     const [result] = await pool.query(
       `INSERT INTO advertisement_inquiries (name, company, email, phone, budget, campaign_type, message) 
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [name, company, email, phone, budget, campaignType, message]
     );
+    console.log('Inquiry inserted successfully, ID:', result.insertId);
+    
     const [newInquiry] = await pool.query(
       'SELECT * FROM advertisement_inquiries WHERE id = ?',
       [result.insertId]
     );
     res.status(201).json({ success: true, data: newInquiry[0] });
   } catch (error) {
+    console.error('Inquiry submission error:', error);
+    
+    // Check if table doesn't exist
+    if (error.code === 'ER_NO_SUCH_TABLE') {
+      return res.status(500).json({ 
+        success: false, 
+        error: 'Database table does not exist. Please contact administrator.' 
+      });
+    }
+    
     next(error);
   }
 });
