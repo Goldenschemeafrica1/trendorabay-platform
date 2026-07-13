@@ -226,12 +226,14 @@ router.get('/', cache(300), async (req, res, next) => {
   }
 });
 
-// Get magazine by slug
+// Get magazine by slug or ID
 router.get('/:slug', async (req, res, next) => {
   try {
+    const param = req.params.slug;
+    const isNumeric = /^\d+$/.test(param);
     const [rows] = await pool.query(
-      'SELECT * FROM magazines WHERE slug = ?',
-      [req.params.slug]
+      `SELECT * FROM magazines WHERE ${isNumeric ? 'id = ?' : 'slug = ?'}`,
+      [param]
     );
     if (rows.length === 0) {
       return res.status(404).json({ success: false, error: 'Magazine not found' });

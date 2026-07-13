@@ -170,15 +170,17 @@ router.get('/', cache(300), async (req, res, next) => {
   }
 });
 
-// Get story by slug
+// Get story by slug or ID
 router.get('/:slug', cache(300), async (req, res, next) => {
   try {
+    const param = req.params.slug;
+    const isNumeric = /^\d+$/.test(param);
     const [rows] = await pool.query(
       `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
        FROM stories s
        LEFT JOIN authors a ON s.author_id = a.id
-       WHERE s.slug = ?`,
-      [req.params.slug]
+       WHERE ${isNumeric ? 's.id = ?' : 's.slug = ?'}`,
+      [param]
     );
     if (rows.length === 0) {
       return res.status(404).json({ success: false, error: 'Story not found' });
