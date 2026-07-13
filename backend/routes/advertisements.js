@@ -50,11 +50,19 @@ router.get('/', async (req, res, next) => {
 
     const [rows] = await pool.query(query, params);
 
-    const transformed = rows.map(ad => ({
-      ...ad,
-      image_url: getImageUrl(ad.image_url),
-      mobile_image_url: ad.mobile_image_url ? getImageUrl(ad.mobile_image_url) : null
-    }));
+    console.log('Raw advertisements from database:', rows);
+
+    const transformed = rows.map(ad => {
+      const originalImageUrl = ad.image_url;
+      const transformedImageUrl = getImageUrl(ad.image_url);
+      console.log(`Ad ID ${ad.id}: Original URL: ${originalImageUrl} -> Transformed: ${transformedImageUrl}`);
+
+      return {
+        ...ad,
+        image_url: transformedImageUrl,
+        mobile_image_url: ad.mobile_image_url ? getImageUrl(ad.mobile_image_url) : null
+      };
+    });
 
     res.json({ success: true, data: transformed });
   } catch (error) {
