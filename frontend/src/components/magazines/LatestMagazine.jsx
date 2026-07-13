@@ -21,7 +21,7 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
         const transformedData = Array.isArray(data) ? data.map(magazine => ({
           ...magazine,
           id: magazine.id || magazine._id || magazine.magazine_id,
-          slug: magazine.slug || magazine.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `magazine-${magazine.id || magazine._id || magazine.magazine_id}`
+          slug: magazine.slug || String(magazine.id || magazine._id || magazine.magazine_id)
         })).filter(magazine => magazine.slug && magazine.slug !== 'undefined') : [];
         setMagazines(transformedData);
       } catch (error) {

@@ -6,7 +6,7 @@ const storyService = {
     if (!story) return story;
     return {
       ...story,
-      slug: story.slug || (story.title ? story.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : null) || `story-${story.id || story._id || story.story_id}`,
+      slug: story.slug || String(story.id || story._id || story.story_id),
       id: story.id || story._id || story.story_id,
     };
   },

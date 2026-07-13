@@ -39,7 +39,7 @@ const magazineService = {
       }
     }
     
-    const slug = mag.slug || (mag.title ? mag.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : null) || `magazine-${mag.id || mag._id || mag.magazine_id}`;
+    const slug = mag.slug || String(mag.id || mag._id || mag.magazine_id);
 
     return {
       ...mag,
