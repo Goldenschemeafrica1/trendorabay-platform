@@ -19,7 +19,7 @@ const Advert = ({
   useEffect(() => {
     const fetchAdvertisement = async () => {
       try {
-        const response = await advertisementService.getAdvertisements({ 
+        const response = await advertisementService.getAdvertisements({
           status: 'active'
         });
         console.log('Advertisement response:', response);
@@ -30,7 +30,12 @@ const Advert = ({
           ads = response.data;
         }
         if (ads.length > 0) {
-          setAdData(ads[0]);
+          // Ensure ad has id field
+          const adWithId = {
+            ...ads[0],
+            id: ads[0].id || ads[0]._id || ads[0].advertisement_id
+          };
+          setAdData(adWithId);
         }
       } catch (error) {
         console.error('Error fetching advertisement:', error);

@@ -17,7 +17,12 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
       try {
         setLoading(true);
         const data = await magazineService.getMagazines({ limit, category });
-        setMagazines(data);
+        // Ensure each magazine has an id field
+        const transformedData = Array.isArray(data) ? data.map(magazine => ({
+          ...magazine,
+          id: magazine.id || magazine._id || magazine.magazine_id
+        })) : [];
+        setMagazines(transformedData);
       } catch (error) {
         console.error('Error fetching magazines:', error);
         setMagazines([]);

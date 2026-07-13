@@ -31,6 +31,7 @@ const FeaturedStories = () => {
         // Transform data to match frontend expectations
         const transformed = stories.map(story => ({
           ...story,
+          id: story.id || story._id || story.story_id,
           category: story.category || story.categoryName || story.category_name || story.category_id,
           image: story.imageUrl || story.featured_image_url,
           author: story.author?.name || story.author_name || 'Unknown Author',
@@ -64,6 +65,7 @@ const FeaturedStories = () => {
 
         const transformed = stories.map(story => ({
           ...story,
+          id: story.id || story._id || story.story_id,
           category: story.category || story.categoryName || story.category_name || story.category_id,
           image: story.imageUrl || story.featured_image_url,
           author: story.author?.name || story.author_name || story.author_id
@@ -94,6 +96,7 @@ const FeaturedStories = () => {
 
         const transformed = stories.map(story => ({
           ...story,
+          id: story.id || story._id || story.story_id,
           category: story.category || story.categoryName || story.category_name || story.category_id,
           image: story.imageUrl || story.featured_image_url,
           author: story.author?.name || story.author_name || story.author_id
@@ -124,6 +127,7 @@ const FeaturedStories = () => {
 
         const transformed = stories.map(story => ({
           ...story,
+          id: story.id || story._id || story.story_id,
           category: story.category || story.categoryName || story.category_name || story.category_id,
           image: story.imageUrl || story.featured_image_url,
           author: story.author?.name || story.author_name || story.author_id,
@@ -146,16 +150,22 @@ const FeaturedStories = () => {
       try {
         const response = await advertisementService.getAdvertisements({ status: 'active' });
         let ads = [];
-        
+
         if (Array.isArray(response)) {
           ads = response;
         } else if (response && Array.isArray(response.data)) {
           ads = response.data;
         }
-        
-        const horizontal = ads.find(ad => ad.position === 'horizontal');
-        const vertical = ads.find(ad => ad.position === 'vertical');
-        
+
+        // Ensure ads have id field
+        const transformedAds = ads.map(ad => ({
+          ...ad,
+          id: ad.id || ad._id || ad.advertisement_id
+        }));
+
+        const horizontal = transformedAds.find(ad => ad.position === 'horizontal');
+        const vertical = transformedAds.find(ad => ad.position === 'vertical');
+
         setHorizontalAd(horizontal);
         setVerticalAd(vertical);
       } catch (error) {
@@ -164,7 +174,7 @@ const FeaturedStories = () => {
         setVerticalAd(null);
       }
     };
-    
+
     fetchAdvertisements();
   }, []);
 
