@@ -30,11 +30,11 @@ const StoryDetailPage = () => {
       try {
         const response = await storyService.getStoryBySlug(slug);
         
-        if (response && response.data) {
-          setStory(response.data);
+        if (response) {
+          setStory(response);
           
           // Check if user is following this author
-          const authorId = response.data.author?.id || response.data.author_id;
+          const authorId = response.author?.id || response.author_id;
           if (authorId) {
             try {
               const followResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/authors/${authorId}/follow/${userId}`);

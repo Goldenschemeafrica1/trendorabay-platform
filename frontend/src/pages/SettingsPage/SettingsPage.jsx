@@ -39,7 +39,7 @@ const SettingsPage = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/profile`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/users/profile`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -118,7 +118,7 @@ const SettingsPage = () => {
           formData.append('profile_image', accountSettings.profileImageFile);
         }
         
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/profile`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/users/profile`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`

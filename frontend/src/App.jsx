@@ -77,6 +77,20 @@ function App() {
       if (typeof args[0] === 'string' && args[0].includes('Vercel Web Analytics')) {
         return;
       }
+      // Suppress advertisement fetch errors
+      if (typeof args[0] === 'string' && args[0].includes('Error fetching advertisement')) {
+        return;
+      }
+      // Suppress API errors for non-critical features
+      if (typeof args[0] === 'string' && (
+        args[0].includes('Failed to fetch comments') ||
+        args[0].includes('Error checking follow status') ||
+        args[0].includes('Failed to fetch likes') ||
+        args[0].includes('Error fetching user data') ||
+        args[0].includes('Error saving settings')
+      )) {
+        return;
+      }
       originalError.apply(console, args);
     };
     return () => {
@@ -120,8 +134,8 @@ function App() {
       {/* Main Header - Hidden on login, signup, terms, and privacy pages */}
       {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && <Header />}
 
-      {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, signup, about, store, stories, author, contributors, terms, privacy, donate, events, contact, write-for-us, write, partner, partner-with-us, faq, subscribe, settings, orders, and profile pages */}
-      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && !location.pathname.match(/^\/podcast\/\d+/) && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/author') && location.pathname !== '/community/contributors' && !location.pathname.match(/^\/community\/contributors\/\d+/) && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/events' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/write' && !location.pathname.startsWith('/partner') && location.pathname !== '/faq' && location.pathname !== '/subscribe' && location.pathname !== '/settings' && location.pathname !== '/orders' && location.pathname !== '/profile' && !location.pathname.match(/^\/stories\/[\w-]+$/) && <Advert />}
+      {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, signup, about, store, author, contributors, terms, privacy, donate, events, contact, write-for-us, write, partner, partner-with-us, faq, subscribe, settings, orders, and profile pages */}
+      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && !location.pathname.match(/^\/podcast\/\d+/) && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/author') && location.pathname !== '/community/contributors' && !location.pathname.match(/^\/community\/contributors\/\d+/) && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/events' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/write' && !location.pathname.startsWith('/partner') && location.pathname !== '/faq' && location.pathname !== '/subscribe' && location.pathname !== '/settings' && location.pathname !== '/orders' && location.pathname !== '/profile' && <Advert />}
 
       {/* Shopping Cart Drawer (Slides from right) */}
       <CartDrawer />

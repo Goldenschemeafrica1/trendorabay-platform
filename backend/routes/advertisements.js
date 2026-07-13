@@ -6,21 +6,17 @@ const router = express.Router();
 
 // Helper function to get image URL - handle Cloudinary and CMS uploads
 const getImageUrl = (url) => {
-  if (!url || url === 'undefined' || url === '/uploads/advertisements/undefined' || url === '/uploads/stories/undefined') return null;
+  if (!url || url === 'undefined' || url === '/uploads/advertisements/undefined' || url === '/uploads/stories/undefined') return '/automotives.jpeg';
   
   // Return full URLs as-is (Cloudinary, external images)
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url;
   }
   
-  // For relative paths, construct full URL using CMS base
-  const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
-  
-  // If it's a relative path starting with /uploads, serve from CMS
+  // If it's a relative path starting with /uploads, try backend URL first, fall back to placeholder
   if (url.startsWith('/uploads/')) {
-    const fullUrl = `${cmsUrl}${url}`;
-    console.log(`Image URL construction: ${url} -> ${fullUrl} (CMS_URL: ${cmsUrl})`);
-    return fullUrl;
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+    return `${backendUrl}${url}`;
   }
   
   // If it starts with /, it's in the frontend public folder - return as-is

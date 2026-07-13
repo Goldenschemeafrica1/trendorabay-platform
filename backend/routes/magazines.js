@@ -137,15 +137,16 @@ router.get('/', cache(300), async (req, res, next) => {
       // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       
-      // If it's a relative path starting with /uploads, serve from CMS
+      // If it's a relative path starting with /uploads, try backend URL first, fall back to category image
       if (url.startsWith('/uploads/')) {
-        return `${cmsUrl}${url}`;
+        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        return `${backendUrl}${url}`;
       }
       // If it starts with / but not /uploads, check if it's a fallback and use preview_pages if available
       if (url.startsWith('/') && !url.startsWith('/uploads/')) {
         // If this looks like a fallback image and we have a preview_pages URL, use that instead
         if (fallbackUrl && fallbackUrl.startsWith('/uploads/')) {
-          return `${cmsUrl}${fallbackUrl}`;
+          return categoryImageMap[categoryId] || '/music.jpeg';
         }
         return url;
       }
@@ -198,9 +199,12 @@ router.get('/', cache(300), async (req, res, next) => {
         .map(id => contributorMap.get(id))
         .filter(c => c !== undefined);
 
+      // Generate slug from title if not exists
+      const slug = magazine.slug || magazine.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(magazine.id);
+
       return {
         ...magazine,
-        slug: magazine.slug,
+        slug,
         coverImage: getImageUrl(magazine.cover_image_url, magazine.category_id, magazine.preview_pages),
         pdfUrl: getImageUrl(magazine.pdf_url, magazine.category_id),
         price: magazine.price,
@@ -231,10 +235,20 @@ router.get('/:slug', async (req, res, next) => {
   try {
     const param = req.params.slug;
     const isNumeric = /^\d+$/.test(param);
-    const [rows] = await pool.query(
-      `SELECT * FROM magazines WHERE ${isNumeric ? 'id = ?' : 'slug = ?'}`,
-      [param]
-    );
+    
+    let rows;
+    
+    if (isNumeric) {
+      [rows] = await pool.query('SELECT * FROM magazines WHERE id = ?', [param]);
+    } else {
+      // Try to find by matching slug against generated title slugs
+      const [allMagazines] = await pool.query('SELECT * FROM magazines');
+      rows = allMagazines.filter(mag => {
+        const generatedSlug = mag.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(mag.id);
+        return generatedSlug === param;
+      });
+    }
+    
     if (rows.length === 0) {
       return res.status(404).json({ success: false, error: 'Magazine not found' });
     }
@@ -255,25 +269,31 @@ router.get('/:slug', async (req, res, next) => {
       53: '/automotives.jpeg' // Automotive
     };
 
-    // Helper function to get image URL (serve CMS uploads)
+    // Helper function to get image URL (handle Cloudinary and CMS uploads)
     const getImageUrl = (url, categoryId, fallbackUrl = null) => {
-      if (!url) {
+      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
+      
+      if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
         // If no URL provided, try fallback URL first, then category-based image
         if (fallbackUrl && fallbackUrl.startsWith('/uploads/')) {
-          return `http://localhost:3001${fallbackUrl}`;
+          return `${cmsUrl}${fallbackUrl}`;
         }
         return categoryImageMap[categoryId] || '/music.jpeg';
       }
+      
+      // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
-      // If it's a relative path starting with /uploads, serve from backend
+      
+      // If it's a relative path starting with /uploads, try backend URL first, fall back to category image
       if (url.startsWith('/uploads/')) {
-        return `http://localhost:3001${url}`;
+        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        return `${backendUrl}${url}`;
       }
       // If it starts with / but not /uploads, check if it's a fallback and use preview_pages if available
       if (url.startsWith('/') && !url.startsWith('/uploads/')) {
         // If this looks like a fallback image and we have a preview_pages URL, use that instead
         if (fallbackUrl && fallbackUrl.startsWith('/uploads/')) {
-          return `http://localhost:3001${fallbackUrl}`;
+          return categoryImageMap[categoryId] || '/music.jpeg';
         }
         return url;
       }
@@ -303,8 +323,12 @@ router.get('/:slug', async (req, res, next) => {
       }));
     }
 
+    // Generate slug from title if not exists
+    const slug = rows[0].slug || rows[0].title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(rows[0].id);
+
     const transformed = {
       ...rows[0],
+      slug,
       coverImage: getImageUrl(rows[0].cover_image_url, rows[0].category_id, rows[0].preview_pages),
       pdfUrl: getImageUrl(rows[0].pdf_url, rows[0].category_id),
       price: rows[0].price,

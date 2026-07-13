@@ -4,9 +4,12 @@ const storyService = {
   // Transform story data to ensure slug exists
   transformStory: (story) => {
     if (!story) return story;
+    // Preserve the slug from backend, only generate from title if slug doesn't exist
+    const cleanTitle = story.title?.trim() || '';
+    const slug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id || story._id || story.story_id);
     return {
       ...story,
-      slug: story.slug || String(story.id || story._id || story.story_id),
+      slug,
       id: story.id || story._id || story.story_id,
     };
   },

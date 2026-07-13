@@ -19,7 +19,7 @@ const FeaturedStories = () => {
   useEffect(() => {
     const fetchFeaturedStories = async () => {
       try {
-        const response = await storyService.getStories({ featured: true, status: 'published', limit: 10 });
+        const response = await storyService.getStories({ status: 'published', limit: 10 });
         let stories = [];
 
         if (Array.isArray(response)) {
@@ -32,14 +32,14 @@ const FeaturedStories = () => {
         const transformed = stories.map(story => ({
           ...story,
           id: story.id || story._id || story.story_id,
-          slug: story.slug || story.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
+          slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
           category: story.category || story.categoryName || story.category_name || story.category_id,
           image: story.imageUrl || story.featured_image_url,
           author: story.author?.name || story.author_name || 'Unknown Author',
           author_id: story.author?.id || story.author_id,
           date: new Date(story.published_at || story.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase(),
           readTime: '5 MIN READ'
-        })).filter(story => story.slug && story.slug !== 'undefined');
+        }));
 
         setFeaturedStories(transformed);
       } catch (error) {
@@ -67,7 +67,7 @@ const FeaturedStories = () => {
         const transformed = stories.map(story => ({
           ...story,
           id: story.id || story._id || story.story_id,
-          slug: story.slug || story.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
+          slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
           category: story.category || story.categoryName || story.category_name || story.category_id,
           image: story.imageUrl || story.featured_image_url,
           author: story.author?.name || story.author_name || story.author_id
@@ -99,7 +99,7 @@ const FeaturedStories = () => {
         const transformed = stories.map(story => ({
           ...story,
           id: story.id || story._id || story.story_id,
-          slug: story.slug || story.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
+          slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
           category: story.category || story.categoryName || story.category_name || story.category_id,
           image: story.imageUrl || story.featured_image_url,
           author: story.author?.name || story.author_name || story.author_id
@@ -131,7 +131,7 @@ const FeaturedStories = () => {
         const transformed = stories.map(story => ({
           ...story,
           id: story.id || story._id || story.story_id,
-          slug: story.slug || story.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
+          slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
           category: story.category || story.categoryName || story.category_name || story.category_id,
           image: story.imageUrl || story.featured_image_url,
           author: story.author?.name || story.author_name || story.author_id,

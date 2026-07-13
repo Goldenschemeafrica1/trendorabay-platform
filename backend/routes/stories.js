@@ -100,12 +100,10 @@ router.get('/', cache(300), async (req, res, next) => {
       // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       
-      // For relative paths, construct full URL using CMS base
-      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
-      
-      // If it's a relative path starting with /uploads, serve from CMS
+      // If it's a relative path starting with /uploads, try backend URL first, fall back to category image
       if (url.startsWith('/uploads/')) {
-        return `${cmsUrl}${url}`;
+        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        return `${backendUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {
@@ -123,9 +121,9 @@ router.get('/', cache(300), async (req, res, next) => {
     const getAvatarUrl = (url) => {
       if (!url) return '/logo.jpeg';
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
-      // If it's a relative path starting with /uploads, serve from backend
+      // If it's a relative path starting with /uploads, fall back to logo since CMS files don't exist
       if (url.startsWith('/uploads/')) {
-        return `http://localhost:3001${url}`;
+        return '/logo.jpeg';
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {
@@ -140,25 +138,33 @@ router.get('/', cache(300), async (req, res, next) => {
     };
 
     // Transform data to match frontend expectations
-    const transformedStories = rows.map(story => ({
-      id: story.id,
-      slug: story.slug,
-      title: story.title,
-      content: story.content,
-      imageUrl: getImageUrl(story.featured_image_url, story.category_name),
-      categoryName: story.category_name,
-      category: story.category_name,
-      featured: story.featured === 1,
-      author: story.author_id ? {
-        id: story.author_id,
-        name: story.author_name || 'Unknown Author',
-        avatar: getAvatarUrl(story.author_avatar)
-      } : null,
-      publishedDate: story.published_at || story.created_at,
-      createdAt: story.created_at,
-      updatedAt: story.updated_at,
-      status: story.status
-    }));
+    const transformedStories = rows.map(story => {
+      // Generate slug from title if not exists - trim whitespace first
+      const cleanTitle = story.title?.trim() || '';
+      const slug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+      
+      return {
+        id: story.id,
+        slug,
+        title: story.title,
+        content: story.content,
+        imageUrl: getImageUrl(story.featured_image_url, story.category_name),
+        categoryName: story.category_name,
+        category: story.category_name,
+        featured: story.featured === 1,
+        author: story.author_id ? {
+          id: story.author_id,
+          name: story.author_name || 'Unknown Author',
+          avatar: getAvatarUrl(story.author_avatar)
+        } : null,
+        publishedDate: story.published_at || story.created_at,
+        createdAt: story.created_at,
+        updatedAt: story.updated_at,
+        status: story.status,
+        author_name: story.author_name,
+        author_id: story.author_id
+      };
+    });
 
     res.json({
       data: transformedStories,
@@ -175,13 +181,31 @@ router.get('/:slug', cache(300), async (req, res, next) => {
   try {
     const param = req.params.slug;
     const isNumeric = /^\d+$/.test(param);
-    const [rows] = await pool.query(
-      `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
-       FROM stories s
-       LEFT JOIN authors a ON s.author_id = a.id
-       WHERE ${isNumeric ? 's.id = ?' : 's.slug = ?'}`,
-      [param]
-    );
+    
+    let rows;
+    
+    if (isNumeric) {
+      [rows] = await pool.query(
+        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+         FROM stories s
+         LEFT JOIN authors a ON s.author_id = a.id
+         WHERE s.id = ?`,
+        [param]
+      );
+    } else {
+      // Try to find by matching slug against generated title slugs
+      const [allStories] = await pool.query(
+        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+         FROM stories s
+         LEFT JOIN authors a ON s.author_id = a.id`
+      );
+      rows = allStories.filter(story => {
+        const cleanTitle = story.title?.trim() || '';
+        const generatedSlug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+        return generatedSlug === param;
+      });
+    }
+    
     if (rows.length === 0) {
       return res.status(404).json({ success: false, error: 'Story not found' });
     }
@@ -190,9 +214,9 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     const getAvatarUrl = (url) => {
       if (!url) return '/logo.jpeg';
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
-      // If it's a relative path starting with /uploads, serve from backend
+      // If it's a relative path starting with /uploads, fall back to logo since CMS files don't exist
       if (url.startsWith('/uploads/')) {
-        return `http://localhost:3001${url}`;
+        return '/logo.jpeg';
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {
@@ -208,8 +232,13 @@ router.get('/:slug', cache(300), async (req, res, next) => {
 
     // Transform the story data
     const story = rows[0];
+    // Generate slug from title if not exists (for consistency) - trim whitespace first
+    const cleanTitle = story.title?.trim() || '';
+    const slug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+    
     const transformed = {
       ...story,
+      slug,
       author_avatar: getAvatarUrl(story.author_avatar)
     };
 
