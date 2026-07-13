@@ -56,7 +56,7 @@ const Footer = () => {
               <div className="fashion-magazine">
                 {featuredMagazines.length > 0 ? (
                   featuredMagazines.map((magazine) => (
-                    <Link key={magazine.id} to={`/magazines/${magazine.id}`} className="magazine-link">
+                    <Link key={magazine.id} to={`/magazines/${magazine.slug}`} className="magazine-link">
                       <img 
                         src={magazine.coverImage} 
                         alt={magazine.title} 

@@ -274,7 +274,7 @@ const LatestStoriesPage = () => {
           <div className="stories-grid">
             {filteredStories.map(story => (
               <article key={story.id} className="story-card">
-                <Link to={`/stories/${story.id}`} className="story-link">
+                <Link to={`/stories/${story.slug}`} className="story-link">
                   <div className="story-image">
                     <img src={story.imageUrl} alt={story.title} loading="lazy" />
                   </div>

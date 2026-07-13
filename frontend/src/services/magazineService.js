@@ -86,6 +86,20 @@ const magazineService = {
     return result;
   },
 
+  // Get magazine by slug
+  getMagazineBySlug: async (slug) => {
+    const cacheKey = `magazine_${slug}`;
+    const cached = getCached(cacheKey);
+    if (cached) return cached;
+
+    const response = await apiRequest.get(`/magazines/${slug}`);
+    const magazine = response.data?.data || response.data;
+    const result = magazineService.transformMagazine(magazine);
+
+    setCached(cacheKey, result);
+    return result;
+  },
+
   // Get magazines by category
   getMagazinesByCategory: async (category, page = 1, limit = 12) => {
     const cacheKey = `magazines_category_${category}_${page}_${limit}`;

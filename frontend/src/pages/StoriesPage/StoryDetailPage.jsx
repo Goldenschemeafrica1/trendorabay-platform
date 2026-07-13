@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import './StoriesPage.css';
 
 const StoryDetailPage = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [relatedStories, setRelatedStories] = useState([]);
@@ -23,7 +23,7 @@ const StoryDetailPage = () => {
     const fetchStory = async () => {
       setLoading(true);
       try {
-        const response = await storyService.getStoryById(id);
+        const response = await storyService.getStoryBySlug(slug);
         
         if (response && response.data) {
           setStory(response.data);

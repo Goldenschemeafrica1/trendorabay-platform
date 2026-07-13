@@ -200,6 +200,7 @@ router.get('/', cache(300), async (req, res, next) => {
 
       return {
         ...magazine,
+        slug: magazine.slug,
         coverImage: getImageUrl(magazine.cover_image_url, magazine.category_id, magazine.preview_pages),
         pdfUrl: getImageUrl(magazine.pdf_url, magazine.category_id),
         price: magazine.price,
@@ -225,12 +226,12 @@ router.get('/', cache(300), async (req, res, next) => {
   }
 });
 
-// Get magazine by ID
-router.get('/:id', async (req, res, next) => {
+// Get magazine by slug
+router.get('/:slug', async (req, res, next) => {
   try {
     const [rows] = await pool.query(
-      'SELECT * FROM magazines WHERE id = ?',
-      [req.params.id]
+      'SELECT * FROM magazines WHERE slug = ?',
+      [req.params.slug]
     );
     if (rows.length === 0) {
       return res.status(404).json({ success: false, error: 'Magazine not found' });

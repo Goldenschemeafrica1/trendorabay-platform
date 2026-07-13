@@ -74,7 +74,7 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
               key={magazine.id}
               className="magazine-card"
             >
-              <Link to={`/magazines/${magazine.id}`}>
+              <Link to={`/magazines/${magazine.slug}`}>
                 <img 
                   src={magazine.coverImage} 
                   alt={magazine.title}

@@ -4,7 +4,7 @@ import MagazineDetails from '../../components/magazines/MagazineDetails';
 import magazineService from '../../services/magazineService';
 
 const MagazineDetailPage = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [magazine, setMagazine] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,7 +13,7 @@ const MagazineDetailPage = () => {
     const fetchMagazine = async () => {
       try {
         setLoading(true);
-        const data = await magazineService.getMagazineById(id);
+        const data = await magazineService.getMagazineBySlug(slug);
         setMagazine(data);
       } catch (err) {
         console.error('Error fetching magazine:', err);
@@ -23,10 +23,10 @@ const MagazineDetailPage = () => {
       }
     };
 
-    if (id) {
+    if (slug) {
       fetchMagazine();
     }
-  }, [id]);
+  }, [slug]);
 
   useEffect(() => {
     document.body.classList.add('magazine-detail-page-body');

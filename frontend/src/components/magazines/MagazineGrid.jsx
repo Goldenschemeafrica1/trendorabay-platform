@@ -297,7 +297,7 @@ const MagazineGrid = ({
             {viewMode === 'grid' ? (
               /* Grid View */
               <div className="magazine-card">
-                <Link to={`/magazines/${magazine.id}`}>
+                <Link to={`/magazines/${magazine.slug}`}>
                   <img 
                     src={magazine.coverImage} 
                     alt={magazine.title}
@@ -321,7 +321,7 @@ const MagazineGrid = ({
               /* List View */
               <div className="magazine-list-item">
                 <div className="list-cover-wrapper">
-                  <Link to={`/magazines/${magazine.id}`}>
+                  <Link to={`/magazines/${magazine.slug}`}>
                     <img 
                       src={magazine.coverImage} 
                       alt={magazine.title}
@@ -337,7 +337,7 @@ const MagazineGrid = ({
                     <div>
                       <span className="list-category">{magazine.category}</span>
                       <h3 className="list-title">
-                        <Link to={`/magazines/${magazine.id}`}>
+                        <Link to={`/magazines/${magazine.slug}`}>
                           {magazine.title}
                         </Link>
                       </h3>

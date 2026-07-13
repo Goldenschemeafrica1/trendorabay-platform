@@ -318,7 +318,7 @@ const ContributorDetailsPage = () => {
                 contributorArticles.map((article) => (
                   <a 
                     key={article.id} 
-                    href={`/magazines/${article.id}`} 
+                    href={`/magazines/${article.slug}`} 
                     className="article-item"
                   >
                     <div className="article-info">

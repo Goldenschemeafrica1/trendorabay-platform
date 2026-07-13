@@ -121,7 +121,7 @@ function App() {
       {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && <Header />}
 
       {/* Advertisement Bar - Hidden on magazine pages, podcast, merchandise, cart, login, signup, about, store, stories, author, contributors, terms, privacy, donate, events, contact, write-for-us, write, partner, partner-with-us, faq, subscribe, settings, orders, and profile pages */}
-      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && !location.pathname.match(/^\/podcast\/\d+/) && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/author') && location.pathname !== '/community/contributors' && !location.pathname.match(/^\/community\/contributors\/\d+/) && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/events' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/write' && !location.pathname.startsWith('/partner') && location.pathname !== '/faq' && location.pathname !== '/subscribe' && location.pathname !== '/settings' && location.pathname !== '/orders' && location.pathname !== '/profile' && !location.pathname.match(/^\/stories\/\d+/) && <Advert />}
+      {!location.pathname.startsWith('/magazines') && location.pathname !== '/podcast' && !location.pathname.match(/^\/podcast\/\d+/) && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/author') && location.pathname !== '/community/contributors' && !location.pathname.match(/^\/community\/contributors\/\d+/) && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/events' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/write' && !location.pathname.startsWith('/partner') && location.pathname !== '/faq' && location.pathname !== '/subscribe' && location.pathname !== '/settings' && location.pathname !== '/orders' && location.pathname !== '/profile' && !location.pathname.match(/^\/stories\/[\w-]+$/) && <Advert />}
 
       {/* Shopping Cart Drawer (Slides from right) */}
       <CartDrawer />
@@ -139,7 +139,7 @@ function App() {
         {/* Magazines Routes */}
         <Route path="/magazines" element={<MagazinesPage />} />
         <Route path="/magazines/category/:category" element={<MagazineCategoryPage />} />
-        <Route path="/magazines/:id" element={<MagazineDetailPage />} />
+        <Route path="/magazines/:slug" element={<MagazineDetailPage />} />
 
         {/* Merchandise Routes */}
         <Route path="/merchandise" element={<StorePage />} />
@@ -152,7 +152,7 @@ function App() {
         {/* Stories Routes (Read-only) */}
         <Route path="/stories" element={<StoriesPage />} />
         <Route path="/stories/latest" element={<LatestStoriesPage />} />
-        <Route path="/stories/:id" element={<StoryDetailPage />} />
+        <Route path="/stories/:slug" element={<StoryDetailPage />} />
         <Route path="/author/:id" element={<AuthorPage />} />
 
 

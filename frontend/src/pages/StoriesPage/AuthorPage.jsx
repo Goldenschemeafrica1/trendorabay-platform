@@ -222,7 +222,7 @@ const AuthorPage = () => {
                 stories.map((story) => (
                   <a 
                     key={story.id} 
-                    href={`/stories/${story.id}`} 
+                    href={`/stories/${story.slug}`} 
                     className="article-item"
                   >
                     <div className="article-info">

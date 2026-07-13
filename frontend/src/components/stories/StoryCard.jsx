@@ -41,7 +41,7 @@ const StoryCard = ({
       
       <div className="story-content">
         <h3 className="story-title">
-          <a href={`/stories/${story.id}`}>{story.title}</a>
+          <a href={`/stories/${story.slug}`}>{story.title}</a>
         </h3>
         
         <p className="story-excerpt">

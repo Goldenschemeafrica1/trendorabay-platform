@@ -21,6 +21,12 @@ const storyService = {
     return response.data;
   },
 
+  // Get story by slug
+  getStoryBySlug: async (slug) => {
+    const response = await apiRequest.get(`/stories/${slug}`);
+    return response.data;
+  },
+
   // Get featured story
   getFeaturedStory: async () => {
     const response = await apiRequest.get('/stories/featured');

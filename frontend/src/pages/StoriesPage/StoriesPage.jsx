@@ -93,7 +93,7 @@ const StoriesPage = () => {
                 <>
                   <div className="stories-grid">
                     {currentStories.map(story => (
-                      <Link key={story.id} to={`/stories/${story.id}`} className="story-card">
+                      <Link key={story.id} to={`/stories/${story.slug}`} className="story-card">
                         <div className="story-image">
                           <img
                             src={story.imageUrl || '/music.jpeg'}
