@@ -54,7 +54,7 @@ const StoryDetailPage = () => {
           
           // Filter out current story and limit to 3
           const filteredRelated = relatedStories
-            .filter(s => s.id !== parseInt(id))
+            .filter(s => s.id !== parseInt(story?.id))
             .slice(0, 3);
           
           setRelatedStories(filteredRelated);
@@ -83,7 +83,7 @@ const StoryDetailPage = () => {
 
     // Make API calls in parallel for faster loading
     Promise.all([fetchStory(), fetchAdvertisement()]);
-  }, [id]);
+  }, [slug]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -116,7 +116,7 @@ const StoryDetailPage = () => {
 
     try {
       const userObj = JSON.parse(user);
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/like`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${story?.id}/like`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ const StoryDetailPage = () => {
 
     try {
       const userObj = JSON.parse(user);
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/comments`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${story?.id}/comments`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ const StoryDetailPage = () => {
       }
 
       // Track share in backend
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/share`, {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${story?.id}/share`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: userId, platform: 'web' })
@@ -267,7 +267,7 @@ const StoryDetailPage = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/comments`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${story?.id}/comments`);
         const data = await response.json();
         if (data.success) {
           setComments(data.data || []);
@@ -280,7 +280,7 @@ const StoryDetailPage = () => {
 
     const fetchLikes = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${id}/likes`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${story?.id}/likes`);
         const data = await response.json();
         if (data.success) {
           setLikesCount(data.likes || 0);
@@ -291,16 +291,16 @@ const StoryDetailPage = () => {
       }
     };
 
-    if (id) {
+    if (story?.id) {
       fetchComments();
       fetchLikes();
     }
-  }, [id]);
+  }, [story?.id]);
 
   // Scroll to top when story ID changes (mobile navigation)
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [id]);
+  }, [story?.id]);
 
   if (loading) {
     return (

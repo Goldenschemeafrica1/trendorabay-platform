@@ -39,8 +39,11 @@ const magazineService = {
       }
     }
     
+    const slug = mag.slug || (mag.title ? mag.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : null) || `magazine-${mag.id || mag._id || mag.magazine_id}`;
+
     return {
       ...mag,
+      slug,
       coverImage: mag.coverImage || mag.cover_image_url || '/music.jpeg',
       previewPages
     };

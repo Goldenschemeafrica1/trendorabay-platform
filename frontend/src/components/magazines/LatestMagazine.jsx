@@ -17,11 +17,12 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
       try {
         setLoading(true);
         const data = await magazineService.getMagazines({ limit, category });
-        // Ensure each magazine has an id field
+        // Ensure each magazine has id and slug fields
         const transformedData = Array.isArray(data) ? data.map(magazine => ({
           ...magazine,
-          id: magazine.id || magazine._id || magazine.magazine_id
-        })) : [];
+          id: magazine.id || magazine._id || magazine.magazine_id,
+          slug: magazine.slug || magazine.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `magazine-${magazine.id || magazine._id || magazine.magazine_id}`
+        })).filter(magazine => magazine.slug && magazine.slug !== 'undefined') : [];
         setMagazines(transformedData);
       } catch (error) {
         console.error('Error fetching magazines:', error);

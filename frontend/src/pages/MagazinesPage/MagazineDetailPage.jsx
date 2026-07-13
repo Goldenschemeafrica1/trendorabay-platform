@@ -23,7 +23,7 @@ const MagazineDetailPage = () => {
       }
     };
 
-    if (slug) {
+    if (slug && slug !== 'undefined') {
       fetchMagazine();
     }
   }, [slug]);
