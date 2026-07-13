@@ -13,10 +13,10 @@ const getImageUrl = (url) => {
     return url;
   }
   
-  // If it's a relative path starting with /uploads, try backend URL first, fall back to placeholder
+  // If it's a relative path starting with /uploads, serve from CMS
   if (url.startsWith('/uploads/')) {
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
-    return `${backendUrl}${url}`;
+    const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
+    return `${cmsUrl}${url}`;
   }
   
   // If it starts with /, it's in the frontend public folder - return as-is
