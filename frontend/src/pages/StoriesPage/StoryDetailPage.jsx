@@ -20,6 +20,11 @@ const StoryDetailPage = () => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
+    if (!slug || slug === 'null' || slug === 'undefined') {
+      setLoading(false);
+      return;
+    }
+
     const fetchStory = async () => {
       setLoading(true);
       try {

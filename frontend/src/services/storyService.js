@@ -1,6 +1,16 @@
 import { apiRequest } from './api';
 
 const storyService = {
+  // Transform story data to ensure slug exists
+  transformStory: (story) => {
+    if (!story) return story;
+    return {
+      ...story,
+      slug: story.slug || (story.title ? story.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : null) || `story-${story.id || story._id || story.story_id}`,
+      id: story.id || story._id || story.story_id,
+    };
+  },
+
   // Get all stories with optional filters
   getStories: async (filters = {}) => {
     const params = new URLSearchParams();
@@ -10,21 +20,27 @@ const storyService = {
     if (filters.page) params.append('page', filters.page);
     if (filters.limit) params.append('limit', filters.limit);
     if (filters.search) params.append('search', filters.search);
+    if (filters.status) params.append('status', filters.status);
+    if (filters.featured) params.append('featured', filters.featured);
     
     const response = await apiRequest.get(`/stories?${params.toString()}`);
-    return response.data;
+    const stories = response.data?.data || response.data || [];
+    return Array.isArray(stories) ? stories.map(storyService.transformStory) : stories;
   },
 
   // Get story by ID
   getStoryById: async (id) => {
     const response = await apiRequest.get(`/stories/${id}`);
-    return response.data;
+    const story = response.data?.data || response.data;
+    return storyService.transformStory(story);
   },
 
   // Get story by slug
   getStoryBySlug: async (slug) => {
+    if (!slug || slug === 'null' || slug === 'undefined') return null;
     const response = await apiRequest.get(`/stories/${slug}`);
-    return response.data;
+    const story = response.data?.data || response.data;
+    return storyService.transformStory(story);
   },
 
   // Get featured story
