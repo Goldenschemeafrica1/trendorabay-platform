@@ -238,7 +238,7 @@ const FeaturedStories = () => {
           {/* Left Stories */}
           <div className="left-stories">
             {featuredStories.slice(1, 3).map((story, index) => (
-              <Link to={`/stories/${story.id}`} key={story.id}>
+              <Link to={`/stories/${story.slug}`} key={story.id}>
                 <article
                   id={`left-story-${index}`}
                   className={`${(story.category === 'SPORTS' || story.category === 'BUSINESS') ? 'fashion-story-card' : 'side-story-card'} ${isVisible[`left-${index}`] ? 'visible' : ''}`}
@@ -290,7 +290,7 @@ const FeaturedStories = () => {
 
           {/* Cover Story - Center Large */}
           <div className="cover-story">
-            <Link to={`/stories/${featuredStories[3]?.id}`}>
+            <Link to={`/stories/${featuredStories[3]?.slug}`}>
               <article className="main-story-card">
                 <div className="main-story-image-wrapper">
                   <img
@@ -319,7 +319,7 @@ const FeaturedStories = () => {
             {/* Mobile SPORTS Story - After Hot Topic */}
             <div className="mobile-sports-story">
               {featuredStories.find(story => story.category === 'SPORTS') && (
-                <Link to={`/stories/${featuredStories.find(story => story.category === 'SPORTS')?.id}`}>
+                <Link to={`/stories/${featuredStories.find(story => story.category === 'SPORTS')?.slug}`}>
                   <article className="mobile-sports-card">
                     <div className="mobile-sports-image-wrapper">
                       <img 
@@ -346,7 +346,7 @@ const FeaturedStories = () => {
             {/* Mobile BUSINESS Story - After SPORTS */}
             <div className="mobile-business-story">
               {featuredStories.find(story => story.category === 'BUSINESS') && (
-                <Link to={`/stories/${featuredStories.find(story => story.category === 'BUSINESS')?.id}`}>
+                <Link to={`/stories/${featuredStories.find(story => story.category === 'BUSINESS')?.slug}`}>
                   <article className="mobile-business-card">
                     <div className="mobile-business-image-wrapper">
                       <img 
@@ -380,7 +380,7 @@ const FeaturedStories = () => {
               </h3>
               <div className="mobile-trending-stories">
                 {featuredStories.slice(0, 6).map((story, index) => (
-                  <Link to={`/stories/${story.id}`} key={story.id}>
+                  <Link to={`/stories/${story.slug}`} key={story.id}>
                     <div className="mobile-trending-story">
                       <span className="mobile-trending-arrow">➤</span>
                       <h4 className="mobile-trending-title">{story.title}</h4>
@@ -397,7 +397,7 @@ const FeaturedStories = () => {
               
               <div className="horizontal-stories-container">
                 {horizontalStories.map((story, index) => (
-                  <Link to={`/stories/${story.id}`} key={story.id}>
+                  <Link to={`/stories/${story.slug}`} key={story.id}>
                     <article
                       className={`horizontal-story-card ${story.category === 'TRAVEL' ? 'travel-card' : ''} ${story.category === 'FOOD' ? 'food-card' : ''} ${story.category === 'HEALTH' ? 'health-card' : ''} ${story.category === 'MUSIC' ? 'music-card' : ''}`}
                       style={{ transitionDelay: `${index * 0.1}s` }}
@@ -433,7 +433,7 @@ const FeaturedStories = () => {
 </h3>
             <div className="trending-stories">
               {featuredStories.slice(0, 6).map((story, index) => (
-                <Link to={`/stories/${story.id}`} key={story.id}>
+                <Link to={`/stories/${story.slug}`} key={story.id}>
                   <div className="trending-story">
                     <span className="trending-arrow">➤</span>
                     <h4 className="trending-title">{story.title}</h4>
