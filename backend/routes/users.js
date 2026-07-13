@@ -162,11 +162,13 @@ router.post('/login', async (req, res, next) => {
     const ip = req.ip || req.connection.remoteAddress;
     const userAgent = req.get('user-agent') || 'unknown';
 
+    console.log('Login attempt for email:', email);
+
     // Validate input
     if (!email || !password) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Email and password are required' 
+      return res.status(400).json({
+        success: false,
+        error: 'Email and password are required'
       });
     }
 
@@ -199,9 +201,9 @@ router.post('/login', async (req, res, next) => {
         const lockedAccount = lockedAccounts[0];
         const remainingTime = Math.ceil((new Date(lockedAccount.locked_until) - new Date()) / 1000 / 60);
         logAccountLockout(normalizedEmail, ip, userAgent);
-        return res.status(423).json({ 
-          success: false, 
-          error: `Account locked due to too many failed attempts. Try again in ${remainingTime} minutes.` 
+        return res.status(423).json({
+          success: false,
+          error: `Account locked due to too many failed attempts. Try again in ${remainingTime} minutes.`
         });
       }
     } catch (error) {
@@ -219,9 +221,9 @@ router.post('/login', async (req, res, next) => {
       // Record failed attempt for non-existent email (prevent enumeration)
       await recordFailedLoginAttempt(normalizedEmail);
       logFailedLogin(normalizedEmail, ip, userAgent);
-      return res.status(401).json({ 
-        success: false, 
-        error: 'Invalid email or password' 
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid email or password'
       });
     }
 
@@ -234,18 +236,18 @@ router.post('/login', async (req, res, next) => {
       // Record failed attempt
       const shouldLock = await recordFailedLoginAttempt(normalizedEmail);
       logFailedLogin(normalizedEmail, ip, userAgent);
-      
+
       if (shouldLock) {
         logAccountLockout(normalizedEmail, ip, userAgent);
-        return res.status(423).json({ 
-          success: false, 
-          error: 'Too many failed login attempts. Account locked for 15 minutes.' 
+        return res.status(423).json({
+          success: false,
+          error: 'Too many failed login attempts. Account locked for 15 minutes.'
         });
       }
-      
-      return res.status(401).json({ 
-        success: false, 
-        error: 'Invalid email or password' 
+
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid email or password'
       });
     }
 
@@ -268,15 +270,20 @@ router.post('/login', async (req, res, next) => {
     // Remove password from response
     const { password: _, ...userWithoutPassword } = user;
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: {
         user: userWithoutPassword,
         token
       }
     });
   } catch (error) {
-    next(error);
+    console.error('Login error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Login failed',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
@@ -342,6 +349,14 @@ const recordFailedLoginAttempt = async (email) => {
 router.get('/profile', auth, async (req, res, next) => {
   try {
     const userId = req.userId; // Set by auth middleware
+    console.log('Fetching profile for userId:', userId);
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid user ID from token'
+      });
+    }
 
     let users;
     try {
@@ -351,6 +366,7 @@ router.get('/profile', auth, async (req, res, next) => {
       );
       users = usersWithProfile;
     } catch (error) {
+      console.log('profile_image column error, trying fallback:', error.message);
       // If profile_image column doesn't exist, select without it
       const [usersWithoutProfile] = await pool.query(
         'SELECT id, username, email, first_name, last_name, role, created_at FROM users WHERE id = ?',
@@ -360,9 +376,9 @@ router.get('/profile', auth, async (req, res, next) => {
     }
 
     if (users.length === 0) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'User not found' 
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
       });
     }
 
@@ -370,7 +386,11 @@ router.get('/profile', auth, async (req, res, next) => {
     res.json({ success: true, data: users[0] });
   } catch (error) {
     console.error('Error fetching profile:', error);
-    next(error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to fetch profile',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 

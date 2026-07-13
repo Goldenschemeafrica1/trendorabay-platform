@@ -1178,30 +1178,30 @@
   .desktop-nav {
     display: none;
   }
-  
+
   .mobile-menu-toggle {
     display: flex;
   }
-  
+
   .mobile-nav {
     display: block !important;
   }
-  
+
   .dropdown-menu {
     display: none;
   }
-  
+
   .logo {
     font-size: 24px;
   }
-  
+
   .logo span {
     font-size: 18px;
   }
 
   .logo-image {
-    height: 140px;
-    width: 450px;
+    height: 180px;
+    width: 550px;
   }
   
   /* Show only menu toggle on mobile, hide desktop actions */
@@ -1273,8 +1273,8 @@
   }
 
   .logo-image {
-    height: 100px;
-    width: 300px;
+    height: 140px;
+    width: 400px;
   }
   
   .header-actions {
