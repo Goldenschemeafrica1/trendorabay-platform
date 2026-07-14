@@ -433,10 +433,24 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
         // Test if profile_image column exists, create it if it doesn't
         await pool.query('SELECT profile_image FROM users LIMIT 1');
         console.log('profile_image column exists');
+        
+        // Check if column is VARCHAR(500) and needs to be upgraded to TEXT
+        const [columnInfo] = await pool.query(`
+          SELECT COLUMN_TYPE 
+          FROM INFORMATION_SCHEMA.COLUMNS 
+          WHERE TABLE_NAME = 'users' 
+          AND COLUMN_NAME = 'profile_image'
+        `);
+        
+        if (columnInfo.length > 0 && columnInfo[0].COLUMN_TYPE.includes('varchar')) {
+          console.log('Upgrading profile_image column from VARCHAR to TEXT...');
+          await pool.query('ALTER TABLE users MODIFY COLUMN profile_image TEXT');
+          console.log('profile_image column upgraded to TEXT');
+        }
       } catch (error) {
-        // Column doesn't exist, create it
-        console.log('Creating profile_image column...');
-        await pool.query('ALTER TABLE users ADD COLUMN profile_image VARCHAR(500)');
+        // Column doesn't exist, create it as TEXT
+        console.log('Creating profile_image column as TEXT...');
+        await pool.query('ALTER TABLE users ADD COLUMN profile_image TEXT');
       }
 
       query += `, profile_image = ?`;
