@@ -15,8 +15,6 @@ const pool = mysql.createPool({
   queueLimit: 0,
   enableKeepAlive: true,
   keepAliveInitialDelay: 0,
-  acquireTimeout: 60000,
-  timeout: 60000,
   // SSL/TLS configuration
   ssl: process.env.DB_SSL === 'true' ? {
     rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false'
@@ -38,8 +36,6 @@ if (process.env.DB_READ_REPLICA_HOST) {
     queueLimit: 0,
     enableKeepAlive: true,
     keepAliveInitialDelay: 0,
-    acquireTimeout: 60000,
-    timeout: 60000,
     // SSL/TLS configuration
     ssl: process.env.DB_READ_REPLICA_SSL === 'true' ? {
       rejectUnauthorized: process.env.DB_READ_REPLICA_SSL_REJECT_UNAUTHORIZED !== 'false'
