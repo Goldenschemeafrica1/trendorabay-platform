@@ -13,6 +13,11 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
+    // Automatically add Authorization header if token exists
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -28,7 +33,15 @@ api.interceptors.response.use(
   (error) => {
     // Handle common error scenarios
     if (error.response?.status === 401) {
-      // Handle unauthorized access
+      // Clear expired tokens and redirect to login
+      console.log('Token expired or invalid, clearing session');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      
+      // Only redirect if not already on login page
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
     }
     
     return Promise.reject(error);
