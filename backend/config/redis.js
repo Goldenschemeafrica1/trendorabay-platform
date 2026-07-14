@@ -19,6 +19,13 @@ export const getRedisClient = async () => {
     redisClient = null;
   }
 
+  // Skip Redis connection if REDIS_URL is not configured (production without Redis)
+  if (!process.env.REDIS_URL && process.env.NODE_ENV === 'production') {
+    console.log('Redis URL not configured, skipping Redis connection (app will work without caching)');
+    isRedisAvailable = false;
+    return null;
+  }
+
   try {
     const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
     const redisPassword = process.env.REDIS_PASSWORD;
@@ -48,8 +55,10 @@ export const getRedisClient = async () => {
     redisClient = createClient(clientConfig);
 
     redisClient.on('error', (err) => {
-      console.error('Redis Client Error:', err.message);
-      // Don't mark as unavailable on every error, let reconnect strategy handle it
+      // Only log error on first connection failure to reduce noise
+      if (!isRedisAvailable) {
+        console.error('Redis Client Error:', err.message);
+      }
     });
 
     redisClient.on('connect', () => {
@@ -58,7 +67,7 @@ export const getRedisClient = async () => {
     });
 
     redisClient.on('disconnect', () => {
-      console.log('Redis Client Disconnected');
+      // Reduce noise by not logging every disconnect
     });
 
     await redisClient.connect();
