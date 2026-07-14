@@ -19,9 +19,11 @@ export const getRedisClient = async () => {
     redisClient = null;
   }
 
-  // Skip Redis connection if REDIS_URL is not configured (production without Redis)
-  if (!process.env.REDIS_URL && process.env.NODE_ENV === 'production') {
-    console.log('Redis URL not configured, skipping Redis connection (app will work without caching)');
+  // Skip Redis connection in production unless explicitly enabled
+  if (process.env.NODE_ENV === 'production' && process.env.ENABLE_REDIS !== 'true') {
+    if (!isRedisAvailable) {
+      console.log('Redis disabled in production (set ENABLE_REDIS=true to enable)');
+    }
     isRedisAvailable = false;
     return null;
   }
