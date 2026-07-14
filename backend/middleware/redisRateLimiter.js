@@ -33,18 +33,19 @@ export const redisRateLimiter = async (req, res, next) => {
     const client = await getRedisClient();
     const ip = req.ip || req.connection.remoteAddress;
     const windowMs = 15 * 60 * 1000; // 15 minutes
-    const maxRequests = 300;
+    const maxRequests = 1000; // Increased from 300 to 1000
     let current;
 
     if (client) {
       const key = `ratelimit:${ip}`;
       current = await client.incr(key);
-      
+
       if (current === 1) {
         await client.expire(key, windowMs / 1000);
       }
 
       if (current > maxRequests) {
+        console.warn(`Rate limit exceeded for IP: ${ip}, count: ${current}`);
         return res.status(429).json({
           success: false,
           error: 'Too many requests from this IP, please try again later.',
@@ -62,6 +63,7 @@ export const redisRateLimiter = async (req, res, next) => {
       current = getInMemoryCount(key, windowMs);
 
       if (current > maxRequests) {
+        console.warn(`Rate limit exceeded for IP: ${ip}, count: ${current}`);
         return res.status(429).json({
           success: false,
           error: 'Too many requests from this IP, please try again later.'
@@ -79,11 +81,12 @@ export const redisRateLimiter = async (req, res, next) => {
     // Fallback to in-memory rate limiting on error
     const ip = req.ip || req.connection.remoteAddress;
     const windowMs = 15 * 60 * 1000;
-    const maxRequests = 300;
+    const maxRequests = 1000; // Increased from 300 to 1000
     const key = `ratelimit:${ip}`;
     const current = getInMemoryCount(key, windowMs);
 
     if (current > maxRequests) {
+      console.warn(`Rate limit exceeded for IP: ${ip}, count: ${current}`);
       return res.status(429).json({
         success: false,
         error: 'Too many requests from this IP, please try again later.'

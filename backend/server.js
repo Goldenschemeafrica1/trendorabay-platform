@@ -46,8 +46,8 @@ app.use(securityMiddleware);
 app.use(corsMiddleware);
 app.use(compression());
 
-// Request timeout (30 seconds)
-app.use(timeoutMiddleware(30000));
+// Request timeout (60 seconds)
+app.use(timeoutMiddleware(60000));
 
 // Use Redis rate limiter if available, fallback to in-memory
 app.use(redisRateLimiter);
