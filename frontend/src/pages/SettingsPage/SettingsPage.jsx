@@ -39,11 +39,30 @@ const SettingsPage = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
+        
+        if (!token) {
+          console.log('No token found, user not authenticated');
+          setLoading(false);
+          return;
+        }
+
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/users/profile`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
+
+        if (!response.ok) {
+          console.error('Profile fetch failed with status:', response.status);
+          if (response.status === 401) {
+            console.log('User not authenticated, redirecting to login');
+            // Optionally redirect to login
+            // window.location.href = '/login';
+          }
+          setLoading(false);
+          return;
+        }
+
         const data = await response.json();
         
         console.log('Fetched user data:', data);
