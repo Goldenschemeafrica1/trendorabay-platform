@@ -36,7 +36,7 @@ export const redisRateLimiter = async (req, res, next) => {
     const maxRequests = 1000; // Increased from 300 to 1000
     let current;
 
-    if (client) {
+    if (client && client.isOpen) {
       const key = `ratelimit:${ip}`;
       current = await client.incr(key);
 
@@ -77,7 +77,7 @@ export const redisRateLimiter = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Redis rate limiter error:', error);
+    console.error('Redis rate limiter error:', error.message);
     // Fallback to in-memory rate limiting on error
     const ip = req.ip || req.connection.remoteAddress;
     const windowMs = 15 * 60 * 1000;

@@ -1,26 +1,42 @@
 import { createClient } from 'redis';
 
 let redisClient = null;
+let isRedisAvailable = true;
 
 export const getRedisClient = async () => {
-  if (redisClient) {
+  // If Redis is marked as unavailable, return null immediately
+  if (!isRedisAvailable) {
+    return null;
+  }
+
+  // If client exists and is connected, return it
+  if (redisClient && redisClient.isOpen) {
     return redisClient;
+  }
+
+  // If client exists but is closed, reset it
+  if (redisClient && !redisClient.isOpen) {
+    redisClient = null;
   }
 
   try {
     const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
     const redisPassword = process.env.REDIS_PASSWORD;
-    
+
     const clientConfig = {
       url: redisUrl,
       socket: {
         reconnectStrategy: (retries) => {
           if (retries > 10) {
-            console.error('Redis reconnection failed after 10 retries');
+            console.error('Redis reconnection failed after 10 retries, disabling Redis');
+            isRedisAvailable = false;
+            redisClient = null;
             return new Error('Redis reconnection failed');
           }
           return Math.min(retries * 100, 3000);
-        }
+        },
+        connectTimeout: 10000,
+        lazyConnect: false
       }
     };
 
@@ -32,17 +48,25 @@ export const getRedisClient = async () => {
     redisClient = createClient(clientConfig);
 
     redisClient.on('error', (err) => {
-      console.error('Redis Client Error:', err);
+      console.error('Redis Client Error:', err.message);
+      // Don't mark as unavailable on every error, let reconnect strategy handle it
     });
 
     redisClient.on('connect', () => {
       console.log('Redis Client Connected');
+      isRedisAvailable = true;
+    });
+
+    redisClient.on('disconnect', () => {
+      console.log('Redis Client Disconnected');
     });
 
     await redisClient.connect();
     return redisClient;
   } catch (error) {
     console.error('Failed to connect to Redis:', error.message);
+    isRedisAvailable = false;
+    redisClient = null;
     // Return null if Redis is not available - app will work without caching
     return null;
   }
