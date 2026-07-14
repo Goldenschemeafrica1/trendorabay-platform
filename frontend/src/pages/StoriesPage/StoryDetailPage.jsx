@@ -78,7 +78,9 @@ const StoryDetailPage = () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/advertisements?status=active`);
         const data = await response.json();
+        console.log('Story detail ad response:', data);
         if (data.success && data.data && data.data.length > 0) {
+          console.log('Setting advertisement:', data.data[0]);
           setAdvertisement(data.data[0]);
         }
       } catch (error) {
@@ -483,12 +485,19 @@ const StoryDetailPage = () => {
           {advertisement && (
             <div className="ad-section">
               <div className="ad-content">
-                {advertisement.image_url ? (
+                {advertisement.image_url || advertisement.mobile_image_url ? (
                   <a href={advertisement.link_url || advertisement.destination_url || '#'} target="_blank" rel="noopener noreferrer">
-                    <img 
-                      src={advertisement.image_url} 
-                      alt={advertisement.title || 'Advertisement'} 
+                    <img
+                      src={advertisement.image_url || advertisement.mobile_image_url || '/images/story-placeholder.jpg'}
+                      alt={advertisement.title || 'Advertisement'}
                       className="ad-image"
+                      onError={(e) => {
+                        console.error('Story detail ad image failed to load:', advertisement.image_url);
+                        e.target.src = '/images/story-placeholder.jpg';
+                      }}
+                      onLoad={() => {
+                        console.log('Story detail ad image loaded successfully:', advertisement.image_url);
+                      }}
                     />
                   </a>
                 ) : (

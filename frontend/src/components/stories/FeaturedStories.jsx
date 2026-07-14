@@ -153,6 +153,7 @@ const FeaturedStories = () => {
     const fetchAdvertisements = async () => {
       try {
         const response = await advertisementService.getAdvertisements({ status: 'active' });
+        console.log('Advertisement response:', response);
         let ads = [];
 
         if (Array.isArray(response)) {
@@ -161,14 +162,21 @@ const FeaturedStories = () => {
           ads = response.data;
         }
 
+        console.log('Ads array:', ads);
+
         // Ensure ads have id field
         const transformedAds = ads.map(ad => ({
           ...ad,
           id: ad.id || ad._id || ad.advertisement_id
         }));
 
+        console.log('Transformed ads:', transformedAds);
+
         const horizontal = transformedAds.find(ad => ad.position === 'horizontal');
         const vertical = transformedAds.find(ad => ad.position === 'vertical');
+
+        console.log('Horizontal ad:', horizontal);
+        console.log('Vertical ad:', vertical);
 
         setHorizontalAd(horizontal);
         setVerticalAd(vertical);
@@ -465,12 +473,16 @@ const FeaturedStories = () => {
             {horizontalAd ? (
               <a href={horizontalAd.link_url || '#'} target="_blank" rel="noopener noreferrer">
                 <img
-                  src={horizontalAd.image_url || '/images/story-placeholder.jpg'}
+                  src={horizontalAd.image_url || horizontalAd.mobile_image_url || '/images/story-placeholder.jpg'}
                   alt={horizontalAd.title || 'Advertisement'}
                   className="ad-image"
                   loading="lazy"
                   onError={(e) => {
+                    console.error('Ad image failed to load:', horizontalAd.image_url);
                     e.target.src = '/images/story-placeholder.jpg';
+                  }}
+                  onLoad={() => {
+                    console.log('Ad image loaded successfully:', horizontalAd.image_url);
                   }}
                 />
               </a>
