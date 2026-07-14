@@ -28,7 +28,14 @@ const storyService = {
     
     const response = await apiRequest.get(`/stories?${params.toString()}`);
     const stories = response.data?.data || response.data || [];
-    return Array.isArray(stories) ? stories.map(storyService.transformStory) : stories;
+    const transformedStories = Array.isArray(stories) ? stories.map(storyService.transformStory) : stories;
+    
+    // Return full response object with pagination info
+    return {
+      data: transformedStories,
+      totalPages: response.data?.totalPages || 1,
+      total: response.data?.total || 0
+    };
   },
 
   // Get story by ID
