@@ -44,13 +44,24 @@ const StoriesPage = () => {
     const fetchStories = async () => {
       setLoading(true);
       try {
+        console.log('Fetching stories with params:', {
+          category: selectedCategory !== 'all' ? selectedCategory : undefined,
+          page: currentPage,
+          limit: 12,
+          status: 'published'
+        });
+        
         const response = await storyService.getStories({
           category: selectedCategory !== 'all' ? selectedCategory : undefined,
           page: currentPage,
           limit: 12,
           status: 'published'
         });
-        console.log('StoriesPage response:', response);
+        
+        console.log('StoriesPage raw response:', response);
+        console.log('Response type:', typeof response);
+        console.log('Is array?', Array.isArray(response));
+        console.log('Has data property?', response && 'data' in response);
         
         // Handle different response structures
         let storiesData = [];
@@ -58,21 +69,28 @@ const StoriesPage = () => {
         
         if (Array.isArray(response)) {
           storiesData = response;
+          console.log('Response is array, using directly');
         } else if (response && Array.isArray(response.data)) {
           storiesData = response.data;
           totalPagesData = response.totalPages || 1;
+          console.log('Response has data array, using response.data');
         } else if (response && response.data) {
           storiesData = response.data;
           totalPagesData = response.totalPages || 1;
+          console.log('Response has data property, using response.data');
+        } else {
+          console.log('Unknown response structure, defaulting to empty array');
         }
         
-        console.log('Stories data:', storiesData);
+        console.log('Final stories data:', storiesData);
+        console.log('Stories data length:', storiesData.length);
         console.log('Total pages:', totalPagesData);
         
         setStories(storiesData);
         setTotalPages(totalPagesData);
       } catch (error) {
         console.error('Error fetching stories:', error);
+        console.error('Error details:', error.message, error.stack);
         setStories([]);
       } finally {
         setLoading(false);
