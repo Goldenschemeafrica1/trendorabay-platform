@@ -386,10 +386,16 @@ router.get('/profile', auth, async (req, res, next) => {
     res.json({ success: true, data: users[0] });
   } catch (error) {
     console.error('Error fetching profile:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      sqlMessage: error.sqlMessage,
+      stack: error.stack
+    });
     return res.status(500).json({
       success: false,
       error: 'Failed to fetch profile',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      details: process.env.NODE_ENV === 'development' ? error.message : error.message
     });
   }
 });
