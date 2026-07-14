@@ -47,10 +47,30 @@ const StoriesPage = () => {
         const response = await storyService.getStories({
           category: selectedCategory !== 'all' ? selectedCategory : undefined,
           page: currentPage,
-          limit: 12
+          limit: 12,
+          status: 'published'
         });
-        setStories(response.data || []);
-        setTotalPages(response.totalPages || 1);
+        console.log('StoriesPage response:', response);
+        
+        // Handle different response structures
+        let storiesData = [];
+        let totalPagesData = 1;
+        
+        if (Array.isArray(response)) {
+          storiesData = response;
+        } else if (response && Array.isArray(response.data)) {
+          storiesData = response.data;
+          totalPagesData = response.totalPages || 1;
+        } else if (response && response.data) {
+          storiesData = response.data;
+          totalPagesData = response.totalPages || 1;
+        }
+        
+        console.log('Stories data:', storiesData);
+        console.log('Total pages:', totalPagesData);
+        
+        setStories(storiesData);
+        setTotalPages(totalPagesData);
       } catch (error) {
         console.error('Error fetching stories:', error);
         setStories([]);
