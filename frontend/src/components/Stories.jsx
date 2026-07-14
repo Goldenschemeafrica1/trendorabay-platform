@@ -77,11 +77,14 @@ const Stories = () => {
   const fetchStories = async () => {
     setIsLoading(true);
     try {
-      const data = await storyService.getAllStories();
-      setStories(data);
-      setFilteredStories(data);
+      const response = await storyService.getStories({ status: 'published' });
+      const data = response.data || response;
+      setStories(Array.isArray(data) ? data : []);
+      setFilteredStories(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching stories:', error);
+      setStories([]);
+      setFilteredStories([]);
     } finally {
       setIsLoading(false);
     }
