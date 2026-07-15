@@ -110,7 +110,6 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
                       ></i>
                     </div>
                   ))}
-                  <span className="rating-number">{magazine.rating}</span>
                 </div>
               </div>
             </div>

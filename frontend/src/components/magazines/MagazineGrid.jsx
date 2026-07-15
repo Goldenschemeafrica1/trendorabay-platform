@@ -344,7 +344,6 @@ const MagazineGrid = ({
                     </div>
                     <div className="list-rating">
                       <i className="fas fa-star"></i>
-                      <span>{magazine.rating}</span>
                     </div>
                   </div>
 
