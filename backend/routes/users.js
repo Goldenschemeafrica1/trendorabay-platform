@@ -263,7 +263,7 @@ router.post('/login', async (req, res, next) => {
     // Generate JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'your_jwt_secret_here',
+      process.env.JWT_SECRET || 'your_jwt_secret_here_use_strong_random_string',
       { expiresIn: process.env.JWT_EXPIRE || '30d' }
     );
 
@@ -540,7 +540,7 @@ router.post('/forgot-password', async (req, res, next) => {
     // Generate a reset token
     const resetToken = jwt.sign(
       { userId: user.id, email: user.email },
-      process.env.JWT_SECRET || 'your_jwt_secret_here',
+      process.env.JWT_SECRET || 'your_jwt_secret_here_use_strong_random_string',
       { expiresIn: '1h' } // Token expires in 1 hour
     );
     
@@ -588,7 +588,7 @@ router.post('/reset-password', async (req, res, next) => {
     // Verify token
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_here');
+      decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_here_use_strong_random_string');
     } catch (error) {
       return res.status(400).json({
         success: false,
