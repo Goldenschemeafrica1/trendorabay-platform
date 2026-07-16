@@ -100,7 +100,7 @@ const cartSlice = createSlice({
 
     calculateTotals: (state) => {
       state.totalItems = state.items.reduce((total, item) => total + item.quantity, 0);
-      state.subtotal = state.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      state.subtotal = state.items.reduce((total, item) => total + ((Number(item.price) || 0) * item.quantity), 0);
     },
 
     setLoading: (state, action) => {

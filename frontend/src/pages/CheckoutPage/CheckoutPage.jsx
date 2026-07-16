@@ -6,7 +6,7 @@ import './CheckoutPage.css';
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { items, subtotal } = useSelector(state => state.cart);
-  const total = subtotal || 0;
+  const total = Number(subtotal) || 0;
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
