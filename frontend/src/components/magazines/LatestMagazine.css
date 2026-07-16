@@ -306,13 +306,7 @@
 }
 
 .rating-number {
-  font-size: 10px !important;
-  font-weight: 800;
-  margin-left: 6px;
-  color: #ff9800;
-  letter-spacing: 0.5px;
-  position: relative;
-  top: -0.5px;
+  display: none;
 }
 
 .meta-item {

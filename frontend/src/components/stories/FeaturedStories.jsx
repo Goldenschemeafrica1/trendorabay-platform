@@ -37,6 +37,7 @@ const FeaturedStories = () => {
           image: story.imageUrl || story.featured_image_url,
           author: story.author?.name || story.author_name || 'Unknown Author',
           author_id: story.author?.id || story.author_id,
+          author_avatar: story.author?.avatar || story.author_avatar || '/logo.jpeg',
           date: new Date(story.published_at || story.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase(),
           readTime: '5 MIN READ'
         }));
@@ -70,7 +71,8 @@ const FeaturedStories = () => {
           slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
           category: story.category || story.categoryName || story.category_name || story.category_id,
           image: story.imageUrl || story.featured_image_url,
-          author: story.author?.name || story.author_name || story.author_id
+          author: story.author?.name || story.author_name || story.author_id,
+          author_avatar: story.author?.avatar || story.author_avatar || '/logo.jpeg'
         })).filter(story => story.slug && story.slug !== 'undefined');
 
         setHorizontalStories(transformed);
@@ -249,7 +251,7 @@ const FeaturedStories = () => {
         <div className="editorial-header">
           <div className="header-left">
             <h1 className="main-headline">
-              <span className="accent">✦</span> Featured Stories
+              <span className="accent">✦</span> Featured Stories <span className="accent">✦</span>
             </h1>
           </div>
         </div>
@@ -279,6 +281,12 @@ const FeaturedStories = () => {
 
                       <div className="side-story-footer">
                         <div className="side-story-author">
+                          <img 
+                            src={story.author_avatar || '/logo.jpeg'} 
+                            alt={story.author || 'Author'} 
+                            className="side-author-avatar"
+                            onError={(e) => { e.target.src = '/logo.jpeg'; }}
+                          />
                           <span className="side-author-name" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${story.author_id || story.author}`); }}>By {story.author}</span>
                           <span className="side-author-role">{story.authorTitle}</span>
                         </div>
@@ -298,6 +306,12 @@ const FeaturedStories = () => {
 
                       <div className="side-story-footer">
                         <div className="side-story-author">
+                          <img 
+                            src={story.author_avatar || '/logo.jpeg'} 
+                            alt={story.author || 'Author'} 
+                            className="side-author-avatar"
+                            onError={(e) => { e.target.src = '/logo.jpeg'; }}
+                          />
                           <span className="side-author-name" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${story.author_id || story.author}`); }}>By {story.author}</span>
                           <span className="side-author-role">{story.authorTitle}</span>
                         </div>
@@ -432,6 +446,12 @@ const FeaturedStories = () => {
                       <h3 className="horizontal-story-title">{story.title}</h3>
                     </div>
                     <div className="horizontal-story-author">
+                      <img 
+                        src={story.author_avatar || '/logo.jpeg'} 
+                        alt={story.author || 'Author'} 
+                        className="horizontal-author-avatar"
+                        onError={(e) => { e.target.src = '/logo.jpeg'; }}
+                      />
                       <span onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${story.author_id || story.author}`); }} className={`horizontal-author-name ${story.category === 'BUSINESS' ? 'business-author-name' : ''} ${story.category === 'TECHNOLOGY' ? 'business-author-name' : ''} ${story.category === 'TRAVEL' ? 'travel-author-name' : ''} ${story.category === 'FOOD' ? 'food-author-name' : ''} ${story.category === 'HEALTH' ? 'health-author-name' : ''} ${story.category === 'MUSIC' ? 'music-author-name' : ''}`}>By {story.author}</span>
                       <span className="horizontal-author-role">{story.authorTitle}</span>
                     </div>
@@ -471,7 +491,7 @@ const FeaturedStories = () => {
           <div className="ad-label">Advertisement</div>
           <div className="advertisement-section">
             {horizontalAd ? (
-              <a href={horizontalAd.link_url || '#'} target="_blank" rel="noopener noreferrer">
+              <a href={horizontalAd.destination_url || horizontalAd.link_url || '#'} target="_blank" rel="noopener noreferrer">
                 <img
                   src={horizontalAd.image_url || horizontalAd.mobile_image_url || '/images/story-placeholder.jpg'}
                   alt={horizontalAd.title || 'Advertisement'}

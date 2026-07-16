@@ -46,12 +46,14 @@ import PodcastsPage from './pages/PodcastsPage/PodcastsPage';
 import PodcastDetail from './pages/PodcastDetail/PodcastDetail';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SignupPage from './pages/SignupPage/SignupPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage';
 import AdvertisePage from './pages/AdvertisePage/AdvertisePage';
 import SubscribePage from './pages/SubscribePage/SubscribePage';
 import DonatePage from './pages/DonatePage/DonatePage';
 import OrdersPage from './pages/OrdersPage/OrdersPage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
+import GalleryPage from './pages/GalleryPage/GalleryPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
 function App() {
@@ -87,7 +89,8 @@ function App() {
         args[0].includes('Error checking follow status') ||
         args[0].includes('Failed to fetch likes') ||
         args[0].includes('Error fetching user data') ||
-        args[0].includes('Error saving settings')
+        args[0].includes('Error saving settings') ||
+        args[0].includes('Ad image failed to load')
       )) {
         return;
       }
@@ -131,11 +134,11 @@ function App() {
         toastClassName="african-toast"
       />
 
-      {/* Main Header - Hidden on login, signup, terms, and privacy pages */}
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && <Header />}
+      {/* Main Header - Hidden on login, signup, terms, privacy, and forgot-password pages */}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/forgot-password' && <Header />}
 
-      {/* Advertisement Bar - Hidden on magazine listing page, podcast, merchandise, cart, login, signup, about, store, author, contributors, terms, privacy, donate, events, contact, write-for-us, write, partner, partner-with-us, faq, subscribe, settings, orders, and profile pages */}
-      {location.pathname !== '/magazines' && !location.pathname.startsWith('/magazines/category') && location.pathname !== '/podcast' && !location.pathname.match(/^\/podcast\/\d+/) && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/author') && location.pathname !== '/community/contributors' && !location.pathname.match(/^\/community\/contributors\/\d+/) && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/events' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/write' && !location.pathname.startsWith('/partner') && location.pathname !== '/faq' && location.pathname !== '/subscribe' && location.pathname !== '/settings' && location.pathname !== '/orders' && location.pathname !== '/profile' && <Advert />}
+      {/* Advertisement Bar - Hidden on magazine listing page, podcast, merchandise, cart, login, signup, about, store, author, contributors, terms, privacy, donate, events, contact, write-for-us, write, partner, partner-with-us, faq, subscribe, settings, orders, profile, gallery, and forgot-password pages */}
+      {location.pathname !== '/magazines' && !location.pathname.startsWith('/magazines/category') && location.pathname !== '/podcast' && !location.pathname.match(/^\/podcast\/\d+/) && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/author') && location.pathname !== '/community/contributors' && !location.pathname.match(/^\/community\/contributors\/\d+/) && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/events' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/write' && !location.pathname.startsWith('/partner') && location.pathname !== '/faq' && location.pathname !== '/subscribe' && location.pathname !== '/settings' && location.pathname !== '/orders' && location.pathname !== '/profile' && location.pathname !== '/gallery' && location.pathname !== '/forgot-password' && <Advert />}
 
       {/* Shopping Cart Drawer (Slides from right) */}
       <CartDrawer />
@@ -195,6 +198,7 @@ function App() {
         {/* Authentication */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
         {/* User Account Pages */}
         <Route path="/profile" element={<ProfilePage />} />
@@ -206,12 +210,15 @@ function App() {
         <Route path="/subscribe" element={<SubscribePage />} />
         <Route path="/donate" element={<DonatePage />} />
 
+        {/* Gallery Page */}
+        <Route path="/gallery" element={<GalleryPage />} />
+
         {/* 404 Page */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, about, magazines, write, partner, advertise, events, podcast detail, author detail, terms, and privacy pages */}
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && location.pathname !== '/about' && !location.pathname.startsWith('/magazines') && location.pathname !== '/write' && location.pathname !== '/write-for-us' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && <Footer />}
+      {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, about, magazines, write, partner, advertise, events, podcast detail, author detail, terms, privacy, and forgot-password pages */}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && location.pathname !== '/about' && !location.pathname.startsWith('/magazines') && location.pathname !== '/write' && location.pathname !== '/write-for-us' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/forgot-password' && <Footer />}
 
       {/* Quick View Modal (can be added here) */}
       {/* <QuickViewModal /> */}

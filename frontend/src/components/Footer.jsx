@@ -25,6 +25,7 @@ const Footer = () => {
     { name: 'Write for Us', path: '/write-for-us' },
     { name: 'FAQs', path: '/faq' },
     { name: 'Magazines', path: '/magazines' },
+    { name: 'Gallery', path: '/gallery' },
   ];
 
   const column2Links = [

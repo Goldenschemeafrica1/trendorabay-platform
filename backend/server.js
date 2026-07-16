@@ -37,6 +37,7 @@ import eventRoutes from './routes/events.js';
 import contactRoutes from './routes/contact.js';
 import authorRoutes from './routes/authors.js';
 import teamRoutes from './routes/team.js';
+import galleryRoutes from './routes/gallery.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -197,6 +198,7 @@ app.use(`/api/${API_VERSION}/events`, eventRoutes);
 app.use(`/api/${API_VERSION}/contact`, contactRoutes);
 app.use(`/api/${API_VERSION}/authors`, authorRoutes);
 app.use(`/api/${API_VERSION}/team`, teamRoutes);
+app.use(`/api/${API_VERSION}/gallery`, galleryRoutes);
 
 // Legacy API routes (backward compatibility - will be deprecated)
 app.use('/api/users', userRoutes);
@@ -218,6 +220,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/authors', authorRoutes);
 app.use('/api/team', teamRoutes);
+app.use('/api/gallery', galleryRoutes);
 
 // Make upload middleware available to routes
 app.set('upload', upload);

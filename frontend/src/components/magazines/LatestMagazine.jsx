@@ -67,7 +67,7 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
         <div className="latest-magazines-header">
           <div className="header-left">
             <h2>
-              <span className="accent">✦</span> Latest Magazines
+              <span className="accent">✦</span> Latest Magazines <span className="accent">✦</span>
             </h2>
           </div>
         </div>

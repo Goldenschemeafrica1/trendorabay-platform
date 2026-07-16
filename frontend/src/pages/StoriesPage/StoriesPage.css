@@ -294,17 +294,30 @@
   line-height: 1.6;
 }
 
+.no-stories .btn,
+.no-stories .btn-primary,
+.write-story-btn {
+  padding: 6px 10px !important;
+  font-size: 11px !important;
+  max-width: 100px !important;
+  width: auto !important;
+  white-space: nowrap !important;
+  min-width: auto !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
-  padding: 14px 32px;
+  padding: 10px 20px;
   border-radius: 30px;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .btn-primary {

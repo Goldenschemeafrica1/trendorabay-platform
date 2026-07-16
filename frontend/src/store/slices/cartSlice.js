@@ -39,15 +39,27 @@ const cartSlice = createSlice({
       const { itemId, size, color, format } = action.payload;
       console.log('removeItem called with:', { itemId, size, color, format });
       console.log('Current cart items:', state.items);
+      
+      const initialLength = state.items.length;
       state.items = state.items.filter(item => {
-        const match = item.id === itemId && 
-                      (item.size === size || (!item.size && !size)) && 
-                      (item.color === color || (!item.color && !color)) && 
-                      (item.format === format || (!item.format && !format));
-        console.log('Item match check:', item.id, match);
-        return !match;
+        // Match by ID first
+        if (item.id !== itemId) return true;
+        
+        // If size is specified, match by size
+        if (size !== undefined && size !== '' && item.size !== size) return true;
+        
+        // If color is specified, match by color
+        if (color !== undefined && color !== '' && item.color !== color) return true;
+        
+        // If format is specified, match by format
+        if (format !== undefined && format !== '' && item.format !== format) return true;
+        
+        // If all specified criteria match, remove this item
+        return false;
       });
+      
       console.log('Items after removal:', state.items);
+      console.log('Items removed:', initialLength - state.items.length);
       cartSlice.caseReducers.calculateTotals(state);
     },
 

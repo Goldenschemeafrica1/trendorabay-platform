@@ -506,4 +506,117 @@ router.post('/clear-invalid-profile-images', auth, async (req, res, next) => {
   }
 });
 
+// Forgot password
+router.post('/forgot-password', async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email is required'
+      });
+    }
+    
+    const normalizedEmail = email.trim().toLowerCase();
+    
+    // Check if user exists
+    const [users] = await pool.query(
+      'SELECT * FROM users WHERE email = ?',
+      [normalizedEmail]
+    );
+    
+    if (users.length === 0) {
+      // For security, still return success even if user doesn't exist
+      // This prevents email enumeration
+      return res.json({
+        success: true,
+        message: 'If an account with this email exists, a password reset link has been sent.'
+      });
+    }
+    
+    const user = users[0];
+    
+    // Generate a reset token
+    const resetToken = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET || 'your_jwt_secret_here',
+      { expiresIn: '1h' } // Token expires in 1 hour
+    );
+    
+    // In a production environment, you would send an email with the reset link
+    // For now, we'll just return success
+    // The reset link would be: `${frontendUrl}/reset-password?token=${resetToken}`
+    
+    console.log('Password reset token generated for user:', user.email);
+    console.log('Reset token:', resetToken);
+    
+    res.json({
+      success: true,
+      message: 'If an account with this email exists, a password reset link has been sent.'
+    });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to process request'
+    });
+  }
+});
+
+// Reset password
+router.post('/reset-password', async (req, res, next) => {
+  try {
+    const { token, newPassword } = req.body;
+    
+    if (!token || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        error: 'Token and new password are required'
+      });
+    }
+    
+    // Validate password complexity
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must be at least 8 characters and contain uppercase, lowercase, number, and special character'
+      });
+    }
+    
+    // Verify token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_here');
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid or expired token'
+      });
+    }
+    
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    
+    // Update password
+    await pool.query(
+      'UPDATE users SET password = ? WHERE id = ?',
+      [hashedPassword, decoded.userId]
+    );
+    
+    res.json({
+      success: true,
+      message: 'Password reset successfully'
+    });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to reset password'
+    });
+  }
+});
+
 export default router;

@@ -194,7 +194,7 @@ const StoriesPage = () => {
                   <i className="fas fa-book-open"></i>
                   <h3>No stories found</h3>
                   <p>Be the first to write a story in this category!</p>
-                  <Link to="/write" className="btn btn-primary">Write a Story</Link>
+                  <Link to="/write" className="btn btn-primary write-story-btn" style={{ padding: '6px 10px', fontSize: '11px', maxWidth: '100px', width: 'auto', minWidth: 'auto', whiteSpace: 'nowrap' }}>Write a Story</Link>
                 </div>
               )}
             </>

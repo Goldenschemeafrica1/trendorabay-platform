@@ -98,13 +98,13 @@ const CartPage = ({ onCheckoutComplete }) => {
   const total = subtotal + shippingCost() - discountAmount;
 
   // Update quantity
-  const handleUpdateQuantity = (itemId, size, color, newQuantity) => {
+  const handleUpdateQuantity = (itemId, size, color, format, newQuantity) => {
     if (newQuantity < 1) {
-      handleRemoveItem(itemId, size, color);
+      handleRemoveItem(itemId, size, color, format);
       return;
     }
     
-    updateItemQuantity(itemId, size, color, newQuantity);
+    updateItemQuantity(itemId, size, color, format, newQuantity);
   };
 
   // Remove item from cart
@@ -277,7 +277,7 @@ const CartPage = ({ onCheckoutComplete }) => {
               {/* Cart Items */}
               {cartItems.length > 0 && (
                 <div className="cart-items-section">
-                  <h2 className="section-title">Cart Items ({cartItems.length})</h2>
+                  <h2 className="cart-items-title">Cart Items ({cartItems.length})</h2>
                   <div className="cart-items-list">
                     {cartItems.map((item, index) => (
                       <div key={`${item.id}-${item.size || ''}-${item.color || ''}-${index}`} className="cart-item-card">
@@ -291,14 +291,14 @@ const CartPage = ({ onCheckoutComplete }) => {
                           <div className="cart-item-actions">
                             <div className="quantity-selector">
                               <button
-                                onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.quantity - 1)}
+                                onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.format, item.quantity - 1)}
                                 aria-label="Decrease quantity"
                               >
                                 −
                               </button>
                               <span>{item.quantity}</span>
                               <button
-                                onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.quantity + 1)}
+                                onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.format, item.quantity + 1)}
                                 aria-label="Increase quantity"
                               >
                                 +
@@ -306,7 +306,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                             </div>
                             <button
                               className="remove-btn"
-                              onClick={() => handleRemoveItem(item.id, item.size, item.color)}
+                              onClick={() => handleRemoveItem(item.id, item.size, item.color, item.format)}
                             >
                               Remove
                             </button>
@@ -321,42 +321,118 @@ const CartPage = ({ onCheckoutComplete }) => {
                 </div>
               )}
 
-              {/* Saved for Later Items */}
-              {savedItems.length > 0 && (
-                <div className="saved-items-section">
-                  <h2 className="section-title">Saved for Later ({savedItems.length})</h2>
-                  <div className="saved-items-grid">
-                    {savedItems.map((item, index) => (
-                      <div key={`saved-${item.id}-${item.size || ''}-${index}`} className="saved-item-card">
-                        <img src={item.image} alt={item.name} className="saved-item-image" />
-                        <div className="saved-item-info">
-                          <h4>{item.name}</h4>
-                          {item.size && <span>Size: {item.size}</span>}
-                          <p>${(parseFloat(item.price) || 0).toFixed(2)}</p>
-                          <div className="saved-item-actions">
-                            <button 
-                              className="move-to-cart-btn"
-                              onClick={() => moveToCart(item)}
-                            >
-                              Move to Cart
-                            </button>
-                            <button 
-                              className="remove-saved-btn"
-                              onClick={() => removeSavedItem(item.id, item.size)}
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </div>
+              {/* Order Summary - Mobile */}
+              {cartItems.length > 0 && (
+                <div className="cart-summary">
+                  <h2 className="summary-title">Order Summary</h2>
+                  
+                  <div className="summary-details">
+                    <div className="summary-row">
+                      <span>Subtotal</span>
+                      <span>${(parseFloat(subtotal) || 0).toFixed(2)}</span>
+                    </div>
+                    
+                    <div className="summary-row">
+                      <span>Shipping</span>
+                      <div className="shipping-options">
+                        <label className="shipping-option">
+                          <input
+                            type="radio"
+                            name="shipping"
+                            value="standard"
+                            checked={shippingMethod === 'standard'}
+                            onChange={() => setShippingMethod('standard')}
+                          />
+                          <span>Standard (3-5 days) - ${shippingCost() === 0 ? 'FREE' : '$5.99'}</span>
+                        </label>
+                        <label className="shipping-option">
+                          <input
+                            type="radio"
+                            name="shipping"
+                            value="express"
+                            checked={shippingMethod === 'express'}
+                            onChange={() => setShippingMethod('express')}
+                          />
+                          <span>Express (1-2 days) - $12.99</span>
+                        </label>
+                        <label className="shipping-option">
+                          <input
+                            type="radio"
+                            name="shipping"
+                            value="overnight"
+                            checked={shippingMethod === 'overnight'}
+                            onChange={() => setShippingMethod('overnight')}
+                          />
+                          <span>Overnight (Next day) - $24.99</span>
+                        </label>
                       </div>
-                    ))}
+                    </div>
+                    
+                    {/* Promo Code Section */}
+                    <div className="promo-section">
+                      {!promoApplied ? (
+                        <div className="promo-input-group">
+                          <input
+                            type="text"
+                            placeholder="Promo code"
+                            value={promoCode}
+                            onChange={(e) => setPromoCode(e.target.value)}
+                            className="promo-input"
+                          />
+                          <button onClick={applyPromoCode} className="apply-promo-btn">
+                            Apply
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="promo-applied">
+                          <span>{discount.name}: -${(parseFloat(discountAmount) || 0).toFixed(2)}</span>
+                          <button onClick={removePromoCode} className="remove-promo-btn">
+                            Remove
+                          </button>
+                        </div>
+                      )}
+                      {promoError && <p className="promo-error">{promoError}</p>}
+                    </div>
+                    
+                    {discountAmount > 0 && (
+                      <div className="summary-row discount-row">
+                        <span>Discount</span>
+                        <span>-${(parseFloat(discountAmount) || 0).toFixed(2)}</span>
+                      </div>
+                    )}
+                    
+                    <div className="summary-divider"></div>
+                    
+                    <div className="summary-row total-row">
+                      <span>Total</span>
+                      <span>${(parseFloat(total) || 0).toFixed(2)}</span>
+                    </div>
+                    
+                    <div className="checkout-note">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4M12 8h.01"/>
+                      </svg>
+                      <span>Free shipping on orders over $100</span>
+                    </div>
+                    
+                    <button className="checkout-button" onClick={() => navigate('/checkout')}>
+                      Proceed to Checkout
+                    </button>
+                    
+                    <div className="payment-icons">
+                      <span>Visa</span>
+                      <span>Mastercard</span>
+                      <span>M-Pesa</span>
+                      <span>PayPal</span>
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* Recommended Products */}
               <div className="recommended-section">
-                <h2 className="section-title">You Might Also Like</h2>
+                <h2 className="recommended-title">You Might Also Like</h2>
                 <div className="recommended-grid">
                   {recommendedProducts.slice(0, 2).map(product => (
                     <div key={product.id} className="best-selling-card">
@@ -384,9 +460,9 @@ const CartPage = ({ onCheckoutComplete }) => {
           )}
         </div>
 
-        {/* Order Summary Sidebar */}
+        {/* Order Summary Sidebar - Desktop Only */}
         {cartItems.length > 0 && (
-          <div className="cart-summary">
+          <div className="cart-summary-desktop">
             <h2 className="summary-title">Order Summary</h2>
             
             <div className="summary-details">
@@ -430,7 +506,6 @@ const CartPage = ({ onCheckoutComplete }) => {
                   </label>
                 </div>
               </div>
-              
               
               {/* Promo Code Section */}
               <div className="promo-section">
@@ -480,7 +555,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                 <span>Free shipping on orders over $100</span>
               </div>
               
-              <button className="checkout-button" disabled>
+              <button className="checkout-button" onClick={() => navigate('/checkout')}>
                 Proceed to Checkout
               </button>
               

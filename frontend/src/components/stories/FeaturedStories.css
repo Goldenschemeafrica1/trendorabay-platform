@@ -1467,8 +1467,23 @@ body {
   text-decoration: underline;
   font-size: 9px;
   margin-bottom: 2px;
-  margin-left: 0;
-  margin-top: 8px;
+  margin-left: 8px;
+  margin-top: 0;
+}
+
+.side-author-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e0e0e0;
+}
+
+.side-story-author {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 12px;
 }
 
 .side-author-role {
@@ -1875,7 +1890,8 @@ body {
 .horizontal-story-author {
   padding: 0 12px 8px 12px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 0;
   margin-top: 0;
 }
@@ -2060,6 +2076,15 @@ body {
   text-decoration: underline;
   font-size: 9px;
   margin: 0;
+  margin-left: 8px;
+}
+
+.horizontal-author-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e0e0e0;
 }
 
 .business-author-name,
