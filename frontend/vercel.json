@@ -4,7 +4,7 @@
   "installCommand": "npm install",
   "framework": "vite",
   "git": {
-    "deploymentEnabled": true
+    "deploymentEnabled": false
   },
   "rewrites": [
     {
