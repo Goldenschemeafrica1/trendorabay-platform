@@ -101,7 +101,6 @@ const GalleryPage = () => {
                     loading="lazy"
                   />
                   <div className="gallery-overlay">
-                    <span className="gallery-overlay-text">{image.title}</span>
                   </div>
                   <button 
                     className={`like-button ${isLiked(image.id) ? 'liked' : ''}`}
@@ -128,7 +127,6 @@ const GalleryPage = () => {
           </button>
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
             <img src={selectedImage.image_url} alt={selectedImage.title} className="lightbox-image" />
-            <p className="lightbox-caption">{selectedImage.title}</p>
           </div>
           <button className="lightbox-nav lightbox-next" onClick={(e) => { e.stopPropagation(); navigateImage('next'); }}>
             &#10095;
