@@ -88,7 +88,7 @@ router.get('/', cache(300), async (req, res, next) => {
     const category = req.query.category || null;
     
     let query = `
-      SELECT id, title, category_id, issue, cover_image_url, pdf_url, preview_pages, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, published_date, description, created_at FROM magazines
+      SELECT id, title, category_id, issue, cover_image_url, pdf_url, preview_pages, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, published_date, description, created_at, slug FROM magazines
     `;
     const params = [];
     

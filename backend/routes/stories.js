@@ -15,7 +15,7 @@ router.get('/homepage', cache(300), async (req, res, next) => {
     const [featuredStories, horizontalStories, mustReadStories, textOnlyStories] = await Promise.all([
       // Featured stories (limit: 10)
       pool.query(
-        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          LEFT JOIN categories c ON s.category_id = c.id
@@ -26,7 +26,7 @@ router.get('/homepage', cache(300), async (req, res, next) => {
       ),
       // Horizontal stories (limit: 4)
       pool.query(
-        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          LEFT JOIN categories c ON s.category_id = c.id
@@ -37,7 +37,7 @@ router.get('/homepage', cache(300), async (req, res, next) => {
       ),
       // Must-read stories (limit: 8)
       pool.query(
-        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          LEFT JOIN categories c ON s.category_id = c.id
@@ -48,7 +48,7 @@ router.get('/homepage', cache(300), async (req, res, next) => {
       ),
       // Text-only stories (limit: 6)
       pool.query(
-        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          LEFT JOIN categories c ON s.category_id = c.id
