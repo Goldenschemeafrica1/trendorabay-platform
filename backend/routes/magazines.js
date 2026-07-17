@@ -88,12 +88,12 @@ router.get('/', cache(300), async (req, res, next) => {
     const category = req.query.category || null;
     
     let query = `
-      SELECT id, title, category_id, issue, cover_image_url, pdf_url, preview_pages, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, published_date, description, created_at, slug FROM magazines
+      SELECT id, title, category, issue_number, cover_image, pdf_url, preview_pages, published, description, created_at FROM magazines
     `;
     const params = [];
-    
+
     if (category) {
-      query += ` WHERE category_id = ?`;
+      query += ` WHERE category = ?`;
       params.push(category);
     }
     
@@ -106,121 +106,35 @@ router.get('/', cache(300), async (req, res, next) => {
     
     const [rows] = await pool.query(query, params);
 
-    // Map categories to actual image files in frontend public folder
-    const categoryImageMap = {
-      32: '/blockchain.jpeg', // Technology
-      42: '/music.jpeg', // Music
-      43: '/fashionandbusiness.jpeg', // Fashion
-      45: '/blockchain.jpeg', // Technology
-      46: '/community.jpeg', // Travel/Community
-      47: '/womeninbusiness.jpeg', // Lifestyle
-      48: '/financeandinvestment.jpeg', // Finance
-      49: '/boxing.jpeg', // Sports
-      50: '/photography.jpeg', // Art
-      51: '/barandrestaurant.jpeg', // Food
-      52: '/kids.jpeg', // Health
-      53: '/automotives.jpeg' // Automotive
-    };
-
-    // Helper function to get image URL (handle Cloudinary and CMS uploads)
-    const getImageUrl = (url, categoryId, fallbackUrl = null) => {
-      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
-      
-      if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
-        // If no URL provided, try fallback URL first, then category-based image
-        if (fallbackUrl && fallbackUrl.startsWith('/uploads/')) {
-          return `${cmsUrl}${fallbackUrl}`;
-        }
-        return categoryImageMap[categoryId] || '/music.jpeg';
-      }
-      
-      // Return full URLs as-is (Cloudinary, external images)
+    // Helper function to get image URL
+    const getImageUrl = (url) => {
+      if (!url || url === 'undefined') return '/music.jpeg';
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
-      
-      // If it's a relative path starting with /uploads, try backend URL first, fall back to category image
       if (url.startsWith('/uploads/')) {
         const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
         return `${backendUrl}${url}`;
       }
-      // If it starts with / but not /uploads, check if it's a fallback and use preview_pages if available
-      if (url.startsWith('/') && !url.startsWith('/uploads/')) {
-        // If this looks like a fallback image and we have a preview_pages URL, use that instead
-        if (fallbackUrl && fallbackUrl.startsWith('/uploads/')) {
-          return categoryImageMap[categoryId] || '/music.jpeg';
-        }
-        return url;
-      }
-      // If it's just a filename, it's in the frontend public folder
-      if (!url.includes('/')) {
-        return `/${url}`;
-      }
-      // If it has a path, return as-is
+      if (url.startsWith('/')) return url;
+      if (!url.includes('/')) return `/${url}`;
       return url;
     };
 
-    // Fetch all unique contributor IDs at once
-    const allContributorIds = new Set();
-    rows.forEach(magazine => {
-      if (magazine.contributors) {
-        magazine.contributors.toString().split(',').forEach(id => {
-          const numId = parseInt(id.trim());
-          if (!isNaN(numId)) allContributorIds.add(numId);
-        });
-      }
-    });
-
-    // Batch fetch all contributors
-    let allContributors = [];
-    if (allContributorIds.size > 0) {
-      const [contributors] = await pool.query(
-        'SELECT id, name, role, avatar FROM contributors WHERE id IN (?) AND status = "active"',
-        [Array.from(allContributorIds)]
-      );
-      allContributors = contributors;
-    }
-
-    // Create a map for quick lookup
-    const contributorMap = new Map();
-    allContributors.forEach(contributor => {
-      contributorMap.set(contributor.id, {
-        id: contributor.id,
-        name: contributor.name,
-        role: contributor.role || 'Contributor',
-        avatar: contributor.avatar || '/images/default-avatar.png'
-      });
-    });
-
     const transformed = rows.map(magazine => {
-      const magazineContributorIds = magazine.contributors
-        ? magazine.contributors.toString().split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id))
-        : [];
-
-      const magazineContributors = magazineContributorIds
-        .map(id => contributorMap.get(id))
-        .filter(c => c !== undefined);
-
-      // Generate slug from title if not exists
-      const slug = magazine.slug || magazine.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(magazine.id);
+      const slug = magazine.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(magazine.id);
 
       return {
-        ...magazine,
+        id: magazine.id,
         slug,
-        coverImage: getImageUrl(magazine.cover_image_url, magazine.category_id, magazine.preview_pages),
-        pdfUrl: getImageUrl(magazine.pdf_url, magazine.category_id),
-        price: magazine.price,
-        digitalPrice: magazine.digital_price,
-        printPrice: magazine.print_price,
-        subscriptionPrice: magazine.subscription_price,
-        pages: magazine.pages,
-        language: magazine.language,
-        publisher: magazine.publisher,
-        rating: magazine.rating,
-        reviewCount: magazine.review_count,
-        tableOfContents: parseTableOfContents(magazine.table_of_contents),
-        contributors: magazineContributors,
-        reviews: magazine.reviews,
-        publishDate: magazine.published_date,
-        description: magazine.description
+        title: magazine.title,
+        category: magazine.category,
+        coverImage: getImageUrl(magazine.cover_image),
+        pdfUrl: getImageUrl(magazine.pdf_url),
+        previewPages: magazine.preview_pages,
+        published: magazine.published,
+        description: magazine.description,
+        createdAt: magazine.created_at,
+        rating: 4.5, // Default rating
+        reviewCount: 10 // Default review count
       };
     });
 
