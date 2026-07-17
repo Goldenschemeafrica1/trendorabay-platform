@@ -70,11 +70,11 @@ const FeaturedStories = () => {
           id: ad.id || ad._id || ad.advertisement_id
         }));
 
-        const horizontal = transformedAds.find(ad => ad.position === 'horizontal');
-        const vertical = transformedAds.find(ad => ad.position === 'vertical');
+        // Use the first ad (same as Advert.jsx below header)
+        const firstAd = transformedAds[0] || null;
 
-        setHorizontalAd(horizontal);
-        setVerticalAd(vertical);
+        setHorizontalAd(firstAd);
+        setVerticalAd(firstAd);
       } catch (error) {
         console.error('Error fetching advertisements:', error);
         setHorizontalAd(null);
