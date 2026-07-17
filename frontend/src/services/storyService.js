@@ -59,6 +59,12 @@ const storyService = {
     return response.data;
   },
 
+  // Get homepage stories (batched endpoint for performance)
+  getHomepageStories: async () => {
+    const response = await apiRequest.get('/stories/homepage?status=published');
+    return response.data;
+  },
+
   // Get recent stories
   getRecentStories: async (limit = 10) => {
     const response = await apiRequest.get(`/stories/recent?limit=${limit}`);

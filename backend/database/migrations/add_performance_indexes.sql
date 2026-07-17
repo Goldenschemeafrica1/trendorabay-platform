@@ -25,6 +25,9 @@ CREATE INDEX idx_contributors_created_at ON contributors(created_at);
 
 -- Magazines table indexes
 CREATE INDEX idx_magazines_created_at ON magazines(created_at);
+CREATE INDEX idx_magazines_category_id ON magazines(category_id);
+CREATE INDEX idx_magazines_status ON magazines(status);
+CREATE INDEX idx_magazines_published_date ON magazines(published_date);
 
 -- Contributor follows table indexes
 CREATE INDEX idx_contributor_follows_contributor_id ON contributor_follows(contributor_id);

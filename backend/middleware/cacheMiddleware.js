@@ -14,10 +14,14 @@ export const cache = (ttl = 300) => {
       const cached = await cacheGet(key);
       if (cached) {
         res.setHeader('X-Cache', 'HIT');
+        res.setHeader('Cache-Control', `public, max-age=${ttl}`);
+        res.setHeader('CDN-Cache-Control', `public, max-age=${ttl * 2}`);
         return res.json(cached);
       }
       
       res.setHeader('X-Cache', 'MISS');
+      res.setHeader('Cache-Control', `public, max-age=${ttl}`);
+      res.setHeader('CDN-Cache-Control', `public, max-age=${ttl * 2}`);
       
       // Store original json method
       const originalJson = res.json.bind(res);

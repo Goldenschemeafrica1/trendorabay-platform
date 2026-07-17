@@ -5,6 +5,9 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import store from './store/store';
 import './index.css'; // Global styles imported here
+import { apiRequest } from './services/api';
+import storyService from './services/storyService';
+import magazineService from './services/magazineService';
 
 // Add font-display swap for better performance
 const fontLink = document.createElement('link');
@@ -15,6 +18,21 @@ fontLink.onload = () => {
   fontLink.media = 'all';
 };
 document.head.appendChild(fontLink);
+
+// Preload critical data for homepage
+const preloadCriticalData = async () => {
+  try {
+    // Preload homepage stories (batched endpoint)
+    storyService.getHomepageStories();
+    // Preload magazines
+    magazineService.getMagazines({ limit: 8 });
+  } catch (error) {
+    console.log('Preload failed (will load on demand):', error.message);
+  }
+};
+
+// Start preloading in background
+preloadCriticalData();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

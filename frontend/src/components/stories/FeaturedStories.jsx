@@ -15,139 +15,41 @@ const FeaturedStories = () => {
   const [horizontalAd, setHorizontalAd] = useState(null);
   const [verticalAd, setVerticalAd] = useState(null);
 
-  // Fetch featured stories from API
+  // Fetch all homepage stories in a single batched API call
   useEffect(() => {
-    const fetchFeaturedStories = async () => {
+    const fetchHomepageStories = async () => {
       try {
-        const response = await storyService.getStories({ status: 'published', limit: 10 });
-        let stories = [];
+        const response = await storyService.getHomepageStories();
+        
+        if (response && response.data) {
+          const transformStory = (story) => ({
+            ...story,
+            id: story.id || story._id || story.story_id,
+            slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
+            category: story.category || story.categoryName || story.category_name || story.category_id,
+            image: story.imageUrl || story.featured_image_url,
+            author: story.author?.name || story.author_name || 'Unknown Author',
+            author_id: story.author?.id || story.author_id,
+            author_avatar: story.author?.avatar || story.author_avatar || '/logo.jpeg',
+            date: new Date(story.published_at || story.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase(),
+            readTime: '5 MIN READ'
+          });
 
-        if (Array.isArray(response)) {
-          stories = response;
-        } else if (response && Array.isArray(response.data)) {
-          stories = response.data;
+          setFeaturedStories(response.data.featuredStories?.map(transformStory).filter(s => s.slug && s.slug !== 'undefined') || []);
+          setHorizontalStories(response.data.horizontalStories?.map(transformStory).filter(s => s.slug && s.slug !== 'undefined') || []);
+          setMustReadStories(response.data.mustReadStories?.map(transformStory).filter(s => s.slug && s.slug !== 'undefined') || []);
+          setTextOnlyStories(response.data.textOnlyStories?.map(transformStory).map(s => ({ ...s, isLarger: true })).filter(s => s.slug && s.slug !== 'undefined') || []);
         }
-
-        // Transform data to match frontend expectations
-        const transformed = stories.map(story => ({
-          ...story,
-          id: story.id || story._id || story.story_id,
-          slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
-          category: story.category || story.categoryName || story.category_name || story.category_id,
-          image: story.imageUrl || story.featured_image_url,
-          author: story.author?.name || story.author_name || 'Unknown Author',
-          author_id: story.author?.id || story.author_id,
-          author_avatar: story.author?.avatar || story.author_avatar || '/logo.jpeg',
-          date: new Date(story.published_at || story.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase(),
-          readTime: '5 MIN READ'
-        }));
-
-        setFeaturedStories(transformed);
       } catch (error) {
-        console.error('Error fetching featured stories:', error);
+        console.error('Error fetching homepage stories:', error);
         setFeaturedStories([]);
-      }
-    };
-
-    fetchFeaturedStories();
-  }, []);
-
-  // Fetch horizontal stories from API
-  useEffect(() => {
-    const fetchHorizontalStories = async () => {
-      try {
-        const response = await storyService.getStories({ status: 'published', limit: 4 });
-        let stories = [];
-
-        if (Array.isArray(response)) {
-          stories = response;
-        } else if (response && Array.isArray(response.data)) {
-          stories = response.data;
-        }
-
-        const transformed = stories.map(story => ({
-          ...story,
-          id: story.id || story._id || story.story_id,
-          slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
-          category: story.category || story.categoryName || story.category_name || story.category_id,
-          image: story.imageUrl || story.featured_image_url,
-          author: story.author?.name || story.author_name || story.author_id,
-          author_avatar: story.author?.avatar || story.author_avatar || '/logo.jpeg'
-        })).filter(story => story.slug && story.slug !== 'undefined');
-
-        setHorizontalStories(transformed);
-      } catch (error) {
-        console.error('Error fetching horizontal stories:', error);
         setHorizontalStories([]);
-      }
-    };
-
-    fetchHorizontalStories();
-  }, []);
-
-  // Fetch must-read stories from API
-  useEffect(() => {
-    const fetchMustReadStories = async () => {
-      try {
-        const response = await storyService.getStories({ status: 'published', limit: 8 });
-        let stories = [];
-
-        if (Array.isArray(response)) {
-          stories = response;
-        } else if (response && Array.isArray(response.data)) {
-          stories = response.data;
-        }
-
-        const transformed = stories.map(story => ({
-          ...story,
-          id: story.id || story._id || story.story_id,
-          slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
-          category: story.category || story.categoryName || story.category_name || story.category_id,
-          image: story.imageUrl || story.featured_image_url,
-          author: story.author?.name || story.author_name || story.author_id
-        })).filter(story => story.slug && story.slug !== 'undefined');
-
-        setMustReadStories(transformed);
-      } catch (error) {
-        console.error('Error fetching must-read stories:', error);
         setMustReadStories([]);
-      }
-    };
-
-    fetchMustReadStories();
-  }, []);
-
-  // Fetch text-only stories from API
-  useEffect(() => {
-    const fetchTextOnlyStories = async () => {
-      try {
-        const response = await storyService.getStories({ status: 'published', limit: 6 });
-        let stories = [];
-
-        if (Array.isArray(response)) {
-          stories = response;
-        } else if (response && Array.isArray(response.data)) {
-          stories = response.data;
-        }
-
-        const transformed = stories.map(story => ({
-          ...story,
-          id: story.id || story._id || story.story_id,
-          slug: story.slug || story.title?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${story.id || story._id || story.story_id}`,
-          category: story.category || story.categoryName || story.category_name || story.category_id,
-          image: story.imageUrl || story.featured_image_url,
-          author: story.author?.name || story.author_name || story.author_id,
-          isLarger: true
-        })).filter(story => story.slug && story.slug !== 'undefined');
-
-        setTextOnlyStories(transformed);
-      } catch (error) {
-        console.error('Error fetching text-only stories:', error);
         setTextOnlyStories([]);
       }
     };
 
-    fetchTextOnlyStories();
+    fetchHomepageStories();
   }, []);
 
   // Fetch advertisements from API

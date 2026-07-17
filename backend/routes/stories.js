@@ -6,6 +6,139 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
+// Batch endpoint for homepage - returns all story sections in one request
+router.get('/homepage', cache(300), async (req, res, next) => {
+  try {
+    const status = req.query.status || 'published';
+
+    // Fetch all sections in parallel using Promise.all
+    const [featuredStories, horizontalStories, mustReadStories, textOnlyStories] = await Promise.all([
+      // Featured stories (limit: 10)
+      pool.query(
+        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+         FROM stories s
+         LEFT JOIN authors a ON s.author_id = a.id
+         LEFT JOIN categories c ON s.category_id = c.id
+         WHERE s.status = ?
+         ORDER BY s.created_at DESC
+         LIMIT 10`,
+        [status]
+      ),
+      // Horizontal stories (limit: 4)
+      pool.query(
+        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+         FROM stories s
+         LEFT JOIN authors a ON s.author_id = a.id
+         LEFT JOIN categories c ON s.category_id = c.id
+         WHERE s.status = ?
+         ORDER BY s.created_at DESC
+         LIMIT 4`,
+        [status]
+      ),
+      // Must-read stories (limit: 8)
+      pool.query(
+        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+         FROM stories s
+         LEFT JOIN authors a ON s.author_id = a.id
+         LEFT JOIN categories c ON s.category_id = c.id
+         WHERE s.status = ?
+         ORDER BY s.created_at DESC
+         LIMIT 8`,
+        [status]
+      ),
+      // Text-only stories (limit: 6)
+      pool.query(
+        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+         FROM stories s
+         LEFT JOIN authors a ON s.author_id = a.id
+         LEFT JOIN categories c ON s.category_id = c.id
+         WHERE s.status = ?
+         ORDER BY s.created_at DESC
+         LIMIT 6`,
+        [status]
+      )
+    ]);
+
+    // Helper function to transform story data
+    const transformStories = (rows) => {
+      const categoryImageMap = {
+        'Music': '/music.jpeg',
+        'Fashion': '/fashionandbusiness.jpeg',
+        'Business': '/financeandinvestment.jpeg',
+        'Technology': '/blockchain.jpeg',
+        'Travel': '/community.jpeg',
+        'Lifestyle': '/womeninbusiness.jpeg',
+        'Finance': '/financeandinvestment.jpeg',
+        'Sports': '/boxing.jpeg',
+        'Art': '/photography.jpeg',
+        'Food': '/barandrestaurant.jpeg',
+        'Health': '/kids.jpeg',
+        'Automotive': '/automotives.jpeg'
+      };
+
+      const getImageUrl = (url, category) => {
+        if (!url || url === 'undefined' || url === '/uploads/stories/undefined') return categoryImageMap[category] || '/music.jpeg';
+        if (url.startsWith('http://') || url.startsWith('https://')) return url;
+        if (url.startsWith('/uploads/')) {
+          const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+          return `${backendUrl}${url}`;
+        }
+        if (url.startsWith('/')) return url;
+        if (!url.includes('/')) return `/${url}`;
+        return url;
+      };
+
+      const getAvatarUrl = (url) => {
+        if (!url) return '/logo.jpeg';
+        if (url.startsWith('http://') || url.startsWith('https://')) return url;
+        if (url.startsWith('/uploads/')) return '/logo.jpeg';
+        if (url.startsWith('/')) return url;
+        if (!url.includes('/')) return `/${url}`;
+        return url;
+      };
+
+      return rows.map(story => {
+        const cleanTitle = story.title?.trim() || '';
+        const slug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+        
+        return {
+          id: story.id,
+          slug,
+          title: story.title,
+          content: story.content,
+          imageUrl: getImageUrl(story.featured_image_url, story.category_name),
+          categoryName: story.category_name,
+          category: story.category_name,
+          featured: story.featured === 1,
+          author: story.author_id ? {
+            id: story.author_id,
+            name: story.author_name || 'Unknown Author',
+            avatar: getAvatarUrl(story.author_avatar)
+          } : null,
+          publishedDate: story.published_at || story.created_at,
+          createdAt: story.created_at,
+          updatedAt: story.updated_at,
+          status: story.status,
+          author_name: story.author_name,
+          author_id: story.author_id
+        };
+      });
+    };
+
+    res.json({
+      success: true,
+      data: {
+        featuredStories: transformStories(featuredStories[0]),
+        horizontalStories: transformStories(horizontalStories[0]),
+        mustReadStories: transformStories(mustReadStories[0]),
+        textOnlyStories: transformStories(textOnlyStories[0])
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get all stories
 router.get('/', cache(300), async (req, res, next) => {
   try {
