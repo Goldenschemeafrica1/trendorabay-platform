@@ -89,9 +89,7 @@ router.get('/', cache(300), async (req, res, next) => {
 
     console.log('Magazines API called with params:', { limit, category });
 
-    let query = `
-      SELECT id, title, category, issue_number, cover_image, pdf_url, preview_pages, published, description, created_at FROM magazines
-    `;
+    let query = `SELECT * FROM magazines`;
     const params = [];
 
     if (category) {
