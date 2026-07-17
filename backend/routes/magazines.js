@@ -122,14 +122,14 @@ router.get('/', cache(300), async (req, res, next) => {
     };
 
     const transformed = rows.map(magazine => {
-      const slug = magazine.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(magazine.id);
+      const slug = magazine.slug || magazine.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(magazine.id);
 
       return {
         id: magazine.id,
         slug,
         title: magazine.title,
         category: magazine.category,
-        coverImage: getImageUrl(magazine.cover_image),
+        coverImage: getImageUrl(magazine.cover_image || magazine.cover_image_url),
         pdfUrl: getImageUrl(magazine.pdf_url),
         previewPages: magazine.preview_pages,
         published: magazine.published,
