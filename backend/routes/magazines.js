@@ -107,6 +107,10 @@ router.get('/', cache(300), async (req, res, next) => {
     console.log('Executing query:', query, 'with params:', params);
     const [rows] = await pool.query(query, params);
     console.log('Query returned', rows.length, 'rows');
+    if (rows.length > 0) {
+      console.log('Sample row columns:', Object.keys(rows[0]));
+      console.log('Sample row data:', JSON.stringify(rows[0], null, 2));
+    }
 
     // Helper function to get image URL
     const getImageUrl = (url) => {
