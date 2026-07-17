@@ -247,21 +247,21 @@ router.get('/:slug', async (req, res, next) => {
     const transformed = {
       ...rows[0],
       slug,
-      coverImage: getImageUrl(rows[0].cover_image_url, rows[0].category_id, rows[0].preview_pages),
-      pdfUrl: getImageUrl(rows[0].pdf_url, rows[0].category_id),
-      price: rows[0].price,
-      digitalPrice: rows[0].digital_price,
-      printPrice: rows[0].print_price,
-      subscriptionPrice: rows[0].subscription_price,
-      pages: rows[0].pages,
-      language: rows[0].language,
-      publisher: rows[0].publisher,
-      rating: rows[0].rating,
-      reviewCount: rows[0].review_count,
+      coverImage: getImageUrl(rows[0].cover_image || rows[0].cover_image_url, rows[0].category_id || rows[0].category, rows[0].preview_pages),
+      pdfUrl: getImageUrl(rows[0].pdf_url, rows[0].category_id || rows[0].category),
+      price: rows[0].price || 9.99,
+      digitalPrice: rows[0].digital_price || 9.99,
+      printPrice: rows[0].print_price || 13.99,
+      subscriptionPrice: rows[0].subscription_price || 99.99,
+      pages: rows[0].pages || 100,
+      language: rows[0].language || 'English',
+      publisher: rows[0].publisher || 'Trendorabay',
+      rating: rows[0].rating || 4.5,
+      reviewCount: rows[0].review_count || 0,
       tableOfContents: parseTableOfContents(rows[0].table_of_contents),
       contributors: magazineContributors,
       reviews: rows[0].reviews,
-      publishDate: rows[0].published_date,
+      publishDate: rows[0].publish_date || rows[0].created_at,
       description: rows[0].description
     };
 
@@ -279,7 +279,7 @@ router.get('/category/:category', async (req, res, next) => {
     const offset = (page - 1) * limit;
     
     const [rows] = await pool.query(
-      'SELECT * FROM magazines WHERE category_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      'SELECT * FROM magazines WHERE category = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
       [req.params.category, limit, offset]
     );
     res.json({ success: true, data: rows });
@@ -324,9 +324,9 @@ router.get('/search', async (req, res, next) => {
 router.get('/categories', async (req, res, next) => {
   try {
     const [rows] = await pool.query(
-      'SELECT DISTINCT category_id FROM magazines WHERE category_id IS NOT NULL ORDER BY category_id'
+      'SELECT DISTINCT category FROM magazines WHERE category IS NOT NULL ORDER BY category'
     );
-    const categories = rows.map(row => row.category_id);
+    const categories = rows.map(row => row.category);
     res.json({ success: true, data: categories });
   } catch (error) {
     next(error);
@@ -371,11 +371,11 @@ router.post('/subscriptions', async (req, res, next) => {
 // Create magazine
 router.post('/', async (req, res, next) => {
   try {
-    const { title, cover_image_url, category_id, issue, pdf_url } = req.body;
+    const { title, cover_image_url, category_id, issue, pdf_url, cover_image, category } = req.body;
     const [result] = await pool.query(
-      `INSERT INTO magazines (title, cover_image_url, category_id, issue, pdf_url) 
+      `INSERT INTO magazines (title, cover_image, category, issue_number, pdf_url) 
        VALUES (?, ?, ?, ?, ?)`,
-      [title, cover_image_url, category_id, issue, pdf_url]
+      [title, cover_image_url || cover_image, category_id || category, issue, pdf_url]
     );
     const [newMagazine] = await pool.query(
       'SELECT * FROM magazines WHERE id = ?',
@@ -390,12 +390,12 @@ router.post('/', async (req, res, next) => {
 // Update magazine
 router.put('/:id', async (req, res, next) => {
   try {
-    const { title, cover_image_url, category_id, issue, pdf_url } = req.body;
+    const { title, cover_image_url, category_id, issue, pdf_url, cover_image, category } = req.body;
     await pool.query(
       `UPDATE magazines 
-       SET title = ?, cover_image_url = ?, category_id = ?, issue = ?, pdf_url = ?
+       SET title = ?, cover_image = ?, category = ?, issue_number = ?, pdf_url = ?
        WHERE id = ?`,
-      [title, cover_image_url, category_id, issue, pdf_url, req.params.id]
+      [title, cover_image_url || cover_image, category_id || category, issue, pdf_url, req.params.id]
     );
     const [updated] = await pool.query(
       'SELECT * FROM magazines WHERE id = ?',
