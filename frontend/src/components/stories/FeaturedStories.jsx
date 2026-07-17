@@ -180,7 +180,7 @@ const FeaturedStories = () => {
                             className="side-author-avatar"
                             onError={(e) => { e.target.src = '/logo.jpeg'; }}
                           />
-                          <span className="side-author-name" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${story.author_id || story.author}`); }}>By {story.author}</span>
+                          <span className="side-author-name" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${story.author_id || story.author}`); }}>{story.author}</span>
                           <span className="side-author-role">{story.authorTitle}</span>
                         </div>
                       </div>
@@ -205,7 +205,7 @@ const FeaturedStories = () => {
                             className="side-author-avatar"
                             onError={(e) => { e.target.src = '/logo.jpeg'; }}
                           />
-                          <span className="side-author-name" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${story.author_id || story.author}`); }}>By {story.author}</span>
+                          <span className="side-author-name" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${story.author_id || story.author}`); }}>{story.author}</span>
                           <span className="side-author-role">{story.authorTitle}</span>
                         </div>
                       </div>
@@ -291,7 +291,7 @@ const FeaturedStories = () => {
                         {featuredStories.find(story => story.category === 'BUSINESS').title}
                       </h3>
                       <div className="mobile-business-author">
-                        By <span onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${featuredStories.find(story => story.category === 'BUSINESS').author_id || featuredStories.find(story => story.category === 'BUSINESS').author}`); }}>{featuredStories.find(story => story.category === 'BUSINESS').author}</span>
+                        <span onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${featuredStories.find(story => story.category === 'BUSINESS').author_id || featuredStories.find(story => story.category === 'BUSINESS').author}`); }}>{featuredStories.find(story => story.category === 'BUSINESS').author}</span>
                       </div>
                     </div>
                   </article>
@@ -345,7 +345,7 @@ const FeaturedStories = () => {
                         className="horizontal-author-avatar"
                         onError={(e) => { e.target.src = '/logo.jpeg'; }}
                       />
-                      <span onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${story.author_id || story.author}`); }} className={`horizontal-author-name ${story.category === 'BUSINESS' ? 'business-author-name' : ''} ${story.category === 'TECHNOLOGY' ? 'business-author-name' : ''} ${story.category === 'TRAVEL' ? 'travel-author-name' : ''} ${story.category === 'FOOD' ? 'food-author-name' : ''} ${story.category === 'HEALTH' ? 'health-author-name' : ''} ${story.category === 'MUSIC' ? 'music-author-name' : ''}`}>By {story.author}</span>
+                      <span onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(`/author/${story.author_id || story.author}`); }} className={`horizontal-author-name ${story.category === 'BUSINESS' ? 'business-author-name' : ''} ${story.category === 'TECHNOLOGY' ? 'business-author-name' : ''} ${story.category === 'TRAVEL' ? 'travel-author-name' : ''} ${story.category === 'FOOD' ? 'food-author-name' : ''} ${story.category === 'HEALTH' ? 'health-author-name' : ''} ${story.category === 'MUSIC' ? 'music-author-name' : ''}`}>{story.author}</span>
                       <span className="horizontal-author-role">{story.authorTitle}</span>
                     </div>
                   </article>
