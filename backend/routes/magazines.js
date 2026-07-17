@@ -86,7 +86,9 @@ router.get('/', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || null;
     const category = req.query.category || null;
-    
+
+    console.log('Magazines API called with params:', { limit, category });
+
     let query = `
       SELECT id, title, category, issue_number, cover_image, pdf_url, preview_pages, published, description, created_at FROM magazines
     `;
@@ -96,15 +98,17 @@ router.get('/', cache(300), async (req, res, next) => {
       query += ` WHERE category = ?`;
       params.push(category);
     }
-    
+
     query += ` ORDER BY created_at DESC`;
-    
+
     if (limit) {
       query += ` LIMIT ?`;
       params.push(limit);
     }
-    
+
+    console.log('Executing query:', query, 'with params:', params);
     const [rows] = await pool.query(query, params);
+    console.log('Query returned', rows.length, 'rows');
 
     // Helper function to get image URL
     const getImageUrl = (url) => {
