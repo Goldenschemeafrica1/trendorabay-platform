@@ -26,12 +26,17 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
         setMagazines(transformedData);
       } catch (error) {
         console.error('Error fetching magazines:', error);
+        // Don't break the page if magazines fail to load
         setMagazines([]);
+        // Show a toast notification instead of breaking the UI
+        if (error.response?.status === 500) {
+          console.warn('Magazines API temporarily unavailable');
+        }
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchMagazines();
   }, [category, limit]);
 
