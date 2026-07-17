@@ -20,7 +20,7 @@ const FeaturedStories = () => {
     const fetchHomepageStories = async () => {
       try {
         const response = await storyService.getHomepageStories();
-        
+
         if (response && response.data) {
           const transformStory = (story) => ({
             ...story,
@@ -52,12 +52,11 @@ const FeaturedStories = () => {
     fetchHomepageStories();
   }, []);
 
-  // Fetch advertisements from API
+  // Fetch advertisements from API (non-blocking, runs after stories)
   useEffect(() => {
     const fetchAdvertisements = async () => {
       try {
         const response = await advertisementService.getAdvertisements({ status: 'active' });
-        console.log('Advertisement response:', response);
         let ads = [];
 
         if (Array.isArray(response)) {
@@ -66,21 +65,13 @@ const FeaturedStories = () => {
           ads = response.data;
         }
 
-        console.log('Ads array:', ads);
-
-        // Ensure ads have id field
         const transformedAds = ads.map(ad => ({
           ...ad,
           id: ad.id || ad._id || ad.advertisement_id
         }));
 
-        console.log('Transformed ads:', transformedAds);
-
         const horizontal = transformedAds.find(ad => ad.position === 'horizontal');
         const vertical = transformedAds.find(ad => ad.position === 'vertical');
-
-        console.log('Horizontal ad:', horizontal);
-        console.log('Vertical ad:', vertical);
 
         setHorizontalAd(horizontal);
         setVerticalAd(vertical);
