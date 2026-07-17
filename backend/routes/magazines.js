@@ -144,6 +144,7 @@ router.get('/', cache(300), async (req, res, next) => {
 
     res.json({ success: true, data: transformed });
   } catch (error) {
+    console.error('Magazines GET / error:', error);
     next(error);
   }
 });
