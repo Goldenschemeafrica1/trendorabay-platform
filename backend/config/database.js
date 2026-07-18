@@ -11,10 +11,14 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'trendorabay',
   waitForConnections: true,
-  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT) || 50,
+  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT) || 10,
   queueLimit: 0,
   enableKeepAlive: true,
-  keepAliveInitialDelay: 0,
+  keepAliveInitialDelay: 10000,
+  // Timeout settings to prevent hanging connections
+  connectTimeout: 10000,
+  acquireTimeout: 10000,
+  timeout: 10000,
   // SSL/TLS configuration
   ssl: process.env.DB_SSL === 'true' ? {
     rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false'
@@ -32,10 +36,14 @@ if (process.env.DB_READ_REPLICA_HOST) {
     password: process.env.DB_READ_REPLICA_PASSWORD || process.env.DB_PASSWORD || '',
     database: process.env.DB_READ_REPLICA_NAME || process.env.DB_NAME || 'trendorabay',
     waitForConnections: true,
-    connectionLimit: parseInt(process.env.DB_READ_REPLICA_CONNECTION_LIMIT) || 50,
+    connectionLimit: parseInt(process.env.DB_READ_REPLICA_CONNECTION_LIMIT) || 10,
     queueLimit: 0,
     enableKeepAlive: true,
-    keepAliveInitialDelay: 0,
+    keepAliveInitialDelay: 10000,
+    // Timeout settings to prevent hanging connections
+    connectTimeout: 10000,
+    acquireTimeout: 10000,
+    timeout: 10000,
     // SSL/TLS configuration
     ssl: process.env.DB_READ_REPLICA_SSL === 'true' ? {
       rejectUnauthorized: process.env.DB_READ_REPLICA_SSL_REJECT_UNAUTHORIZED !== 'false'
@@ -55,24 +63,31 @@ export const getWritePool = () => {
   return pool;
 };
 
-// Test connection
-const testConnection = async () => {
-  try {
-    const connection = await pool.getConnection();
-    console.log('Primary database connected successfully');
-    connection.release();
-    
-    if (readPool) {
-      const readConnection = await readPool.getConnection();
-      console.log('Read replica connected successfully');
-      readConnection.release();
+// Test connection with retry logic
+const testConnection = async (retries = 3) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const connection = await pool.getConnection();
+      console.log('Primary database connected successfully');
+      connection.release();
+      
+      if (readPool) {
+        const readConnection = await readPool.getConnection();
+        console.log('Read replica connected successfully');
+        readConnection.release();
+      }
+      
+      return true;
+    } catch (error) {
+      console.error(`Database connection attempt ${i + 1} failed:`, error.message);
+      if (i < retries - 1) {
+        // Wait before retrying (exponential backoff)
+        await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+      }
     }
-    
-    return true;
-  } catch (error) {
-    console.error('Database connection failed:', error.message);
-    return false;
   }
+  console.error('Database connection failed after retries');
+  return false;
 };
 
 export { pool, readPool, testConnection };
