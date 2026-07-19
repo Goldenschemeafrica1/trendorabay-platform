@@ -3,26 +3,12 @@ import pool from '../config/database.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { uploadToCloudinary, isCloudinaryConfigured } from '../config/cloudinary.js';
 
 const router = express.Router();
 
-// Configure multer for file uploads
-const uploadDir = process.env.UPLOADS_PATH || path.join(process.cwd(), 'uploads', 'pitches');
-
-// Ensure upload directory exists
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'pitch-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
+// Configure multer for file uploads (memory storage for Cloudinary)
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage: storage,
@@ -106,7 +92,47 @@ router.post('/', upload.single('articleAttachment'), async (req, res, next) => {
       });
     }
 
-    const articleAttachment = req.file ? `/uploads/pitches/${req.file.filename}` : null;
+    let articleAttachment = null;
+
+    // Upload file to Cloudinary if present
+    if (req.file) {
+      if (!isCloudinaryConfigured()) {
+        return res.status(500).json({
+          success: false,
+          error: 'Cloudinary is not configured. Please contact administrator.'
+        });
+      }
+
+      try {
+        // Create a temporary file for Cloudinary upload
+        const tempDir = path.join(process.cwd(), 'temp');
+        if (!fs.existsSync(tempDir)) {
+          fs.mkdirSync(tempDir, { recursive: true });
+        }
+
+        const tempFilePath = path.join(tempDir, req.file.originalname);
+        fs.writeFileSync(tempFilePath, req.file.buffer);
+
+        // Upload to Cloudinary
+        const uploadResult = await uploadToCloudinary(
+          { path: tempFilePath },
+          'pitch-submissions'
+        );
+
+        articleAttachment = uploadResult.url;
+
+        // Clean up temp file
+        fs.unlinkSync(tempFilePath);
+
+        console.log('File uploaded to Cloudinary:', articleAttachment);
+      } catch (uploadError) {
+        console.error('Cloudinary upload error:', uploadError);
+        return res.status(500).json({
+          success: false,
+          error: 'Failed to upload file to Cloudinary'
+        });
+      }
+    }
 
     console.log('Attempting to insert pitch into database...');
     const [result] = await pool.query(
