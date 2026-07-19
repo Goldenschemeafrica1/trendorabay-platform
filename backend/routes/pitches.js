@@ -97,40 +97,36 @@ router.post('/', upload.single('articleAttachment'), async (req, res, next) => {
     // Upload file to Cloudinary if present
     if (req.file) {
       if (!isCloudinaryConfigured()) {
-        return res.status(500).json({
-          success: false,
-          error: 'Cloudinary is not configured. Please contact administrator.'
-        });
-      }
+        console.warn('Cloudinary not configured. Skipping file upload.');
+        // Continue without file upload - pitch will be saved without attachment
+      } else {
+        try {
+          // Create a temporary file for Cloudinary upload
+          const tempDir = path.join(process.cwd(), 'temp');
+          if (!fs.existsSync(tempDir)) {
+            fs.mkdirSync(tempDir, { recursive: true });
+          }
 
-      try {
-        // Create a temporary file for Cloudinary upload
-        const tempDir = path.join(process.cwd(), 'temp');
-        if (!fs.existsSync(tempDir)) {
-          fs.mkdirSync(tempDir, { recursive: true });
+          const tempFilePath = path.join(tempDir, req.file.originalname);
+          fs.writeFileSync(tempFilePath, req.file.buffer);
+
+          // Upload to Cloudinary
+          const uploadResult = await uploadToCloudinary(
+            { path: tempFilePath },
+            'pitch-submissions'
+          );
+
+          articleAttachment = uploadResult.url;
+
+          // Clean up temp file
+          fs.unlinkSync(tempFilePath);
+
+          console.log('File uploaded to Cloudinary:', articleAttachment);
+        } catch (uploadError) {
+          console.error('Cloudinary upload error:', uploadError);
+          // Continue without file upload - pitch will be saved without attachment
+          console.warn('Continuing without file attachment due to upload error');
         }
-
-        const tempFilePath = path.join(tempDir, req.file.originalname);
-        fs.writeFileSync(tempFilePath, req.file.buffer);
-
-        // Upload to Cloudinary
-        const uploadResult = await uploadToCloudinary(
-          { path: tempFilePath },
-          'pitch-submissions'
-        );
-
-        articleAttachment = uploadResult.url;
-
-        // Clean up temp file
-        fs.unlinkSync(tempFilePath);
-
-        console.log('File uploaded to Cloudinary:', articleAttachment);
-      } catch (uploadError) {
-        console.error('Cloudinary upload error:', uploadError);
-        return res.status(500).json({
-          success: false,
-          error: 'Failed to upload file to Cloudinary'
-        });
       }
     }
 
