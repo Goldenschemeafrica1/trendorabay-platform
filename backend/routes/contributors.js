@@ -1,5 +1,6 @@
 import express from 'express';
 import pool from '../config/database.js';
+import { cache } from '../middleware/cacheMiddleware.js';
 
 const router = express.Router();
 
