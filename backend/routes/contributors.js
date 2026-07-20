@@ -32,19 +32,12 @@ router.get('/', async (req, res, next) => {
     res.json({ success: true, data: rows });
   } catch (error) {
     console.error('Error fetching contributors:', error);
-    ne`t(error);, COALESCE(cf.follower_count 0) as actual_followers
-      FROM contributors c
-       LEFT JOIN 
-         contributor_id, as follower_count
-         
-        GOUP BY
-       ) cfON=._id
-     `
+    next(error);
   }
 });
 
 // Get contributor by ID
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT c.*, (SELECT COUNT(*) FROM contributor_follows WHERE contributor_id = c.id) as actual_followers FROM contributors c WHERE c.id = ?',
@@ -73,7 +66,7 @@ router.get('/role/:role', async (req, res, next) => {
 });
 
 // Get active contributors
-router.get('/active', async (req, res, next) => {
+router.get('/active', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 20;
     const [rows] = await pool.query(

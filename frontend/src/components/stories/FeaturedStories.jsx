@@ -52,7 +52,7 @@ const FeaturedStories = () => {
     fetchHomepageStories();
   }, []);
 
-  // Fetch advertisements from API (non-blocking, runs after stories)
+  // Fetch advertisements from API (parallel with stories for faster loading)
   useEffect(() => {
     const fetchAdvertisements = async () => {
       try {

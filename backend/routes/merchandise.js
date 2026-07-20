@@ -1,5 +1,6 @@
 import express from 'express';
 import pool from '../config/database.js';
+import { cache } from '../middleware/cacheMiddleware.js';
 
 const router = express.Router();
 
@@ -30,7 +31,7 @@ const getImageUrl = (url) => {
 };
 
 // Get all merchandise
-router.get('/', async (req, res, next) => {
+router.get('/', cache(300), async (req, res, next) => {
   try {
     const { category, minPrice, maxPrice, search, page = 1, limit = 12 } = req.query;
     const offset = (page - 1) * limit;
@@ -79,7 +80,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // Get merchandise by ID
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT * FROM products WHERE id = ?',
@@ -100,7 +101,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Get merchandise by category
-router.get('/category/:category', async (req, res, next) => {
+router.get('/category/:category', cache(300), async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
@@ -122,7 +123,7 @@ router.get('/category/:category', async (req, res, next) => {
 });
 
 // Get featured products
-router.get('/featured', async (req, res, next) => {
+router.get('/featured', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 8;
     const [rows] = await pool.query(
@@ -164,7 +165,7 @@ router.get('/search', async (req, res, next) => {
 });
 
 // Get product categories
-router.get('/categories', async (req, res, next) => {
+router.get('/categories', cache(600), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT DISTINCT category FROM products WHERE category IS NOT NULL ORDER BY category'
@@ -287,5 +288,3 @@ router.delete('/:id', async (req, res, next) => {
     next(error);
   }
 });
-
-export default router;
