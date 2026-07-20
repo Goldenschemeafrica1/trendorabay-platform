@@ -4,7 +4,7 @@ import pool from '../config/database.js';
 const router = express.Router();
 
 // Get all contributors
-router.get('/', async (req, res, next) => {
+router.get('/', cache(300), async (req, res, next) => {
   try {
     const { status } = req.query;
     let query = `
