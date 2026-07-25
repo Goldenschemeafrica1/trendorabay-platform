@@ -3,8 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // Load theme from localStorage
 const savedTheme = localStorage.getItem('theme');
 const validThemes = ['light', 'dark'];
-const prefersDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-const initialTheme = savedTheme && validThemes.includes(savedTheme) ? savedTheme : (prefersDark ? 'dark' : 'light');
+const initialTheme = savedTheme && validThemes.includes(savedTheme) ? savedTheme : 'light';
 
 const initialState = {
   // Mobile menu state
