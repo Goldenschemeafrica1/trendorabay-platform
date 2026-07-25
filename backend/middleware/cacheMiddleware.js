@@ -1,4 +1,5 @@
 import { cacheGet, cacheSet, cacheDel, cacheDelPattern } from '../config/redis.js';
+import { recordCacheHit, recordCacheMiss } from '../config/metrics.js';
 
 // Cache middleware for GET requests
 export const cache = (ttl = 300) => {
@@ -14,14 +15,18 @@ export const cache = (ttl = 300) => {
       const cached = await cacheGet(key);
       if (cached) {
         res.setHeader('X-Cache', 'HIT');
-        res.setHeader('Cache-Control', `public, max-age=${ttl}`);
-        res.setHeader('CDN-Cache-Control', `public, max-age=${ttl * 2}`);
+        recordCacheHit();
+        res.setHeader('Cache-Control', `public, max-age=${ttl}, stale-while-revalidate=${ttl}`);
+        res.setHeader('Vary', 'Accept-Encoding');
+        res.setHeader('CDN-Cache-Control', `public, max-age=${ttl * 2}, stale-while-revalidate=${ttl * 2}`);
         return res.json(cached);
       }
       
       res.setHeader('X-Cache', 'MISS');
-      res.setHeader('Cache-Control', `public, max-age=${ttl}`);
-      res.setHeader('CDN-Cache-Control', `public, max-age=${ttl * 2}`);
+      recordCacheMiss();
+      res.setHeader('Cache-Control', `public, max-age=${ttl}, stale-while-revalidate=${ttl}`);
+      res.setHeader('Vary', 'Accept-Encoding');
+      res.setHeader('CDN-Cache-Control', `public, max-age=${ttl * 2}, stale-while-revalidate=${ttl * 2}`);
       
       // Store original json method
       const originalJson = res.json.bind(res);

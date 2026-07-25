@@ -508,3 +508,150 @@
     font-size: 13px;
   }
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .events-page {
+  background: linear-gradient(135deg, #0A0F0A 0%, #1E2A1E 100%);
+}
+
+body.dark-mode .header-content h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .header-content h1 .accent {
+  color: #D4A373;
+}
+
+body.dark-mode .page-subtitle {
+  color: #D4A373;
+}
+
+body.dark-mode .page-subtitle::before {
+  background: #D4A373;
+}
+
+body.dark-mode .back-home-link {
+  color: #D4A373;
+  border-color: #D4A373;
+}
+
+body.dark-mode .back-home-link:hover {
+  background: #D4A373;
+  color: #0A0F0A;
+}
+
+body.dark-mode .search-filter-section {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .search-input {
+  background: #1E2A1E;
+  border-color: #2C5530;
+  color: #FAF6F0;
+}
+
+body.dark-mode .search-input:focus {
+  border-color: #D4A373;
+  background: #162116;
+}
+
+body.dark-mode .search-input::placeholder {
+  color: #B87C4B;
+}
+
+body.dark-mode .search-icon {
+  color: #D4A373;
+}
+
+body.dark-mode .filter-tab {
+  background: #1E2A1E;
+  color: #D4A373;
+  border-color: #2C5530;
+}
+
+body.dark-mode .filter-tab.active {
+  background: #D4A373;
+  color: #0A0F0A;
+  border-color: #D4A373;
+}
+
+body.dark-mode .results-count {
+  color: #D4A373;
+}
+
+body.dark-mode .view-btn {
+  background: #1E2A1E;
+  border-color: #2C5530;
+  color: #D4A373;
+}
+
+body.dark-mode .view-btn.active {
+  background: #D4A373;
+  border-color: #D4A373;
+  color: #0A0F0A;
+}
+
+body.dark-mode .event-card {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .event-card h5 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .event-description {
+  color: #D4A373;
+}
+
+body.dark-mode .event-card-meta span {
+  color: #D4A373;
+}
+
+body.dark-mode .event-card-meta i {
+  color: #D4A373;
+}
+
+body.dark-mode .event-price-tag {
+  color: #D4A373;
+}
+
+body.dark-mode .event-register-btn {
+  color: #D4A373;
+  border-color: #D4A373;
+}
+
+body.dark-mode .event-register-btn:hover {
+  background: #D4A373;
+  color: #0A0F0A;
+}
+
+body.dark-mode .no-results {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .no-results h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .no-results p {
+  color: #D4A373;
+}
+
+body.dark-mode .reset-filters-btn {
+  background: #D4A373;
+}
+
+body.dark-mode .load-more-btn {
+  color: #D4A373;
+  border-color: #D4A373;
+}
+
+body.dark-mode .load-more-btn:hover {
+  background: #D4A373;
+  color: #0A0F0A;
+}

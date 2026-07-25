@@ -36,8 +36,20 @@ const merchService = {
 
   // Search products
   searchProducts: async (query, page = 1, limit = 12) => {
-    const response = await apiRequest.get(`/products/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
-    return response.data;
+    try {
+      const response = await apiRequest.get(`/v1/products/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
+      // Handle backend response format: {success: true, data: [...]} or {success: false, error: "..."}
+      if (response.data?.success === false) {
+        return { data: [] };
+      }
+      return response.data;
+    } catch (err) {
+      // Handle 404 responses with data
+      if (err.response?.data?.data) {
+        return err.response.data;
+      }
+      return { data: [] };
+    }
   },
 
   // Get product categories

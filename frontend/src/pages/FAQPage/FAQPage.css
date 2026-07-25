@@ -398,3 +398,124 @@
   outline: 2px solid #DAA520;
   outline-offset: 2px;
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .faq-page {
+  background: #0A0F0A;
+  color: #FAF6F0;
+}
+
+body.dark-mode .faq-header {
+  background: transparent;
+}
+
+body.dark-mode .faq-title {
+  background: linear-gradient(135deg, #D4A373, #B87C4B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode .faq-subtitle {
+  color: #D4A373;
+}
+
+body.dark-mode .category-button {
+  background: #1E2A1E;
+  border-color: #2C5530;
+  color: #FAF6F0;
+}
+
+body.dark-mode .category-button:hover {
+  background: #162116;
+  border-color: #3A6A3E;
+  color: #D4A373;
+}
+
+body.dark-mode .category-button.active {
+  background: linear-gradient(135deg, #D4A373, #B87C4B);
+  border-color: #D4A373;
+  color: #0A0F0A;
+  box-shadow: 0 4px 20px rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .faq-item {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .faq-item:hover {
+  background: #1E2A1E;
+  border-color: #3A6A3E;
+}
+
+body.dark-mode .faq-question {
+  color: #FAF6F0;
+}
+
+body.dark-mode .faq-question:hover {
+  background: #1E2A1E;
+}
+
+body.dark-mode .expand-icon {
+  color: #D4A373;
+}
+
+body.dark-mode .faq-answer {
+  border-top-color: #2C5530;
+}
+
+body.dark-mode .faq-answer p {
+  color: #D4A373;
+}
+
+body.dark-mode .support-section {
+  background: #1E2A1E;
+  border-color: #2C5530;
+}
+
+body.dark-mode .support-title {
+  color: #FAF6F0;
+}
+
+body.dark-mode .support-subtitle {
+  color: #D4A373;
+}
+
+body.dark-mode .support-btn.primary {
+  background: linear-gradient(135deg, #D4A373, #B87C4B);
+  color: #0A0F0A;
+  box-shadow: 0 4px 20px rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .support-btn.primary:hover {
+  background: linear-gradient(135deg, #B87C4B, #D4A373);
+  box-shadow: 0 6px 25px rgba(212, 163, 115, 0.4);
+}
+
+body.dark-mode .support-btn.secondary {
+  background: transparent;
+  color: #FAF6F0;
+  border-color: #2C5530;
+}
+
+body.dark-mode .support-btn.secondary:hover {
+  background: #162116;
+  border-color: #3A6A3E;
+}
+
+body.dark-mode .stat-value {
+  color: #D4A373;
+}
+
+body.dark-mode .stat-label {
+  color: #B87C4B;
+}
+
+body.dark-mode .category-button:focus,
+body.dark-mode .faq-question:focus,
+body.dark-mode .support-btn:focus {
+  outline-color: #D4A373;
+}

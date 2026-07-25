@@ -121,3 +121,49 @@
     gap: 1rem;
   }
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .magazine-filters {
+  background: #162116;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .filters-header {
+  border-bottom-color: #2C5530;
+}
+
+body.dark-mode .filter-icon {
+  color: #D4A373;
+}
+
+body.dark-mode .filters-header h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .filter-group label {
+  color: #D4A373;
+}
+
+body.dark-mode .filter-select {
+  background: #1E2A1E;
+  color: #FAF6F0;
+  border-color: #2C5530;
+}
+
+body.dark-mode .filter-select:focus {
+  border-color: #D4A373;
+  box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
+}
+
+body.dark-mode .price-input-field {
+  background: #1E2A1E;
+  color: #FAF6F0;
+  border-color: #2C5530;
+}
+
+body.dark-mode .price-input-field:focus {
+  border-color: #D4A373;
+  box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
+}

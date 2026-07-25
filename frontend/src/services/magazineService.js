@@ -143,15 +143,28 @@ const magazineService = {
     const cached = getCached(cacheKey);
     if (cached) return cached;
 
-    const response = await apiRequest.get(`/magazines/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
-    const magazines = response.data?.data || response.data || [];
+    try {
+      const response = await apiRequest.get(`/v1/magazines/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
+      const magazines = response.data?.data || response.data || [];
 
-    const result = magazines.length > 0
-      ? magazines.map(mag => magazineService.transformMagazine(mag))
-      : magazines;
+      const result = magazines.length > 0
+        ? magazines.map(mag => magazineService.transformMagazine(mag))
+        : magazines;
 
-    setCached(cacheKey, result);
-    return result;
+      setCached(cacheKey, result);
+      return result;
+    } catch (err) {
+      // Handle 404 responses with data
+      if (err.response?.data?.data) {
+        const magazines = err.response.data.data || [];
+        const result = magazines.length > 0
+          ? magazines.map(mag => magazineService.transformMagazine(mag))
+          : magazines;
+        setCached(cacheKey, result);
+        return result;
+      }
+      return [];
+    }
   },
 
   // Get magazine categories

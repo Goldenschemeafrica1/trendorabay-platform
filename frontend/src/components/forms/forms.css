@@ -169,14 +169,43 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .btn {
     padding: 0.75rem 1.25rem;
     font-size: 0.9rem;
   }
-  
+
   .btn-large {
     padding: 0.875rem 1.5rem;
     font-size: 1rem;
   }
+}
+
+/* ========== DARK MODE STYLES FOR FORMS ========== */
+body.dark-mode .form-label {
+  color: #FAF6F0;
+}
+
+body.dark-mode .form-input,
+body.dark-mode .form-textarea {
+  background: rgba(10, 15, 10, 0.8);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .form-input:focus,
+body.dark-mode .form-textarea:focus {
+  border-color: #D4A373;
+  box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
+}
+
+body.dark-mode .form-input::placeholder,
+body.dark-mode .form-textarea::placeholder {
+  color: rgba(250, 246, 240, 0.5);
+}
+
+body.dark-mode .form-error {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: rgba(220, 38, 38, 0.5);
+  color: #f87171;
 }

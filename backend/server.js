@@ -13,6 +13,8 @@ import { redisRateLimiter } from './middleware/redisRateLimiter.js';
 import { sanitizeInput } from './middleware/validator.js';
 import { timeoutMiddleware } from './middleware/timeout.js';
 import { validatePagination } from './middleware/pagination.js';
+import { metricsMiddleware, getMetrics } from './config/metrics.js';
+import { startQueueWorker } from './workers/queueWorker.js';
 import multer from 'multer';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -40,6 +42,12 @@ import teamRoutes from './routes/team.js';
 import galleryRoutes from './routes/gallery.js';
 
 const app = express();
+
+// Trust X-Forwarded-* headers when running behind a load balancer/reverse proxy
+if (process.env.TRUST_PROXY === 'true' || process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', true);
+}
+
 const PORT = process.env.PORT || 3001;
 
 // Security middleware
@@ -52,6 +60,9 @@ app.use(timeoutMiddleware(60000));
 
 // Use Redis rate limiter if available, fallback to in-memory
 app.use(redisRateLimiter);
+
+// Collect request metrics for APM
+app.use(metricsMiddleware);
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
@@ -104,6 +115,8 @@ app.use('/uploads', (req, res, next) => {
   res.header('Referrer-Policy', 'strict-origin-when-cross-origin');
   // Cache control for static assets
   res.header('Cache-Control', 'public, max-age=31536000, immutable');
+  res.header('CDN-Cache-Control', 'public, max-age=31536000, immutable');
+  res.header('Vary', 'Accept-Encoding');
   next();
 }, express.static(backendUploadsPath));
 
@@ -176,6 +189,16 @@ app.get('/api/redis-health', async (req, res) => {
   }
 });
 
+// Monitoring / metrics endpoint
+app.get('/api/metrics', async (req, res) => {
+  try {
+    const data = await getMetrics();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // API Routes with versioning
 const API_VERSION = process.env.API_VERSION || 'v1';
 
@@ -225,6 +248,31 @@ app.use('/api/gallery', galleryRoutes);
 // Make upload middleware available to routes
 app.set('upload', upload);
 
+// Serve frontend build for production / CDN with aggressive cache on hashed assets
+const frontendDistPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendDistPath, {
+  index: false,
+  immutable: true,
+  maxAge: '1y',
+  setHeaders: (res, filePath) => {
+    if (path.basename(filePath) === 'index.html') {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+    res.setHeader('CDN-Cache-Control', res.getHeader('Cache-Control'));
+    res.setHeader('Vary', 'Accept-Encoding');
+  }
+}));
+
+// SPA fallback: only for non-API, non-upload routes
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) {
+    return next();
+  }
+  res.sendFile(path.join(frontendDistPath, 'index.html'));
+});
+
 // 404 handler
 app.use(notFound);
 
@@ -268,6 +316,8 @@ const startServer = async () => {
       // Create tables if they don't exist
       await createInquiriesTable();
     }
+    
+    startQueueWorker();
     
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);

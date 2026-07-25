@@ -40,3 +40,16 @@ section h2 {
     font-size: 2rem;
   }
 }
+
+/* ========== DARK MODE STYLES FOR HOME PAGE ========== */
+body.dark-mode .home-page {
+  background: #0A0F0A;
+}
+
+body.dark-mode section h2 {
+  color: #D4A373;
+}
+
+body.dark-mode .newsletter-section {
+  background: #1E2A1E;
+}

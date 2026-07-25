@@ -100,12 +100,11 @@ router.get('/homepage', cache(300), async (req, res, next) => {
       return rows.map(story => {
         const cleanTitle = story.title?.trim() || '';
         const slug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
-        
+
         return {
           id: story.id,
           slug,
           title: story.title,
-          content: story.content,
           imageUrl: getImageUrl(story.featured_image_url, story.category_name),
           categoryName: story.category_name,
           category: story.category_name,
@@ -318,73 +317,25 @@ router.get('/', cache(300), async (req, res, next) => {
   }
 });
 
-// Get story by slug or ID
-router.get('/:slug', cache(300), async (req, res, next) => {
+// Search stories
+router.get('/search', cache(60), async (req, res, next) => {
   try {
-    const param = req.params.slug;
-    const isNumeric = /^\d+$/.test(param);
+    const { q } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const offset = (page - 1) * limit;
     
-    let rows;
-    
-    if (isNumeric) {
-      [rows] = await pool.query(
-        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
-         FROM stories s
-         LEFT JOIN authors a ON s.author_id = a.id
-         WHERE s.id = ?`,
-        [param]
-      );
-    } else {
-      // Try to find by matching slug against generated title slugs
-      const [allStories] = await pool.query(
-        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
-         FROM stories s
-         LEFT JOIN authors a ON s.author_id = a.id`
-      );
-      rows = allStories.filter(story => {
-        const cleanTitle = story.title?.trim() || '';
-        const generatedSlug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
-        return generatedSlug === param;
-      });
-    }
-    
-    if (rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Story not found' });
-    }
-
-    // Helper function to get avatar URL (serve CMS uploads)
-    const getAvatarUrl = (url) => {
-      if (!url) return '/logo.jpeg';
-      if (url.startsWith('http://') || url.startsWith('https://')) return url;
-      // If it's a relative path starting with /uploads, fall back to logo since CMS files don't exist
-      if (url.startsWith('/uploads/')) {
-        return '/logo.jpeg';
-      }
-      // If it starts with /, it's in the frontend public folder - return as-is
-      if (url.startsWith('/')) {
-        return url;
-      }
-      // If it's just a filename, it's in the frontend public folder
-      if (!url.includes('/')) {
-        return `/${url}`;
-      }
-      // If it has a path, return as-is
-      return url;
-    };
-
-    // Transform the story data
-    const story = rows[0];
-    // Generate slug from title if not exists (for consistency) - trim whitespace first
-    const cleanTitle = story.title?.trim() || '';
-    const slug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
-    
-    const transformed = {
-      ...story,
-      slug,
-      author_avatar: getAvatarUrl(story.author_avatar)
-    };
-
-    res.json({ success: true, data: transformed });
+    const [rows] = await pool.query(
+      `SELECT s.*, a.name as author_name 
+       FROM stories s 
+       LEFT JOIN authors a ON s.author_id = a.id 
+       WHERE (s.title LIKE ? OR s.content LIKE ?) AND s.status = 'published'
+       ORDER BY s.created_at DESC 
+       LIMIT ? OFFSET ?`,
+      [`%${q}%`, `%${q}%`, limit, offset]
+    );
+    // Always return 200 with data array (empty if no results)
+    res.json({ success: true, data: rows || [] });
   } catch (error) {
     next(error);
   }
@@ -448,24 +399,113 @@ router.get('/recent', cache(300), async (req, res, next) => {
   }
 });
 
-// Search stories
-router.get('/search', cache(60), async (req, res, next) => {
+// Get story by slug or ID
+router.get('/:slug', cache(300), async (req, res, next) => {
   try {
-    const { q } = req.query;
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12;
-    const offset = (page - 1) * limit;
+    const param = req.params.slug;
+    const isNumeric = /^\d+$/.test(param);
     
-    const [rows] = await pool.query(
-      `SELECT s.*, a.name as author_name 
-       FROM stories s 
-       LEFT JOIN authors a ON s.author_id = a.id 
-       WHERE (s.title LIKE ? OR s.content LIKE ?) AND s.status = 'published'
-       ORDER BY s.created_at DESC 
-       LIMIT ? OFFSET ?`,
-      [`%${q}%`, `%${q}%`, limit, offset]
-    );
-    res.json({ success: true, data: rows });
+    let rows;
+    
+    if (isNumeric) {
+      [rows] = await pool.query(
+        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+         FROM stories s
+         LEFT JOIN authors a ON s.author_id = a.id
+         WHERE s.id = ?`,
+        [param]
+      );
+    } else {
+      // Try to find by matching slug against generated title slugs
+      const [allStories] = await pool.query(
+        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+         FROM stories s
+         LEFT JOIN authors a ON s.author_id = a.id`
+      );
+      rows = allStories.filter(story => {
+        const cleanTitle = story.title?.trim() || '';
+        const generatedSlug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+        return generatedSlug === param;
+      });
+    }
+    
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, error: 'Story not found' });
+    }
+
+    // Helper function to get avatar URL (serve CMS uploads)
+    const getAvatarUrl = (url) => {
+      if (!url) return '/logo.jpeg';
+      if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      // If it's a relative path starting with /uploads, fall back to logo since CMS files don't exist
+      if (url.startsWith('/uploads/')) {
+        return '/logo.jpeg';
+      }
+      // If it starts with /, it's in the frontend public folder - return as-is
+      if (url.startsWith('/')) {
+        return url;
+      }
+      // If it's just a filename, it's in the frontend public folder
+      if (!url.includes('/')) {
+        return `/${url}`;
+      }
+      // If it has a path, return as-is
+      return url;
+    };
+
+    // Transform the story data
+    const story = rows[0];
+    // Generate slug from title if not exists (for consistency) - trim whitespace first
+    const cleanTitle = story.title?.trim() || '';
+    const slug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+    
+    // Helper function to get image URL (handle Cloudinary and CMS uploads)
+    const getImageUrl = (url, category) => {
+      if (!url || url === 'undefined' || url === '/uploads/stories/undefined') return null;
+      
+      // Return full URLs as-is (Cloudinary, external images)
+      if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      
+      // If it's a relative path starting with /uploads, try backend URL first
+      if (url.startsWith('/uploads/')) {
+        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        return `${backendUrl}${url}`;
+      }
+      // If it starts with /, it's in the frontend public folder - return as-is
+      if (url.startsWith('/')) {
+        return url;
+      }
+      // If it's just a filename, it's in the frontend public folder
+      if (!url.includes('/')) {
+        return `/${url}`;
+      }
+      // If it has a path, return as-is
+      return url;
+    };
+    
+    // Combine image URLs into an array
+    const imageUrls = [];
+    if (story.featured_image_url) {
+      imageUrls.push(getImageUrl(story.featured_image_url, story.category_name));
+    }
+    if (story.featured_image_url_2) {
+      imageUrls.push(getImageUrl(story.featured_image_url_2, story.category_name));
+    }
+    if (story.featured_image_url_3) {
+      imageUrls.push(getImageUrl(story.featured_image_url_3, story.category_name));
+    }
+    if (story.featured_image_url_4) {
+      imageUrls.push(getImageUrl(story.featured_image_url_4, story.category_name));
+    }
+    
+    const transformed = {
+      ...story,
+      slug,
+      author_avatar: getAvatarUrl(story.author_avatar),
+      featured_image_url: imageUrls.length > 0 ? imageUrls : null
+    };
+
+    res.json({ success: true, data: transformed });
   } catch (error) {
     next(error);
   }
@@ -578,11 +618,11 @@ router.get('/author/:authorId', async (req, res, next) => {
 // Create story
 router.post('/', async (req, res, next) => {
   try {
-    const { title, content, featured_image_url, author_id, category_id, tags } = req.body;
+    const { title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags } = req.body;
     const [result] = await pool.query(
-      `INSERT INTO stories (title, content, featured_image_url, author_id, category_id, tags) 
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [title, content, featured_image_url, author_id, category_id, tags]
+      `INSERT INTO stories (title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags]
     );
     const [newStory] = await pool.query(
       `SELECT s.*, a.name as author_name 
@@ -605,12 +645,12 @@ router.post('/', async (req, res, next) => {
 // Update story
 router.put('/:id', async (req, res, next) => {
   try {
-    const { title, content, featured_image_url, author_id, category_id, tags } = req.body;
+    const { title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags } = req.body;
     await pool.query(
       `UPDATE stories 
-       SET title = ?, content = ?, featured_image_url = ?, author_id = ?, category_id = ?, tags = ?
+       SET title = ?, content = ?, featured_image_url = ?, featured_image_url_2 = ?, featured_image_url_3 = ?, featured_image_url_4 = ?, author_id = ?, category_id = ?, tags = ?
        WHERE id = ?`,
-      [title, content, featured_image_url, author_id, category_id, tags, req.params.id]
+      [title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags, req.params.id]
     );
     const [updated] = await pool.query(
       `SELECT s.*, a.name as author_name 

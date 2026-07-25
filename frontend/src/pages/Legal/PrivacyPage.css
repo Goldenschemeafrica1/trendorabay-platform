@@ -164,3 +164,59 @@
     font-size: 0.85rem;
   }
 }
+
+/* ========== DARK MODE STYLES FOR PRIVACY PAGE ========== */
+body.dark-mode .privacy-page {
+  background: #0A0F0A;
+}
+
+body.dark-mode .privacy-header h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .privacy-header p {
+  background: #1E2A1E;
+  color: rgba(250, 246, 240, 0.7);
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .privacy-content {
+  background: #1E2A1E;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .privacy-content section {
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .privacy-content h2 {
+  color: #D4A373;
+}
+
+body.dark-mode .privacy-content h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .privacy-content p {
+  color: rgba(250, 246, 240, 0.9);
+}
+
+body.dark-mode .privacy-content ul li {
+  color: rgba(250, 246, 240, 0.9);
+}
+
+body.dark-mode .privacy-content ul li::before {
+  color: #D4A373;
+}
+
+body.dark-mode .privacy-content ul li strong {
+  color: #D4A373;
+}
+
+body.dark-mode .contact-info {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .contact-info p {
+  color: rgba(250, 246, 240, 0.9);
+}

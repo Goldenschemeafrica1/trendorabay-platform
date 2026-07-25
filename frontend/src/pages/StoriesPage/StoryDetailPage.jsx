@@ -17,7 +17,6 @@ const StoryDetailPage = () => {
   const [showComments, setShowComments] = useState(false);
   const [userId] = useState(1); // In real app, get from auth context
   const [advertisement, setAdvertisement] = useState(null);
-  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     if (!slug || slug === 'null' || slug === 'undefined') {
@@ -32,20 +31,6 @@ const StoryDetailPage = () => {
         
         if (response) {
           setStory(response);
-          
-          // Check if user is following this author
-          const authorId = response.author?.id || response.author_id;
-          if (authorId) {
-            try {
-              const followResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/authors/${authorId}/follow/${userId}`);
-              const followData = await followResponse.json();
-              if (followData.success) {
-                setIsFollowing(followData.isFollowing);
-              }
-            } catch (error) {
-              console.error('Error checking follow status:', error);
-            }
-          }
           
           // Fetch related stories
           const relatedResponse = await storyService.getStories({ status: 'published', limit: 4 });
@@ -78,9 +63,7 @@ const StoryDetailPage = () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/advertisements?status=active`);
         const data = await response.json();
-        console.log('Story detail ad response:', data);
         if (data.success && data.data && data.data.length > 0) {
-          console.log('Setting advertisement:', data.data[0]);
           setAdvertisement(data.data[0]);
         }
       } catch (error) {
@@ -122,12 +105,12 @@ const StoryDetailPage = () => {
     }
 
     try {
-      const userObj = JSON.parse(user);
+      const token = localStorage.getItem('token');
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${story?.id}/like`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userObj.token}`
+          'Authorization': `Bearer ${token}`
         }
       });
       const data = await response.json();
@@ -159,12 +142,12 @@ const StoryDetailPage = () => {
     }
 
     try {
-      const userObj = JSON.parse(user);
+      const token = localStorage.getItem('token');
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stories/${story?.id}/comments`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userObj.token}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ content: commentText })
       });
@@ -220,57 +203,6 @@ const StoryDetailPage = () => {
     setShowComments(!showComments);
   };
 
-  const handleFollowAuthor = async () => {
-    // Check if user is logged in
-    const user = localStorage.getItem('user');
-    if (!user) {
-      toast.error('Please login to follow authors', {
-        position: "bottom-right",
-        autoClose: 3000,
-      });
-      navigate('/login');
-      return;
-    }
-
-    const authorId = story.author?.id || story.author_id;
-    if (!authorId) return;
-
-    try {
-      if (isFollowing) {
-        // Unfollow
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/authors/${authorId}/follow`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: userId })
-        });
-        const data = await response.json();
-        if (data.success) {
-          setIsFollowing(false);
-          toast.success('Unfollowed author');
-        } else {
-          toast.error(data.error || 'Failed to unfollow');
-        }
-      } else {
-        // Follow
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/authors/${authorId}/follow`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: userId })
-        });
-        const data = await response.json();
-        if (data.success) {
-          setIsFollowing(true);
-          toast.success('Following author');
-        } else {
-          toast.error(data.error || 'Failed to follow');
-        }
-      }
-    } catch (error) {
-      console.error('Follow error:', error);
-      toast.error('Failed to follow author');
-    }
-  };
-
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -310,12 +242,7 @@ const StoryDetailPage = () => {
   }, [story?.id]);
 
   if (loading) {
-    return (
-      <div className="story-detail-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading story...</p>
-      </div>
-    );
+    return null;
   }
 
   if (!story) {
@@ -347,9 +274,9 @@ const StoryDetailPage = () => {
                     e.target.src = '/logo.jpeg';
                   }}
                 />
-                <span className="author-name-mini">
+                <Link to={`/author/${story.author_id}`} className="author-name-mini">
                   {story.author_name || 'Unknown Author'}
-                </span>
+                </Link>
               </div>
               <div className="story-meta-info">
                 {story.published_at && (
@@ -366,23 +293,94 @@ const StoryDetailPage = () => {
             {/* Story Title */}
             <h1 className="story-title">{story.title}</h1>
 
-            {/* Featured Image */}
-            {story.imageUrl && (
-              <div className="story-featured-image">
-                <img
-                  src={story.imageUrl.startsWith('/') ? story.imageUrl : `/${story.imageUrl}`}
-                  alt={story.title}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-            )}
-
-            <div
-              className="story-body"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(story.content) }}
-            />
+            {/* Story Body with Newspaper-Style Images */}
+            {(() => {
+              const imageField = story.featured_image_url || story.imageUrl || story.image || story.images || story.image_url;
+              const images = Array.isArray(imageField) ? imageField : (imageField ? [imageField] : []);
+              
+              const getImageSrc = (url) => {
+                if (!url) return '';
+                if (url.startsWith('http://') || url.startsWith('https://')) return url;
+                if (url.startsWith('/')) return url;
+                return `/${url}`;
+              };
+              
+              // Split content into paragraphs
+              const content = story.content || '';
+              const paragraphs = content.split(/<\/p>/).filter(p => p.trim());
+              
+              // Calculate positions for images
+              const firstImagePosition = 0; // At the very beginning
+              const secondImagePosition = Math.floor(paragraphs.length * 0.33);
+              const thirdImagePosition = Math.floor(paragraphs.length * 0.66);
+              const fourthImagePosition = Math.floor(paragraphs.length * 0.85);
+              
+              return (
+                <div className="story-body newspaper-style">
+                  {paragraphs.map((paragraph, index) => {
+                    const paraContent = paragraph + '</p>';
+                    
+                    return (
+                      <React.Fragment key={index}>
+                        {/* Insert first image - float left at the beginning */}
+                        {index === firstImagePosition && images[0] && (
+                          <div className="story-featured-image newspaper-float-left">
+                            <img
+                              src={getImageSrc(images[0])}
+                              alt={`${story.title} - 1`}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        )}
+                        
+                        {/* Insert second image - float right */}
+                        {index === secondImagePosition && images[1] && (
+                          <div className="story-featured-image newspaper-float-right">
+                            <img
+                              src={getImageSrc(images[1])}
+                              alt={`${story.title} - 2`}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        )}
+                        
+                        {/* Insert third image - float left */}
+                        {index === thirdImagePosition && images[2] && (
+                          <div className="story-featured-image newspaper-float-left">
+                            <img
+                              src={getImageSrc(images[2])}
+                              alt={`${story.title} - 3`}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        )}
+                        
+                        {/* Insert fourth image - float right */}
+                        {index === fourthImagePosition && images[3] && (
+                          <div className="story-featured-image newspaper-float-right">
+                            <img
+                              src={getImageSrc(images[3])}
+                              alt={`${story.title} - 4`}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        )}
+                        
+                        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(paraContent) }} />
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              );
+            })()}
 
             {/* Story Tags */}
             <div className="story-tags">
@@ -457,30 +455,6 @@ const StoryDetailPage = () => {
 
         {/* Sidebar */}
         <aside className="story-sidebar">
-          {/* Author Card */}
-          {story.author_name && (
-            <div className="author-card">
-              <img 
-                src={story.author_avatar || '/logo.jpeg'} 
-                alt={story.author_name || 'Author'} 
-                onError={(e) => {
-                  e.target.src = '/logo.jpeg';
-                }}
-              />
-              <div className="author-info">
-                <h3>{story.author_name || 'Unknown Author'}</h3>
-                <p className="author-role">Author</p>
-                {story.author_bio && <p className="author-bio">{story.author_bio}</p>}
-                <button 
-                  onClick={handleFollowAuthor}
-                  className={`follow-author-btn ${isFollowing ? 'following' : ''}`}
-                >
-                  {isFollowing ? 'Following' : 'Follow Author'}
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Ad Section */}
           {advertisement && (
             <div className="ad-section">
@@ -508,6 +482,9 @@ const StoryDetailPage = () => {
               </div>
             </div>
           )}
+
+          {/* Spacer to push newsletter to bottom */}
+          <div style={{ flex: 1 }}></div>
 
           {/* Newsletter Signup */}
           <div className="newsletter-card">

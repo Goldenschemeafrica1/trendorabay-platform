@@ -142,18 +142,64 @@
   .magazine-image {
     height: 250px;
   }
-  
+
   .magazine-content {
     padding: 1.25rem;
   }
-  
+
   .magazine-title {
     font-size: 1.1rem;
   }
-  
+
   .magazine-meta {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
+}
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .magazine-card {
+  background: #162116;
+}
+
+body.dark-mode .magazine-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .overlay-btn {
+  background: #FAF6F0;
+  color: #D4A373;
+}
+
+body.dark-mode .overlay-btn:hover {
+  background: #D4A373;
+  color: #0A0F0A;
+}
+
+body.dark-mode .magazine-title {
+  color: #FAF6F0;
+}
+
+body.dark-mode .magazine-description {
+  color: #D4A373;
+}
+
+body.dark-mode .magazine-price {
+  color: #D4A373;
+}
+
+body.dark-mode .magazine-category {
+  background: #1E2A1E;
+  color: #D4A373;
+}
+
+body.dark-mode .add-to-cart-btn {
+  background: #D4A373;
+}
+
+body.dark-mode .add-to-cart-btn:hover {
+  background: #1E2A1E;
 }

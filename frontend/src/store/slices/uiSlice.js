@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// Load theme from localStorage
+const savedTheme = localStorage.getItem('theme');
+const validThemes = ['light', 'dark'];
+const prefersDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+const initialTheme = savedTheme && validThemes.includes(savedTheme) ? savedTheme : (prefersDark ? 'dark' : 'light');
+
 const initialState = {
   // Mobile menu state
   isMobileMenuOpen: false,
@@ -16,7 +22,7 @@ const initialState = {
   isSearchOpen: false,
   
   // Theme
-  theme: 'light', // 'light', 'dark'
+  theme: initialTheme, // 'light', 'dark'
   
   // Notifications
   notifications: [],
@@ -88,10 +94,12 @@ const uiSlice = createSlice({
     // Theme management
     setTheme: (state, action) => {
       state.theme = action.payload;
+      localStorage.setItem('theme', action.payload);
     },
 
     toggleTheme: (state) => {
       state.theme = state.theme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', state.theme);
     },
 
     // Notifications

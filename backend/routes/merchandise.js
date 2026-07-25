@@ -79,21 +79,24 @@ router.get('/', cache(300), async (req, res, next) => {
   }
 });
 
-// Get merchandise by ID
-router.get('/:id', cache(300), async (req, res, next) => {
+// Search products
+router.get('/search', async (req, res, next) => {
   try {
+    const { q } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const offset = (page - 1) * limit;
+    
     const [rows] = await pool.query(
-      'SELECT * FROM products WHERE id = ?',
-      [req.params.id]
+      'SELECT * FROM products WHERE (name LIKE ? OR description LIKE ?) AND status = "active" ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      [`%${q}%`, `%${q}%`, limit, offset]
     );
-    if (rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Merchandise not found' });
-    }
-    // Transform image URL to serve CMS uploads
-    const transformed = {
-      ...rows[0],
-      image_url: getImageUrl(rows[0].image_url)
-    };
+    // Transform image URLs to serve CMS uploads
+    const transformed = (rows || []).map(product => ({
+      ...product,
+      image_url: getImageUrl(product.image_url)
+    }));
+    // Always return 200 with data array (empty if no results)
     res.json({ success: true, data: transformed });
   } catch (error) {
     next(error);
@@ -141,23 +144,21 @@ router.get('/featured', cache(300), async (req, res, next) => {
   }
 });
 
-// Search products
-router.get('/search', async (req, res, next) => {
+// Get merchandise by ID
+router.get('/:id', cache(300), async (req, res, next) => {
   try {
-    const { q } = req.query;
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12;
-    const offset = (page - 1) * limit;
-    
     const [rows] = await pool.query(
-      'SELECT * FROM products WHERE (name LIKE ? OR description LIKE ?) AND status = "active" ORDER BY created_at DESC LIMIT ? OFFSET ?',
-      [`%${q}%`, `%${q}%`, limit, offset]
+      'SELECT * FROM products WHERE id = ?',
+      [req.params.id]
     );
-    // Transform image URLs to serve CMS uploads
-    const transformed = rows.map(product => ({
-      ...product,
-      image_url: getImageUrl(product.image_url)
-    }));
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, error: 'Merchandise not found' });
+    }
+    // Transform image URL to serve CMS uploads
+    const transformed = {
+      ...rows[0],
+      image_url: getImageUrl(rows[0].image_url)
+    };
     res.json({ success: true, data: transformed });
   } catch (error) {
     next(error);

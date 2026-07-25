@@ -54,18 +54,28 @@ import OrdersPage from './pages/OrdersPage/OrdersPage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import GalleryPage from './pages/GalleryPage/GalleryPage';
+import SearchPage from './pages/SearchPage/SearchPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { isLoading } = useSelector(state => state.ui);
+  const { isLoading, theme } = useSelector(state => state.ui);
   const { isDrawerOpen } = useSelector(state => state.cart);
 
   // Scroll to top on route change
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  // Apply dark mode class to body based on theme state
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [theme]);
 
   // Track page views for analytics
   useEffect(() => {
@@ -137,8 +147,8 @@ function App() {
       {/* Main Header - Hidden on login, signup, terms, privacy, and forgot-password pages */}
       {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/forgot-password' && <Header />}
 
-      {/* Advertisement Bar - Hidden on magazine listing page, podcast, merchandise, cart, login, signup, about, store, author, contributors, terms, privacy, donate, contact, write-for-us, write, partner, partner-with-us, faq, subscribe, settings, orders, profile, gallery, and forgot-password pages */}
-      {location.pathname !== '/magazines' && !location.pathname.startsWith('/magazines/category') && location.pathname !== '/podcast' && !location.pathname.match(/^\/podcast\/\d+/) && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/author') && location.pathname !== '/community/contributors' && !location.pathname.match(/^\/community\/contributors\/\d+/) && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/write' && !location.pathname.startsWith('/partner') && location.pathname !== '/faq' && location.pathname !== '/subscribe' && location.pathname !== '/settings' && location.pathname !== '/orders' && location.pathname !== '/profile' && location.pathname !== '/gallery' && location.pathname !== '/forgot-password' && <Advert />}
+      {/* Advertisement Bar - Hidden on magazine listing page, podcast, merchandise, cart, login, signup, about, store, author, contributors, terms, privacy, donate, contact, write-for-us, write, partner, partner-with-us, faq, subscribe, settings, orders, profile, gallery, search, and forgot-password pages */}
+      {location.pathname !== '/magazines' && !location.pathname.startsWith('/magazines/category') && location.pathname !== '/podcast' && !location.pathname.match(/^\/podcast\/\d+/) && location.pathname !== '/merchandise' && location.pathname !== '/cart' && location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/about' && location.pathname !== '/store' && !location.pathname.startsWith('/author') && location.pathname !== '/community/contributors' && !location.pathname.match(/^\/community\/contributors\/\d+/) && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/donate' && location.pathname !== '/contact' && location.pathname !== '/write-for-us' && location.pathname !== '/write' && !location.pathname.startsWith('/partner') && location.pathname !== '/faq' && location.pathname !== '/subscribe' && location.pathname !== '/settings' && location.pathname !== '/orders' && location.pathname !== '/profile' && location.pathname !== '/gallery' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && <Advert />}
 
       {/* Shopping Cart Drawer (Slides from right) */}
       <CartDrawer />
@@ -213,12 +223,15 @@ function App() {
         {/* Gallery Page */}
         <Route path="/gallery" element={<GalleryPage />} />
 
+        {/* Search Page */}
+        <Route path="/search" element={<SearchPage />} />
+
         {/* 404 Page */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, about, magazines, write, partner, advertise, events, podcast detail, author detail, terms, privacy, and forgot-password pages */}
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && location.pathname !== '/about' && !location.pathname.startsWith('/magazines') && location.pathname !== '/write' && location.pathname !== '/write-for-us' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/forgot-password' && <Footer />}
+      {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, about, magazines, write, partner, advertise, events, podcast detail, author detail, terms, privacy, search, and forgot-password pages */}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && location.pathname !== '/about' && !location.pathname.startsWith('/magazines') && location.pathname !== '/write' && location.pathname !== '/write-for-us' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && <Footer />}
 
       {/* Quick View Modal (can be added here) */}
       {/* <QuickViewModal /> */}

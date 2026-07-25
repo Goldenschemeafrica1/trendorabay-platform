@@ -538,3 +538,115 @@
     transform: rotate(360deg);
   }
 }
+
+/* ========== DARK MODE STYLES FOR LOGIN PAGE ========== */
+body.dark-mode .login-page {
+  background: #0A0F0A;
+}
+
+body.dark-mode .login-container {
+  background: #1E2A1E;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .login-logo {
+  color: #D4A373;
+}
+
+body.dark-mode .login-logo span {
+  color: #FAF6F0;
+}
+
+body.dark-mode .login-header h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .login-header p {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .form-group label {
+  color: #FAF6F0;
+}
+
+body.dark-mode .form-group input {
+  background: rgba(10, 15, 10, 0.8);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .form-group input:focus {
+  border-color: #D4A373;
+  box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
+}
+
+body.dark-mode .form-group input:disabled {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .password-toggle {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .password-toggle:hover {
+  color: #D4A373;
+}
+
+body.dark-mode .error-message {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: rgba(220, 38, 38, 0.5);
+}
+
+body.dark-mode .checkbox-container {
+  color: #FAF6F0;
+}
+
+body.dark-mode .checkmark {
+  background: rgba(10, 15, 10, 0.8);
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .checkbox-container:hover .checkmark {
+  border-color: #D4A373;
+}
+
+body.dark-mode .checkbox-container input:checked ~ .checkmark {
+  background: #D4A373;
+  border-color: #D4A373;
+}
+
+body.dark-mode .login-divider::before {
+  background: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .login-divider span {
+  background: #1E2A1E;
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .social-button {
+  background: rgba(30, 42, 30, 0.5);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .social-button:hover {
+  background: rgba(212, 163, 115, 0.2);
+  border-color: #D4A373;
+}
+
+body.dark-mode .signup-link p {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .back-to-home {
+  border-top-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .back-to-home a {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .back-to-home a:hover {
+  color: #D4A373;
+}

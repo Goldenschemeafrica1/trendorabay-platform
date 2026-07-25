@@ -893,19 +893,48 @@ h3.story-title {
 }
 
 .story-featured-image {
-  width: 100%;
-  max-width: 1100px;
-  margin-bottom: 32px;
   border-radius: 8px;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 
-.story-featured-image img {
+.story-featured-image.newspaper-float-left {
+  float: left;
+  width: 450px;
+  max-width: 50%;
+  margin-right: 25px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.story-featured-image.newspaper-float-right {
+  float: right;
+  width: 450px;
+  max-width: 50%;
+  margin-left: 25px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.story-featured-image.newspaper-float-left img,
+.story-featured-image.newspaper-float-right img {
   width: 100%;
   height: auto;
-  max-height: 500px;
+  max-height: 400px;
   object-fit: cover;
   display: block;
+}
+
+.story-body.newspaper-style::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.story-body.newspaper-style p {
+  text-align: justify;
+  line-height: 1.8;
+  margin-bottom: 16px;
 }
 
 .story-meta {
@@ -1028,6 +1057,13 @@ h3.story-title {
   font-size: 14px !important;
   font-weight: 600 !important;
   color: #1e2a1e !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: color 0.3s ease !important;
+}
+
+.author-name-mini:hover {
+  color: #b87c4b !important;
 }
 
 .story-meta-info {
@@ -1069,6 +1105,8 @@ h3.story-title {
 
 .story-body p {
   margin-bottom: 16px !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
 }
 
 .story-tags {
@@ -1240,6 +1278,7 @@ h3.story-title {
   display: flex !important;
   flex-direction: column !important;
   gap: 32px !important;
+  min-height: 100vh !important;
 }
 
 .author-card {
@@ -1320,7 +1359,7 @@ h3.story-title {
 .ad-image {
   width: 100% !important;
   height: auto !important;
-  min-height: 400px !important;
+  min-height: 600px !important;
   border-radius: 12px !important;
   object-fit: cover !important;
   display: block !important;
@@ -1350,6 +1389,7 @@ h3.story-title {
   padding: 24px !important;
   border-radius: 16px !important;
   text-align: center !important;
+  margin-top: 100px !important;
 }
 
 .newsletter-card h3 {
@@ -1982,6 +2022,12 @@ h3.story-title {
   margin-top: 40px;
 }
 
+.story-navigation {
+  text-align: left;
+  margin-top: 20px;
+  padding-left: 100px;
+}
+
 .back-to-stories {
   color: #b87c4b;
   text-decoration: none;
@@ -2267,6 +2313,7 @@ h3.story-title {
   padding: 20px;
   border-radius: 16px;
   text-align: center;
+  margin-top: 100px;
 }
 
 .newsletter-card h3 {
@@ -2405,4 +2452,344 @@ h3.story-title {
   .newsletter-form button {
     width: 100%;
   }
+}
+
+/* ========== DARK MODE STYLES FOR STORY DETAIL PAGE ========== */
+body.dark-mode .story-detail-page {
+  background-color: #0A0F0A !important;
+}
+
+body.dark-mode .story-hero {
+  background: #0A0F0A !important;
+}
+
+body.dark-mode .image-overlay {
+  background: linear-gradient(to top, rgba(10, 15, 10, 0.95) 0%, rgba(10, 15, 10, 0.5) 60%, transparent 100%) !important;
+}
+
+body.dark-mode .story-title {
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .story-content-container {
+  background: #1E2A1E !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .story-content {
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .story-meta-bar {
+  background: rgba(30, 42, 30, 0.5) !important;
+}
+
+body.dark-mode .author-name-mini {
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .author-name-mini:hover {
+  color: #D4A373 !important;
+}
+
+body.dark-mode .story-date-mini,
+body.dark-mode .read-time-mini {
+  color: rgba(250, 246, 240, 0.7) !important;
+}
+
+body.dark-mode .story-excerpt {
+  background: rgba(30, 42, 30, 0.5) !important;
+  border-left-color: #D4A373 !important;
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .story-body h2 {
+  color: #D4A373 !important;
+}
+
+body.dark-mode .story-body p {
+  color: rgba(250, 246, 240, 0.9) !important;
+}
+
+body.dark-mode .story-tag {
+  background: rgba(30, 42, 30, 0.5) !important;
+  color: #D4A373 !important;
+}
+
+body.dark-mode .story-tag:hover {
+  background: #D4A373 !important;
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .engagement-btn {
+  background: rgba(30, 42, 30, 0.5) !important;
+  border-color: rgba(212, 163, 115, 0.3) !important;
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .engagement-btn:hover {
+  border-color: #D4A373 !important;
+  background: rgba(212, 163, 115, 0.2) !important;
+  color: #D4A373 !important;
+}
+
+body.dark-mode .engagement-btn.liked {
+  background: #D4A373 !important;
+  color: #FAF6F0 !important;
+  border-color: #D4A373 !important;
+}
+
+body.dark-mode .comments-section {
+  border-top-color: rgba(212, 163, 115, 0.3) !important;
+}
+
+body.dark-mode .comments-section h3 {
+  color: #D4A373 !important;
+}
+
+body.dark-mode .comment-input {
+  background: rgba(10, 15, 10, 0.8) !important;
+  border-color: rgba(212, 163, 115, 0.3) !important;
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .comment-input:focus {
+  border-color: #D4A373 !important;
+}
+
+body.dark-mode .comment-input::placeholder {
+  color: rgba(250, 246, 240, 0.5) !important;
+}
+
+body.dark-mode .no-comments {
+  background: rgba(30, 42, 30, 0.5) !important;
+  color: rgba(250, 246, 240, 0.7) !important;
+}
+
+body.dark-mode .comment-item {
+  background: rgba(30, 42, 30, 0.5) !important;
+  border-left-color: #D4A373 !important;
+}
+
+body.dark-mode .comment-author {
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .comment-date {
+  color: rgba(250, 246, 240, 0.6) !important;
+}
+
+body.dark-mode .comment-content {
+  color: rgba(250, 246, 240, 0.9) !important;
+}
+
+body.dark-mode .author-card {
+  background: #1E2A1E !important;
+  border-color: rgba(212, 163, 115, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .author-info h3 {
+  color: #D4A373 !important;
+}
+
+body.dark-mode .author-role {
+  color: rgba(250, 246, 240, 0.7) !important;
+}
+
+body.dark-mode .author-bio {
+  color: rgba(250, 246, 240, 0.8) !important;
+}
+
+body.dark-mode .follow-author-btn.following {
+  background: rgba(212, 163, 115, 0.3) !important;
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .ad-placeholder {
+  background: linear-gradient(135deg, #1E2A1E 0%, #0A0F0A 100%) !important;
+  border-color: rgba(212, 163, 115, 0.3) !important;
+}
+
+body.dark-mode .story-not-found {
+  background: #1E2A1E !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .story-not-found h2 {
+  color: #D4A373 !important;
+}
+
+body.dark-mode .story-not-found p {
+  color: rgba(250, 246, 240, 0.8) !important;
+}
+
+/* ============================================
+   DARK MODE STYLES - MAIN STORIES PAGE
+   ============================================ */
+body.dark-mode .stories-page {
+  background-color: #0A0F0A;
+}
+
+body.dark-mode .stories-hero {
+  background: linear-gradient(135deg, #1E2A1E 0%, #162116 100%);
+}
+
+body.dark-mode .stories-hero::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' opacity='0.05'%3E%3Cpath d='M20,30 L35,10 L50,30 L70,15 L80,35 L60,50 L75,70 L50,65 L30,80 L25,55 L5,45 L20,30' fill='none' stroke='%23D4A373' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+body.dark-mode .stories-hero h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .stories-hero .highlight {
+  color: #D4A373;
+  border-bottom-color: #D4A373;
+}
+
+body.dark-mode .hero-subtitle {
+  color: #D4A373;
+}
+
+body.dark-mode .stat-number {
+  color: #D4A373;
+}
+
+body.dark-mode .stat-label {
+  color: #B87C4B;
+}
+
+body.dark-mode .section-title {
+  color: #FAF6F0;
+}
+
+body.dark-mode .section-title i {
+  color: #D4A373;
+}
+
+body.dark-mode .section-title::after {
+  background: linear-gradient(90deg, #D4A373 0%, transparent 100%);
+}
+
+body.dark-mode .all-stories {
+  background: #162116;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .category-filter {
+  background: #162116;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .category-select {
+  background: #1E2A1E;
+  border-color: #2C5530;
+  color: #FAF6F0;
+}
+
+body.dark-mode .category-select:focus {
+  border-color: #D4A373;
+}
+
+body.dark-mode .category-btn {
+  background: #1E2A1E;
+  color: #D4A373;
+  border-color: #2C5530;
+}
+
+body.dark-mode .category-btn:hover {
+  color: #D4A373;
+  background: rgba(212, 163, 115, 0.1);
+  border-color: #D4A373;
+}
+
+body.dark-mode .category-btn.active {
+  background: linear-gradient(135deg, #D4A373 0%, #B87C4B 100%);
+  border-color: #D4A373;
+}
+
+body.dark-mode .loader {
+  border-color: #2C5530;
+  border-top-color: #D4A373;
+}
+
+body.dark-mode .no-stories {
+  background: #162116;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .no-stories i {
+  color: #D4A373;
+}
+
+body.dark-mode .no-stories h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .no-stories p {
+  color: #D4A373;
+}
+
+body.dark-mode .btn-primary {
+  background: #D4A373;
+}
+
+body.dark-mode .btn-primary:hover {
+  background: #B87C4B;
+}
+
+body.dark-mode .pagination-btn {
+  background: #1E2A1E;
+  border-color: #2C5530;
+  color: #FAF6F0;
+}
+
+body.dark-mode .pagination-btn:hover:not(:disabled) {
+  background: #D4A373;
+  border-color: #D4A373;
+}
+
+body.dark-mode .page-number {
+  background: #1E2A1E;
+  border-color: #2C5530;
+  color: #FAF6F0;
+}
+
+body.dark-mode .page-number:hover {
+  background: rgba(212, 163, 115, 0.1);
+  border-color: #D4A373;
+}
+
+body.dark-mode .page-number.active {
+  background: #D4A373;
+  border-color: #D4A373;
+}
+
+body.dark-mode .story-card {
+  background: #162116 !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .story-title {
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .stories-grid .story-card h3.story-title,
+body.dark-mode .all-stories .stories-grid .story-card h3.story-title,
+body.dark-mode h3.story-title {
+  color: #FAF6F0 !important;
+}
+
+body.dark-mode .story-author span {
+  color: #D4A373 !important;
+}
+
+body.dark-mode .story-published-date {
+  color: #B87C4B !important;
+}
+
+body.dark-mode .write-cta {
+  background: linear-gradient(135deg, #D4A373 0%, #B87C4B 100%);
+  color: #0A0F0A;
 }

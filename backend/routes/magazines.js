@@ -151,6 +151,56 @@ router.get('/', cache(300), async (req, res, next) => {
   }
 });
 
+// Search magazines
+router.get('/search', async (req, res, next) => {
+  try {
+    const { q } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const offset = (page - 1) * limit;
+    
+    const [rows] = await pool.query(
+      'SELECT * FROM magazines WHERE title LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      [`%${q}%`, limit, offset]
+    );
+    // Always return 200 with data array (empty if no results)
+    res.json({ success: true, data: rows || [] });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get magazines by category
+router.get('/category/:category', async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const offset = (page - 1) * limit;
+    
+    const [rows] = await pool.query(
+      'SELECT * FROM magazines WHERE category = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      [req.params.category, limit, offset]
+    );
+    res.json({ success: true, data: rows });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get featured magazines
+router.get('/featured', async (req, res, next) => {
+  try {
+    const limit = parseInt(req.query.limit) || 6;
+    const [rows] = await pool.query(
+      'SELECT * FROM magazines ORDER BY created_at DESC LIMIT ?',
+      [limit]
+    );
+    res.json({ success: true, data: rows });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get magazine by slug or ID
 router.get('/:slug', async (req, res, next) => {
   try {
@@ -269,55 +319,6 @@ router.get('/:slug', async (req, res, next) => {
     };
 
     res.json({ success: true, data: transformed });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get magazines by category
-router.get('/category/:category', async (req, res, next) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12;
-    const offset = (page - 1) * limit;
-    
-    const [rows] = await pool.query(
-      'SELECT * FROM magazines WHERE category = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
-      [req.params.category, limit, offset]
-    );
-    res.json({ success: true, data: rows });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get featured magazines
-router.get('/featured', async (req, res, next) => {
-  try {
-    const limit = parseInt(req.query.limit) || 6;
-    const [rows] = await pool.query(
-      'SELECT * FROM magazines ORDER BY created_at DESC LIMIT ?',
-      [limit]
-    );
-    res.json({ success: true, data: rows });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Search magazines
-router.get('/search', async (req, res, next) => {
-  try {
-    const { q } = req.query;
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12;
-    const offset = (page - 1) * limit;
-    
-    const [rows] = await pool.query(
-      'SELECT * FROM magazines WHERE title LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
-      [`%${q}%`, limit, offset]
-    );
-    res.json({ success: true, data: rows });
   } catch (error) {
     next(error);
   }

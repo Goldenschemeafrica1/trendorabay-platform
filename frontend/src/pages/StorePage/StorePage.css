@@ -1407,3 +1407,229 @@ body:has(.store-page) footer,
 body:has(.podcast-page) footer {
   display: none !important;
 }
+
+/* ========== DARK MODE STYLES FOR STORE PAGE ========== */
+body.dark-mode .store-page {
+  background: #0A0F0A;
+}
+
+body.dark-mode .store-hero {
+  background: linear-gradient(135deg, #1E2A1E 0%, #0A0F0A 100%);
+}
+
+body.dark-mode .store-hero-text h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .store-hero-text p {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .hoodie-label {
+  color: #FAF6F0;
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .best-selling-section {
+  background: #0A0F0A;
+}
+
+body.dark-mode .best-selling-header h2 {
+  color: #D4A373;
+}
+
+body.dark-mode .best-selling-header p {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .best-selling-card {
+  background: #1E2A1E;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .best-selling-content-section {
+  background: #1E2A1E;
+  border-top-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .best-selling-content-section h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .best-selling-content-section .best-selling-price {
+  color: #D4A373;
+}
+
+body.dark-mode .our-collection-section {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .our-collection-header h2 {
+  color: #D4A373;
+}
+
+body.dark-mode .our-collection-header p {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .store-sidebar {
+  background: #1E2A1E;
+}
+
+body.dark-mode .filter-section {
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .filter-title {
+  color: #FAF6F0;
+}
+
+body.dark-mode .category-btn {
+  color: rgba(250, 246, 240, 0.8);
+}
+
+body.dark-mode .category-btn:hover {
+  background: rgba(30, 42, 30, 0.5);
+  color: #D4A373;
+}
+
+body.dark-mode .category-btn.active {
+  background: #D4A373;
+  color: #FAF6F0;
+}
+
+body.dark-mode .price-inputs input {
+  background: rgba(10, 15, 10, 0.8);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .price-slider {
+  background: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .size-filter-btn {
+  background: rgba(30, 42, 30, 0.5);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .size-filter-btn:hover,
+body.dark-mode .size-filter-btn.active {
+  background: #D4A373;
+  color: #FAF6F0;
+  border-color: #D4A373;
+}
+
+body.dark-mode .clear-filters {
+  border-color: rgba(212, 163, 115, 0.3);
+  color: rgba(250, 246, 240, 0.8);
+}
+
+body.dark-mode .clear-filters:hover {
+  border-color: #D4A373;
+  color: #D4A373;
+}
+
+body.dark-mode .filter-toggle {
+  background: rgba(30, 42, 30, 0.5);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .search-bar input {
+  background: rgba(10, 15, 10, 0.8);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .sort-bar select {
+  background: rgba(10, 15, 10, 0.8);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .view-toggle button {
+  background: rgba(30, 42, 30, 0.5);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .view-toggle button.active {
+  background: #D4A373;
+  border-color: #D4A373;
+  color: #FAF6F0;
+}
+
+body.dark-mode .results-count {
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .product-card {
+  background: #1E2A1E;
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .product-image-wrapper {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .wishlist-btn {
+  background: rgba(30, 42, 30, 0.5);
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .product-category {
+  color: #D4A373;
+  background: rgba(212, 163, 115, 0.2);
+}
+
+body.dark-mode .product-name {
+  color: #FAF6F0;
+}
+
+body.dark-mode .review-count {
+  color: rgba(250, 246, 240, 0.6);
+}
+
+body.dark-mode .current-price {
+  color: #D4A373;
+}
+
+body.dark-mode .original-price {
+  color: rgba(250, 246, 240, 0.5);
+}
+
+body.dark-mode .product-description {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .quick-size-btn {
+  background: rgba(30, 42, 30, 0.5);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .quick-size-btn:hover {
+  background: #D4A373;
+  color: #FAF6F0;
+  border-color: #D4A373;
+}
+
+body.dark-mode .add-to-cart-btn {
+  background: #D4A373;
+}
+
+body.dark-mode .add-to-cart-btn.disabled {
+  background: rgba(30, 42, 30, 0.5);
+  color: rgba(250, 246, 240, 0.5);
+}
+
+body.dark-mode .no-products h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .no-products p {
+  color: rgba(250, 246, 240, 0.7);
+}

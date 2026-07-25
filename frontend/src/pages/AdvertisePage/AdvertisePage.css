@@ -452,3 +452,143 @@
     font-size: 14px;
   }
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .advertise-page {
+  background: #0A0F0A;
+}
+
+body.dark-mode .advertise-header h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .advertise-header p {
+  color: #D4A373;
+}
+
+body.dark-mode .info-section h2 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .benefit-card {
+  background: #162116;
+}
+
+body.dark-mode .benefit-card i {
+  color: #D4A373;
+}
+
+body.dark-mode .benefit-card h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .benefit-card p {
+  color: #D4A373;
+}
+
+body.dark-mode .opportunity-item {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .opportunity-item:hover {
+  border-color: #D4A373;
+  box-shadow: 0 4px 12px rgba(212, 163, 115, 0.15);
+}
+
+body.dark-mode .opportunity-item h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .opportunity-item p {
+  color: #D4A373;
+}
+
+body.dark-mode .advertise-form-section {
+  background: #162116;
+}
+
+body.dark-mode .form-container h2 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .form-container > p {
+  color: #D4A373;
+}
+
+body.dark-mode .form-group label {
+  color: #FAF6F0;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+  background: #1E2A1E;
+  color: #FAF6F0;
+  border-color: #2C5530;
+}
+
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+  border-color: #D4A373;
+  box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
+}
+
+body.dark-mode .form-group input:disabled,
+body.dark-mode .form-group select:disabled,
+body.dark-mode .form-group textarea:disabled {
+  background: #162116;
+}
+
+body.dark-mode .checkbox-container {
+  color: #D4A373;
+}
+
+body.dark-mode .checkmark {
+  background: #1E2A1E;
+  border-color: #2C5530;
+}
+
+body.dark-mode .checkbox-container:hover .checkmark {
+  border-color: #D4A373;
+}
+
+body.dark-mode .checkbox-container input:checked ~ .checkmark {
+  background: #D4A373;
+  border-color: #D4A373;
+}
+
+body.dark-mode .submit-btn {
+  background: linear-gradient(135deg, #D4A373, #B87C4B);
+}
+
+body.dark-mode .success-message {
+  background: #162116;
+}
+
+body.dark-mode .success-message h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .success-message p {
+  color: #D4A373;
+}
+
+body.dark-mode .back-home-btn {
+  background: linear-gradient(135deg, #D4A373, #B87C4B);
+}
+
+body.dark-mode .back-to-home {
+  border-top-color: #2C5530;
+}
+
+body.dark-mode .back-to-home a {
+  color: #D4A373;
+}
+
+body.dark-mode .back-to-home a:hover {
+  color: #FAF6F0;
+}

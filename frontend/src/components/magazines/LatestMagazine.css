@@ -6,6 +6,47 @@
   margin-top: 30px;
 }
 
+/* Dark Mode Styles */
+body.dark-mode .latest-magazines {
+  background: #0A0F0A;
+}
+
+body.dark-mode .magazine-card {
+  background: #1E2A1E;
+}
+
+body.dark-mode .magazine-category {
+  color: #D4A373;
+}
+
+body.dark-mode .header-left h2 {
+  color: #D4A373;
+}
+
+body.dark-mode .header-left h2 .accent {
+  color: #D4A373;
+}
+
+body.dark-mode .view-all-link {
+  color: #D4A373;
+}
+
+body.dark-mode .scroll-indicator {
+  background: linear-gradient(90deg, rgba(10,15,10,0) 0%, rgba(10,15,10,0.9) 50%, #0A0F0A 100%);
+}
+
+body.dark-mode .scroll-indicator:hover {
+  background: linear-gradient(90deg, rgba(10,15,10,0) 0%, rgba(10,15,10,0.95) 50%, #0A0F0A 100%);
+}
+
+body.dark-mode .scroll-indicator-left {
+  background: linear-gradient(270deg, rgba(10,15,10,0) 0%, rgba(10,15,10,0.9) 50%, #0A0F0A 100%);
+}
+
+body.dark-mode .scroll-indicator-right {
+  background: linear-gradient(90deg, rgba(10,15,10,0) 0%, rgba(10,15,10,0.9) 50%, #0A0F0A 100%);
+}
+
 
 .container {
   max-width: 1200px;

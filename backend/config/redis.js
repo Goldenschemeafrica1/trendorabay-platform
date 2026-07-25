@@ -137,6 +137,39 @@ export const cacheDelPattern = async (pattern) => {
   }
 };
 
+export const getRedisStats = async () => {
+  const client = await getRedisClient();
+  if (!client) {
+    return { connected: false };
+  }
+  try {
+    const info = await client.info();
+    const stats = Object.fromEntries(
+      info
+        .split(/\r?\n/)
+        .filter(line => line.includes(':'))
+        .map(line => line.split(':', 2))
+    );
+    const hits = parseInt(stats.keyspace_hits) || 0;
+    const misses = parseInt(stats.keyspace_misses) || 0;
+    const total = hits + misses || 1;
+    return {
+      connected: true,
+      usedMemory: stats.used_memory,
+      usedMemoryHuman: stats.used_memory_human,
+      connectedClients: stats.connected_clients,
+      totalCommands: stats.total_commands_processed,
+      instantaneousOps: stats.instantaneous_ops_per_sec,
+      uptimeSeconds: stats.uptime_in_seconds,
+      keyspaceHits: hits,
+      keyspaceMisses: misses,
+      hitRate: Number((hits / total).toFixed(4))
+    };
+  } catch (error) {
+    return { connected: false, error: error.message };
+  }
+};
+
 export const closeRedis = async () => {
   if (redisClient) {
     await redisClient.quit();

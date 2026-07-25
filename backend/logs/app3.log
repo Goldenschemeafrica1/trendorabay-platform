@@ -1,0 +1,12 @@
+Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Primary database connected successfully
+Advertisement inquiries table checked/created successfully
+Server running on port 3003
+Environment: production
+API Base URL: http://localhost:3003/api
+Network access: http://192.168.100.4:3003/api
+⚠️  Redis disabled in production - caching will not work optimally
+   Set ENABLE_REDIS=true in .env to enable Redis caching for better performance
+2026-07-25T07:17:26.716Z - 127.0.0.1 - GET /api/health
+Primary database connected successfully

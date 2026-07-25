@@ -33,23 +33,55 @@ This document describes the scalability improvements implemented to handle high 
 ### 4. Database Connection Pooling
 - **Location**: `config/database.js`
 - **Features**:
-  - Increased connection limit (100 connections)
-  - Configurable via `DB_CONNECTION_LIMIT` env var
+  - Primary and read replica connection pools
+  - Configurable limits via `DB_CONNECTION_LIMIT` and `DB_READ_REPLICA_CONNECTION_LIMIT`
   - Connection timeout settings
   - Keep-alive enabled
 
-### 5. Response Compression
+### 5. Read Replica Routing
+- **Location**: `config/database.js`
+- **Features**:
+  - Automatic routing of `SELECT` queries to read replicas
+  - `SELECT ... FOR UPDATE` and all writes stay on the primary
+  - Falls back to primary if no read replica is configured
+  - No route changes required; existing `pool.query` calls use the routing proxy
+
+### 6. Response Compression
 - **Location**: `server.js`
 - **Features**:
   - Gzip compression for all responses
   - Reduced bandwidth usage
   - Faster page loads
 
-### 6. Health Check Endpoints
+### 7. Health Check Endpoints
 - **Location**: `server.js`
 - **Endpoints**:
   - `/api/health` - Basic health check with database status
   - `/api/ready` - Readiness check for load balancers/Kubernetes
+
+### 8. CDN-Ready Cache Headers
+- **Location**: `server.js` and `middleware/cacheMiddleware.js`
+- **Features**:
+  - Long-lived `Cache-Control` and `CDN-Cache-Control` for static uploads and frontend `dist` assets
+  - `no-cache` for `index.html` so SPAs stay fresh
+  - `stale-while-revalidate` for cached API responses
+  - `Vary: Accept-Encoding` for compressed responses
+
+### 9. Monitoring and Metrics
+- **Location**: `config/metrics.js`, `server.js`, `config/database.js`, `middleware/cacheMiddleware.js`, `config/redis.js`
+- **Features**:
+  - Request duration/status APM metrics exposed via `/api/metrics`
+  - Database query analysis with slow query logging
+  - Redis performance stats from `INFO`
+  - Cache hit/miss ratio tracking
+
+### 10. Queue System
+- **Location**: `config/queue.js`, `workers/queueWorker.js`, `services/queueService.js`
+- **Features**:
+  - Bull job queue backed by Redis
+  - Processors for `email`, `image-processing`, and `heavy-processing`
+  - `services/queueService.js` helpers to offload work from request handlers
+  - Workers start with the server and log job lifecycle
 
 ## Configuration
 
@@ -94,25 +126,30 @@ CACHE_TTL=300
 - Configure sticky sessions if needed
 
 ### 2. Database Scaling
-- Implement read replicas for read-heavy queries
-- Consider database sharding for massive datasets
-- Use connection pooling at the application level
+- ✅ **Read replica routing** for read-heavy queries — implemented in `config/database.js`
+- ✅ **Connection pooling** at the application level — primary and read replica pools with configurable limits
+- **Database sharding** for massive datasets (future consideration):
+  - Use range or hash sharding on `user_id`/`tenant_id` to distribute load
+  - Add a shard router in `config/database.js` to pick connections by shard key
+  - Keep cross-shard aggregation/OLAP in a separate read pool or data warehouse
 
 ### 3. CDN Implementation
-- Serve static assets via CDN (Cloudflare, CloudFront)
-- Configure CDN caching headers
-- Use CDN for API responses where appropriate
+- ✅ Cache headers configured for static assets (`/uploads`, `frontend/dist`) and cached API responses
+- Use a CDN origin (Cloudflare/CloudFront) pointing at the backend for static + API traffic
+- Cloudflare: use `CDN-Cache-Control`; CloudFront: use `Cache-Control` plus origin TTL overrides
+- Keep `index.html` uncached; cache hashed build assets and `/uploads` for 1 year
 
 ### 4. Monitoring
-- Implement application performance monitoring (APM)
-- Set up database query analysis
-- Monitor Redis performance
-- Track cache hit/miss ratios
+- ✅ APM request metrics exposed on `/api/metrics`
+- ✅ Database query analysis with slow-query logging
+- ✅ Redis performance stats from `INFO`
+- ✅ Cache hit/miss ratio tracking
 
 ### 5. Queue System
-- Implement job queues for heavy processing
-- Use Bull or RabbitMQ for background jobs
-- Offload email sending, image processing, etc.
+- ✅ Bull job queue configured with Redis
+- ✅ Background workers for `email`, `image-processing`, and `heavy-processing`
+- ✅ Service helpers to enqueue jobs from request handlers
+- Replace simulated processors with real transports (SendGrid, AWS SES, Sharp, Cloudinary)
 
 ## Testing Scalability
 

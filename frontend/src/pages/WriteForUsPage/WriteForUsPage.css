@@ -794,3 +794,191 @@
     max-width: 100%;
   }
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .write-for-us-page {
+  --bg-primary: #0A0F0A;
+  --bg-secondary: #1E2A1E;
+  --bg-card: #162116;
+  --text-primary: #FAF6F0;
+  --text-secondary: #D4A373;
+  --border-light: #2C5530;
+  --accent: #D4A373;
+  background: var(--bg-primary, #0A0F0A);
+}
+
+body.dark-mode .write-intro h2 {
+  color: var(--text-primary, #FAF6F0);
+}
+
+body.dark-mode .write-intro p {
+  color: var(--text-secondary, #D4A373);
+}
+
+body.dark-mode .guidelines-card {
+  background: var(--bg-secondary, #1E2A1E);
+  border-color: var(--border-light, #2C5530);
+}
+
+body.dark-mode .guidelines-card h3 {
+  color: var(--text-primary, #FAF6F0);
+}
+
+body.dark-mode .guideline-section h4 {
+  color: var(--accent, #D4A373);
+}
+
+body.dark-mode .guideline-section li {
+  color: var(--text-secondary, #D4A373);
+}
+
+body.dark-mode .guideline-section li::before {
+  color: var(--accent, #D4A373);
+}
+
+body.dark-mode .guidelines-note {
+  background: rgba(212, 163, 115, 0.15);
+}
+
+body.dark-mode .guidelines-note h4 {
+  color: var(--accent, #D4A373);
+}
+
+body.dark-mode .guidelines-note p {
+  color: var(--text-secondary, #D4A373);
+}
+
+body.dark-mode .contact-card {
+  background: var(--bg-card, #162116);
+  border-color: var(--border-light, #2C5530);
+}
+
+body.dark-mode .contact-card h4 {
+  color: var(--text-primary, #FAF6F0);
+}
+
+body.dark-mode .contact-card p {
+  color: var(--text-secondary, #D4A373);
+}
+
+body.dark-mode .contact-card a {
+  color: var(--accent, #D4A373);
+}
+
+body.dark-mode .write-form {
+  background: var(--bg-card, #162116);
+  border-color: var(--border-light, #2C5530);
+}
+
+body.dark-mode .tab-btn {
+  color: var(--text-secondary, #D4A373);
+}
+
+body.dark-mode .tab-btn.active {
+  color: var(--accent, #D4A373);
+  border-bottom-color: var(--accent, #D4A373);
+}
+
+body.dark-mode .form-group label {
+  color: var(--text-primary, #FAF6F0);
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+  background: var(--bg-primary, #0A0F0A);
+  color: var(--text-primary, #FAF6F0);
+  border-color: var(--border-light, #2C5530);
+}
+
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+  border-color: var(--accent, #D4A373);
+}
+
+body.dark-mode .char-counter {
+  color: var(--text-secondary, #D4A373);
+}
+
+body.dark-mode .topic-chip {
+  background: var(--bg-secondary, #1E2A1E);
+  border-color: var(--border-light, #2C5530);
+  color: var(--text-secondary, #D4A373);
+}
+
+body.dark-mode .topic-chip:hover {
+  background: rgba(212, 163, 115, 0.15);
+  border-color: var(--accent, #D4A373);
+}
+
+body.dark-mode .topic-chip.active {
+  background: var(--accent, #D4A373);
+  border-color: var(--accent, #D4A373);
+  color: #0A0F0A;
+}
+
+body.dark-mode .form-footer {
+  background: var(--bg-secondary, #1E2A1E);
+  border-top-color: var(--border-light, #2C5530);
+}
+
+body.dark-mode .checkbox-label {
+  color: var(--text-secondary, #D4A373);
+}
+
+body.dark-mode .checkbox-label a {
+  color: var(--accent, #D4A373);
+}
+
+body.dark-mode .submit-pitch-btn {
+  background: var(--accent, #D4A373);
+}
+
+body.dark-mode .submit-pitch-btn:hover:not(:disabled) {
+  background: #B87C4B;
+}
+
+body.dark-mode .testimonials-section h2 {
+  color: var(--text-primary, #FAF6F0);
+}
+
+body.dark-mode .testimonial-card {
+  background: var(--bg-secondary, #1E2A1E);
+  border-color: var(--border-light, #2C5530);
+}
+
+body.dark-mode .testimonial-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .testimonial-quote {
+  color: var(--text-primary, #FAF6F0);
+}
+
+body.dark-mode .testimonial-author strong {
+  color: var(--accent, #D4A373);
+}
+
+body.dark-mode .testimonial-author span {
+  color: var(--text-secondary, #D4A373);
+}
+
+body.dark-mode .faq-section h2 {
+  color: var(--text-primary, #FAF6F0);
+}
+
+body.dark-mode .faq-item {
+  background: var(--bg-card, #162116);
+  border-color: var(--border-light, #2C5530);
+}
+
+body.dark-mode .faq-item h4 {
+  color: var(--accent, #D4A373);
+}
+
+body.dark-mode .faq-item p {
+  color: var(--text-secondary, #D4A373);
+}

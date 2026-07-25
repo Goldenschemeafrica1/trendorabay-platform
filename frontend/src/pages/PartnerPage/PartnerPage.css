@@ -437,3 +437,125 @@
     padding: 20px;
   }
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .partner-page {
+  --bg-primary: #0A0F0A;
+  background: var(--bg-primary, #0A0F0A);
+}
+
+body.dark-mode .benefits-section h2 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .benefit-card {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .benefit-card:hover {
+  border-color: #D4A373;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .benefit-card h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .benefit-card p {
+  color: #D4A373;
+}
+
+body.dark-mode .partner-form-section {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .partner-form-section h2 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .form-group label {
+  color: #FAF6F0;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+  background: #1E2A1E;
+  color: #FAF6F0;
+  border-color: #2C5530;
+}
+
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+  border-color: #D4A373;
+  box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
+}
+
+body.dark-mode .char-counter {
+  color: #B87C4B;
+}
+
+body.dark-mode .checkbox-label {
+  color: #D4A373;
+}
+
+body.dark-mode .checkbox-label a {
+  color: #D4A373;
+}
+
+body.dark-mode .submit-btn {
+  background: #1E2A1E;
+}
+
+body.dark-mode .submit-btn:hover:not(:disabled) {
+  background: #D4A373;
+}
+
+body.dark-mode .partner-success {
+  background: linear-gradient(135deg, #0A0F0A 0%, #1E2A1E 100%);
+}
+
+body.dark-mode .success-container {
+  background: #162116;
+}
+
+body.dark-mode .success-container h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .success-container p {
+  color: #D4A373;
+}
+
+body.dark-mode .success-details {
+  background: #1E2A1E;
+}
+
+body.dark-mode .success-details h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .success-details li {
+  color: #D4A373;
+}
+
+body.dark-mode .submit-another-btn {
+  background: #D4A373;
+}
+
+body.dark-mode .submit-another-btn:hover {
+  background: #1E2A1E;
+}
+
+body.dark-mode .home-link {
+  color: #D4A373;
+}
+
+body.dark-mode .home-link:hover {
+  color: #FAF6F0;
+}

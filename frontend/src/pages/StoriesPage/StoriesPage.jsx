@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import storyService from '../../services/storyService';
 import './StoriesPage.css';
 
 const StoriesPage = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -146,10 +147,17 @@ const StoriesPage = () => {
                           <h3 className="story-title" style={{ '--text-3xl': '10px', marginTop: '8px' }}>{story.title}</h3>
                           <div className="story-meta">
                             <div className="story-author">
-                              <Link to={`/author/${story.author?.id}`} className="author-link" onClick={(e) => e.stopPropagation()}>
+                              <span 
+                                className="author-link" 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(`/author/${story.author?.id}`);
+                                }}
+                                style={{ cursor: 'pointer' }}
+                              >
                                 <img src={story.author?.avatar || '/images/default-avatar.png'} alt={story.author?.name || 'Author'} />
                                 <span style={{ fontSize: '9px !important' }}>{story.author?.name || 'Unknown Author'}</span>
-                              </Link>
+                              </span>
                               <span className="story-published-date" style={{ fontSize: '8px !important' }}>{formatPublishedDate(story.publishedDate)}</span>
                             </div>
                           </div>

@@ -1,0 +1,61 @@
+# Usage: docker compose -f docker-compose.scale.yml up -d
+# Copy backend/.env.example to backend/.env and set DB/JWT/Cloudinary secrets first.
+
+version: '3.8'
+
+x-backend-common: &backend-common
+  build: ./backend
+  image: trendorabay-backend:latest
+  restart: unless-stopped
+  expose:
+    - "3001"
+  environment:
+    - PORT=3001
+    - NODE_ENV=production
+    - TRUST_PROXY=true
+    - REDIS_URL=redis://redis:6379
+  env_file:
+    - ./backend/.env
+  depends_on:
+    - redis
+  networks:
+    - trendorabay-network
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: trendorabay-redis
+    restart: unless-stopped
+    networks:
+      - trendorabay-network
+
+  app1:
+    <<: *backend-common
+    container_name: trendorabay-app1
+
+  app2:
+    <<: *backend-common
+    container_name: trendorabay-app2
+
+  app3:
+    <<: *backend-common
+    container_name: trendorabay-app3
+
+  nginx:
+    image: nginx:alpine
+    container_name: trendorabay-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app1
+      - app2
+      - app3
+    networks:
+      - trendorabay-network
+
+networks:
+  trendorabay-network:
+    driver: bridge

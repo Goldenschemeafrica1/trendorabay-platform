@@ -1,7 +1,6 @@
+import 'dotenv/config';
 import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { recordDbQuery } from './metrics.js';
 
 // Create primary database connection pool
 const pool = mysql.createPool({
@@ -63,6 +62,29 @@ export const getWritePool = () => {
   return pool;
 };
 
+// Read/write routing proxy
+const isReadQuery = (sqlInput) => {
+  const sql = (typeof sqlInput === 'string' ? sqlInput : sqlInput?.sql || '').trim().toLowerCase();
+  return sql.startsWith('select') && !sql.includes('for update');
+};
+
+const routingPool = new Proxy(pool, {
+  get(target, prop) {
+    if (prop === 'query' || prop === 'execute') {
+      return async (...args) => {
+        const useRead = readPool && isReadQuery(args[0]);
+        const start = Date.now();
+        try {
+          return await (useRead ? readPool : target)[prop](...args);
+        } finally {
+          recordDbQuery(args[0], Date.now() - start);
+        }
+      };
+    }
+    return target[prop];
+  }
+});
+
 // Test connection with retry logic
 const testConnection = async (retries = 3) => {
   for (let i = 0; i < retries; i++) {
@@ -91,4 +113,4 @@ const testConnection = async (retries = 3) => {
 };
 
 export { pool, readPool, testConnection };
-export default pool;
+export default routingPool;

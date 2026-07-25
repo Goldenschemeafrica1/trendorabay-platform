@@ -626,24 +626,25 @@ input::placeholder, textarea::placeholder {
 }
 
 /* ========== DARK MODE SUPPORT ========== */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #ffffff;
-    --color-text: var(--color-cream);
-    --color-border: var(--color-forest-green);
-  }
-  
-  body::before {
-    opacity: 0.05;
-  }
-  
-  input, textarea, select {
-    background-color: var(--color-charcoal);
-    color: var(--color-cream);
-    border-color: var(--color-forest-green);
-  }
-  
-  input::placeholder, textarea::placeholder {
-    color: var(--color-olive-green);
-  }
+body.dark-mode {
+  --color-background: #0A0F0A;
+  --color-text: var(--color-cream);
+  --color-border: var(--color-forest-green);
+}
+
+body.dark-mode::before {
+  opacity: 0.05;
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background-color: var(--color-charcoal);
+  color: var(--color-cream);
+  border-color: var(--color-forest-green);
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: var(--color-olive-green);
 }

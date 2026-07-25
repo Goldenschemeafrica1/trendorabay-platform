@@ -216,3 +216,44 @@
     margin-bottom: 16px;
   }
 }
+
+/* ========== DARK MODE STYLES FOR CONTACT PAGE ========== */
+body.dark-mode .contact-page {
+  background: #0A0F0A;
+}
+
+body.dark-mode .contact-header h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .contact-header p {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .contact-info h2 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .contact-info p {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .contact-details {
+  background: #1E2A1E;
+  border: 1px solid rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .contact-item {
+  color: rgba(250, 246, 240, 0.9);
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .contact-item strong {
+  color: #D4A373;
+}
+
+body.dark-mode .contact-form {
+  background: #1E2A1E;
+  border-color: rgba(212, 163, 115, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}

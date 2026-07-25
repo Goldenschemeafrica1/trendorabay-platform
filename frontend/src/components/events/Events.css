@@ -643,3 +643,119 @@
     justify-content: center;
   }
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .events-community {
+  background: linear-gradient(135deg, #0A0F0A 0%, #1E2A1E 100%);
+}
+
+body.dark-mode .events-community::before {
+  background: linear-gradient(90deg, #D4A373 0%, #B87C4B 50%, #D4A373 100%);
+}
+
+body.dark-mode .events-community .header-content h2 {
+  color: #D4A373;
+}
+
+body.dark-mode .events-community .header-content h2 .accent {
+  color: #D4A373;
+}
+
+body.dark-mode .events-community .section-subtitle {
+  color: #D4A373;
+}
+
+body.dark-mode .events-community .section-subtitle::before {
+  background: #D4A373;
+}
+
+body.dark-mode .events-community .view-all-link {
+  color: #D4A373;
+  border-color: #D4A373;
+}
+
+body.dark-mode .events-community .view-all-link:hover {
+  background: #D4A373;
+  color: #0A0F0A;
+}
+
+body.dark-mode .featured-event {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .event-title {
+  color: #FAF6F0;
+}
+
+body.dark-mode .event-description {
+  color: #D4A373;
+}
+
+body.dark-mode .event-datetime span,
+body.dark-mode .event-location-info span {
+  color: #D4A373;
+}
+
+body.dark-mode .event-datetime i,
+body.dark-mode .event-location-info i {
+  color: #D4A373;
+}
+
+body.dark-mode .event-price {
+  color: #D4A373;
+}
+
+body.dark-mode .community-stats {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .stat-number {
+  color: #D4A373;
+}
+
+body.dark-mode .stat-label {
+  color: #B87C4B;
+}
+
+body.dark-mode .upcoming-events h4 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .event-card {
+  background: #162116;
+  border-color: #2C5530;
+}
+
+body.dark-mode .event-card:hover {
+  box-shadow: 0 15px 35px rgba(212, 163, 115, 0.15);
+}
+
+body.dark-mode .event-card h5 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .event-card-meta {
+  color: #D4A373;
+}
+
+body.dark-mode .event-card-meta i {
+  color: #D4A373;
+}
+
+body.dark-mode .event-price-tag {
+  color: #D4A373;
+}
+
+body.dark-mode .event-register-btn {
+  color: #D4A373;
+  border-color: #D4A373;
+}
+
+body.dark-mode .event-register-btn:hover {
+  background: #D4A373;
+  color: #0A0F0A;
+}

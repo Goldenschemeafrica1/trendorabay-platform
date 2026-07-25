@@ -26,15 +26,8 @@ CREATE INDEX idx_contributors_created_at ON contributors(created_at);
 -- Magazines table indexes
 CREATE INDEX idx_magazines_created_at ON magazines(created_at);
 CREATE INDEX idx_magazines_category_id ON magazines(category_id);
-CREATE INDEX idx_magazines_status ON magazines(status);
-CREATE INDEX idx_magazines_published_date ON magazines(published_date);
 
 -- Contributor follows table indexes
 CREATE INDEX idx_contributor_follows_contributor_id ON contributor_follows(contributor_id);
 CREATE INDEX idx_contributor_follows_user_id ON contributor_follows(user_id);
 CREATE INDEX idx_contributor_follows_unique ON contributor_follows(user_id, contributor_id);
-
--- Full-text search indexes for search functionality
-CREATE FULLTEXT INDEX ft_stories_title_content ON stories(title, content);
-CREATE FULLTEXT INDEX ft_contributors_name_bio ON contributors(name, bio);
-CREATE FULLTEXT INDEX ft_magazines_title ON magazines(title);

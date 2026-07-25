@@ -378,3 +378,71 @@
     height: 16px;
   }
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .gallery-page {
+  background-color: #0A0F0A;
+}
+
+body.dark-mode .gallery-hero {
+  color: #FAF6F0;
+}
+
+body.dark-mode .gallery-hero::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' opacity='0.05'%3E%3Cpath d='M20,30 L35,10 L50,30 L70,15 L80,35 L60,50 L75,70 L50,65 L30,80 L25,55 L5,45 L20,30' fill='none' stroke='%23D4A373' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+body.dark-mode .gallery-title {
+  color: #FAF6F0;
+}
+
+body.dark-mode .gallery-subtitle {
+  color: #D4A373;
+}
+
+body.dark-mode .gallery-loading,
+body.dark-mode .gallery-empty {
+  color: #D4A373;
+}
+
+body.dark-mode .gallery-item {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .gallery-item:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .like-button {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .like-button:hover {
+  background: rgba(212, 163, 115, 0.9);
+}
+
+body.dark-mode .like-button.liked {
+  background: rgba(212, 163, 115, 0.95);
+}
+
+body.dark-mode .lightbox {
+  background: rgba(10, 15, 10, 0.95);
+}
+
+body.dark-mode .lightbox-close:hover {
+  color: #D4A373;
+}
+
+body.dark-mode .lightbox-nav {
+  background: rgba(30, 42, 30, 0.8);
+}
+
+body.dark-mode .lightbox-nav:hover {
+  background: rgba(212, 163, 115, 0.9);
+}
+
+body.dark-mode .lightbox-caption {
+  color: #FAF6F0;
+}

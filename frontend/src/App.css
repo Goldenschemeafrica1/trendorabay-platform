@@ -453,3 +453,52 @@ button {
     display: none !important;
   }
 }
+
+/* ========== DARK MODE STYLES FOR APP ========== */
+body.dark-mode body {
+  background-color: #0A0F0A;
+  color: #FAF6F0;
+}
+
+body.dark-mode .newsletter-section {
+  background: #1E2A1E;
+  border-top-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .combined-subscription-section {
+  background: linear-gradient(135deg, rgba(30, 42, 30, 0.8), rgba(10, 15, 10, 0.9));
+  border-top-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .combined-subscription-section .cta-buttons .subscribe-btn {
+  background: #D4A373;
+}
+
+body.dark-mode .combined-subscription-section .cta-buttons .subscribe-btn:hover {
+  background: #B87C4B;
+}
+
+body.dark-mode .combined-subscription-section .cta-buttons .gift-btn {
+  border-color: #D4A373;
+  color: #FAF6F0;
+}
+
+body.dark-mode .combined-subscription-section .cta-buttons .gift-btn:hover {
+  background: #D4A373;
+}
+
+body.dark-mode .view-all-link {
+  color: #D4A373;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+  background: #0A0F0A;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #D4A373;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #B87C4B;
+}

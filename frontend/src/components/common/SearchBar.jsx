@@ -61,7 +61,6 @@ const SearchBar = ({
       <div className="search-bar-container">
         <form onSubmit={handleSubmit} className="search-form">
           <div className="search-input-wrapper">
-            <FaSearch className="search-icon" />
             <input
               type="text"
               value={query}

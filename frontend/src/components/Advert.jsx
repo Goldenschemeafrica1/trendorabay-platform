@@ -61,13 +61,13 @@ const Advert = ({
       target="_blank" 
       rel="noopener noreferrer" 
       className="advert-link"
-      style={{ width: '100%', height: '120px', display: 'block', margin: '20px auto' }}
+      style={{ width: '100%', height: '120px', display: 'block', margin: '20px auto', background: 'transparent' }}
     >
       <img 
         src={displayImageUrl} 
         alt={displayTitle} 
         className="advert__image"
-        style={{ width: '100%', height: '120px', objectFit: 'cover', objectPosition: 'center' }}
+        style={{ width: '100%', height: '120px', objectFit: 'cover', objectPosition: 'center', background: 'transparent' }}
       />
     </a>
   );

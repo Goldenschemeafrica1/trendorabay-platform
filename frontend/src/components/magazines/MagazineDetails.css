@@ -6,7 +6,7 @@
   padding-bottom: 60px;
 }
 
-body.magazine-detail-page-body {
+body.magazine-detail-page-body:not(.dark-mode) {
   background: transparent !important;
 }
 
@@ -1449,4 +1449,393 @@ body.magazine-detail-page-body {
     box-shadow: none;
     border: 1px solid #ccc;
   }
+}
+
+/* ========== DARK MODE STYLES FOR MAGAZINE DETAILS ========== */
+body.dark-mode .magazine-details-page,
+body.dark-mode .magazine-detail-page {
+  background: #0A0F0A !important;
+}
+
+body.dark-mode .magazine-info {
+  background: #1E2A1E;
+  border-color: rgba(212, 163, 115, 0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .info-category {
+  color: #D4A373;
+}
+
+body.dark-mode .info-title {
+  background: linear-gradient(135deg, #FAF6F0 0%, #D4A373 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode .info-meta {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .info-meta i {
+  color: #D4A373;
+}
+
+body.dark-mode .info-rating {
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .rating-value {
+  color: #FAF6F0;
+}
+
+body.dark-mode .review-count {
+  color: rgba(250, 246, 240, 0.6);
+}
+
+body.dark-mode .info-identifiers {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .identifier {
+  color: rgba(250, 246, 240, 0.8);
+}
+
+body.dark-mode .identifier strong {
+  color: #D4A373;
+}
+
+body.dark-mode .format-selection h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .format-option {
+  background: rgba(30, 42, 30, 0.5);
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .format-option:hover {
+  border-color: #D4A373;
+  background: rgba(212, 163, 115, 0.2);
+}
+
+body.dark-mode .format-option.active {
+  border-color: #D4A373;
+  background: rgba(212, 163, 115, 0.2);
+}
+
+body.dark-mode .format-info h4 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .format-info p {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .format-price {
+  color: #D4A373;
+}
+
+body.dark-mode .quantity-selector label {
+  color: #FAF6F0;
+}
+
+body.dark-mode .quantity-controls {
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .quantity-controls button {
+  background: rgba(30, 42, 30, 0.5);
+  color: #FAF6F0;
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .quantity-controls button:hover:not(:disabled) {
+  background: #D4A373;
+  color: #FAF6F0;
+}
+
+body.dark-mode .quantity-controls input {
+  background: rgba(30, 42, 30, 0.5);
+  color: #FAF6F0;
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .info-extras {
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .share-section span {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .share-section button {
+  background: rgba(30, 42, 30, 0.5);
+  color: #FAF6F0;
+}
+
+body.dark-mode .share-section button:hover {
+  background: #D4A373;
+  color: #FAF6F0;
+}
+
+body.dark-mode .print-btn {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .print-btn:hover {
+  color: #D4A373;
+}
+
+body.dark-mode .guarantee-badge {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .guarantee-badge i {
+  color: #D4A373;
+}
+
+body.dark-mode .guarantee-badge strong {
+  color: #FAF6F0;
+}
+
+body.dark-mode .guarantee-badge span {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .magazine-tabs {
+  background: #1E2A1E;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .tabs-header {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .magazine-tabs .tab-btn {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .magazine-tabs .tab-btn:hover {
+  color: #D4A373;
+}
+
+body.dark-mode .magazine-tabs .tab-btn.active {
+  color: #D4A373;
+  background: linear-gradient(to bottom, #1E2A1E 0%, #1E2A1E 50%, rgba(30, 42, 30, 0.5) 100%);
+}
+
+body.dark-mode .full-description p {
+  color: rgba(250, 246, 240, 0.9);
+}
+
+body.dark-mode .key-features {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .key-features h3 {
+  color: #D4A373;
+}
+
+body.dark-mode .key-features li {
+  color: rgba(250, 246, 240, 0.9);
+}
+
+body.dark-mode .key-features i {
+  color: #D4A373;
+}
+
+body.dark-mode .contents-tab h3 {
+  color: #D4A373;
+}
+
+body.dark-mode .toc-list {
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .toc-item {
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .toc-item:hover {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .toc-title {
+  color: #FAF6F0;
+}
+
+body.dark-mode .toc-page {
+  color: #D4A373;
+}
+
+body.dark-mode .contributors-tab h3 {
+  color: #D4A373;
+}
+
+body.dark-mode .contributor-card {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .contributor-card:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .contributor-info h4 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .contributor-info p {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .editor-note {
+  background: rgba(30, 42, 30, 0.8);
+  color: #FAF6F0;
+}
+
+body.dark-mode .reviews-summary {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .big-rating {
+  color: #FAF6F0;
+}
+
+body.dark-mode .average-rating span {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .write-review-btn {
+  background: #D4A373;
+}
+
+body.dark-mode .write-review-btn:hover {
+  background: #1E2A1E;
+}
+
+body.dark-mode .review-item {
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .review-item:hover {
+  border-color: #D4A373;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .review-header h4 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .review-count {
+  color: rgba(250, 246, 240, 0.6);
+}
+
+body.dark-mode .review-date {
+  color: rgba(250, 246, 240, 0.6);
+}
+
+body.dark-mode .review-comment {
+  color: rgba(250, 246, 240, 0.9);
+}
+
+body.dark-mode .related-magazines h2 {
+  color: #D4A373;
+}
+
+body.dark-mode .related-category {
+  color: #D4A373;
+}
+
+body.dark-mode .related-info h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .preview-modal {
+  background: rgba(10, 15, 10, 0.95);
+}
+
+body.dark-mode .preview-content {
+  background: #1E2A1E;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .preview-header {
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .preview-header h3 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .close-preview {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .close-preview:hover {
+  color: #D4A373;
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .preview-grid-item img {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .preview-page-label {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .preview-footer {
+  border-top-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .download-preview {
+  background: rgba(30, 42, 30, 0.5);
+  color: #FAF6F0;
+}
+
+body.dark-mode .download-preview:hover {
+  background: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .buy-preview {
+  background: #D4A373;
+  color: #FAF6F0;
+}
+
+body.dark-mode .buy-preview:hover {
+  background: #B87C4B;
+}
+
+body.dark-mode .magazine-not-found h2 {
+  color: #D4A373;
+}
+
+body.dark-mode .magazine-not-found p {
+  color: rgba(250, 246, 240, 0.8);
+}
+
+body.dark-mode .back-to-magazines {
+  background: #1E2A1E;
+  color: #FAF6F0;
+}
+
+body.dark-mode .back-to-magazines:hover {
+  background: #D4A373;
+}
+
+/* Ad Section Dark Mode */
+body.dark-mode .ad-section {
+  background: rgba(30, 42, 30, 0.5);
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .ad-placeholder {
+  background: linear-gradient(135deg, #1E2A1E 0%, #0A0F0A 100%);
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .ad-placeholder p {
+  color: rgba(250, 246, 240, 0.7);
 }

@@ -18,6 +18,24 @@
   pointer-events: auto;
 }
 
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  color: #333;
+}
+
+.theme-toggle-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
 /* ===== Profile Dropdown Styles ===== */
 .profile-dropdown-container {
   position: relative;
@@ -171,9 +189,41 @@
 .logo-icons {
   display: flex;
   align-items: center;
-  gap: 0px;
+  gap: 8px;
   position: absolute;
-  right: 50px;
+  right: 30px;
+}
+
+/* Header Search Container */
+.header-search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.header-search-input {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  padding: 8px 12px;
+  border: 1px solid #e1e1e1;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  margin-right: 8px;
+  background: white;
+  color: #333;
+}
+
+.header-search-input:focus {
+  border-color: #B87C4B;
+  box-shadow: 0 0 0 2px rgba(184, 124, 75, 0.1);
+}
+
+.header-search-input::placeholder {
+  color: #999;
 }
 
 /* Profile and Login Section */
@@ -658,6 +708,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Mobile Search Button - Left side on mobile */
+.mobile-search-btn {
+  display: none;
+}
+
+/* Mobile Theme Toggle Button - Left side on mobile */
+.mobile-theme-toggle {
+  display: none;
 }
 
 .search-btn::before {
@@ -1200,12 +1260,44 @@
   }
 
   .logo-image {
-    height: 180px;
-    width: 550px;
+    height: 220px;
+    width: 650px;
+  }
+  
+  /* Ensure header is sticky on mobile */
+  .trendorabay-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
   }
   
   /* Show only menu toggle on mobile, hide desktop actions */
   .desktop-only {
+    display: none;
+  }
+  
+  /* Show mobile search button on left side */
+  .mobile-search-btn {
+    display: flex;
+  }
+  
+  /* Show mobile theme toggle button on left side */
+  .mobile-theme-toggle {
+    display: flex;
+  }
+  
+  /* Hide original search button in logo-icons on mobile */
+  .logo-icons .header-search-container {
+    display: none;
+  }
+  
+  /* Hide cart icon on mobile */
+  .logo-icons .cart-icon {
+    display: none;
+  }
+  
+  /* Hide theme toggle button in logo-icons on mobile */
+  .logo-icons .theme-toggle-btn {
     display: none;
   }
   
@@ -1273,8 +1365,8 @@
   }
 
   .logo-image {
-    height: 140px;
-    width: 400px;
+    height: 180px;
+    width: 500px;
   }
   
   .header-actions {
@@ -1385,4 +1477,73 @@
   .profile-login-link .mobile-only {
     color: #e63946;
   }
+}
+
+/* ========== DARK MODE STYLES FOR HEADER ========== */
+body.dark-mode .theme-toggle-btn {
+  color: #333;
+}
+
+body.dark-mode .theme-toggle-btn:hover {
+  background-color: transparent;
+}
+
+body.dark-mode .header-search-input {
+  background: rgba(10, 15, 10, 0.8);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .header-search-input:focus {
+  border-color: #D4A373;
+  box-shadow: 0 0 0 2px rgba(212, 163, 115, 0.1);
+}
+
+body.dark-mode .header-search-input::placeholder {
+  color: rgba(250, 246, 240, 0.5);
+}
+
+body.dark-mode .profile-icon-btn {
+  color: #FAF6F0;
+}
+
+body.dark-mode .profile-icon-btn:hover {
+  background-color: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .profile-avatar-img {
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .profile-dropdown {
+  background: #1E2A1E;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .profile-dropdown a,
+body.dark-mode .profile-dropdown button {
+  color: #FAF6F0;
+}
+
+body.dark-mode .profile-dropdown a:hover,
+body.dark-mode .profile-dropdown button:hover {
+  background-color: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .dropdown-menu {
+  background: #1E2A1E;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .dropdown-menu::before {
+  border-bottom-color: #1E2A1E;
+}
+
+body.dark-mode .dropdown-item {
+  color: #FAF6F0;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background-color: rgba(30, 42, 30, 0.5);
+  color: #D4A373;
 }

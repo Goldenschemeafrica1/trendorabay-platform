@@ -483,3 +483,76 @@
     font-size: 0.9rem;
   }
 }
+
+/* ========== DARK MODE STYLES FOR CART DRAWER ========== */
+body.dark-mode .cart-drawer {
+  background: #1E2A1E;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .cart-drawer-header {
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .cart-title {
+  color: #FAF6F0;
+}
+
+body.dark-mode .close-btn {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .close-btn:hover {
+  background: rgba(30, 42, 30, 0.5);
+}
+
+body.dark-mode .empty-cart-icon {
+  color: rgba(250, 246, 240, 0.3);
+}
+
+body.dark-mode .cart-item {
+  background: rgba(30, 42, 30, 0.5);
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .cart-item-name {
+  color: #FAF6F0;
+}
+
+body.dark-mode .cart-item-price {
+  color: #D4A373;
+}
+
+body.dark-mode .cart-item-size {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .cart-item-quantity {
+  color: rgba(250, 246, 240, 0.7);
+}
+
+body.dark-mode .quantity-btn {
+  background: rgba(10, 15, 10, 0.5);
+  border-color: rgba(212, 163, 115, 0.3);
+  color: #FAF6F0;
+}
+
+body.dark-mode .quantity-btn:hover:not(:disabled) {
+  background: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .quantity {
+  color: #FAF6F0;
+}
+
+body.dark-mode .cart-summary {
+  border-top-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .cart-subtotal {
+  color: rgba(250, 246, 240, 0.8);
+}
+
+body.dark-mode .total-amount {
+  color: #D4A373;
+}

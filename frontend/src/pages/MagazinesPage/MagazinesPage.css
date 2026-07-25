@@ -58,3 +58,14 @@
     padding: 0 8px;
   }
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .magazines-page {
+  background: #0A0F0A;
+}
+
+body.dark-mode .page-header p {
+  color: #D4A373;
+}

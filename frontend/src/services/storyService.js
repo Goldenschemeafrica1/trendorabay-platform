@@ -79,7 +79,11 @@ const storyService = {
 
   // Search stories
   searchStories: async (query, page = 1, limit = 12) => {
-    const response = await apiRequest.get(`/stories/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
+    const response = await apiRequest.get(`/v1/stories/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
+    // Handle backend response format: {success: true, data: [...]} or {success: false, error: "..."}
+    if (response.data?.success === false) {
+      return { data: [] };
+    }
     return response.data;
   },
 

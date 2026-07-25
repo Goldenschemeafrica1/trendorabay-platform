@@ -200,3 +200,43 @@
     font-size: 0.9rem;
   }
 }
+
+/* ========== DARK MODE STYLES FOR TERMS PAGE ========== */
+body.dark-mode .terms-page {
+  background: #0A0F0A;
+}
+
+body.dark-mode .terms-header h1 {
+  color: #FAF6F0;
+}
+
+body.dark-mode .terms-header p {
+  background: #1E2A1E;
+  color: rgba(250, 246, 240, 0.7);
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .terms-content {
+  background: #1E2A1E;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .terms-content section {
+  border-bottom-color: rgba(212, 163, 115, 0.3);
+}
+
+body.dark-mode .terms-content h2 {
+  color: #D4A373;
+}
+
+body.dark-mode .terms-content p {
+  color: rgba(250, 246, 240, 0.9);
+}
+
+body.dark-mode .terms-content ul li {
+  color: rgba(250, 246, 240, 0.9);
+}
+
+body.dark-mode .terms-content ul li::before {
+  color: #D4A373;
+}
