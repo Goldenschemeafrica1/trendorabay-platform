@@ -250,28 +250,32 @@ app.set('upload', upload);
 
 // Serve frontend build for production / CDN with aggressive cache on hashed assets
 const frontendDistPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(frontendDistPath, {
-  index: false,
-  immutable: true,
-  maxAge: '1y',
-  setHeaders: (res, filePath) => {
-    if (path.basename(filePath) === 'index.html') {
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    } else {
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    }
-    res.setHeader('CDN-Cache-Control', res.getHeader('Cache-Control'));
-    res.setHeader('Vary', 'Accept-Encoding');
-  }
-}));
+const hasFrontendDist = fs.existsSync(frontendDistPath);
 
-// SPA fallback: only for non-API, non-upload routes
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) {
-    return next();
-  }
-  res.sendFile(path.join(frontendDistPath, 'index.html'));
-});
+if (hasFrontendDist) {
+  app.use(express.static(frontendDistPath, {
+    index: false,
+    immutable: true,
+    maxAge: '1y',
+    setHeaders: (res, filePath) => {
+      if (path.basename(filePath) === 'index.html') {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      } else {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
+      res.setHeader('CDN-Cache-Control', res.getHeader('Cache-Control'));
+      res.setHeader('Vary', 'Accept-Encoding');
+    }
+  }));
+
+  // SPA fallback: only for non-API, non-upload routes
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+}
 
 // 404 handler
 app.use(notFound);
