@@ -2793,3 +2793,101 @@ body.dark-mode .write-cta {
   background: linear-gradient(135deg, #D4A373 0%, #B87C4B 100%);
   color: #0A0F0A;
 }
+
+/* ===== Story Detail Mobile Fixes ===== */
+@media (max-width: 768px) {
+  .story-detail-page .story-title {
+    font-size: 24px !important;
+    line-height: 1.2 !important;
+  }
+
+  .story-detail-page .story-content {
+    font-size: 16px !important;
+  }
+
+  .story-detail-page .story-body h2 {
+    font-size: 24px !important;
+  }
+
+  .story-detail-page .story-body p {
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+  }
+
+  .story-detail-page .story-meta-bar {
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+  }
+
+  .story-detail-page .story-meta-info {
+    flex-wrap: wrap !important;
+  }
+
+  .story-detail-page .story-featured-image.newspaper-float-left,
+  .story-detail-page .story-featured-image.newspaper-float-right {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  .story-detail-page .story-featured-image img {
+    max-height: 300px !important;
+  }
+
+  .story-detail-page .story-sidebar {
+    min-height: auto !important;
+  }
+
+  .story-detail-page .story-sidebar .ad-image {
+    min-height: auto !important;
+    max-height: 400px !important;
+  }
+
+  .story-detail-page .story-navigation {
+    padding-left: 16px !important;
+  }
+
+  .story-detail-page .engagement-btn {
+    padding: 12px 20px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .story-detail-page .story-title {
+    font-size: 22px !important;
+    line-height: 1.15 !important;
+  }
+
+  .story-detail-page .story-content {
+    font-size: 15px !important;
+  }
+
+  .story-detail-page .story-body h2 {
+    font-size: 20px !important;
+  }
+
+  .story-detail-page .story-body p {
+    font-size: 14px !important;
+    line-height: 1.7 !important;
+  }
+
+  .story-detail-page .story-featured-image img {
+    max-height: 220px !important;
+  }
+
+  .story-detail-page .story-sidebar .ad-image {
+    max-height: 300px !important;
+  }
+
+  .story-detail-page .story-navigation {
+    padding-left: 12px !important;
+  }
+
+  .story-detail-page .engagement-btn {
+    padding: 10px 14px !important;
+    font-size: 12px !important;
+  }
+}
