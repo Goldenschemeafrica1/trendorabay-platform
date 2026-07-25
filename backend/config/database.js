@@ -68,6 +68,32 @@ const isReadQuery = (sqlInput) => {
   return sql.startsWith('select') && !sql.includes('for update');
 };
 
+// Retry transient network/DNS/connection failures
+const RETRYABLE_ERROR_CODES = new Set([
+  'ENOTFOUND',
+  'ECONNREFUSED',
+  'ECONNRESET',
+  'ETIMEDOUT',
+  'EPIPE',
+  'PROTOCOL_CONNECTION_LOST'
+]);
+
+const isRetryableError = (error) => error && RETRYABLE_ERROR_CODES.has(error.code);
+
+const withRetry = async (operation, maxRetries = 3) => {
+  let lastError;
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+      if (!isRetryableError(error) || i === maxRetries - 1) throw error;
+      await new Promise(resolve => setTimeout(resolve, Math.min(1000 * Math.pow(2, i), 4000)));
+    }
+  }
+  throw lastError;
+};
+
 const routingPool = new Proxy(pool, {
   get(target, prop) {
     if (prop === 'query' || prop === 'execute') {
@@ -75,7 +101,7 @@ const routingPool = new Proxy(pool, {
         const useRead = readPool && isReadQuery(args[0]);
         const start = Date.now();
         try {
-          return await (useRead ? readPool : target)[prop](...args);
+          return await withRetry(() => (useRead ? readPool : target)[prop](...args));
         } finally {
           recordDbQuery(args[0], Date.now() - start);
         }

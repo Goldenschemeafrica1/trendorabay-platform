@@ -416,17 +416,28 @@ router.get('/:slug', cache(300), async (req, res, next) => {
         [param]
       );
     } else {
-      // Try to find by matching slug against generated title slugs
-      const [allStories] = await pool.query(
+      // Fast lookup by stored slug column
+      [rows] = await pool.query(
         `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
          FROM stories s
-         LEFT JOIN authors a ON s.author_id = a.id`
+         LEFT JOIN authors a ON s.author_id = a.id
+         WHERE s.slug = ?`,
+        [param]
       );
-      rows = allStories.filter(story => {
-        const cleanTitle = story.title?.trim() || '';
-        const generatedSlug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
-        return generatedSlug === param;
-      });
+
+      // Fallback to generated title slugs for legacy rows without a stored slug
+      if (rows.length === 0) {
+        const [allStories] = await pool.query(
+          `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+           FROM stories s
+           LEFT JOIN authors a ON s.author_id = a.id`
+        );
+        rows = allStories.filter(story => {
+          const cleanTitle = story.title?.trim() || '';
+          const generatedSlug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+          return generatedSlug === param;
+        });
+      }
     }
     
     if (rows.length === 0) {
