@@ -8,7 +8,6 @@ const ContributorsPage = () => {
   const navigate = useNavigate();
   const [contributors, setContributors] = useState([]);
   const [selectedRole, setSelectedRole] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [filteredContributors, setFilteredContributors] = useState([]);
   const [following, setFollowing] = useState(new Set());
@@ -133,31 +132,8 @@ const ContributorsPage = () => {
       });
     }
     
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(c => {
-        const name = c.name?.toLowerCase() || '';
-        const role = c.role?.toLowerCase() || '';
-        const bio = c.bio?.toLowerCase() || '';
-        const expertise = c.expertise || '';
-        
-        // Handle expertise as string or array
-        let expertiseText = '';
-        if (Array.isArray(expertise)) {
-          expertiseText = expertise.join(' ').toLowerCase();
-        } else {
-          expertiseText = String(expertise).toLowerCase();
-        }
-        
-        return name.includes(query) ||
-               role.includes(query) ||
-               bio.includes(query) ||
-               expertiseText.includes(query);
-      });
-    }
-    
     setFilteredContributors(filtered);
-  }, [selectedRole, searchQuery, contributors]);
+  }, [selectedRole, contributors]);
 
   const toggleFollow = async (contributorId) => {
     // Check if user is logged in
@@ -243,20 +219,6 @@ const ContributorsPage = () => {
       <div className="contributors-container">
         {/* Filters Section */}
         <div className="filters-section">
-          <div className="search-bar">
-            <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="M21 21l-4.35-4.35"/>
-            </svg>
-            <input
-              type="text"
-              placeholder="Search by name, role, or expertise..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-          </div>
-
           <div className="role-filters">
             {roles.map(role => (
               <button
@@ -285,7 +247,7 @@ const ContributorsPage = () => {
           <div className="no-results">
             <h3>No contributors found</h3>
             <p>Try adjusting your search or filter criteria</p>
-            <button onClick={() => { setSelectedRole('all'); setSearchQuery(''); }}>
+            <button onClick={() => { setSelectedRole('all'); }}>
               Clear Filters
             </button>
           </div>
