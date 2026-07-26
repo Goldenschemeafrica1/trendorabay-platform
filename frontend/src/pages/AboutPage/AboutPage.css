@@ -1004,3 +1004,133 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ============================================
+   DARK MODE STYLES
+   ============================================ */
+body.dark-mode .about-page {
+  background: var(--bg-primary);
+}
+
+body.dark-mode .about-hero {
+  background: linear-gradient(135deg, #0A0F0A 0%, #1E2A1E 100%);
+}
+
+body.dark-mode .about-hero::before {
+  opacity: 0.05;
+}
+
+body.dark-mode .about-hero-title {
+  background: linear-gradient(135deg, #FAF6F0 0%, #D4A373 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+body.dark-mode .about-hero-subtitle {
+  color: rgba(250, 246, 240, 0.8);
+}
+
+body.dark-mode .about-tabs {
+  background: var(--bg-primary);
+}
+
+body.dark-mode .timeline::before {
+  background: var(--accent);
+}
+
+body.dark-mode .timeline-content {
+  background: var(--bg-card);
+  border-color: var(--border-light);
+}
+
+body.dark-mode .value-card {
+  background: var(--bg-card);
+  border-color: var(--border-light);
+}
+
+body.dark-mode .value-card:hover {
+  border-color: var(--accent-soft);
+}
+
+body.dark-mode .mission-card,
+body.dark-mode .vision-card {
+  background: var(--bg-card);
+  border-color: var(--border-light);
+}
+
+body.dark-mode .commitment-item {
+  background: var(--bg-card);
+  border-color: var(--border-light);
+}
+
+body.dark-mode .commitment-check {
+  background: rgba(212, 163, 115, 0.2);
+  color: #D4A373;
+}
+
+body.dark-mode .team-card {
+  background: var(--bg-card);
+  border-color: var(--border-light);
+}
+
+body.dark-mode .join-team-section {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+}
+
+body.dark-mode .impact-story-card {
+  background: var(--bg-card);
+  border-color: var(--border-light);
+}
+
+body.dark-mode .press-card {
+  background: var(--bg-card);
+  border-color: var(--border-light);
+}
+
+body.dark-mode .press-card:hover {
+  border-color: var(--accent-soft);
+}
+
+body.dark-mode .team-modal-content {
+  background: var(--bg-card);
+}
+
+body.dark-mode .modal-close {
+  background: var(--bg-secondary);
+}
+
+body.dark-mode .modal-close:hover {
+  background: var(--accent);
+  color: white;
+}
+
+body.dark-mode .modal-info h2 {
+  color: var(--text-primary);
+}
+
+body.dark-mode .modal-role {
+  color: var(--accent);
+}
+
+body.dark-mode .modal-bio {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .modal-expertise strong {
+  color: var(--text-primary);
+}
+
+body.dark-mode .expertise-tag {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+body.dark-mode .modal-quote {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+body.dark-mode .quote-mark {
+  color: var(--accent);
+}
