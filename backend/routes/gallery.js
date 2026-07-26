@@ -11,7 +11,7 @@ router.get('/', cache(300), async (req, res, next) => {
     const { category, featured, page = 1, limit = 50 } = req.query;
     const offset = (page - 1) * limit;
 
-    console.log('Gallery API called with params:', { category, featured, page, limit });
+    console.log('Gallery API called');
 
     // Get total count for pagination
     let countQuery = 'SELECT COUNT(*) as total FROM gallery WHERE 1=1';
@@ -29,7 +29,7 @@ router.get('/', cache(300), async (req, res, next) => {
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
-    console.log('Total gallery items count:', total, 'Total pages:', totalPages);
+    console.log('Gallery pagination calculated');
 
     let query = `
       SELECT * FROM gallery
@@ -48,12 +48,11 @@ router.get('/', cache(300), async (req, res, next) => {
     query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
     params.push(parseInt(limit), offset);
 
-    console.log('Executing query:', query);
-    console.log('Query params:', params);
+    console.log('Executing gallery query');
 
     const [rows] = await pool.query(query, params);
 
-    console.log('Gallery items fetched from database:', rows.length);
+    console.log('Gallery items fetched successfully');
 
     res.json({
       data: rows,

@@ -4,6 +4,8 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { uploadToCloudinary, isCloudinaryConfigured } from '../config/cloudinary.js';
+import auth from '../middleware/auth.js';
+import { validateMagicNumber } from '../middleware/fileValidator.js';
 
 const router = express.Router();
 
@@ -16,18 +18,42 @@ const upload = multer({
     fileSize: 10 * 1024 * 1024 // 10MB limit
   },
   fileFilter: (req, file, cb) => {
-    const allowedTypes = ['.doc', '.docx', '.pdf', '.txt'];
+    // First check extension
+    const allowedExtensions = ['.doc', '.docx', '.pdf', '.txt'];
     const ext = path.extname(file.originalname).toLowerCase();
-    if (allowedTypes.includes(ext)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Invalid file type. Only .doc, .docx, .pdf, and .txt files are allowed.'));
+    if (!allowedExtensions.includes(ext)) {
+      return cb(new Error('Invalid file type. Only .doc, .docx, .pdf, and .txt files are allowed.'), false);
     }
+
+    // Map extensions to MIME types for magic number validation
+    const extToMime = {
+      '.doc': 'application/msword',
+      '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      '.pdf': 'application/pdf',
+      '.txt': 'text/plain'
+    };
+
+    const expectedMime = extToMime[ext];
+
+    // For text files, skip magic number validation
+    if (ext === '.txt') {
+      return cb(null, true);
+    }
+
+    // Validate magic numbers for binary files
+    if (file.buffer) {
+      const isValid = validateMagicNumber(file.buffer, expectedMime);
+      if (!isValid) {
+        return cb(new Error('File content does not match the declared file type. This may indicate a spoofed file.'), false);
+      }
+    }
+
+    cb(null, true);
   }
 });
 
 // Get all pitches
-router.get('/', async (req, res, next) => {
+router.get('/', auth, async (req, res, next) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
     const offset = (page - 1) * limit;
@@ -51,7 +77,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // Get pitch by ID
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', auth, async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT * FROM pitch_submissions WHERE id = ?',
@@ -67,9 +93,9 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Create pitch
-router.post('/', upload.single('articleAttachment'), async (req, res, next) => {
+router.post('/', auth, upload.single('articleAttachment'), async (req, res, next) => {
   try {
-    console.log('Received pitch submission:', req.body);
+    console.log('Received pitch submission');
     const {
       fullName,
       email,
@@ -121,7 +147,7 @@ router.post('/', upload.single('articleAttachment'), async (req, res, next) => {
           // Clean up temp file
           fs.unlinkSync(tempFilePath);
 
-          console.log('File uploaded to Cloudinary:', articleAttachment);
+          console.log('File uploaded to Cloudinary successfully');
         } catch (uploadError) {
           console.error('Cloudinary upload error:', uploadError);
           // Continue without file upload - pitch will be saved without attachment
@@ -130,7 +156,7 @@ router.post('/', upload.single('articleAttachment'), async (req, res, next) => {
       }
     }
 
-    console.log('Attempting to insert pitch into database...');
+    console.log('Attempting to insert pitch into database');
     const [result] = await pool.query(
       `INSERT INTO pitch_submissions (
         full_name, 
@@ -161,7 +187,7 @@ router.post('/', upload.single('articleAttachment'), async (req, res, next) => {
         articleAttachment
       ]
     );
-    console.log('Pitch inserted successfully, ID:', result.insertId);
+    console.log('Pitch inserted successfully');
 
     const [newPitch] = await pool.query(
       'SELECT * FROM pitch_submissions WHERE id = ?',
@@ -184,7 +210,7 @@ router.post('/', upload.single('articleAttachment'), async (req, res, next) => {
 });
 
 // Update pitch status
-router.patch('/:id/status', async (req, res, next) => {
+router.patch('/:id/status', auth, async (req, res, next) => {
   try {
     const { status } = req.body;
     await pool.query(
@@ -202,7 +228,7 @@ router.patch('/:id/status', async (req, res, next) => {
 });
 
 // Delete pitch
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', auth, async (req, res, next) => {
   try {
     await pool.query(
       'DELETE FROM pitch_submissions WHERE id = ?',

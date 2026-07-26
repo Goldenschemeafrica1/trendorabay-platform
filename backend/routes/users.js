@@ -6,6 +6,7 @@ import path from 'path';
 import pool from '../config/database.js';
 import auth from '../middleware/auth.js';
 import { logFailedLogin, logSuccessfulLogin, logAccountLockout } from '../middleware/securityLogger.js';
+import { redisAuthLimiter } from '../middleware/redisRateLimiter.js';
 
 const router = express.Router();
 
@@ -59,9 +60,9 @@ const uploadToCMS = async (file, filename) => {
 };
 
 // Register new user
-router.post('/register', async (req, res, next) => {
+router.post('/register', redisAuthLimiter, async (req, res, next) => {
   try {
-    console.log('Registration attempt:', { username: req.body.username, email: req.body.email });
+    console.log('Registration attempt for new user');
     const { username, email, password, first_name, last_name } = req.body;
 
     // Validate input
@@ -86,7 +87,7 @@ router.post('/register', async (req, res, next) => {
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedUsername = username.trim();
 
-    console.log('Checking for existing user with email:', normalizedEmail);
+    console.log('Checking for existing user email');
 
     // Check if user already exists by email (case-insensitive)
     const [existingEmailUsers] = await pool.query(
@@ -95,14 +96,14 @@ router.post('/register', async (req, res, next) => {
     );
 
     if (existingEmailUsers.length > 0) {
-      console.log('User already exists with email:', normalizedEmail);
+      console.log('User already exists with provided email');
       return res.status(409).json({
         success: false,
         error: 'User with this email already exists'
       });
     }
 
-    console.log('Checking for existing username:', normalizedUsername);
+    console.log('Checking for existing username');
 
     // Check if username already exists (case-insensitive)
     const [existingUsernameUsers] = await pool.query(
@@ -111,7 +112,7 @@ router.post('/register', async (req, res, next) => {
     );
 
     if (existingUsernameUsers.length > 0) {
-      console.log('Username already taken:', normalizedUsername);
+      console.log('Username already taken');
       return res.status(409).json({
         success: false,
         error: 'Username already taken'
@@ -133,7 +134,7 @@ router.post('/register', async (req, res, next) => {
       [normalizedUsername, normalizedEmail, hashedPassword, first_name || null, last_name || null]
     );
 
-    console.log('User inserted with ID:', result.insertId);
+    console.log('User inserted successfully');
 
     // Return success immediately after successful insertion
     // Don't fetch user data to avoid potential errors
@@ -156,13 +157,13 @@ router.post('/register', async (req, res, next) => {
 });
 
 // Login user
-router.post('/login', async (req, res, next) => {
+router.post('/login', redisAuthLimiter, async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const ip = req.ip || req.connection.remoteAddress;
     const userAgent = req.get('user-agent') || 'unknown';
 
-    console.log('Login attempt for email:', email);
+    console.log('Login attempt received');
 
     // Validate input
     if (!email || !password) {
@@ -261,9 +262,17 @@ router.post('/login', async (req, res, next) => {
     logSuccessfulLogin(user.id, normalizedEmail, ip, userAgent);
 
     // Generate JWT token
+    if (!process.env.JWT_SECRET) {
+      console.error('CRITICAL: JWT_SECRET not set in environment variables. Cannot generate authentication token.');
+      return res.status(500).json({
+        success: false,
+        error: 'Server configuration error: JWT secret not configured'
+      });
+    }
+
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'your_jwt_secret_here_use_strong_random_string',
+      process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRE || '30d' }
     );
 
@@ -349,7 +358,7 @@ const recordFailedLoginAttempt = async (email) => {
 router.get('/profile', auth, async (req, res, next) => {
   try {
     const userId = req.userId; // Set by auth middleware
-    console.log('Fetching profile for userId:', userId);
+    console.log('Fetching user profile');
 
     if (!userId) {
       return res.status(401).json({
@@ -382,20 +391,14 @@ router.get('/profile', auth, async (req, res, next) => {
       });
     }
 
-    console.log('User profile data:', users[0]);
+    console.log('User profile fetched successfully');
     res.json({ success: true, data: users[0] });
   } catch (error) {
-    console.error('Error fetching profile:', error);
-    console.error('Error details:', {
-      message: error.message,
-      code: error.code,
-      sqlMessage: error.sqlMessage,
-      stack: error.stack
-    });
+    console.error('Error fetching profile:', error.message);
     return res.status(500).json({
       success: false,
       error: 'Failed to fetch profile',
-      details: process.env.NODE_ENV === 'development' ? error.message : error.message
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
   }
 });
@@ -407,8 +410,8 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
     const { first_name, last_name } = req.body;
 
     console.log('=== Profile Update Request ===');
-    console.log('User ID:', userId);
-    console.log('Request body:', { first_name, last_name });
+    console.log('Processing profile update request');
+    console.log('Profile update data received');
     console.log('File received:', req.file ? 'Yes' : 'No');
 
     let query = `UPDATE users SET first_name = ?, last_name = ?`;
@@ -416,18 +419,14 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
 
     // Handle profile image upload
     if (req.file) {
-      console.log('File details:', {
-        originalname: req.file.originalname,
-        size: req.file.size,
-        mimetype: req.file.mimetype
-      });
+      console.log('File upload received for profile image');
 
       // Upload to CMS
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
       const filename = 'profile-' + uniqueSuffix + path.extname(req.file.originalname);
       const profileImageUrl = await uploadToCMS(req.file, filename);
 
-      console.log('Profile image URL:', profileImageUrl);
+      console.log('Profile image uploaded successfully');
 
       try {
         // Test if profile_image column exists, create it if it doesn't
@@ -460,8 +459,7 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
     query += ` WHERE id = ?`;
     params.push(userId);
 
-    console.log('Executing query:', query);
-    console.log('Query params:', params);
+    console.log('Executing profile update query');
 
     await pool.query(query, params);
     console.log('Profile update successful');
@@ -507,7 +505,7 @@ router.post('/clear-invalid-profile-images', auth, async (req, res, next) => {
 });
 
 // Forgot password
-router.post('/forgot-password', async (req, res, next) => {
+router.post('/forgot-password', redisAuthLimiter, async (req, res, next) => {
   try {
     const { email } = req.body;
     
@@ -538,18 +536,23 @@ router.post('/forgot-password', async (req, res, next) => {
     const user = users[0];
     
     // Generate a reset token
+    if (!process.env.JWT_SECRET) {
+      console.error('CRITICAL: JWT_SECRET not set in environment variables. Cannot generate password reset token.');
+      return res.status(500).json({
+        success: false,
+        error: 'Server configuration error: JWT secret not configured'
+      });
+    }
+
     const resetToken = jwt.sign(
       { userId: user.id, email: user.email },
-      process.env.JWT_SECRET || 'your_jwt_secret_here_use_strong_random_string',
+      process.env.JWT_SECRET,
       { expiresIn: '1h' } // Token expires in 1 hour
     );
     
     // In a production environment, you would send an email with the reset link
     // For now, we'll just return success
     // The reset link would be: `${frontendUrl}/reset-password?token=${resetToken}`
-    
-    console.log('Password reset token generated for user:', user.email);
-    console.log('Reset token:', resetToken);
     
     res.json({
       success: true,
@@ -565,7 +568,7 @@ router.post('/forgot-password', async (req, res, next) => {
 });
 
 // Reset password
-router.post('/reset-password', async (req, res, next) => {
+router.post('/reset-password', redisAuthLimiter, async (req, res, next) => {
   try {
     const { token, newPassword } = req.body;
     
@@ -586,9 +589,17 @@ router.post('/reset-password', async (req, res, next) => {
     }
     
     // Verify token
+    if (!process.env.JWT_SECRET) {
+      console.error('CRITICAL: JWT_SECRET not set in environment variables. Cannot verify password reset token.');
+      return res.status(500).json({
+        success: false,
+        error: 'Server configuration error: JWT secret not configured'
+      });
+    }
+
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_here_use_strong_random_string');
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (error) {
       return res.status(400).json({
         success: false,

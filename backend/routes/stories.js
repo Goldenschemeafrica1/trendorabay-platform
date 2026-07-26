@@ -144,7 +144,7 @@ router.get('/', cache(300), async (req, res, next) => {
     const { category, author, search, page = 1, limit = 12, featured, status } = req.query;
     const offset = (page - 1) * limit;
 
-    console.log('Stories API called with params:', { category, author, search, page, limit, featured, status });
+    console.log('Stories API called');
 
     // Get total count for pagination
     let countQuery = 'SELECT COUNT(*) as total FROM stories s WHERE 1=1';
@@ -174,7 +174,7 @@ router.get('/', cache(300), async (req, res, next) => {
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
-    console.log('Total stories count:', total, 'Total pages:', totalPages);
+    console.log('Stories pagination calculated');
 
     let query = `
       SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
@@ -208,15 +208,11 @@ router.get('/', cache(300), async (req, res, next) => {
     query += ' ORDER BY s.created_at DESC LIMIT ? OFFSET ?';
     params.push(parseInt(limit), offset);
 
-    console.log('Executing query:', query);
-    console.log('Query params:', params);
+    console.log('Executing stories query');
 
     const [rows] = await pool.query(query, params);
 
-    console.log('Stories fetched from database:', rows.length);
-
-    // Log actual image URLs from database for debugging
-    console.log('Sample image URLs from database:', rows.slice(0, 3).map(r => ({ id: r.id, featured_image_url: r.featured_image_url })));
+    console.log('Stories fetched successfully');
 
     // Map categories to actual image files in frontend public folder
     const categoryImageMap = {

@@ -26,10 +26,9 @@ router.get('/', cache(300), async (req, res, next) => {
 
     query += ' ORDER BY c.created_at DESC';
 
-    console.log('Contributors query:', query);
+    console.log('Executing contributors query');
     const [rows] = await pool.query(query, params);
-    console.log('Contributors fetched:', rows.length);
-    console.log('First contributor:', rows[0]);
+    console.log('Contributors fetched successfully');
     res.json({ success: true, data: rows });
   } catch (error) {
     console.error('Error fetching contributors:', error);

@@ -11,13 +11,16 @@ const auth = (req, res, next) => {
       });
     }
 
-    // Ensure JWT_SECRET is set, use fallback for development
-    const jwtSecret = process.env.JWT_SECRET || 'your_jwt_secret_here_use_strong_random_string';
+    // Fail-fast if JWT_SECRET is not set
     if (!process.env.JWT_SECRET) {
-      console.warn('WARNING: JWT_SECRET not set in environment variables. Using fallback (not secure for production!)');
+      console.error('CRITICAL: JWT_SECRET not set in environment variables. Authentication cannot function.');
+      return res.status(500).json({
+        success: false,
+        error: 'Server configuration error: JWT secret not configured'
+      });
     }
 
-    const decoded = jwt.verify(token, jwtSecret);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.userId;
     req.userEmail = decoded.email;
     req.userRole = decoded.role;

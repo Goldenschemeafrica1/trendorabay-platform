@@ -17,9 +17,9 @@ router.get('/', async (req, res, next) => {
 
     query += ' ORDER BY created_at DESC';
 
-    console.log('Team query:', query);
+    console.log('Executing team query');
     const [rows] = await pool.query(query, params);
-    console.log('Team members fetched:', rows.length);
+    console.log('Team members fetched successfully');
     res.json({ success: true, data: rows });
   } catch (error) {
     console.error('Error fetching team members:', error);

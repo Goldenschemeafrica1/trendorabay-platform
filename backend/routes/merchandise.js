@@ -59,12 +59,10 @@ router.get('/', cache(300), async (req, res, next) => {
     query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
     params.push(parseInt(limit), offset);
     
-    console.log('Products query:', query);
-    console.log('Products params:', params);
+    console.log('Executing products query');
     
     const [rows] = await pool.query(query, params);
-    console.log('Products fetched:', rows.length);
-    console.log('First product:', rows[0]);
+    console.log('Products fetched successfully');
     
     // Transform image URLs to serve CMS uploads
     const transformed = rows.map(product => ({

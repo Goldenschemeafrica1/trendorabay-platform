@@ -16,6 +16,7 @@ import { validatePagination } from './middleware/pagination.js';
 import { metricsMiddleware, getMetrics } from './config/metrics.js';
 import { startQueueWorker } from './workers/queueWorker.js';
 import multer from 'multer';
+import { createMagicNumberFilter } from './middleware/fileValidator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -77,15 +78,7 @@ const upload = multer({
   limits: {
     fileSize: 5 * 1024 * 1024 // 5MB limit (reduced from 50MB for security)
   },
-  fileFilter: (req, file, cb) => {
-    // Basic file type validation
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'audio/mpeg', 'audio/mp3', 'video/mp4', 'application/pdf'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Invalid file type'), false);
-    }
-  }
+  fileFilter: createMagicNumberFilter(['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'audio/mpeg', 'audio/mp3', 'video/mp4', 'application/pdf'])
 });
 
 // Serve static files from backend uploads directory with CORS and security headers
@@ -313,6 +306,27 @@ const createInquiriesTable = async () => {
 // Start server
 const startServer = async () => {
   try {
+    // Validate critical environment variables
+    if (!process.env.JWT_SECRET) {
+      console.error('CRITICAL: JWT_SECRET environment variable is not set.');
+      console.error('The server cannot start without a JWT secret for authentication.');
+      console.error('Please set JWT_SECRET in your .env file or environment variables.');
+      console.error('You can generate a secure JWT secret using: node scripts/generateJwtSecret.js');
+      process.exit(1);
+    }
+
+    if (process.env.JWT_SECRET === 'your_jwt_secret_here_use_strong_random_string' || 
+        process.env.JWT_SECRET === 'your_jwt_secret_here') {
+      console.error('CRITICAL: JWT_SECRET is set to the default placeholder value.');
+      console.error('This is not secure for production. Please generate a secure JWT secret.');
+      console.error('You can generate a secure JWT secret using: node scripts/generateJwtSecret.js');
+      if (process.env.NODE_ENV === 'production') {
+        process.exit(1);
+      } else {
+        console.warn('WARNING: Running with default JWT secret in development mode. This should be changed before production deployment.');
+      }
+    }
+
     const dbConnected = await testConnection();
     if (!dbConnected) {
       console.warn('Warning: Database connection failed. Server will start but database operations will fail.');

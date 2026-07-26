@@ -46,7 +46,7 @@ router.get('/:id', async (req, res, next) => {
 // Create inquiry
 router.post('/', async (req, res, next) => {
   try {
-    console.log('Received inquiry submission:', req.body);
+    console.log('Received inquiry submission');
     const { name, company, email, phone, budget, campaignType, message } = req.body;
     
     // Validate required fields
@@ -57,13 +57,13 @@ router.post('/', async (req, res, next) => {
       });
     }
     
-    console.log('Attempting to insert inquiry into database...');
+    console.log('Attempting to insert inquiry into database');
     const [result] = await pool.query(
       `INSERT INTO advertisement_inquiries (name, company, email, phone, budget, campaign_type, message) 
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [name, company, email, phone, budget, campaignType, message]
     );
-    console.log('Inquiry inserted successfully, ID:', result.insertId);
+    console.log('Inquiry inserted successfully');
     
     const [newInquiry] = await pool.query(
       'SELECT * FROM advertisement_inquiries WHERE id = ?',
