@@ -2816,11 +2816,12 @@ body.dark-mode .write-cta {
 
   .story-detail-page .story-meta-bar {
     flex-wrap: wrap !important;
-    align-items: flex-start !important;
+    align-items: center !important;
   }
 
   .story-detail-page .story-meta-info {
     flex-wrap: wrap !important;
+    margin-left: 0 !important;
   }
 
   .story-detail-page .story-featured-image.newspaper-float-left,
