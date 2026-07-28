@@ -26,16 +26,10 @@ if (process.env.ADDITIONAL_ALLOWED_ORIGINS) {
 
 export const corsMiddleware = cors({
   origin: function (origin, callback) {
-    // In production, require origin validation to prevent CSRF attacks
-    // In development, allow no-origin requests for testing with curl/postman
+    // Allow requests without origin header (same-origin requests, health checks, monitoring)
     if (!origin) {
-      if (process.env.NODE_ENV === 'production') {
-        console.error('CORS: Request with no origin rejected in production');
-        return callback(new Error('Origin header is required in production'), false);
-      } else {
-        console.warn('CORS: Allowing request with no origin in development mode');
-        return callback(null, true);
-      }
+      console.warn('CORS: Allowing request with no origin');
+      return callback(null, true);
     }
 
     const normalizedOrigin = normalizeOrigin(origin);
