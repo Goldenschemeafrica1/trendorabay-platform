@@ -15,8 +15,8 @@ async function addSlugColumn() {
   try {
     console.log('Starting migration to add slug column to magazines table...');
 
-    // Add slug column to magazines table
-    await pool.query('ALTER TABLE magazines ADD COLUMN slug VARCHAR(255) UNIQUE AFTER title');
+    // Add slug column to magazines table (without UNIQUE constraint for TiDB compatibility)
+    await pool.query('ALTER TABLE magazines ADD COLUMN slug VARCHAR(255) AFTER title');
     console.log('Slug column added successfully');
 
     // Generate slugs for existing magazines

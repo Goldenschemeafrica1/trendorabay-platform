@@ -1017,3 +1017,980 @@ Raw advertisements from database: [
   }
 ]
 Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T12:02:50.356Z - 127.0.0.1 - GET /api/advertisements
+2026-07-25T12:02:50.386Z - 127.0.0.1 - GET /api/stories/homepage
+2026-07-25T12:02:50.404Z - 127.0.0.1 - GET /api/magazines
+Magazines API called with params: { limit: null, category: null }
+Executing query: SELECT * FROM magazines ORDER BY created_at DESC with params: []
+2026-07-25T12:02:50.408Z - 127.0.0.1 - GET /api/magazines
+Magazines API called with params: { limit: 8, category: null }
+Executing query: SELECT * FROM magazines ORDER BY created_at DESC LIMIT ? with params: [ 8 ]
+Query returned 8 rows
+Sample row columns: [
+  'id',              'title',
+  'issue',           'description',
+  'cover_image_url', 'pdf_url',
+  'category_id',     'published_date',
+  'price',           'digital_price',
+  'print_price',     'subscription_price',
+  'pages',           'language',
+  'publisher',       'rating',
+  'review_count',    'table_of_contents',
+  'contributors',    'preview_pages',
+  'created_at',      'updated_at',
+  'reviews',         'publish_date',
+  'contributor_id'
+]
+Sample row data: {
+  "id": 120015,
+  "title": "SPORTSTREND",
+  "issue": "Vol. 1 No. 1",
+  "description": null,
+  "cover_image_url": "https://res.cloudinary.com/z8oenh6r/image/upload/v1784571132/magazines/1784571132668-cover%20page%20%282%29.jpg",
+  "pdf_url": "",
+  "category_id": 49,
+  "published_date": "2026-07-19T21:00:00.000Z",
+  "price": "9.99",
+  "digital_price": "9.99",
+  "print_price": "13.99",
+  "subscription_price": "99.99",
+  "pages": 100,
+  "language": "English",
+  "publisher": "Trendorabay",
+  "rating": "4.50",
+  "review_count": 0,
+  "table_of_contents": null,
+  "contributors": "22",
+  "preview_pages": null,
+  "created_at": "2026-07-20T15:12:13.000Z",
+  "updated_at": "2026-07-20T15:12:13.000Z",
+  "reviews": null,
+  "publish_date": null,
+  "contributor_id": null
+}
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T12:02:52.565Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T12:02:52.845Z - 127.0.0.1 - GET /api/advertisements
+Query returned 9 rows
+Sample row columns: [
+  'id',              'title',
+  'issue',           'description',
+  'cover_image_url', 'pdf_url',
+  'category_id',     'published_date',
+  'price',           'digital_price',
+  'print_price',     'subscription_price',
+  'pages',           'language',
+  'publisher',       'rating',
+  'review_count',    'table_of_contents',
+  'contributors',    'preview_pages',
+  'created_at',      'updated_at',
+  'reviews',         'publish_date',
+  'contributor_id'
+]
+Sample row data: {
+  "id": 120015,
+  "title": "SPORTSTREND",
+  "issue": "Vol. 1 No. 1",
+  "description": null,
+  "cover_image_url": "https://res.cloudinary.com/z8oenh6r/image/upload/v1784571132/magazines/1784571132668-cover%20page%20%282%29.jpg",
+  "pdf_url": "",
+  "category_id": 49,
+  "published_date": "2026-07-19T21:00:00.000Z",
+  "price": "9.99",
+  "digital_price": "9.99",
+  "print_price": "13.99",
+  "subscription_price": "99.99",
+  "pages": 100,
+  "language": "English",
+  "publisher": "Trendorabay",
+  "rating": "4.50",
+  "review_count": 0,
+  "table_of_contents": null,
+  "contributors": "22",
+  "preview_pages": null,
+  "created_at": "2026-07-20T15:12:13.000Z",
+  "updated_at": "2026-07-20T15:12:13.000Z",
+  "reviews": null,
+  "publish_date": null,
+  "contributor_id": null
+}
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T12:02:53.167Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:41:34.618Z - 127.0.0.1 - GET /api/advertisements
+2026-07-25T17:41:34.802Z - 127.0.0.1 - GET /api/magazines
+Magazines API called with params: { limit: 8, category: null }
+Executing query: SELECT * FROM magazines ORDER BY created_at DESC LIMIT ? with params: [ 8 ]
+2026-07-25T17:41:34.810Z - 127.0.0.1 - GET /api/magazines
+Magazines API called with params: { limit: null, category: null }
+Executing query: SELECT * FROM magazines ORDER BY created_at DESC with params: []
+2026-07-25T17:41:34.838Z - 127.0.0.1 - GET /api/stories/homepage
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:41:35.691Z - 127.0.0.1 - GET /api/advertisements
+Query returned 8 rows
+Sample row columns: [
+  'id',              'title',
+  'issue',           'description',
+  'cover_image_url', 'pdf_url',
+  'category_id',     'published_date',
+  'price',           'digital_price',
+  'print_price',     'subscription_price',
+  'pages',           'language',
+  'publisher',       'rating',
+  'review_count',    'table_of_contents',
+  'contributors',    'preview_pages',
+  'created_at',      'updated_at',
+  'reviews',         'publish_date',
+  'contributor_id'
+]
+Sample row data: {
+  "id": 120015,
+  "title": "SPORTSTREND",
+  "issue": "Vol. 1 No. 1",
+  "description": null,
+  "cover_image_url": "https://res.cloudinary.com/z8oenh6r/image/upload/v1784571132/magazines/1784571132668-cover%20page%20%282%29.jpg",
+  "pdf_url": "",
+  "category_id": 49,
+  "published_date": "2026-07-19T21:00:00.000Z",
+  "price": "9.99",
+  "digital_price": "9.99",
+  "print_price": "13.99",
+  "subscription_price": "99.99",
+  "pages": 100,
+  "language": "English",
+  "publisher": "Trendorabay",
+  "rating": "4.50",
+  "review_count": 0,
+  "table_of_contents": null,
+  "contributors": "22",
+  "preview_pages": null,
+  "created_at": "2026-07-20T15:12:13.000Z",
+  "updated_at": "2026-07-20T15:12:13.000Z",
+  "reviews": null,
+  "publish_date": null,
+  "contributor_id": null
+}
+Query returned 9 rows
+Sample row columns: [
+  'id',              'title',
+  'issue',           'description',
+  'cover_image_url', 'pdf_url',
+  'category_id',     'published_date',
+  'price',           'digital_price',
+  'print_price',     'subscription_price',
+  'pages',           'language',
+  'publisher',       'rating',
+  'review_count',    'table_of_contents',
+  'contributors',    'preview_pages',
+  'created_at',      'updated_at',
+  'reviews',         'publish_date',
+  'contributor_id'
+]
+Sample row data: {
+  "id": 120015,
+  "title": "SPORTSTREND",
+  "issue": "Vol. 1 No. 1",
+  "description": null,
+  "cover_image_url": "https://res.cloudinary.com/z8oenh6r/image/upload/v1784571132/magazines/1784571132668-cover%20page%20%282%29.jpg",
+  "pdf_url": "",
+  "category_id": 49,
+  "published_date": "2026-07-19T21:00:00.000Z",
+  "price": "9.99",
+  "digital_price": "9.99",
+  "print_price": "13.99",
+  "subscription_price": "99.99",
+  "pages": 100,
+  "language": "English",
+  "publisher": "Trendorabay",
+  "rating": "4.50",
+  "review_count": 0,
+  "table_of_contents": null,
+  "contributors": "22",
+  "preview_pages": null,
+  "created_at": "2026-07-20T15:12:13.000Z",
+  "updated_at": "2026-07-20T15:12:13.000Z",
+  "reviews": null,
+  "publish_date": null,
+  "contributor_id": null
+}
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:41:35.870Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:41:36.024Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:41:38.975Z - 127.0.0.1 - GET /api/advertisements
+2026-07-25T17:41:38.986Z - 127.0.0.1 - GET /api/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:41:39.127Z - 127.0.0.1 - GET /api/advertisements
+2026-07-25T17:41:39.160Z - 127.0.0.1 - GET /api/stories/77/likes
+2026-07-25T17:41:39.163Z - 127.0.0.1 - GET /api/stories/77/comments
+2026-07-25T17:41:39.163Z - 127.0.0.1 - GET /api/stories
+Stories API called with params: {
+  category: undefined,
+  author: undefined,
+  search: undefined,
+  page: 1,
+  limit: '4',
+  featured: undefined,
+  status: 'published'
+}
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+Total stories count: 5 Total pages: 2
+Executing query: 
+      SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+      FROM stories s
+      LEFT JOIN authors a ON s.author_id = a.id
+      LEFT JOIN categories c ON s.category_id = c.id
+      WHERE 1=1
+     AND s.status = ? ORDER BY s.created_at DESC LIMIT ? OFFSET ?
+Query params: [ 'published', 4, 0 ]
+Stories fetched from database: 4
+Sample image URLs from database: [
+  {
+    id: 77,
+    featured_image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784378819/stories/1784378819251-KetoFlow%20%C3%A2%C2%80%C2%A2%20Dream%20Your%20Transformation.jpg'
+  },
+  {
+    id: 76,
+    featured_image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784378707/stories/1784378707455-Open%20For%20Business%20_%20Motivation%20_%20Mindset%20_%20Business.jpg'
+  },
+  {
+    id: 75,
+    featured_image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784376743/stories/1784376742890-African%20Masai%20culture.jpg'
+  }
+]
+2026-07-25T17:45:55.849Z - 127.0.0.1 - GET /api/advertisements
+2026-07-25T17:45:55.916Z - 127.0.0.1 - GET /api/stories/77/comments
+2026-07-25T17:45:55.917Z - 127.0.0.1 - GET /api/stories/77/likes
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:45:56.098Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:45:56.265Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:45:56.444Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:52:20.987Z - 127.0.0.1 - GET /api/advertisements
+2026-07-25T17:52:21.008Z - 127.0.0.1 - GET /api/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+2026-07-25T17:52:24.988Z - 127.0.0.1 - GET /api/stories
+Stories API called with params: {
+  category: undefined,
+  author: undefined,
+  search: undefined,
+  page: 1,
+  limit: '4',
+  featured: undefined,
+  status: 'published'
+}
+2026-07-25T17:52:24.998Z - 127.0.0.1 - GET /api/stories/77/likes
+2026-07-25T17:52:25.020Z - 127.0.0.1 - GET /api/stories/77/comments
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+Total stories count: 5 Total pages: 2
+Executing query: 
+      SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+      FROM stories s
+      LEFT JOIN authors a ON s.author_id = a.id
+      LEFT JOIN categories c ON s.category_id = c.id
+      WHERE 1=1
+     AND s.status = ? ORDER BY s.created_at DESC LIMIT ? OFFSET ?
+Query params: [ 'published', 4, 0 ]
+2026-07-25T17:52:25.147Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:52:25.324Z - 127.0.0.1 - GET /api/advertisements
+Stories fetched from database: 4
+Sample image URLs from database: [
+  {
+    id: 77,
+    featured_image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784378819/stories/1784378819251-KetoFlow%20%C3%A2%C2%80%C2%A2%20Dream%20Your%20Transformation.jpg'
+  },
+  {
+    id: 76,
+    featured_image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784378707/stories/1784378707455-Open%20For%20Business%20_%20Motivation%20_%20Mindset%20_%20Business.jpg'
+  },
+  {
+    id: 75,
+    featured_image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784376743/stories/1784376742890-African%20Masai%20culture.jpg'
+  }
+]
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:52:25.496Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:55:53.966Z - 127.0.0.1 - GET /api/advertisements
+2026-07-25T17:55:54.033Z - 127.0.0.1 - GET /api/stories/77/comments
+2026-07-25T17:55:54.044Z - 127.0.0.1 - GET /api/stories/77/likes
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:55:54.239Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:55:54.415Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T17:55:54.563Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T18:01:51.448Z - 127.0.0.1 - GET /api/advertisements
+Error: getaddrinfo ENOTFOUND gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+    at file:///Users/macbook/Downloads/web%201/trendorabay/backend/routes/advertisements.js:51:31
+    at Layer.handle [as handle_request] (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:175:3)
+    at router (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:47:12)
+2026-07-25T18:01:51.466Z - 127.0.0.1 - GET /api/advertisements
+Error: getaddrinfo ENOTFOUND gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+    at file:///Users/macbook/Downloads/web%201/trendorabay/backend/routes/advertisements.js:51:31
+    at Layer.handle [as handle_request] (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:175:3)
+    at router (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:47:12)
+2026-07-25T18:01:51.486Z - 127.0.0.1 - GET /api/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+2026-07-25T18:01:51.491Z - 127.0.0.1 - GET /api/advertisements
+Error: getaddrinfo ENOTFOUND gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+    at file:///Users/macbook/Downloads/web%201/trendorabay/backend/routes/stories.js:420:39
+    at Layer.handle [as handle_request] (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/route.js:149:13)
+    at file:///Users/macbook/Downloads/web%201/trendorabay/backend/middleware/cacheMiddleware.js:35:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Error: getaddrinfo ENOTFOUND gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+    at file:///Users/macbook/Downloads/web%201/trendorabay/backend/routes/advertisements.js:51:31
+    at Layer.handle [as handle_request] (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:175:3)
+    at router (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:47:12)
+2026-07-25T18:01:51.506Z - 127.0.0.1 - GET /api/advertisements
+Error: getaddrinfo ENOTFOUND gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+    at file:///Users/macbook/Downloads/web%201/trendorabay/backend/routes/advertisements.js:51:31
+    at Layer.handle [as handle_request] (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:175:3)
+    at router (/Users/macbook/Downloads/web 1/trendorabay/backend/node_modules/express/lib/router/index.js:47:12)
+2026-07-25T18:02:09.813Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T18:02:15.729Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T18:02:15.902Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T18:02:16.478Z - 127.0.0.1 - GET /api/advertisements
+Raw advertisements from database: [
+  {
+    id: 30001,
+    title: 'ad',
+    advertiser_name: 'kingslesly geo',
+    campaign_name: 'one year',
+    image_url: 'https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png',
+    mobile_image_url: '',
+    dark_image_url: null,
+    destination_url: 'trendorabay.com',
+    location: 'top-banner',
+    priority: 1,
+    rotation: 1,
+    active: 1,
+    start_date: 2026-07-13T21:00:00.000Z,
+    end_date: 2027-07-13T21:00:00.000Z,
+    budget: '5000.00',
+    impressions: 0,
+    clicks: 0,
+    created_at: 2026-07-14T09:47:02.000Z,
+    updated_at: 2026-07-17T03:08:36.000Z
+  }
+]
+Ad ID 30001: Original URL: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png -> Transformed: https://res.cloudinary.com/z8oenh6r/image/upload/v1784033186/advertisements/1784033186031-ChatGPT%20Image%20Jul%208%2C%202026%20at%2008_18_26%20PM.png
+2026-07-25T18:04:53.819Z - 127.0.0.1 - GET /api/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+2026-07-25T18:05:26.354Z - 127.0.0.1 - GET /api/v1/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+2026-07-25T18:07:01.022Z - 127.0.0.1 - GET /api/v1/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+2026-07-25T18:16:05.702Z - 127.0.0.1 - GET /api/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+2026-07-25T18:16:08.488Z - 127.0.0.1 - GET /api/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+2026-07-25T18:16:09.830Z - 127.0.0.1 - GET /api/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+2026-07-25T18:16:11.055Z - 127.0.0.1 - GET /api/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine
+2026-07-25T18:16:12.351Z - 127.0.0.1 - GET /api/stories/the-future-of-health-why-prevention-is-becoming-the-most-powerful-medicine

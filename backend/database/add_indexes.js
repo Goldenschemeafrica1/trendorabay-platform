@@ -11,6 +11,9 @@ const addIndexes = async () => {
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'trendorabay',
+      ssl: process.env.DB_SSL === 'true' ? {
+        rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false'
+      } : false
     });
 
     console.log('Adding performance indexes...');
@@ -24,6 +27,7 @@ const addIndexes = async () => {
       'CREATE INDEX idx_stories_published_at ON stories(published_at)',
       'CREATE INDEX idx_stories_created_at ON stories(created_at)',
       'CREATE INDEX idx_stories_status_featured ON stories(status, featured)',
+      'CREATE INDEX idx_stories_slug ON stories(slug)',
       
       // Podcasts table indexes
       'CREATE INDEX idx_podcasts_status ON podcasts(status)',
@@ -40,6 +44,7 @@ const addIndexes = async () => {
       
       // Magazines table indexes
       'CREATE INDEX idx_magazines_created_at ON magazines(created_at)',
+      'CREATE INDEX idx_magazines_slug ON magazines(slug)',
       
       // Contributor follows table indexes
       'CREATE INDEX idx_contributor_follows_contributor_id ON contributor_follows(contributor_id)',

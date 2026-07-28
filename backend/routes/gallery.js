@@ -2,6 +2,7 @@ import express from 'express';
 import pool from '../config/database.js';
 import { cache } from '../middleware/cacheMiddleware.js';
 import auth from '../middleware/auth.js';
+import { getTableStatus } from '../config/tableValidator.js';
 
 const router = express.Router();
 
@@ -188,13 +189,8 @@ router.post('/:id/like', auth, async (req, res, next) => {
 // Get likes count for a gallery item
 router.get('/:id/likes', async (req, res, next) => {
   try {
-    // Check if gallery_likes table exists
-    const [tableCheck] = await pool.query(
-      "SHOW TABLES LIKE 'gallery_likes'"
-    );
-
-    if (tableCheck.length === 0) {
-      // Table doesn't exist, return 0
+    // Use cached table existence check
+    if (!getTableStatus('gallery_likes')) {
       return res.json({ success: true, likes: 0 });
     }
 

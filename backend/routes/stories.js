@@ -3,6 +3,7 @@ import pool from '../config/database.js';
 import { cache } from '../middleware/cacheMiddleware.js';
 import { cachePatterns } from '../middleware/cacheMiddleware.js';
 import auth from '../middleware/auth.js';
+import { getTableStatus } from '../config/tableValidator.js';
 
 const router = express.Router();
 
@@ -177,7 +178,7 @@ router.get('/', cache(300), async (req, res, next) => {
     console.log('Stories pagination calculated');
 
     let query = `
-      SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+      SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.tags, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
       FROM stories s
       LEFT JOIN authors a ON s.author_id = a.id
       LEFT JOIN categories c ON s.category_id = c.id
@@ -405,7 +406,7 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     
     if (isNumeric) {
       [rows] = await pool.query(
-        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.tags, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          WHERE s.id = ?`,
@@ -414,7 +415,7 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     } else {
       // Fast lookup by stored slug column
       [rows] = await pool.query(
-        `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.tags, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          WHERE s.slug = ?`,
@@ -424,7 +425,7 @@ router.get('/:slug', cache(300), async (req, res, next) => {
       // Fallback to generated title slugs for legacy rows without a stored slug
       if (rows.length === 0) {
         const [allStories] = await pool.query(
-          `SELECT s.*, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+          `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.tags, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
            FROM stories s
            LEFT JOIN authors a ON s.author_id = a.id`
         );
@@ -746,13 +747,8 @@ router.post('/:id/like', auth, async (req, res, next) => {
 // Get likes count for a story
 router.get('/:id/likes', async (req, res, next) => {
   try {
-    // Check if likes table exists
-    const [tableCheck] = await pool.query(
-      "SHOW TABLES LIKE 'likes'"
-    );
-
-    if (tableCheck.length === 0) {
-      // Table doesn't exist, return 0
+    // Use cached table existence check
+    if (!getTableStatus('likes')) {
       return res.json({ success: true, likes: 0 });
     }
 
@@ -763,7 +759,7 @@ router.get('/:id/likes', async (req, res, next) => {
     res.json({ success: true, likes: likes[0].count });
   } catch (error) {
     console.error('Error fetching likes:', error);
-    res.json({ success: true, likes: 0 }); // Return 0 instead of error
+    res.json({ success: true, likes: 0 });
   }
 });
 
@@ -774,12 +770,8 @@ router.post('/:id/comments', auth, async (req, res, next) => {
     const { content, parent_id } = req.body;
     const story_id = req.params.id;
 
-    // Check if comments table exists
-    const [tableCheck] = await pool.query(
-      "SHOW TABLES LIKE 'comments'"
-    );
-
-    if (tableCheck.length === 0) {
+    // Use cached table existence check
+    if (!getTableStatus('comments')) {
       return res.status(500).json({ success: false, error: 'Comments table does not exist' });
     }
 
@@ -807,13 +799,8 @@ router.post('/:id/comments', auth, async (req, res, next) => {
 // Get comments for a story
 router.get('/:id/comments', async (req, res, next) => {
   try {
-    // Check if comments table exists
-    const [tableCheck] = await pool.query(
-      "SHOW TABLES LIKE 'comments'"
-    );
-
-    if (tableCheck.length === 0) {
-      // Table doesn't exist, return empty array
+    // Use cached table existence check
+    if (!getTableStatus('comments')) {
       return res.json({ success: true, data: [] });
     }
 
@@ -828,7 +815,7 @@ router.get('/:id/comments', async (req, res, next) => {
     res.json({ success: true, data: comments });
   } catch (error) {
     console.error('Error fetching comments:', error);
-    res.json({ success: true, data: [] }); // Return empty array instead of error
+    res.json({ success: true, data: [] });
   }
 });
 

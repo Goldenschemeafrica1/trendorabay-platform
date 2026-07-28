@@ -6,6 +6,7 @@ import compression from 'compression';
 import { testConnection } from './config/database.js';
 import pool from './config/database.js';
 import { getRedisClient } from './config/redis.js';
+import { validateTablesAtStartup } from './config/tableValidator.js';
 import { corsMiddleware } from './middleware/cors.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { securityMiddleware } from './middleware/security.js';
@@ -331,6 +332,8 @@ const startServer = async () => {
     if (!dbConnected) {
       console.warn('Warning: Database connection failed. Server will start but database operations will fail.');
     } else {
+      // Validate all required tables at startup
+      await validateTablesAtStartup();
       // Create tables if they don't exist
       await createInquiriesTable();
     }
