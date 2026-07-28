@@ -89,11 +89,11 @@ router.get('/', cache(300), async (req, res, next) => {
 
     console.log('Magazines API called');
 
-    let query = `SELECT * FROM magazines`;
+    let query = `SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines`;
     const params = [];
 
     if (category) {
-      query += ` WHERE category = ?`;
+      query += ` WHERE category_id = ?`;
       params.push(category);
     }
 
@@ -105,8 +105,10 @@ router.get('/', cache(300), async (req, res, next) => {
     }
 
     console.log('Executing magazines query');
+    console.log('Query:', query);
+    console.log('Params:', params);
     const [rows] = await pool.query(query, params);
-    console.log('Query returned successfully');
+    console.log('Query returned successfully, rows:', rows.length);
     if (rows.length > 0) {
       console.log('Sample row data retrieved');
     }
@@ -131,11 +133,11 @@ router.get('/', cache(300), async (req, res, next) => {
         id: magazine.id,
         slug,
         title: magazine.title,
-        category: magazine.category,
-        coverImage: getImageUrl(magazine.cover_image || magazine.cover_image_url),
+        category: magazine.category_id,
+        coverImage: getImageUrl(magazine.cover_image_url),
         pdfUrl: getImageUrl(magazine.pdf_url),
         previewPages: magazine.preview_pages,
-        published: magazine.published,
+        published: magazine.published_date,
         description: magazine.description,
         createdAt: magazine.created_at,
         rating: 4.5, // Default rating
@@ -159,7 +161,7 @@ router.get('/search', async (req, res, next) => {
     const offset = (page - 1) * limit;
     
     const [rows] = await pool.query(
-      'SELECT * FROM magazines WHERE title LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      'SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines WHERE title LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
       [`%${q}%`, limit, offset]
     );
     // Always return 200 with data array (empty if no results)
@@ -177,7 +179,7 @@ router.get('/category/:category', async (req, res, next) => {
     const offset = (page - 1) * limit;
     
     const [rows] = await pool.query(
-      'SELECT * FROM magazines WHERE category = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      'SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines WHERE category_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
       [req.params.category, limit, offset]
     );
     res.json({ success: true, data: rows });
@@ -191,7 +193,7 @@ router.get('/featured', async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
     const [rows] = await pool.query(
-      'SELECT * FROM magazines ORDER BY created_at DESC LIMIT ?',
+      'SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines ORDER BY created_at DESC LIMIT ?',
       [limit]
     );
     res.json({ success: true, data: rows });
@@ -209,10 +211,10 @@ router.get('/:slug', async (req, res, next) => {
     let rows;
     
     if (isNumeric) {
-      [rows] = await pool.query('SELECT * FROM magazines WHERE id = ?', [param]);
+      [rows] = await pool.query('SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines WHERE id = ?', [param]);
     } else {
       // Try to find by matching slug against generated title slugs
-      const [allMagazines] = await pool.query('SELECT * FROM magazines');
+      const [allMagazines] = await pool.query('SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines');
       rows = allMagazines.filter(mag => {
         const generatedSlug = mag.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(mag.id);
         return generatedSlug === param;
@@ -376,12 +378,12 @@ router.post('/', async (req, res, next) => {
   try {
     const { title, cover_image_url, category_id, issue, pdf_url, cover_image, category } = req.body;
     const [result] = await pool.query(
-      `INSERT INTO magazines (title, cover_image, category, issue_number, pdf_url) 
+      `INSERT INTO magazines (title, cover_image_url, category_id, issue, pdf_url) 
        VALUES (?, ?, ?, ?, ?)`,
       [title, cover_image_url || cover_image, category_id || category, issue, pdf_url]
     );
     const [newMagazine] = await pool.query(
-      'SELECT * FROM magazines WHERE id = ?',
+      'SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines WHERE id = ?',
       [result.insertId]
     );
     res.status(201).json({ success: true, data: newMagazine[0] });
@@ -396,12 +398,12 @@ router.put('/:id', async (req, res, next) => {
     const { title, cover_image_url, category_id, issue, pdf_url, cover_image, category } = req.body;
     await pool.query(
       `UPDATE magazines 
-       SET title = ?, cover_image = ?, category = ?, issue_number = ?, pdf_url = ?
+       SET title = ?, cover_image_url = ?, category_id = ?, issue = ?, pdf_url = ?
        WHERE id = ?`,
       [title, cover_image_url || cover_image, category_id || category, issue, pdf_url, req.params.id]
     );
     const [updated] = await pool.query(
-      'SELECT * FROM magazines WHERE id = ?',
+      'SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines WHERE id = ?',
       [req.params.id]
     );
     res.json({ success: true, data: updated[0] });
