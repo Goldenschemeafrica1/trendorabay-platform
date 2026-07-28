@@ -153,6 +153,7 @@ export const createSlug = (text) => {
   return text
     .toLowerCase()
     .trim()
+    .replace(/[:?!]/g, '') // Remove colons, question marks, exclamation marks
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '');
