@@ -14,8 +14,7 @@ async function runSlugMigration() {
     // Update existing stories to generate slugs from titles
     const [result] = await pool.query(`
       UPDATE stories 
-      SET slug = LOWER(TRIM(REPLACE(REPLACE(REPLACE(title, ' ', '-'), '/', '-'), '_', '-')))
-      WHERE slug IS NULL OR slug = ''
+      SET slug = LOWER(TRIM(REPLACE(REPLACE(REPLACE(REPLACE(title, ':', ''), '?', ''), '!', ''), ' ', '-')))
     `);
     console.log(`✓ Updated ${result.affectedRows} stories with slugs`);
     

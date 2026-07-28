@@ -178,7 +178,7 @@ router.get('/', cache(300), async (req, res, next) => {
     console.log('Stories pagination calculated');
 
     let query = `
-      SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.tags, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+      SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
       FROM stories s
       LEFT JOIN authors a ON s.author_id = a.id
       LEFT JOIN categories c ON s.category_id = c.id
@@ -406,7 +406,7 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     
     if (isNumeric) {
       [rows] = await pool.query(
-        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.tags, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          WHERE s.id = ?`,
@@ -415,7 +415,7 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     } else {
       // Fast lookup by stored slug column
       [rows] = await pool.query(
-        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.tags, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          WHERE s.slug = ?`,

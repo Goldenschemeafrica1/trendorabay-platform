@@ -1,5 +1,6 @@
 export const errorHandler = (err, req, res, next) => {
-  console.error(err.stack);
+  console.error('Error details:', err.message);
+  console.error('Error stack:', err.stack);
 
   if (err.name === 'ValidationError') {
     return res.status(400).json({
