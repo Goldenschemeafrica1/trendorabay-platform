@@ -421,20 +421,6 @@ router.get('/:slug', cache(300), async (req, res, next) => {
          WHERE s.slug = ?`,
         [param]
       );
-
-      // Fallback to generated title slugs for legacy rows without a stored slug
-      if (rows.length === 0) {
-        const [allStories] = await pool.query(
-          `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.tags, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
-           FROM stories s
-           LEFT JOIN authors a ON s.author_id = a.id`
-        );
-        rows = allStories.filter(story => {
-          const cleanTitle = story.title?.trim() || '';
-          const generatedSlug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
-          return generatedSlug === param;
-        });
-      }
     }
     
     if (rows.length === 0) {
