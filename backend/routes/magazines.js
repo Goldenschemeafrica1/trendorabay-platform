@@ -130,9 +130,7 @@ router.get('/', cache(300), async (req, res, next) => {
         previewPages: magazine.preview_pages,
         published: magazine.published_date,
         description: magazine.description,
-        createdAt: magazine.created_at,
-        rating: 4.5, // Default rating
-        reviewCount: 10 // Default review count
+        createdAt: magazine.created_at
       };
     });
 
@@ -306,8 +304,6 @@ router.get('/:slug', cache(300), async (req, res, next) => {
       pages: rows[0].pages || 100,
       language: rows[0].language || 'English',
       publisher: rows[0].publisher || 'Trendorabay',
-      rating: rows[0].rating || 4.5,
-      reviewCount: rows[0].review_count || 0,
       tableOfContents: parseTableOfContents(rows[0].table_of_contents),
       contributors: magazineContributors,
       reviews: rows[0].reviews,
