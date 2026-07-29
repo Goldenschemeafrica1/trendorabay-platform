@@ -87,8 +87,6 @@ router.get('/', cache(300), async (req, res, next) => {
     const limit = parseInt(req.query.limit) || null;
     const category = req.query.category || null;
 
-    console.log('Magazines API called');
-
     let query = `SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines`;
     const params = [];
 
@@ -104,14 +102,7 @@ router.get('/', cache(300), async (req, res, next) => {
       params.push(limit);
     }
 
-    console.log('Executing magazines query');
-    console.log('Query:', query);
-    console.log('Params:', params);
     const [rows] = await pool.query(query, params);
-    console.log('Query returned successfully, rows:', rows.length);
-    if (rows.length > 0) {
-      console.log('Sample row data retrieved');
-    }
 
     // Helper function to get image URL
     const getImageUrl = (url) => {
@@ -153,7 +144,7 @@ router.get('/', cache(300), async (req, res, next) => {
 });
 
 // Search magazines
-router.get('/search', async (req, res, next) => {
+router.get('/search', cache(60), async (req, res, next) => {
   try {
     const { q } = req.query;
     const page = parseInt(req.query.page) || 1;
@@ -172,7 +163,7 @@ router.get('/search', async (req, res, next) => {
 });
 
 // Get magazines by category
-router.get('/category/:category', async (req, res, next) => {
+router.get('/category/:category', cache(300), async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
@@ -189,7 +180,7 @@ router.get('/category/:category', async (req, res, next) => {
 });
 
 // Get featured magazines
-router.get('/featured', async (req, res, next) => {
+router.get('/featured', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
     const [rows] = await pool.query(
@@ -203,7 +194,7 @@ router.get('/featured', async (req, res, next) => {
 });
 
 // Get magazine by slug or ID
-router.get('/:slug', async (req, res, next) => {
+router.get('/:slug', cache(300), async (req, res, next) => {
   try {
     const param = req.params.slug;
     const isNumeric = /^\d+$/.test(param);
@@ -213,12 +204,17 @@ router.get('/:slug', async (req, res, next) => {
     if (isNumeric) {
       [rows] = await pool.query('SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines WHERE id = ?', [param]);
     } else {
-      // Try to find by matching slug against generated title slugs
-      const [allMagazines] = await pool.query('SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines');
-      rows = allMagazines.filter(mag => {
-        const generatedSlug = mag.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(mag.id);
-        return generatedSlug === param;
-      });
+      // Fast lookup by slug column first
+      [rows] = await pool.query('SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines WHERE slug = ?', [param]);
+      
+      // Fallback to title-based slug generation if not found
+      if (rows.length === 0) {
+        const [allMagazines] = await pool.query('SELECT id, slug, title, category_id, cover_image_url, pdf_url, preview_pages, published_date, description, created_at, updated_at, price, digital_price, print_price, subscription_price, pages, language, publisher, rating, review_count, table_of_contents, contributors, reviews, publish_date, issue FROM magazines WHERE slug IS NULL OR slug = "" LIMIT 100');
+        rows = allMagazines.filter(mag => {
+          const generatedSlug = mag.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(mag.id);
+          return generatedSlug === param;
+        });
+      }
     }
     
     if (rows.length === 0) {
@@ -326,7 +322,7 @@ router.get('/:slug', async (req, res, next) => {
 });
 
 // Get magazine categories
-router.get('/categories', async (req, res, next) => {
+router.get('/categories', cache(600), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT DISTINCT category FROM magazines WHERE category IS NOT NULL ORDER BY category'
@@ -339,7 +335,7 @@ router.get('/categories', async (req, res, next) => {
 });
 
 // Get subscription options
-router.get('/subscriptions', async (req, res, next) => {
+router.get('/subscriptions', cache(600), async (req, res, next) => {
   try {
     // Mock subscription data - in production, this would come from a subscriptions table
     const subscriptions = [

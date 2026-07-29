@@ -30,9 +30,6 @@ router.get('/', cache(300), async (req, res, next) => {
 
     const [rows] = await pool.query(query, params);
 
-    // Log actual image URLs from database for debugging
-    console.log('Sample podcast image URLs from database:', rows.slice(0, 3).map(r => ({ id: r.id, cover_art_url: r.cover_art_url, series: r.series, title: r.title })));
-
     // Map podcast titles/guests to actual image files in frontend public folder
     const podcastImageMap = {
       'kandanda': '/music.jpeg',
@@ -133,7 +130,7 @@ router.get('/', cache(300), async (req, res, next) => {
 });
 
 // Get podcast by ID
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, plays, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE id = ?',
@@ -327,7 +324,7 @@ router.patch('/:id/plays', async (req, res, next) => {
 });
 
 // Get all series
-router.get('/series/list', async (req, res, next) => {
+router.get('/series/list', cache(600), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT DISTINCT series FROM podcasts WHERE series IS NOT NULL ORDER BY series'
@@ -340,7 +337,7 @@ router.get('/series/list', async (req, res, next) => {
 });
 
 // Get trending podcasts
-router.get('/trending/list', async (req, res, next) => {
+router.get('/trending/list', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     const [rows] = await pool.query(
@@ -354,7 +351,7 @@ router.get('/trending/list', async (req, res, next) => {
 });
 
 // Get published podcasts
-router.get('/published/list', async (req, res, next) => {
+router.get('/published/list', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 20;
     const [rows] = await pool.query(

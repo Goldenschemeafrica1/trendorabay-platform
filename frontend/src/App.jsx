@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Analytics } from '@vercel/analytics/react';
+import api from './services/api';
 
 // Layout Components
 import Advert from './components/Advert';
@@ -123,6 +124,45 @@ function App() {
       document.body.style.overflow = 'unset';
     };
   }, [isDrawerOpen]);
+
+  // Handle visibility change - refresh data when user returns to tab
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // Clear cache when user returns to ensure fresh data
+        if (typeof api.clearCache === 'function') {
+          api.clearCache();
+        }
+        console.log('Tab became visible, cache cleared for fresh data');
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  // Preload critical data for instant first load
+  useEffect(() => {
+    const preloadCriticalData = async () => {
+      try {
+        // Preload magazines
+        await api.get('/magazines?limit=6');
+        // Preload featured stories
+        await api.get('/stories/homepage');
+        // Preload latest stories
+        await api.get('/stories/latest?limit=10');
+        console.log('Critical data preloaded for instant first load');
+      } catch (error) {
+        console.log('Preload failed, will load on demand:', error.message);
+      }
+    };
+
+    // Start preloading immediately
+    preloadCriticalData();
+  }, []);
 
   return (
     <div className="app">

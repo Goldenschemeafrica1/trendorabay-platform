@@ -19,10 +19,9 @@ export const getRedisClient = async () => {
     redisClient = null;
   }
 
-  // Enable Redis in production for caching
-  if (process.env.NODE_ENV === 'production' && process.env.ENABLE_REDIS !== 'true') {
-    console.log('⚠️  Redis disabled in production - caching will not work optimally');
-    console.log('   Set ENABLE_REDIS=true in .env to enable Redis caching for better performance');
+  // Enable Redis in production for caching (enabled by default)
+  if (process.env.NODE_ENV === 'production' && process.env.ENABLE_REDIS === 'false') {
+    console.log('⚠️  Redis explicitly disabled in production - caching will not work optimally');
     isRedisAvailable = false;
     return null;
   }

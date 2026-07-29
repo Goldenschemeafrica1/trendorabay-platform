@@ -59,10 +59,7 @@ router.get('/', cache(300), async (req, res, next) => {
     query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
     params.push(parseInt(limit), offset);
     
-    console.log('Executing products query');
-    
     const [rows] = await pool.query(query, params);
-    console.log('Products fetched successfully');
     
     // Transform image URLs to serve CMS uploads
     const transformed = rows.map(product => ({
@@ -78,7 +75,7 @@ router.get('/', cache(300), async (req, res, next) => {
 });
 
 // Search products
-router.get('/search', async (req, res, next) => {
+router.get('/search', cache(60), async (req, res, next) => {
   try {
     const { q } = req.query;
     const page = parseInt(req.query.page) || 1;
@@ -177,7 +174,7 @@ router.get('/categories', cache(600), async (req, res, next) => {
 });
 
 // Get product options
-router.get('/:id/options', async (req, res, next) => {
+router.get('/:id/options', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT sizes, stock FROM products WHERE id = ?',
@@ -195,7 +192,7 @@ router.get('/:id/options', async (req, res, next) => {
 });
 
 // Check product availability
-router.get('/:id/availability', async (req, res, next) => {
+router.get('/:id/availability', cache(60), async (req, res, next) => {
   try {
     const { size, color } = req.query;
     const [rows] = await pool.query(
@@ -214,7 +211,7 @@ router.get('/:id/availability', async (req, res, next) => {
 });
 
 // Get related products
-router.get('/:id/related', async (req, res, next) => {
+router.get('/:id/related', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 4;
     const [product] = await pool.query(

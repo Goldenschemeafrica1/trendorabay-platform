@@ -209,11 +209,7 @@ router.get('/', cache(300), async (req, res, next) => {
     query += ' ORDER BY s.created_at DESC LIMIT ? OFFSET ?';
     params.push(parseInt(limit), offset);
 
-    console.log('Executing stories query');
-
     const [rows] = await pool.query(query, params);
-
-    console.log('Stories fetched successfully');
 
     // Map categories to actual image files in frontend public folder
     const categoryImageMap = {
@@ -506,7 +502,7 @@ router.get('/:slug', cache(300), async (req, res, next) => {
 });
 
 // Get story categories
-router.get('/categories', async (req, res, next) => {
+router.get('/categories', cache(600), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT DISTINCT category FROM stories WHERE category IS NOT NULL ORDER BY category'
@@ -519,7 +515,7 @@ router.get('/categories', async (req, res, next) => {
 });
 
 // Get authors
-router.get('/authors', async (req, res, next) => {
+router.get('/authors', cache(300), async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
@@ -536,7 +532,7 @@ router.get('/authors', async (req, res, next) => {
 });
 
 // Get author by ID
-router.get('/authors/:authorId', async (req, res, next) => {
+router.get('/authors/:authorId', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT * FROM authors WHERE id = ?',
@@ -552,7 +548,7 @@ router.get('/authors/:authorId', async (req, res, next) => {
 });
 
 // Get popular stories
-router.get('/popular', async (req, res, next) => {
+router.get('/popular', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
     const [rows] = await pool.query(
@@ -571,7 +567,7 @@ router.get('/popular', async (req, res, next) => {
 });
 
 // Get stories by category
-router.get('/category/:category', async (req, res, next) => {
+router.get('/category/:category', cache(300), async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
@@ -593,7 +589,7 @@ router.get('/category/:category', async (req, res, next) => {
 });
 
 // Get stories by author
-router.get('/author/:authorId', async (req, res, next) => {
+router.get('/author/:authorId', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       `SELECT s.*, a.name as author_name 
