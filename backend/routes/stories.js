@@ -337,13 +337,13 @@ router.get('/search', cache(60), async (req, res, next) => {
 // Get latest stories
 router.get('/latest', cache(300), async (req, res, next) => {
   try {
-    const limit = req.query.limit || 10;
+    const limit = parseInt(req.query.limit) || 10;
     const [rows] = await pool.query(
-      `SELECT s.*, a.name as author_name 
-       FROM stories s 
-       LEFT JOIN authors a ON s.author_id = a.id 
+      `SELECT s.*, a.name as author_name
+       FROM stories s
+       LEFT JOIN authors a ON s.author_id = a.id
        WHERE s.status = 'published'
-       ORDER BY s.created_at DESC 
+       ORDER BY s.created_at DESC
        LIMIT ?`,
       [limit]
     );
