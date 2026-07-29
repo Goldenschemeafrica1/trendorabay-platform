@@ -347,7 +347,37 @@ body.dark-mode .scroll-indicator-right {
 }
 
 .rating-number {
-  display: none;
+  display: none !important;
+}
+
+/* Hide any potential rating number displays */
+.category-rating .rating-number,
+.category-rating span[class*="rating"],
+.category-rating span[class*="number"],
+.category-rating span[class*="count"],
+.magazine-details .rating-number,
+.magazine-details span[class*="rating"],
+.magazine-details span[class*="number"],
+.magazine-details span[class*="count"] {
+  display: none !important;
+}
+
+/* Hide any direct text nodes or spans within category-rating that aren't star containers */
+.category-rating > span:not(.star-container),
+.category-rating > text,
+.category-rating::after,
+.category-rating::before {
+  display: none !important;
+}
+
+/* Hide any numeric content within category-rating */
+.category-rating *:not(.star-container):not(.star-container *) {
+  display: none !important;
+}
+
+/* Only show star containers within category-rating */
+.category-rating .star-container {
+  display: block !important;
 }
 
 .meta-item {
@@ -523,6 +553,7 @@ body.dark-mode .scroll-indicator-right {
 
   .rating-number {
     font-size: 10px !important;
+    display: none;
   }
 }
 
@@ -579,6 +610,7 @@ body.dark-mode .scroll-indicator-right {
 
   .rating-number {
     font-size: 9px !important;
+    display: none;
   }
 
 }
@@ -680,6 +712,7 @@ body.dark-mode .scroll-indicator-right {
   .rating-number {
     font-size: 8px !important;
     margin-left: 4px;
+    display: none;
   }
   
 }
@@ -780,6 +813,7 @@ body.dark-mode .scroll-indicator-right {
     font-size: 6px !important;
     margin-left: 3px;
     top: -1px;
+    display: none;
   }
 
   .badge {
@@ -884,6 +918,7 @@ body.dark-mode .scroll-indicator-right {
     font-size: 5px !important;
     margin-left: 2px;
     top: -1px;
+    display: none;
   }
 
   .badge {

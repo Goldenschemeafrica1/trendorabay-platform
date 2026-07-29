@@ -64,7 +64,59 @@ const LatestMagazines = ({ limit = 8, showViewAll = true, category }) => {
     toast.info(`Preview feature coming soon for ${magazine.title}`);
   };
 
-  
+  // Remove any numeric rating content from DOM
+  useEffect(() => {
+    const removeRatingNumbers = () => {
+      // Debug: log magazine data
+      console.log('Magazines data:', magazines);
+
+      // Clean category-rating containers
+      const ratingContainers = document.querySelectorAll('.category-rating');
+      ratingContainers.forEach(container => {
+        // Remove any text nodes or spans that contain numbers
+        Array.from(container.childNodes).forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            node.remove();
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            const text = node.textContent || '';
+            if (/^\d+(\.\d+)?$/.test(text.trim()) && !node.classList.contains('star-container')) {
+              node.remove();
+            }
+          }
+        });
+      });
+
+      // Clean magazine-category elements for any numeric suffixes
+      const categoryElements = document.querySelectorAll('.magazine-category');
+      categoryElements.forEach(element => {
+        const text = element.textContent || '';
+        console.log('Category text before:', text);
+        // Remove any numeric values from the category text
+        const cleanedText = text.replace(/\s*\d+(\.\d+)?\s*/g, '').replace(/\s*\(\d+\)\s*/g, '').replace(/\s*\/\s*\d+(\.\d+)?\s*/g, '').trim();
+        console.log('Category text after:', cleanedText);
+        if (cleanedText !== text) {
+          element.textContent = cleanedText;
+        }
+      });
+
+      // Clean magazine-details for any numeric content
+      const detailsElements = document.querySelectorAll('.magazine-details');
+      detailsElements.forEach(element => {
+        const text = element.textContent || '';
+        console.log('Details text:', text);
+      });
+    };
+
+    // Run immediately and after a short delay to catch dynamically added content
+    removeRatingNumbers();
+    const timeout = setTimeout(removeRatingNumbers, 100);
+    const interval = setInterval(removeRatingNumbers, 500);
+
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
+  }, [magazines]);
 
   return (
     <section className="latest-magazines">
