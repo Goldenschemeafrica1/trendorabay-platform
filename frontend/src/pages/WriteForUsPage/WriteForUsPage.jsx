@@ -26,9 +26,9 @@ const WriteForUsPage = () => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState('pitch');
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const topicsOptions = [
     'Startups & Entrepreneurship',
@@ -118,12 +118,17 @@ const WriteForUsPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (isSubmitting || isSubmitted) {
+      return;
+    }
+    
     if (!validateForm()) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     
     setIsSubmitting(true);
+    setIsSubmitted(true);
     
     try {
       await pitchService.submitPitch({
@@ -141,7 +146,6 @@ const WriteForUsPage = () => {
       }, formData.articleAttachment);
       
       setIsSubmitting(false);
-      setSubmitSuccess(true);
       setShowSuccessPopup(true);
       
       // Reset form after successful submission
@@ -166,12 +170,13 @@ const WriteForUsPage = () => {
           experience: '',
           agreeToTerms: false
         });
-        setSubmitSuccess(false);
+        setIsSubmitted(false);
         setShowSuccessPopup(false);
       }, 5000);
     } catch (error) {
       console.error('Error submitting pitch:', error);
       setIsSubmitting(false);
+      setIsSubmitted(false);
       alert('Failed to submit pitch. Please try again.');
     }
   };
