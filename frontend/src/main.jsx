@@ -19,9 +19,12 @@ document.head.appendChild(fontLink);
 // Register service worker for offline caching and instant loading
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    const swVersion = '?v=3'; // Cache-busting version
+    navigator.serviceWorker.register('/sw.js' + swVersion)
       .then((registration) => {
         console.log('Service Worker registered with scope:', registration.scope);
+        // Force update check
+        registration.update();
       })
       .catch((error) => {
         console.log('Service Worker registration failed:', error);
