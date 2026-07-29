@@ -1,4 +1,4 @@
-const CACHE_NAME = 'trendorabay-v1';
+const CACHE_NAME = 'trendorabay-v2';
 const urlsToCache = [
   '/',
   '/magazines',
