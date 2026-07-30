@@ -165,7 +165,11 @@ const FeaturedStories = () => {
                   // Sports & Business stories with image on top
                   <>
                     <div className="side-story-image-wrapper">
-                      <img src={story.image || '/logo.jpeg'} alt={story.title || 'Story'} loading="lazy" className="side-story-image" onError={(e) => { e.target.src = '/logo.jpeg'; }} />
+                      {story.image ? (
+                        <img src={story.image} alt={story.title || 'Story'} loading="lazy" className="side-story-image" onError={(e) => { e.target.src = '/logo.jpeg'; }} />
+                      ) : (
+                        <div className="image-placeholder"></div>
+                      )}
                       <span className={`side-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'SPORTS' ? 'sports-category' : ''}`}>{story.category || 'CATEGORY'}</span>
                     </div>
 
@@ -190,7 +194,11 @@ const FeaturedStories = () => {
                   // Regular side story layout
                   <>
                     <div className="side-story-image-wrapper">
-                      <img src={story.image || '/logo.jpeg'} alt={story.title || 'Story'} onError={(e) => { e.target.src = '/logo.jpeg'; }} loading="lazy" className="side-story-image" />
+                      {story.image ? (
+                        <img src={story.image} alt={story.title || 'Story'} onError={(e) => { e.target.src = '/logo.jpeg'; }} loading="lazy" className="side-story-image" />
+                      ) : (
+                        <div className="image-placeholder"></div>
+                      )}
                       <span className="side-story-category">{story.category || 'CATEGORY'}</span>
                     </div>
 
@@ -222,15 +230,19 @@ const FeaturedStories = () => {
             <Link to={`/stories/${featuredStories[3]?.slug}`}>
               <article className="main-story-card">
                 <div className="main-story-image-wrapper">
-                  <img
-                    src={featuredStories[3]?.image || '/logo.jpeg'}
-                    alt={featuredStories[3]?.title || 'Cover Story'}
-                    loading="lazy"
-                    className="main-story-image"
-                    onError={(e) => {
-                      e.target.src = '/logo.jpeg';
-                    }}
-                  />
+                  {featuredStories[3]?.image ? (
+                    <img
+                      src={featuredStories[3]?.image}
+                      alt={featuredStories[3]?.title || 'Cover Story'}
+                      loading="lazy"
+                      className="main-story-image"
+                      onError={(e) => {
+                        e.target.src = '/logo.jpeg';
+                      }}
+                    />
+                  ) : (
+                    <div className="image-placeholder main-placeholder"></div>
+                  )}
 
                   {/* HOT TOPIC Badge - Desktop */}
                   <div className="hot-topic-badge desktop-hot-topic-badge">HOT TOPIC</div>
@@ -251,12 +263,16 @@ const FeaturedStories = () => {
                 <Link to={`/stories/${featuredStories.find(story => story.category === 'SPORTS')?.slug}`}>
                   <article className="mobile-sports-card">
                     <div className="mobile-sports-image-wrapper">
-                      <img 
-                        src={featuredStories.find(story => story.category === 'SPORTS')?.image || '/logo.jpeg'} 
-                        alt={featuredStories.find(story => story.category === 'SPORTS')?.title || 'Sports Story'} 
-                        loading="lazy" 
-                        className="mobile-sports-image" 
-                      />
+                      {featuredStories.find(story => story.category === 'SPORTS')?.image ? (
+                        <img 
+                          src={featuredStories.find(story => story.category === 'SPORTS')?.image} 
+                          alt={featuredStories.find(story => story.category === 'SPORTS')?.title || 'Sports Story'} 
+                          loading="lazy" 
+                          className="mobile-sports-image" 
+                        />
+                      ) : (
+                        <div className="image-placeholder"></div>
+                      )}
                       <span className="mobile-sports-category">SPORTS</span>
                     </div>
                     <div className="mobile-sports-content">
@@ -278,12 +294,16 @@ const FeaturedStories = () => {
                 <Link to={`/stories/${featuredStories.find(story => story.category === 'BUSINESS')?.slug}`}>
                   <article className="mobile-business-card">
                     <div className="mobile-business-image-wrapper">
-                      <img 
-                        src={featuredStories.find(story => story.category === 'BUSINESS')?.image || '/logo.jpeg'} 
-                        alt={featuredStories.find(story => story.category === 'BUSINESS')?.title || 'Business Story'} 
-                        loading="lazy" 
-                        className="mobile-business-image" 
-                      />
+                      {featuredStories.find(story => story.category === 'BUSINESS')?.image ? (
+                        <img 
+                          src={featuredStories.find(story => story.category === 'BUSINESS')?.image} 
+                          alt={featuredStories.find(story => story.category === 'BUSINESS')?.title || 'Business Story'} 
+                          loading="lazy" 
+                          className="mobile-business-image" 
+                        />
+                      ) : (
+                        <div className="image-placeholder"></div>
+                      )}
                       <span className="mobile-business-category">BUSINESS</span>
                     </div>
                     <div className="mobile-business-content">
@@ -332,7 +352,11 @@ const FeaturedStories = () => {
                       style={{ transitionDelay: `${index * 0.1}s` }}
                     >
                     <div className="horizontal-story-image-wrapper">
-                      <img src={story.image || '/logo.jpeg'} alt={story.title || 'Story'} onError={(e) => { e.target.src = '/logo.jpeg'; }} loading="lazy" className="horizontal-story-image" />
+                      {story.image ? (
+                        <img src={story.image} alt={story.title || 'Story'} onError={(e) => { e.target.src = '/logo.jpeg'; }} loading="lazy" className="horizontal-story-image" />
+                      ) : (
+                        <div className="image-placeholder"></div>
+                      )}
                       <span className={`horizontal-story-category ${story.category === 'BUSINESS' ? 'business-category' : ''} ${story.category === 'TECHNOLOGY' ? 'business-category' : ''} ${story.category === 'TRAVEL' ? 'travel-category' : ''} ${story.category === 'FOOD' ? 'food-category' : ''} ${story.category === 'MUSIC' ? 'music-category' : ''}`}>{story.category}</span>
                     </div>
                     <div className="horizontal-story-content">
