@@ -43,7 +43,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: false, // Disable credentials for cross-origin requests
+  withCredentials: true, // Enable credentials to send httpOnly cookies
 });
 
 // Request interceptor
@@ -66,11 +66,7 @@ api.interceptors.request.use(
       }
     }
 
-    // Automatically add Authorization header if token exists
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // Token is now sent via httpOnly cookie, no need for Authorization header
     return config;
   },
   (error) => {
@@ -93,51 +89,14 @@ api.interceptors.response.use(
 
     // Handle 401 errors - token expired
     if (error.response?.status === 401 && !originalRequest._retry) {
-      if (isRefreshing) {
-        // If already refreshing, wait for the refresh to complete
-        return new Promise((resolve, reject) => {
-          subscribeTokenRefresh((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            resolve(api(originalRequest));
-          });
-        });
-      }
-
       originalRequest._retry = true;
-      isRefreshing = true;
 
-      try {
-        // Attempt to refresh token by calling login endpoint with stored credentials
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        if (user.email) {
-          // For simplicity, we'll clear the session and redirect to login
-          // In a full implementation, you'd have a refresh token endpoint
-          console.log('Token expired, redirecting to login for re-authentication');
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          
-          if (window.location.pathname !== '/login') {
-            window.location.href = '/login';
-          }
-        } else {
-          // No user data, clear session
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          
-          if (window.location.pathname !== '/login') {
-            window.location.href = '/login';
-          }
-        }
-      } catch (refreshError) {
-        console.error('Token refresh failed:', refreshError);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
-        }
-      } finally {
-        isRefreshing = false;
+      // Token is in httpOnly cookie, clear user data and redirect to login
+      console.log('Token expired, redirecting to login for re-authentication');
+      localStorage.removeItem('user');
+      
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
       }
     }
 

@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import { testConnection } from './config/database.js';
 import pool from './config/database.js';
 import { getRedisClient } from './config/redis.js';
@@ -69,6 +70,9 @@ app.use(metricsMiddleware);
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Cookie parsing middleware
+app.use(cookieParser());
 
 // Input sanitization
 app.use(sanitizeInput);

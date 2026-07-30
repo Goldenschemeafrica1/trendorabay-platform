@@ -60,9 +60,8 @@ const LoginPage = () => {
       });
       
       if (response.data.success) {
-        // Save user data and token to localStorage
+        // Save user data to localStorage (token is now in httpOnly cookie)
         localStorage.setItem('user', JSON.stringify(response.data.data.user));
-        localStorage.setItem('token', response.data.data.token);
         
         // Redirect to profile or home
         navigate('/');

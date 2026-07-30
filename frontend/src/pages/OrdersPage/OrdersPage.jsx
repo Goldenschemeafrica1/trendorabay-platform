@@ -53,17 +53,14 @@ const OrdersPage = () => {
     const fetchOrders = async () => {
       try {
         const userData = JSON.parse(localStorage.getItem('user') || '{}');
-        const token = localStorage.getItem('token');
         
-        if (!userData.id || !token) {
+        if (!userData.id) {
           navigate('/login');
           return;
         }
 
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/orders/user/${userData.id}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          credentials: 'include'
         });
         
         if (response.status === 401) {

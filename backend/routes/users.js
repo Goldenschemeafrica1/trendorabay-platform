@@ -136,8 +136,32 @@ router.post('/register', redisAuthLimiter, async (req, res, next) => {
 
     console.log('User inserted successfully');
 
+    // Generate JWT token for auto-login after registration
+    if (!process.env.JWT_SECRET) {
+      console.error('CRITICAL: JWT_SECRET not set in environment variables. Cannot generate authentication token.');
+      return res.status(500).json({
+        success: false,
+        error: 'Server configuration error: JWT secret not configured'
+      });
+    }
+
+    const token = jwt.sign(
+      { userId: result.insertId, email: normalizedEmail, role: 'user' },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE || '30d' }
+    );
+
+    // Set httpOnly cookie with JWT token
+    const isProduction = process.env.NODE_ENV === 'production';
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'strict' : 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      path: '/'
+    });
+
     // Return success immediately after successful insertion
-    // Don't fetch user data to avoid potential errors
     res.status(201).json({
       success: true,
       data: {
@@ -279,11 +303,20 @@ router.post('/login', redisAuthLimiter, async (req, res, next) => {
     // Remove password from response
     const { password: _, ...userWithoutPassword } = user;
 
+    // Set httpOnly cookie with JWT token
+    const isProduction = process.env.NODE_ENV === 'production';
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'strict' : 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      path: '/'
+    });
+
     res.json({
       success: true,
       data: {
-        user: userWithoutPassword,
-        token
+        user: userWithoutPassword
       }
     });
   } catch (error) {
@@ -292,6 +325,30 @@ router.post('/login', redisAuthLimiter, async (req, res, next) => {
       success: false,
       error: 'Login failed',
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// Logout user
+router.post('/logout', (req, res) => {
+  try {
+    // Clear the httpOnly cookie
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      path: '/'
+    });
+
+    res.json({
+      success: true,
+      message: 'Logged out successfully'
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Logout failed'
     });
   }
 });

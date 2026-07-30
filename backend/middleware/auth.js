@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken';
 
 const auth = (req, res, next) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    // Try to get token from httpOnly cookie first, fallback to Authorization header
+    const token = req.cookies?.token || req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
       return res.status(401).json({

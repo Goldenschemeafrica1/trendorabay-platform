@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import { toggleTheme } from '../store/slices/uiSlice';
 import './styles/Header.css';
 
@@ -64,12 +65,21 @@ const Header = () => {
   }, []);
 
   // Handle logout
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    setUser(null);
-    setShowProfileDropdown(false);
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint to clear httpOnly cookie
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/users/logout`, {}, {
+        withCredentials: true
+      });
+    } catch (error) {
+      console.error('Logout API call failed:', error);
+    } finally {
+      // Clear user data from localStorage regardless of API call result
+      localStorage.removeItem('user');
+      setUser(null);
+      setShowProfileDropdown(false);
+      navigate('/');
+    }
   };
 
   // Handle theme toggle

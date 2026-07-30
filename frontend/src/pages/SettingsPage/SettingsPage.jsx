@@ -38,18 +38,16 @@ const SettingsPage = () => {
     // Load user data from API
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
         
-        if (!token) {
-          console.log('No token found, user not authenticated');
+        if (!user) {
+          console.log('No user found, user not authenticated');
           setLoading(false);
           return;
         }
 
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/users/profile`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          credentials: 'include'
         });
 
         if (!response.ok) {
@@ -125,8 +123,6 @@ const SettingsPage = () => {
 
   const handleSave = async (section) => {
     try {
-      const token = localStorage.getItem('token');
-      
       if (section === 'account') {
         const formData = new FormData();
         formData.append('first_name', accountSettings.firstName);
@@ -139,9 +135,7 @@ const SettingsPage = () => {
         
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/users/profile`, {
           method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
+          credentials: 'include',
           body: formData
         });
         

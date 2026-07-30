@@ -109,9 +109,12 @@ const SignupPage = () => {
 
       // Check if response exists and has success property (axios wraps in data)
       if (response?.data?.success === true) {
-        toast.success('Account created successfully! Redirecting to login...');
+        // Save user data to localStorage (token is now in httpOnly cookie)
+        localStorage.setItem('user', JSON.stringify(response.data.data));
+        
+        toast.success('Account created successfully! Redirecting to home...');
         setTimeout(() => {
-          navigate('/login');
+          navigate('/');
         }, 1500);
       } else {
         console.log('Registration failed, response:', response);
