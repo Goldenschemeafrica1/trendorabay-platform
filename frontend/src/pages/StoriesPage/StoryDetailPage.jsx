@@ -462,12 +462,12 @@ const StoryDetailPage = () => {
                 {advertisement.image_url || advertisement.mobile_image_url ? (
                   <a href={advertisement.link_url || advertisement.destination_url || '#'} target="_blank" rel="noopener noreferrer">
                     <img
-                      src={advertisement.image_url || advertisement.mobile_image_url || '/images/story-placeholder.jpg'}
+                      src={advertisement.image_url || advertisement.mobile_image_url || '/logo.jpeg'}
                       alt={advertisement.title || 'Advertisement'}
                       className="ad-image"
                       onError={(e) => {
                         console.error('Story detail ad image failed to load:', advertisement.image_url);
-                        e.target.src = '/images/story-placeholder.jpg';
+                        e.target.src = '/logo.jpeg';
                       }}
                       onLoad={() => {
                         console.log('Story detail ad image loaded successfully:', advertisement.image_url);

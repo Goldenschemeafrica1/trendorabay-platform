@@ -28,10 +28,10 @@ const StoryCard = ({
     <article className={`story-card ${compact ? 'compact' : ''}`}>
       <div className="story-image">
         <img 
-          src={story.imageUrl || story.image || '/images/story-placeholder.jpg'} 
+          src={story.imageUrl || story.image || '/logo.jpeg'} 
           alt={story.title}
           onError={(e) => {
-            e.target.src = '/images/story-placeholder.jpg';
+            e.target.src = '/logo.jpeg';
           }}
         />
         {showCategory && (story.categoryName || story.category) && (
