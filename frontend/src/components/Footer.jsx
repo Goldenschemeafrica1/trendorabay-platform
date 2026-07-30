@@ -167,8 +167,10 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="container">
           <div className="bottom-bar-content">
-            <div className="social-links">
-              {socialLinks.map((social) => (
+            <div className="social-section">
+              <h4 className="social-title">Follow Us</h4>
+              <div className="social-links">
+                {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.url}
@@ -215,6 +217,7 @@ const Footer = () => {
                   )}
                 </a>
               ))}
+            </div>
             </div>
             <div className="bottom-bar-links">
               <Link to="/contact">Contact</Link>

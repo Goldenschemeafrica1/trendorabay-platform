@@ -294,6 +294,23 @@
 }
 
 /* Social Links */
+.social-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.social-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .social-links {
   display: flex;
   gap: 0.6rem;
