@@ -1,307 +1,610 @@
-# Contributing Guidelines
+# Contributing to Trendorabay
 
-Thank you for your interest in contributing to the Trendorabay Platform! This document provides guidelines and instructions for contributing to the project.
+Thank you for contributing to the **Trendorabay Platform**.
+
+Trendorabay is a **proprietary company digital media platform**. Contributions are made by authorized developers, employees, contractors, and other approved contributors working on behalf of or with permission from the company.
+
+This document explains the development workflow, coding expectations, testing practices, pull request process, security requirements, and contribution guidelines.
+
+> **Important:** This is a private company project. Repository access does not grant permission to copy, publish, distribute, sublicense, or reuse the source code outside authorized company activities.
+
+---
 
 ## Table of Contents
 
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Workflow](#development-workflow)
-- [Pull Request Process](#pull-request-process)
-- [Coding Standards](#coding-standards)
-- [Testing Guidelines](#testing-guidelines)
-- [Documentation](#documentation)
-- [Reporting Issues](#reporting-issues)
-- [Feature Requests](#feature-requests)
+* [Code of Conduct](#code-of-conduct)
+* [Getting Started](#getting-started)
+* [Development Workflow](#development-workflow)
+* [Branching Strategy](#branching-strategy)
+* [Commit Message Guidelines](#commit-message-guidelines)
+* [Pull Request Process](#pull-request-process)
+* [Coding Standards](#coding-standards)
+* [Testing Guidelines](#testing-guidelines)
+* [Security Guidelines](#security-guidelines)
+* [Database Changes](#database-changes)
+* [Documentation](#documentation)
+* [Reporting Issues](#reporting-issues)
+* [Feature Requests](#feature-requests)
+* [Questions and Discussions](#questions-and-discussions)
+* [Recognition](#recognition)
+* [Proprietary Software and Contributions](#proprietary-software-and-contributions)
 
-## Code of Conduct
+---
 
-### Our Pledge
+# Code of Conduct
 
-We are committed to providing a welcoming and inclusive environment for all contributors. Please be respectful and constructive in all interactions.
+## Our Pledge
 
-### Our Standards
+We are committed to maintaining a professional, respectful, and collaborative development environment.
 
-- Use welcoming and inclusive language
-- Be respectful of different viewpoints and experiences
-- Gracefully accept constructive criticism
-- Focus on what is best for the community
-- Show empathy towards other community members
+All contributors are expected to communicate professionally and treat other team members and contributors with respect.
 
-### Unacceptable Behavior
+## Our Standards
 
-- Harassment, derogatory comments, or personal attacks
-- Trolling or insulting/derogatory comments
-- Public or private harassment
-- Publishing others' private information without permission
-- Other unethical or unprofessional conduct
+Contributors should:
 
-### Reporting Issues
+* Use respectful and professional language
+* Accept constructive feedback
+* Give constructive feedback
+* Respect different technical perspectives
+* Communicate clearly
+* Document important decisions
+* Raise concerns early
+* Help maintain a positive development environment
 
-If you encounter any unacceptable behavior, please contact the project maintainers immediately.
+## Unacceptable Behavior
 
-## Getting Started
+The following behavior is not acceptable:
 
-### Prerequisites
+* Harassment
+* Personal attacks
+* Discrimination
+* Threatening behavior
+* Deliberately disruptive conduct
+* Sharing private or confidential information without authorization
+* Unauthorized access to systems or data
+* Deliberate damage to company systems
+* Other unethical or unprofessional conduct
 
-Before contributing, ensure you have:
+Concerns should be reported privately to the project lead or appropriate company representative.
 
-- Node.js v16 or higher installed
-- MySQL v8.0 or higher installed
-- Git installed and configured
-- A GitHub account
-- Basic knowledge of JavaScript, React, and Node.js
+---
 
-### Setting Up Development Environment
+# Getting Started
 
-1. **Fork the Repository**
-   - Go to the repository on GitHub
-   - Click the "Fork" button in the top right corner
+## Repository Access
 
-2. **Clone Your Fork**
-   ```bash
-   git clone https://github.com/your-username/trendorabay.git
-   cd trendorabay
-   ```
+Trendorabay is maintained in a private company repository.
 
-3. **Add Upstream Remote**
-   ```bash
-   git remote add upstream https://github.com/original-owner/trendorabay.git
-   ```
+Before contributing, make sure you have:
 
-4. **Install Dependencies**
-   ```bash
-   # Backend
-   cd backend
-   npm install
-   
-   # Frontend
-   cd ../frontend
-   npm install
-   ```
+* Authorized repository access
+* Access to the required development resources
+* Node.js installed
+* MySQL installed
+* Git installed and configured
+* Access to required project documentation
+* Appropriate local development configuration
 
-5. **Configure Environment Variables**
-   ```bash
-   # Backend
-   cd backend
-   cp .env.example .env
-   # Edit .env with your configuration
-   
-   # Frontend
-   cd ../frontend
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
+Repository access is provided only to authorized contributors.
 
-6. **Set Up Database**
-   ```bash
-   cd backend
-   mysql -u root -p < config/schema.sql
-   node database/run_migration.js
-   ```
+Do not share repository credentials or access with unauthorized individuals.
 
-7. **Start Development Servers**
-   ```bash
-   # Terminal 1 - Backend
-   cd backend
-   npm run dev
-   
-   # Terminal 2 - Frontend
-   cd frontend
-   npm run dev
-   ```
+---
 
-## Development Workflow
+## Prerequisites
 
-### Branch Strategy
+Recommended development environment:
 
-We use a Git branching model to manage development:
+* Node.js 16+
+* npm or Yarn
+* MySQL 8+
+* Git
+* Redis where required
+* Modern web browser
+* GitHub account with authorized repository access
 
-- **main**: Production-ready code
-- **develop**: Integration branch for features
-- **feature/***: New features
-- **bugfix/***: Bug fixes
-- **hotfix/***: Emergency production fixes
+Check the project README and installation documentation for the currently supported versions.
 
-### Creating a Feature Branch
+---
 
-1. **Ensure your develop branch is up to date**
-   ```bash
-   git checkout develop
-   git pull upstream develop
-   ```
+# Setting Up the Development Environment
 
-2. **Create a new feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+## 1. Clone the Repository
 
-3. **Make your changes**
-   - Write code following our coding standards
-   - Test your changes thoroughly
-   - Update documentation if needed
+Because the repository is private, contributors should clone the company repository using their authorized GitHub access.
 
-4. **Commit your changes**
-   ```bash
-   git add .
-   git commit -m "feat: add your feature description"
-   ```
-
-### Commit Message Guidelines
-
-Follow [Conventional Commits](https://www.conventionalcommits.org/) specification:
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
+```bash
+git clone <company-repository-url>
+cd trendorabay-platform
 ```
 
-**Types**:
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes (formatting, etc.)
-- `refactor`: Code refactoring
-- `perf`: Performance improvements
-- `test`: Adding or updating tests
-- `chore`: Maintenance tasks
-- `ci`: CI/CD changes
+Do not create or publish unauthorized public copies of the repository.
 
-**Examples**:
+---
+
+## 2. Install Dependencies
+
+### Backend
+
+```bash
+cd backend
+npm install
 ```
+
+### Frontend
+
+```bash
+cd ../frontend
+npm install
+```
+
+---
+
+## 3. Configure Environment Variables
+
+Create local environment files from the provided examples.
+
+### Backend
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+### Frontend
+
+```bash
+cd ../frontend
+cp .env.example .env
+```
+
+Configure the values required for your local environment.
+
+Example backend configuration:
+
+```env
+PORT=3001
+NODE_ENV=development
+
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_local_database_password
+DB_NAME=trendorabay
+
+FRONTEND_URL=http://localhost:5173
+
+JWT_SECRET=your_local_development_secret
+
+REDIS_URL=redis://localhost:6379
+```
+
+Never commit:
+
+```text
+.env
+.env.local
+.env.production
+```
+
+Never commit:
+
+* Production credentials
+* Database passwords
+* API keys
+* JWT secrets
+* Private keys
+* Access tokens
+* Payment credentials
+* Cloud credentials
+* Third-party service credentials
+
+Each developer should use appropriate local development credentials.
+
+---
+
+## 4. Set Up the Database
+
+Use the project's database schema and migration process.
+
+```bash
+cd backend
+mysql -u root -p < config/schema.sql
+```
+
+If migrations are configured:
+
+```bash
+node database/run_migration.js
+```
+
+Do not connect local development directly to production databases unless explicitly authorized.
+
+Do not use production data in local development unless specifically approved and handled according to company security requirements.
+
+---
+
+## 5. Start the Development Servers
+
+### Backend
+
+```bash
+cd backend
+npm run dev
+```
+
+The backend normally runs on:
+
+```text
+http://localhost:3001
+```
+
+Health check:
+
+```text
+http://localhost:3001/api/health
+```
+
+### Frontend
+
+In another terminal:
+
+```bash
+cd frontend
+npm run dev
+```
+
+The frontend normally runs on:
+
+```text
+http://localhost:5173
+```
+
+---
+
+# Development Workflow
+
+Contributions should follow the project's standard development workflow:
+
+```text
+Task / Issue
+     ↓
+Understand Requirements
+     ↓
+Discuss Significant Changes
+     ↓
+Create Branch
+     ↓
+Implement
+     ↓
+Test
+     ↓
+Self Review
+     ↓
+Push Branch
+     ↓
+Pull Request
+     ↓
+Code Review
+     ↓
+Address Feedback
+     ↓
+Approval
+     ↓
+Merge
+```
+
+---
+
+# Branching Strategy
+
+Do not develop directly on protected branches unless specifically authorized.
+
+Recommended branch naming:
+
+```text
+feature/<description>
+fix/<description>
+refactor/<description>
+docs/<description>
+test/<description>
+chore/<description>
+hotfix/<description>
+```
+
+Examples:
+
+```text
+feature/podcast-search
+feature/creator-profiles
+fix/cart-total
+fix/authentication-error
+docs/api-authentication
+test/user-registration
+refactor/api-response-handler
+```
+
+---
+
+## Creating a Branch
+
+Make sure your base branch is current:
+
+```bash
+git checkout main
+git pull origin main
+```
+
+Create your branch:
+
+```bash
+git checkout -b feature/your-feature-name
+```
+
+Make your changes, test them, and commit them.
+
+---
+
+# Commit Message Guidelines
+
+Use clear and descriptive commit messages.
+
+Recommended format:
+
+```text
+<type>(<scope>): <description>
+```
+
+Examples:
+
+```text
 feat(auth): add user registration
-
 fix(magazines): resolve pagination bug
-
 docs(api): update authentication documentation
-
-style(components): format code with prettier
+test(users): add registration tests
+refactor(api): simplify response handling
 ```
 
-## Pull Request Process
+Common commit types:
 
-### Before Submitting a PR
+* `feat` — New feature
+* `fix` — Bug fix
+* `docs` — Documentation
+* `style` — Formatting/style changes
+* `refactor` — Code restructuring
+* `perf` — Performance improvements
+* `test` — Tests
+* `chore` — Maintenance
+* `ci` — CI/CD changes
 
-1. **Update your branch**
-   ```bash
-   git checkout develop
-   git pull upstream develop
-   git checkout feature/your-feature-name
-   git rebase develop
-   ```
+Avoid vague messages such as:
 
-2. **Run tests**
-   ```bash
-   # Frontend tests
-   cd frontend
-   npm test
-   
-   # Backend tests (when implemented)
-   cd backend
-   npm test
-   ```
+```text
+fix
+changes
+update
+stuff
+work
+final
+```
 
-3. **Check code style**
-   ```bash
-   # Frontend linting
-   cd frontend
-   npm run lint
-   
-   # Backend linting (when configured)
-   cd backend
-   npm run lint
-   ```
+---
 
-4. **Build the project**
-   ```bash
-   # Frontend build
-   cd frontend
-   npm run build
-   ```
+# Pull Request Process
 
-### Submitting a Pull Request
+## Before Opening a Pull Request
 
-1. **Push your branch**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
+Update your branch:
 
-2. **Create Pull Request**
-   - Go to your fork on GitHub
-   - Click "New Pull Request"
-   - Select your feature branch
-   - Base: `develop` branch
-   - Click "Create Pull Request"
+```bash
+git fetch origin
+git rebase origin/main
+```
 
-3. **Fill in PR Template**
-   ```markdown
-   ## Description
-   Brief description of changes
-   
-   ## Type of Change
-   - [ ] Bug fix
-   - [ ] New feature
-   - [ ] Breaking change
-   - [ ] Documentation update
-   
-   ## Testing
-   Describe how you tested your changes
-   
-   ## Checklist
-   - [ ] Code follows project style guidelines
-   - [ ] Tests pass locally
-   - [ ] Documentation updated
-   - [ ] No merge conflicts
-   ```
+Resolve conflicts carefully and run tests after resolving conflicts.
 
-### PR Review Process
+---
 
-1. **Automated Checks**
-   - CI/CD pipeline runs tests
-   - Code style checks
-   - Build verification
+## Run Tests
 
-2. **Code Review**
-   - Maintainers review your code
-   - Feedback provided via comments
-   - Address review feedback
+### Frontend
 
-3. **Approval and Merge**
-   - At least one maintainer approval required
-   - No unresolved conflicts
-   - All checks must pass
+```bash
+cd frontend
+npm test
+```
 
-4. **Merge**
-   - Squash and merge preferred
-   - Commit message standardized
-   - Branch deleted after merge
+For a single test run:
 
-## Coding Standards
+```bash
+npm run test:run
+```
 
-### JavaScript/Node.js (Backend)
+For coverage:
 
-#### Code Style
+```bash
+npm run test:coverage
+```
 
-- Use ES6+ features
-- Use `const` and `let`, avoid `var`
-- Use arrow functions for callbacks
-- Use template literals
-- Use async/await for asynchronous code
-- Follow Prettier configuration
+### Backend
 
-#### Example
+If backend tests are configured:
+
+```bash
+cd backend
+npm test
+```
+
+---
+
+## Run Linting
+
+Frontend:
+
+```bash
+cd frontend
+npm run lint
+```
+
+Backend:
+
+```bash
+cd backend
+npm run lint
+```
+
+Run only commands that are configured in the project.
+
+---
+
+## Build the Frontend
+
+```bash
+cd frontend
+npm run build
+```
+
+Make sure the production build completes successfully before submitting significant frontend changes.
+
+---
+
+# Submitting a Pull Request
+
+Push your branch:
+
+```bash
+git push origin feature/your-feature-name
+```
+
+Open a Pull Request against the appropriate protected branch.
+
+Your PR should clearly explain:
+
+### Description
+
+What changed?
+
+### Reason
+
+Why was the change necessary?
+
+### Testing
+
+How was the change tested?
+
+### Additional Changes
+
+Mention any:
+
+* Database changes
+* API changes
+* Environment variable changes
+* Dependency changes
+* Breaking changes
+* Deployment requirements
+* Security considerations
+
+### Screenshots
+
+For UI changes, include screenshots where useful.
+
+---
+
+## Pull Request Checklist
+
+```markdown
+## Description
+
+Describe the changes.
+
+## Type of Change
+
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Refactoring
+- [ ] Documentation
+- [ ] Testing
+- [ ] Performance
+- [ ] Security
+- [ ] Breaking change
+
+## Testing
+
+Describe how the changes were tested.
+
+## Checklist
+
+- [ ] Code follows project conventions
+- [ ] Tests pass locally
+- [ ] Linting passes
+- [ ] Build succeeds where applicable
+- [ ] Documentation updated where necessary
+- [ ] Database changes documented
+- [ ] Environment changes documented
+- [ ] No secrets committed
+- [ ] No unrelated changes included
+```
+
+---
+
+# Pull Request Review Process
+
+## 1. Automated Checks
+
+Where configured, CI/CD may run:
+
+* Tests
+* Linting
+* Build verification
+* Security checks
+* Dependency checks
+
+## 2. Code Review
+
+Reviewers may evaluate:
+
+* Correctness
+* Security
+* Maintainability
+* Performance
+* Testing
+* Architecture
+* API design
+* Database impact
+* Accessibility
+* User experience
+
+## 3. Address Feedback
+
+Contributors should respond to review comments and update their branch when changes are requested.
+
+## 4. Approval
+
+Required approvals depend on repository branch protection and company development policies.
+
+## 5. Merge
+
+Only authorized contributors should merge changes into protected branches.
+
+---
+
+# Coding Standards
+
+## JavaScript / Node.js
+
+Use modern JavaScript practices.
+
+Prefer:
 
 ```javascript
-// Good
 const getUserById = async (userId) => {
   try {
     const [rows] = await pool.query(
       'SELECT * FROM users WHERE id = ?',
       [userId]
     );
+
     return rows[0];
   } catch (error) {
     console.error('Error fetching user:', error);
@@ -310,40 +613,40 @@ const getUserById = async (userId) => {
 };
 ```
 
-#### Error Handling
+Guidelines:
 
-Always handle errors appropriately:
+* Use `const` and `let`
+* Avoid `var`
+* Use `async/await` for asynchronous operations
+* Use parameterized database queries
+* Validate external input
+* Handle errors appropriately
+* Avoid unnecessary dependencies
+* Follow the project's formatting configuration
+
+---
+
+# React Standards
+
+## Component Structure
+
+Prefer focused, reusable components.
+
+Example:
 
 ```javascript
-try {
-  const result = await someOperation();
-  return result;
-} catch (error) {
-  console.error('Operation failed:', error);
-  throw new Error('Operation failed');
-}
-```
-
-### React (Frontend)
-
-#### Component Structure
-
-```javascript
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const MyComponent = ({ prop1, prop2 }) => {
-  const [state, setState] = useState(initialValue);
-  
+  const [state, setState] = useState(null);
+
   useEffect(() => {
     // Side effects
-    return () => {
-      // Cleanup
-    };
-  }, [dependencies]);
+  }, []);
 
   return (
     <div className="my-component">
-      {/* JSX */}
+      {/* Component content */}
     </div>
   );
 };
@@ -351,25 +654,96 @@ const MyComponent = ({ prop1, prop2 }) => {
 export default MyComponent;
 ```
 
-#### Hooks Usage
+## Hooks
 
-- Use `useState` for local state
-- Use `useEffect` for side effects
-- Use `useSelector` for Redux state
-- Use `useDispatch` for Redux actions
+Use hooks appropriately:
 
-#### Naming Conventions
+* `useState` for local state
+* `useEffect` for side effects
+* `useSelector` for Redux state
+* `useDispatch` for Redux actions
 
-- Components: PascalCase (`MyComponent`)
-- Functions: camelCase (`getUserData`)
-- Constants: UPPER_SNAKE_CASE (`API_BASE_URL`)
-- Files: kebab-case (`my-component.jsx`)
+Avoid unnecessary global state.
 
-## Testing Guidelines
+---
 
-### Frontend Testing
+# Naming Conventions
 
-#### Unit Tests
+Components:
+
+```text
+MyComponent
+UserProfile
+PodcastCard
+```
+
+Functions:
+
+```text
+getUserData
+createPodcast
+handleSubmit
+```
+
+Constants:
+
+```text
+API_BASE_URL
+MAX_UPLOAD_SIZE
+DEFAULT_PAGE_SIZE
+```
+
+Use the existing project naming conventions for files and folders.
+
+---
+
+# Backend Guidelines
+
+Backend contributions should:
+
+* Validate request input
+* Verify authentication
+* Verify authorization
+* Use parameterized database queries
+* Return appropriate HTTP status codes
+* Avoid exposing sensitive information
+* Handle errors consistently
+* Keep business logic organized
+* Consider API performance
+* Update API documentation when endpoints change
+
+Never bypass authentication or authorization controls simply to make development easier.
+
+---
+
+# Database Guidelines
+
+Before changing the database:
+
+* Understand existing relationships
+* Review affected queries
+* Consider indexes and performance
+* Consider backward compatibility
+* Document schema changes
+* Use migrations where supported
+* Avoid destructive changes without approval
+
+Never modify production data directly unless explicitly authorized.
+
+---
+
+# Testing Guidelines
+
+Testing should be included with new functionality whenever practical.
+
+## Frontend
+
+Current frontend testing may use:
+
+* Vitest
+* React Testing Library
+
+Example:
 
 ```javascript
 import { render, screen } from '@testing-library/react';
@@ -378,179 +752,409 @@ import MyComponent from '../MyComponent';
 describe('MyComponent', () => {
   test('renders correctly', () => {
     render(<MyComponent />);
-    expect(screen.getByText('Expected Text')).toBeInTheDocument();
+
+    expect(
+      screen.getByText('Expected Text')
+    ).toBeInTheDocument();
   });
 });
 ```
 
-#### Running Tests
+Run:
 
 ```bash
 cd frontend
-npm test              # Watch mode
-npm run test:run      # Run once
-npm run test:coverage # With coverage
+npm test
 ```
-
-### Backend Testing
-
-Currently, backend tests are not configured. This is an area for enhancement.
-
-#### Setting Up Tests
-
-```bash
-cd backend
-npm install --save-dev jest supertest
-```
-
-## Documentation
-
-### When to Update Documentation
-
-Update documentation when you:
-- Add new features
-- Change existing functionality
-- Modify API endpoints
-- Update database schema
-- Change configuration options
-- Fix bugs that affect users
-
-### Documentation Files
-
-- **README.md**: Project overview and quick start
-- **INSTALLATION.md**: Setup instructions
-- **API_REFERENCE.md**: API documentation
-- **DATABASE_SCHEMA.md**: Database documentation
-- **ARCHITECTURE.md**: System architecture
-- **DEPLOYMENT.md**: Deployment guide
-- **DEVELOPMENT_GUIDE.md**: Development workflow
-- **CONTRIBUTING.md**: This file
-- **TROUBLESHOOTING.md**: Common issues and solutions
-
-### Code Comments
-
-- Add comments for complex logic
-- Document function parameters and return values
-- Explain non-obvious code
-- Keep comments up to date with code changes
-
-## Reporting Issues
-
-### Before Reporting
-
-1. **Search existing issues**
-   - Check if the issue has already been reported
-   - Add comments to existing issues if relevant
-
-2. **Gather information**
-   - Steps to reproduce
-   - Expected behavior
-   - Actual behavior
-   - Screenshots if applicable
-   - Environment details (OS, Node.js version, etc.)
-
-### Issue Report Template
-
-```markdown
-## Description
-Clear description of the issue
-
-## Steps to Reproduce
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
-
-## Expected Behavior
-What you expected to happen
-
-## Actual Behavior
-What actually happened
-
-## Screenshots
-If applicable, add screenshots
-
-## Environment
-- OS: [e.g., macOS, Windows, Linux]
-- Node.js version: [e.g., 18.0.0]
-- Browser: [e.g., Chrome, Firefox]
-
-## Additional Context
-Any other relevant information
-```
-
-## Feature Requests
-
-### Before Requesting
-
-1. **Check if feature already exists**
-   - Review existing functionality
-   - Check documentation
-
-2. **Search existing feature requests**
-   - Look for similar requests
-   - Add comments to existing requests
-
-### Feature Request Template
-
-```markdown
-## Feature Description
-Clear description of the desired feature
-
-## Problem Statement
-What problem does this feature solve?
-
-## Proposed Solution
-How should this feature work?
-
-## Alternatives Considered
-What alternatives did you consider?
-
-## Additional Context
-Any other relevant information
-```
-
-## Questions and Discussions
-
-### Getting Help
-
-- Check documentation first
-- Search existing issues and discussions
-- Create a new discussion for questions
-- Be specific and provide context
-
-### Discussion Guidelines
-
-- Use descriptive titles
-- Provide context and background
-- Be respectful of others' time
-- Follow up on your discussions
-
-## Recognition
-
-Contributors will be recognized in:
-- CONTRIBUTORS.md file
-- Release notes
-- Project documentation
-
-## License
-
-By contributing to this project, you agree that your contributions will be licensed under the project's license.
-
-## Contact
-
-For questions about contributing:
-- Open a GitHub discussion
-- Contact maintainers via email
-- Join our community chat (if available)
-
-## Additional Resources
-
-- [GitHub Flow](https://guides.github.com/introduction/flow/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
-- [React Documentation](https://react.dev/)
-- [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)
 
 ---
 
-Thank you for contributing to Trendorabay! Your contributions help make this project better for everyone.
+## Backend
+
+Backend automated testing is being expanded.
+
+Where appropriate, backend tests may cover:
+
+* API endpoints
+* Authentication
+* Authorization
+* Validation
+* Business logic
+* Database operations
+* Error handling
+* Integration behavior
+
+New backend functionality should include tests where practical.
+
+---
+
+# Bug Fixes
+
+Before fixing a bug:
+
+1. Reproduce the issue
+2. Identify the affected component/system
+3. Determine the likely cause
+4. Implement the smallest appropriate fix
+5. Test the fix
+6. Add a regression test where practical
+7. Update documentation if necessary
+
+A bug fix PR should explain:
+
+* What was broken
+* Why it happened
+* What was changed
+* How it was tested
+
+---
+
+# New Features
+
+Before implementing a significant feature:
+
+1. Understand the problem being solved
+2. Review existing functionality
+3. Check whether a similar feature already exists
+4. Discuss significant architectural changes
+5. Consider security implications
+6. Consider database/API changes
+7. Define the smallest practical implementation
+8. Implement and test
+9. Update documentation
+10. Submit a focused PR
+
+Large features should be divided into smaller, reviewable changes where practical.
+
+---
+
+# Security Guidelines
+
+Security is everyone's responsibility.
+
+Contributors must:
+
+* Protect credentials
+* Validate user input
+* Verify authentication
+* Verify authorization
+* Use secure database queries
+* Protect API endpoints
+* Keep dependencies updated
+* Follow existing security middleware
+* Avoid exposing sensitive information
+* Avoid committing secrets
+* Avoid unnecessary access to production systems
+* Avoid copying production data into development environments without authorization
+
+The platform may use security mechanisms including:
+
+* Helmet
+* CORS controls
+* Rate limiting
+* Input validation
+* Input sanitization
+* JWT authentication
+* File validation
+* Path traversal protection
+* DOMPurify
+* Secure environment configuration
+
+Do not disable security controls simply to bypass development problems.
+
+---
+
+# Do Not Commit Secrets
+
+Never commit:
+
+```text
+.env
+.env.local
+.env.production
+```
+
+or files containing:
+
+* Passwords
+* API keys
+* JWT secrets
+* Private keys
+* Access tokens
+* Database credentials
+* Payment credentials
+* Cloud credentials
+* Third-party service credentials
+
+If a secret is accidentally committed:
+
+1. Do not simply delete it from the latest commit
+2. Notify the appropriate project administrator immediately
+3. Treat the credential as compromised
+4. Rotate/revoke the credential where appropriate
+5. Follow the company's security response process
+
+---
+
+# Dependencies
+
+Before adding a dependency:
+
+* Check whether existing project functionality can solve the problem
+* Confirm the dependency is necessary
+* Check compatibility
+* Check maintenance status
+* Consider security implications
+* Consider bundle/runtime impact
+* Discuss significant dependencies with the project lead
+
+Avoid adding dependencies for functionality that can reasonably be implemented using existing project tools.
+
+---
+
+# Documentation
+
+Documentation should be updated when changes affect:
+
+* Features
+* APIs
+* Database schema
+* Environment variables
+* Installation
+* Configuration
+* Deployment
+* Architecture
+* Developer workflows
+* User-facing behavior
+
+Relevant documentation includes:
+
+* `README.md`
+* `INSTALLATION.md`
+* `API_REFERENCE.md`
+* `DATABASE_SCHEMA.md`
+* `ARCHITECTURE.md`
+* `DEPLOYMENT.md`
+* `DEVELOPMENT_GUIDE.md`
+* `CONTRIBUTING.md`
+* `TROUBLESHOOTING.md`
+
+---
+
+# Code Comments
+
+Comments should explain **why**, not merely repeat what the code does.
+
+Add comments for:
+
+* Complex logic
+* Important architectural decisions
+* Non-obvious workarounds
+* Security-sensitive behavior
+* Complex business rules
+
+Keep comments accurate as the code changes.
+
+---
+
+# Reporting Issues
+
+Before reporting an issue:
+
+1. Check existing issues
+2. Check the documentation
+3. Confirm the issue is reproducible
+4. Gather relevant environment information
+5. Provide clear reproduction steps
+
+## Issue Template
+
+```markdown
+## Description
+
+Describe the issue clearly.
+
+## Steps to Reproduce
+
+1. Go to '...'
+2. Perform '...'
+3. Observe '...'
+
+## Expected Behavior
+
+Describe what should happen.
+
+## Actual Behavior
+
+Describe what actually happens.
+
+## Environment
+
+- OS:
+- Node.js version:
+- Browser:
+- Frontend version/commit:
+- Backend version/commit:
+
+## Screenshots
+
+Add screenshots where applicable.
+
+## Additional Context
+
+Provide any additional relevant information.
+```
+
+---
+
+# Security Issues
+
+Do **not** publish sensitive security vulnerabilities in public issue trackers or discussions.
+
+Security-related issues should be reported privately through the company's approved security or project-management channel.
+
+Include enough information for the responsible team to reproduce and investigate the issue without exposing sensitive credentials, personal information, or production secrets.
+
+---
+
+# Feature Requests
+
+Before requesting a feature:
+
+1. Check whether the functionality already exists
+2. Review project documentation
+3. Search existing tasks/issues
+4. Explain the problem the feature would solve
+5. Describe the proposed behavior
+
+## Feature Request Template
+
+```markdown
+## Feature Description
+
+Describe the proposed feature.
+
+## Problem Statement
+
+What problem does this feature solve?
+
+## Proposed Solution
+
+Describe how the feature could work.
+
+## Alternatives Considered
+
+Describe alternatives that were considered.
+
+## Additional Context
+
+Add relevant screenshots, examples, or technical information.
+```
+
+---
+
+# Questions and Discussions
+
+Before asking a development question:
+
+1. Check the README
+2. Check the relevant documentation
+3. Search existing issues/discussions
+4. Review related code
+
+When asking a question, provide:
+
+* What you are trying to accomplish
+* What you expected
+* What happened
+* Relevant error messages
+* Relevant code or files
+* Steps already attempted
+
+Avoid sharing credentials, secrets, private customer information, or production data in discussions.
+
+---
+
+# Recognition
+
+Authorized contributors may be recognized through appropriate internal or project documentation, such as:
+
+* Contributor records
+* Release notes
+* Project documentation
+* Internal team recognition
+
+Recognition is subject to company policies and project practices.
+
+---
+
+# Proprietary Software and Contributions
+
+Trendorabay is proprietary company software.
+
+By contributing, you acknowledge that:
+
+* The repository is private
+* Source code and related materials are company property where applicable
+* Repository access does not grant ownership rights
+* Contributions do not automatically grant rights to reuse company source code
+* Proprietary code must not be published without authorization
+* Company confidential information must be protected
+* Contributions are subject to applicable employment, contractor, confidentiality, intellectual property, and company agreements
+* You must follow company security and access-control policies
+
+Where applicable, ownership and permitted use of work created for the company are governed by the contributor's employment or contractor agreement and applicable company policies.
+
+The project should use an appropriate proprietary license/notice reviewed and approved by the company.
+
+---
+
+# Development Checklist
+
+Before considering a task complete:
+
+```text
+[ ] Requirements understood
+[ ] Existing code reviewed
+[ ] Correct branch created
+[ ] Implementation completed
+[ ] Security considerations reviewed
+[ ] Tests added/updated where appropriate
+[ ] Tests passing
+[ ] Linting passing where configured
+[ ] Build passing where applicable
+[ ] Documentation updated
+[ ] No secrets committed
+[ ] No unnecessary dependencies added
+[ ] No unrelated changes included
+[ ] Self-review completed
+[ ] Pull Request created
+```
+
+---
+
+# Questions and Support
+
+For questions about:
+
+* Architecture
+* Backend
+* Frontend
+* Database
+* Authentication
+* Security
+* Deployment
+* Infrastructure
+* Repository access
+* Proprietary code
+* Production systems
+
+Contact the appropriate project lead or use the company's approved internal communication channels.
+
+---
+
+# Final Note
+
+Thank you for contributing to Trendorabay.
+
+**Build carefully. Review thoroughly. Test your work. Protect the platform.**
