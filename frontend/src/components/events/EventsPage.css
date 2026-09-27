@@ -377,11 +377,48 @@
   margin-top: 10px;
   display: flex;
   gap: 10px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
 .opp-actions .btn-secondary {
   font-size: 11px;
   padding: 8px 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.15s;
+  color: #111;
+  white-space: nowrap;
+}
+
+.opp-actions .btn-secondary:hover {
+  border-color: #111;
+  background: #f9f9f9;
+}
+
+.opp-actions .apply-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #111318;
+  color: #fff;
+  padding: 9px 15px;
+  border-radius: 8px;
+  font-weight: 900;
+  font-size: 12px;
+  transition: 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+  border: none;
+}
+
+.opp-actions .apply-link:hover {
+  background: #2a2d33;
+  transform: translateY(-1px);
 }
 
 /* ===== NO RESULTS ===== */

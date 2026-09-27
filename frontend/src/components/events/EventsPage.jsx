@@ -10,6 +10,7 @@ const EventsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOpportunity, setSelectedOpportunity] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
 
   const categories = [
     { id: 'all', label: 'All' },
@@ -333,44 +334,49 @@ const EventsPage = () => {
 
         {/* Submit Section */}
         <section className="submit-section">
-          <div className="submit-content">
-            <span className="submit-badge">For organisations</span>
-            <h2>Submit an<br />opportunity.</h2>
-            <p>Are you an organisation, university, NGO, accelerator or event organiser? Share your opportunity with Africa's next generation. Our editorial team reviews and verifies every submission before publishing.</p>
-            <div className="submit-features">
-              <span className="submit-feature">✅ Editorial review</span>
-              <span className="submit-feature">🔗 Direct to your application</span>
-              <span className="submit-feature">📅 Deadline monitoring</span>
+          {!showSubmitForm ? (
+            <div className="submit-content">
+              <span className="submit-badge">For organisations</span>
+              <h2>Submit an<br />opportunity.</h2>
+              <p>Are you an organisation, university, NGO, accelerator or event organiser? Share your opportunity with Africa's next generation. Our editorial team reviews and verifies every submission before publishing.</p>
+              <div className="submit-features">
+                <span className="submit-feature">✅ Editorial review</span>
+                <span className="submit-feature">🔗 Direct to your application</span>
+                <span className="submit-feature">📅 Deadline monitoring</span>
+              </div>
+              <button className="btn-primary" onClick={() => setShowSubmitForm(true)}>SUBMIT AN OPPORTUNITY →</button>
             </div>
-          </div>
-          <form className="submit-form" onSubmit={(e) => { e.preventDefault(); alert('Thank you! Your opportunity has been submitted for editorial review.'); }}>
-            <label>Opportunity title</label>
-            <input type="text" placeholder="e.g. Africa Innovation Grant 2026" required />
-            <label>Organisation</label>
-            <input type="text" placeholder="Your organisation name" required />
-            <label>Category</label>
-            <select required>
-              <option value="">Select category</option>
-              <option>Job</option>
-              <option>Grant</option>
-              <option>Scholarship</option>
-              <option>Competition</option>
-              <option>Fellowship</option>
-              <option>Event</option>
-              <option>Funding programme</option>
-              <option>Internship</option>
-              <option>Training</option>
-              <option>Accelerator</option>
-            </select>
-            <label>Application link (official source)</label>
-            <input type="url" placeholder="https://..." required />
-            <label>Deadline</label>
-            <input type="date" />
-            <label>Short description</label>
-            <textarea rows="2" placeholder="Brief summary of the opportunity..."></textarea>
-            <button type="submit" className="btn-primary">SUBMIT FOR REVIEW →</button>
-            <p className="submit-note">Our team verifies every opportunity against the official source before publishing.</p>
-          </form>
+          ) : (
+            <form className="submit-form" onSubmit={(e) => { e.preventDefault(); alert('Thank you! Your opportunity has been submitted for editorial review.'); }}>
+              <button className="btn-secondary" onClick={() => setShowSubmitForm(false)}>← BACK</button>
+              <label>Opportunity title</label>
+              <input type="text" placeholder="e.g. Africa Innovation Grant 2026" required />
+              <label>Organisation</label>
+              <input type="text" placeholder="Your organisation name" required />
+              <label>Category</label>
+              <select required>
+                <option value="">Select category</option>
+                <option>Job</option>
+                <option>Grant</option>
+                <option>Scholarship</option>
+                <option>Competition</option>
+                <option>Fellowship</option>
+                <option>Event</option>
+                <option>Funding programme</option>
+                <option>Internship</option>
+                <option>Training</option>
+                <option>Accelerator</option>
+              </select>
+              <label>Application link (official source)</label>
+              <input type="url" placeholder="https://..." required />
+              <label>Deadline</label>
+              <input type="date" />
+              <label>Short description</label>
+              <textarea rows="2" placeholder="Brief summary of the opportunity..."></textarea>
+              <button type="submit" className="btn-primary">SUBMIT FOR REVIEW →</button>
+              <p className="submit-note">Our team verifies every opportunity against the official source before publishing.</p>
+            </form>
+          )}
         </section>
       </div>
 
