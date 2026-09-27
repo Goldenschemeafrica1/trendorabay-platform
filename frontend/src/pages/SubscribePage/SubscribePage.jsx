@@ -21,7 +21,7 @@ const SubscribePage = () => {
     {
       id: 'monthly',
       name: 'Monthly',
-      price: 9.99,
+      price: 1300,
       period: 'month',
       features: [
         'Access to all digital magazines',
@@ -35,7 +35,7 @@ const SubscribePage = () => {
     {
       id: 'yearly',
       name: 'Yearly',
-      price: 99.99,
+      price: 13000,
       period: 'year',
       features: [
         'Everything in Monthly plan',
@@ -50,7 +50,7 @@ const SubscribePage = () => {
     {
       id: 'lifetime',
       name: 'Lifetime',
-      price: 299.99,
+      price: 39000,
       period: 'once',
       features: [
         'Everything in Yearly plan',
@@ -118,7 +118,7 @@ const SubscribePage = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       setIsSubmitted(true);
-    } catch (error) {
+    } catch {
       setErrors({ general: 'Subscription failed. Please try again.' });
     } finally {
       setIsLoading(false);
@@ -126,7 +126,7 @@ const SubscribePage = () => {
   };
 
   const selectedPlanData = subscriptionPlans.find(plan => plan.id === selectedPlan);
-  const finalPrice = promoApplied && selectedPlan === 'yearly' ? selectedPlanData.price * 0.8 : selectedPlanData.price;
+  const finalPrice = promoApplied && selectedPlan === 'yearly' ? Math.round(selectedPlanData.price * 0.8) : selectedPlanData.price;
 
   if (isSubmitted) {
     return (
@@ -171,8 +171,8 @@ const SubscribePage = () => {
                   <div className="plan-header">
                     <h3>{plan.name}</h3>
                     <div className="plan-price">
-                      <span className="currency">$</span>
-                      <span className="amount">{promoApplied && plan.id === 'yearly' ? (plan.price * 0.8).toFixed(2) : plan.price}</span>
+                      <span className="currency">KSh</span>
+                      <span className="amount">{promoApplied && plan.id === 'yearly' ? Math.round(plan.price * 0.8).toLocaleString() : plan.price.toLocaleString()}</span>
                       <span className="period">/{plan.period}</span>
                     </div>
                   </div>
@@ -310,18 +310,18 @@ const SubscribePage = () => {
                   <h3>Order Summary</h3>
                   <div className="summary-item">
                     <span>{selectedPlanData.name} Plan</span>
-                    <span>${finalPrice.toFixed(2)}</span>
+                    <span>KSh {finalPrice.toLocaleString()}</span>
                   </div>
                   {promoApplied && (
                     <div className="summary-item discount">
                       <span>Promo Discount (20%)</span>
-                      <span>-${(selectedPlanData.price * 0.2).toFixed(2)}</span>
+                      <span>-KSh {Math.round(selectedPlanData.price * 0.2).toLocaleString()}</span>
                     </div>
                   )}
                   <div className="summary-divider"></div>
                   <div className="summary-item total">
                     <span>Total</span>
-                    <span>${finalPrice.toFixed(2)}</span>
+                    <span>KSh {finalPrice.toLocaleString()}</span>
                   </div>
                 </div>
 
@@ -345,7 +345,7 @@ const SubscribePage = () => {
                   className="subscribe-btn"
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Processing...' : `Subscribe for $${finalPrice.toFixed(2)}`}
+                  {isLoading ? 'Processing...' : `Subscribe for KSh ${finalPrice.toLocaleString()}`}
                 </button>
               </form>
             </div>

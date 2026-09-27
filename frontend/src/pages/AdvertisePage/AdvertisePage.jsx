@@ -15,7 +15,6 @@ const AdvertisePage = () => {
     agreeToTerms: false
   });
   const [errors, setErrors] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
@@ -67,7 +66,6 @@ const AdvertisePage = () => {
         message: formData.message
       });
       
-      setIsSubmitted(true);
       setShowSuccessPopup(true);
       
       // Reset form after successful submission
@@ -82,7 +80,6 @@ const AdvertisePage = () => {
           message: '',
           agreeToTerms: false
         });
-        setIsSubmitted(false);
         setShowSuccessPopup(false);
       }, 5000);
     } catch (error) {
@@ -269,11 +266,11 @@ const AdvertisePage = () => {
                       disabled={isLoading}
                     >
                       <option value="">Select budget range</option>
-                      <option value="500-1000">$500 - $1,000</option>
-                      <option value="1000-2500">$1,000 - $2,500</option>
-                      <option value="2500-5000">$2,500 - $5,000</option>
-                      <option value="5000-10000">$5,000 - $10,000</option>
-                      <option value="10000+">$10,000+</option>
+                      <option value="500-1000">KSH 65,000 - KSH 130,000</option>
+                      <option value="1000-2500">KSH 130,000 - KSH 325,000</option>
+                      <option value="2500-5000">KSH 325,000 - KSH 650,000</option>
+                      <option value="5000-10000">KSH 650,000 - KSH 1,300,000</option>
+                      <option value="10000+">KSH 1,300,000+</option>
                     </select>
                     {errors.budget && <span className="error-text">{errors.budget}</span>}
                   </div>

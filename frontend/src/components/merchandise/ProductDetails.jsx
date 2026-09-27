@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
 import { FaShoppingCart, FaHeart, FaShare, FaStar, FaTruck, FaShieldAlt, FaUndo } from 'react-icons/fa';
-import Button from '../forms/Button';
+import Button from '../Button';
 import './ProductDetails.css';
 
 const ProductDetails = ({ product }) => {
@@ -20,17 +20,10 @@ const ProductDetails = ({ product }) => {
 
   const handleAddToCart = () => {
     // Add to cart logic
-    console.log('Added to cart:', {
-      ...product,
-      size: selectedSize,
-      color: selectedColor,
-      quantity
-    });
   };
 
   const handleAddToWishlist = () => {
     // Add to wishlist logic
-    console.log('Added to wishlist:', product.id);
   };
 
   const handleShare = () => {
@@ -99,9 +92,9 @@ const ProductDetails = ({ product }) => {
               
               <div className="product-pricing">
                 {product.originalPrice && (
-                  <span className="original-price">${product.originalPrice}</span>
+                  <span className="original-price">KSH {product.originalPrice}</span>
                 )}
-                <span className="current-price">${product.price}</span>
+                <span className="current-price">KSH {product.price}</span>
               </div>
             </div>
 
@@ -206,7 +199,7 @@ const ProductDetails = ({ product }) => {
                 <FaTruck className="feature-icon" />
                 <div className="feature-text">
                   <strong>Free Shipping</strong>
-                  <span>On orders over $50</span>
+                  <span>On orders over KSH 6,500</span>
                 </div>
               </div>
               <div className="feature">

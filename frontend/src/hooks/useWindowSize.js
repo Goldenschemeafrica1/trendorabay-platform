@@ -31,7 +31,7 @@ export const useWindowSize = () => {
 
 // Hook for responsive breakpoints
 export const useBreakpoint = () => {
-  const { width } = useWindowSize();
+  const { width, height } = useWindowSize();
 
   const breakpoints = {
     xs: width < 576,

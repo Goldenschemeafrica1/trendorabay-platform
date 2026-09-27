@@ -37,10 +37,6 @@ const cartSlice = createSlice({
 
     removeItem: (state, action) => {
       const { itemId, size, color, format } = action.payload;
-      console.log('removeItem called with:', { itemId, size, color, format });
-      console.log('Current cart items:', state.items);
-      
-      const initialLength = state.items.length;
       state.items = state.items.filter(item => {
         // Match by ID first
         if (item.id !== itemId) return true;
@@ -57,23 +53,17 @@ const cartSlice = createSlice({
         // If all specified criteria match, remove this item
         return false;
       });
-      
-      console.log('Items after removal:', state.items);
-      console.log('Items removed:', initialLength - state.items.length);
       cartSlice.caseReducers.calculateTotals(state);
     },
 
     updateQuantity: (state, action) => {
       const { itemId, size, color, format, quantity } = action.payload;
-      console.log('updateQuantity called with:', { itemId, size, color, format, quantity });
       const item = state.items.find(cartItem => 
         cartItem.id === itemId && 
         (cartItem.size === size || (!cartItem.size && !size)) && 
         (cartItem.color === color || (!cartItem.color && !color)) &&
         (cartItem.format === format || (!cartItem.format && !format))
       );
-
-      console.log('Found item:', item);
       if (item) {
         item.quantity = Math.max(1, quantity);
         cartSlice.caseReducers.calculateTotals(state);

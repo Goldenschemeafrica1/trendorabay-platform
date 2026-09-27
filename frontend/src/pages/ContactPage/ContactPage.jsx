@@ -3,8 +3,7 @@ import ContactForm from './ContactForm';
 import './ContactPage.css';
 
 const ContactPage = () => {
-  const handleSubmit = (formData) => {
-    console.log('Form submitted:', formData);
+  const handleSubmit = () => {
     alert('Message sent successfully!');
   };
 

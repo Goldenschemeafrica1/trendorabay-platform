@@ -14,8 +14,6 @@ const searchService = {
       };
     }
 
-    console.log('Searching for:', query);
-
     try {
       // Search all content types in parallel
       const [stories, magazines, products] = await Promise.all([
@@ -46,8 +44,6 @@ const searchService = {
       const storiesData = stories.data || stories || [];
       const magazinesData = Array.isArray(magazines) ? magazines : [];
       const productsData = products.data || products || [];
-
-      console.log('Search results:', { stories: storiesData.length, magazines: magazinesData.length, products: productsData.length });
 
       return {
         stories: storiesData,

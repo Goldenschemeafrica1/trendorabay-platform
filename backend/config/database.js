@@ -15,9 +15,7 @@ const pool = mysql.createPool({
   enableKeepAlive: true,
   keepAliveInitialDelay: 10000,
   // Timeout settings to prevent hanging connections
-  connectTimeout: 10000,
-  acquireTimeout: 10000,
-  timeout: 10000,
+  connectTimeout: 30000,
   // SSL/TLS configuration
   ssl: process.env.DB_SSL === 'true' ? {
     rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false'
@@ -40,9 +38,7 @@ if (process.env.DB_READ_REPLICA_HOST) {
     enableKeepAlive: true,
     keepAliveInitialDelay: 10000,
     // Timeout settings to prevent hanging connections
-    connectTimeout: 10000,
-    acquireTimeout: 10000,
-    timeout: 10000,
+    connectTimeout: 30000,
     // SSL/TLS configuration
     ssl: process.env.DB_READ_REPLICA_SSL === 'true' ? {
       rejectUnauthorized: process.env.DB_READ_REPLICA_SSL_REJECT_UNAUTHORIZED !== 'false'

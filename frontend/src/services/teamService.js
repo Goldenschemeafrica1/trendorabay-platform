@@ -2,9 +2,7 @@ import api from './api';
 
 const teamService = {
   getTeamMembers: async (params = {}) => {
-    console.log('teamService: Calling /team endpoint with params:', params);
     const response = await api.get('/team', { params });
-    console.log('teamService: Response received:', response);
     return response;
   },
 

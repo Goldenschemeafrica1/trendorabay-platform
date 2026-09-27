@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { apiRequest } from '../../services/api';
+import { loginSuccess } from '../../store/slices/authSlice';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './SignupPage.css';
 
 const SignupPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     firstName: '',
@@ -20,8 +24,6 @@ const SignupPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -94,7 +96,6 @@ const SignupPage = () => {
     setErrors({});
 
     try {
-      console.log('Sending registration request...');
       const response = await apiRequest.post('/users/register', {
         username: formData.username,
         email: formData.email,
@@ -103,21 +104,14 @@ const SignupPage = () => {
         last_name: formData.lastName
       });
 
-      console.log('Registration response:', response);
-      console.log('Response data:', response?.data);
-      console.log('Response success:', response?.data?.success);
-
       // Check if response exists and has success property (axios wraps in data)
       if (response?.data?.success === true) {
-        // Save user data to localStorage (token is now in httpOnly cookie)
-        localStorage.setItem('user', JSON.stringify(response.data.data));
-        
+        dispatch(loginSuccess({ user: response.data.data }));
         toast.success('Account created successfully! Redirecting to home...');
         setTimeout(() => {
           navigate('/');
         }, 1500);
       } else {
-        console.log('Registration failed, response:', response);
         setErrors({ general: response?.data?.error || response?.data?.message || 'Registration failed' });
       }
     } catch (error) {

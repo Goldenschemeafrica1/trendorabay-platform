@@ -169,7 +169,8 @@ router.post('/register', redisAuthLimiter, async (req, res, next) => {
         username: normalizedUsername,
         email: normalizedEmail,
         first_name: first_name || null,
-        last_name: last_name || null
+        last_name: last_name || null,
+        profile_image: null
       },
       message: 'User registered successfully'
     });
@@ -238,7 +239,7 @@ router.post('/login', redisAuthLimiter, async (req, res, next) => {
 
     // Find user
     const [users] = await pool.query(
-      'SELECT * FROM users WHERE email = ?',
+      'SELECT id, username, email, password, first_name, last_name, profile_image, role FROM users WHERE email = ?',
       [normalizedEmail]
     );
 

@@ -28,7 +28,7 @@ const CheckoutSuccessPage = () => {
         <div className="bg-gray-50 rounded-lg p-8 mb-8">
           <h2 className="text-lg font-semibold mb-4">Order Details</h2>
           <div className="text-left space-y-2">
-            <p><strong>Order Number:</strong> #TRB{Math.floor(Math.random() * 1000000)}</p>
+            <p><strong>Order Number:</strong> #TRB000000</p>
             <p><strong>Date:</strong> {new Date().toLocaleDateString()}</p>
             <p><strong>Payment Method:</strong> Credit Card</p>
             <p><strong>Shipping Address:</strong> Will be added to your profile</p>

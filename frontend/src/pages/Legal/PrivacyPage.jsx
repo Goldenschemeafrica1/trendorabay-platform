@@ -124,7 +124,7 @@ const PrivacyPage = () => {
               If you have any questions about this Privacy Policy, please contact us:
             </p>
             <div className="contact-info">
-              <p>By email: privacy@trendorabay.com</p>
+              <p>By email: trendorabay@trendorabay.com</p>
               <p>By visiting this page on our website: trendorabay.com/contact</p>
             </div>
           </section>

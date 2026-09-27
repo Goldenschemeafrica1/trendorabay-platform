@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export const useLocalStorage = (key, initialValue) => {
   // Get value from localStorage or use initial value
@@ -109,7 +109,7 @@ export const usePreferences = () => {
   const [preferences, setPreferences] = useLocalStorage('trendorabay-preferences', {
     theme: 'light',
     language: 'en',
-    currency: 'USD',
+    currency: 'KSH',
     newsletterSubscribed: false,
   });
 
@@ -124,7 +124,7 @@ export const usePreferences = () => {
     setPreferences({
       theme: 'light',
       language: 'en',
-      currency: 'USD',
+      currency: 'KSH',
       newsletterSubscribed: false,
     });
   };

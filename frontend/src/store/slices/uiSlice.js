@@ -140,7 +140,7 @@ const uiSlice = createSlice({
     },
 
     // Reset UI state
-    resetUIState: (state) => {
+    resetUIState: () => {
       return initialState;
     },
   },

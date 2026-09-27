@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useSearchParams } from 'react-router-dom';
 import { FaFilter, FaThList, FaThLarge, FaTimes } from 'react-icons/fa';
 import { addToCart } from '../../store/slices/cartSlice';
 import ProductCard from '../../components/merchandise/ProductCard';
 import ProductFilters from '../../components/merchandise/ProductFilters';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { merchService } from '../../services/merchService';
 import './MerchandisePage.css';
 
@@ -178,7 +177,6 @@ const MerchandisePage = () => {
   if (loading) {
     return (
       <div className="merchandise-loading">
-        <LoadingSpinner />
         <p>Loading awesome merchandise...</p>
       </div>
     );
@@ -359,7 +357,7 @@ const MerchandisePage = () => {
             <div className="feature-item">
               <div className="feature-icon">🚚</div>
               <h3>Worldwide Shipping</h3>
-              <p>Free shipping on orders over $50</p>
+              <p>Free shipping on orders over KSH 6,500</p>
             </div>
             <div className="feature-item">
               <div className="feature-icon">🔄</div>

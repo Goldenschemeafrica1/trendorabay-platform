@@ -292,7 +292,7 @@ const WriteForUsPage = () => {
               <p>
                 Have questions about contributing? Reach out to our editorial team at
               </p>
-              <a href="mailto:contributors@trendorabay.com">contributors@trendorabay.com</a>
+              <a href="mailto:trendorabay@trendorabay.com">trendorabay@trendorabay.com</a>
             </div>
           </aside>
 
@@ -589,7 +589,7 @@ const WriteForUsPage = () => {
           <div className="faq-grid">
             <div className="faq-item">
               <h4>Do you pay contributors?</h4>
-              <p>Yes! We offer competitive rates for accepted articles. Payment varies based on article length, depth, and exclusivity. Freelance rates start at $50 per article.</p>
+              <p>Yes! We offer competitive rates for accepted articles. Payment varies based on article length, depth, and exclusivity. Freelance rates start at KSH 5,000 per article.</p>
             </div>
             <div className="faq-item">
               <h4>How long does the review process take?</h4>

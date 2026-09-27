@@ -43,6 +43,7 @@ import contactRoutes from './routes/contact.js';
 import authorRoutes from './routes/authors.js';
 import teamRoutes from './routes/team.js';
 import galleryRoutes from './routes/gallery.js';
+import analyticsRoutes from './routes/analytics.js';
 
 const app = express();
 
@@ -220,6 +221,7 @@ app.use(`/api/${API_VERSION}/contact`, contactRoutes);
 app.use(`/api/${API_VERSION}/authors`, authorRoutes);
 app.use(`/api/${API_VERSION}/team`, teamRoutes);
 app.use(`/api/${API_VERSION}/gallery`, galleryRoutes);
+app.use(`/api/${API_VERSION}/analytics`, analyticsRoutes);
 
 // Legacy API routes (backward compatibility - will be deprecated)
 app.use('/api/users', userRoutes);
@@ -242,6 +244,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/authors', authorRoutes);
 app.use('/api/team', teamRoutes);
 app.use('/api/gallery', galleryRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Make upload middleware available to routes
 app.set('upload', upload);

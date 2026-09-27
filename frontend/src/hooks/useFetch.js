@@ -52,11 +52,13 @@ export const useFetch = (url, options = {}) => {
     }
   }, [url, fetchOptions, onSuccess, onError]);
 
+  const depsKey = JSON.stringify(dependencies);
+
   useEffect(() => {
     if (immediate && url) {
       fetchData();
     }
-  }, [url, immediate, fetchData, ...dependencies]);
+  }, [url, immediate, fetchData, depsKey]);
 
   const refetch = useCallback(() => {
     return fetchData();

@@ -126,11 +126,34 @@ router.get('/', cache(300), async (req, res, next) => {
         title: magazine.title,
         category: magazine.category_id,
         coverImage: getImageUrl(magazine.cover_image_url),
+        coverImageLarge: getImageUrl(magazine.cover_image_url),
         pdfUrl: getImageUrl(magazine.pdf_url),
         previewPages: magazine.preview_pages,
         published: magazine.published_date,
         description: magazine.description,
-        createdAt: magazine.created_at
+        createdAt: magazine.created_at,
+        // Add additional fields for consistency with details page
+        fullDescription: magazine.description || 'Explore this exciting magazine issue featuring the latest stories and insights.',
+        reviewCount: magazine.review_count || 0,
+        rating: magazine.rating || 4.5,
+        readers: magazine.readers || 1000,
+        isNew: magazine.is_new || false,
+        isFeatured: magazine.is_featured || false,
+        editorPick: magazine.editor_pick || false,
+        subcategory: magazine.subcategory || magazine.category || 'General',
+        issue: magazine.issue || 'Vol. 1 / 2026',
+        price: magazine.price || 9.99,
+        digitalPrice: magazine.digital_price || 9.99,
+        printPrice: magazine.print_price || 13.99,
+        subscriptionPrice: magazine.subscription_price || 99.99,
+        pages: magazine.pages || 100,
+        language: magazine.language || 'English',
+        publisher: magazine.publisher || 'Trendorabay',
+        editor: magazine.editor || 'Trendorabay Editorial',
+        contributors: [],
+        tableOfContents: [],
+        reviews: [],
+        relatedMagazines: [],
       };
     });
 
@@ -296,6 +319,7 @@ router.get('/:slug', cache(300), async (req, res, next) => {
       ...rows[0],
       slug,
       coverImage: getImageUrl(rows[0].cover_image || rows[0].cover_image_url, rows[0].category_id || rows[0].category, rows[0].preview_pages),
+      coverImageLarge: getImageUrl(rows[0].cover_image || rows[0].cover_image_url, rows[0].category_id || rows[0].category, rows[0].preview_pages),
       pdfUrl: getImageUrl(rows[0].pdf_url, rows[0].category_id || rows[0].category),
       price: rows[0].price || 9.99,
       digitalPrice: rows[0].digital_price || 9.99,
@@ -308,7 +332,19 @@ router.get('/:slug', cache(300), async (req, res, next) => {
       contributors: magazineContributors,
       reviews: rows[0].reviews,
       publishDate: rows[0].publish_date || rows[0].created_at,
-      description: rows[0].description
+      description: rows[0].description,
+      // Add additional fields expected by MagazineDetails component
+      fullDescription: rows[0].description || 'Explore this exciting magazine issue featuring the latest stories and insights.',
+      reviewCount: rows[0].review_count || 0,
+      rating: rows[0].rating || 4.5,
+      readers: rows[0].readers || 1000,
+      isNew: rows[0].is_new || false,
+      isFeatured: rows[0].is_featured || false,
+      editorPick: rows[0].editor_pick || false,
+      subcategory: rows[0].subcategory || rows[0].category || 'General',
+      issue: rows[0].issue || 'Vol. 1 / 2026',
+      relatedMagazines: rows[0].related_magazines || [],
+      editor: rows[0].editor || 'Trendorabay Editorial',
     };
 
     res.json({ success: true, data: transformed });

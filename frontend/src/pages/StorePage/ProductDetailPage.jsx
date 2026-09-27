@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import ProductDetails from '../../components/merchandise/ProductDetails';
-import Breadcrumbs from '../../components/common/Breadcrumbs';
-import SocialShare from '../../components/common/SocialShare';
 
 const ProductDetailPage = ({ productId }) => {
   const [selectedSize, setSelectedSize] = useState('');
@@ -30,17 +28,9 @@ const ProductDetailPage = ({ productId }) => {
     ]
   };
 
-  const breadcrumbItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Merchandise', href: '/merchandise' },
-    { label: product.name }
-  ];
-
   return (
     <div className="product-detail-page">
       <div className="container">
-        <Breadcrumbs items={breadcrumbItems} />
-        
         <ProductDetails 
           product={product}
           selectedSize={selectedSize}
@@ -49,13 +39,6 @@ const ProductDetailPage = ({ productId }) => {
           onColorChange={setSelectedColor}
         />
         
-        <div className="product-actions-footer">
-          <SocialShare
-            url={window.location.href}
-            title={product.name}
-            description={product.description}
-          />
-        </div>
       </div>
     </div>
   );

@@ -1,216 +1,177 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import storyService from '../../services/storyService';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import api from '../../services/api';
 import './StoriesPage.css';
 
 const StoriesPage = () => {
-  const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState('all');
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // Helper function to format date as "X days ago"
-  const formatPublishedDate = (dateString) => {
-    const publishedDate = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now - publishedDate);
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return '1 day ago';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
-    return `${Math.floor(diffDays / 365)} years ago`;
-  };
-
-  // Categories based on your magazine sections
-  const categories = [
-    { id: 'all', name: 'All Stories', icon: '📚' },
-    { id: 'business', name: 'Business & Entrepreneurship', icon: '💼' },
-    { id: 'real-estate', name: 'Real Estate & Property', icon: '🏠' },
-    { id: 'lifestyle', name: 'Lifestyle & Wellness', icon: '🧘' },
-    { id: 'urban-culture', name: 'Urban Culture & Trends', icon: '🌆' },
-    { id: 'music', name: 'Music & Entertainment', icon: '🎵' },
-    { id: 'tech', name: 'Tech & Innovation', icon: '💻' },
-    { id: 'interviews', name: 'Interviews & Features', icon: '🎤' },
-    { id: 'fashion', name: 'Fashion & Style', icon: '👗' },
-    { id: 'art', name: 'Art & Photography', icon: '🎨' },
-  ];
-
-  // Fetch stories from API
   useEffect(() => {
     const fetchStories = async () => {
-      setLoading(true);
       try {
-        console.log('Fetching stories with params:', {
-          category: selectedCategory !== 'all' ? selectedCategory : undefined,
-          page: currentPage,
-          limit: 12,
-          status: 'published'
-        });
-        
-        const response = await storyService.getStories({
-          category: selectedCategory !== 'all' ? selectedCategory : undefined,
-          page: currentPage,
-          limit: 12,
-          status: 'published'
-        });
-        
-        console.log('StoriesPage raw response:', response);
-        console.log('Response type:', typeof response);
-        console.log('Is array?', Array.isArray(response));
-        console.log('Has data property?', response && 'data' in response);
-        
-        // Handle different response structures
-        let storiesData = [];
-        let totalPagesData = 1;
-        
-        if (Array.isArray(response)) {
-          storiesData = response;
-          console.log('Response is array, using directly');
-        } else if (response && Array.isArray(response.data)) {
-          storiesData = response.data;
-          totalPagesData = response.totalPages || 1;
-          console.log('Response has data array, using response.data');
-        } else if (response && response.data) {
-          storiesData = response.data;
-          totalPagesData = response.totalPages || 1;
-          console.log('Response has data property, using response.data');
-        } else {
-          console.log('Unknown response structure, defaulting to empty array');
-        }
-        
-        console.log('Final stories data:', storiesData);
-        console.log('Stories data length:', storiesData.length);
-        console.log('Total pages:', totalPagesData);
-        
-        setStories(storiesData);
-        setTotalPages(totalPagesData);
-      } catch (error) {
-        console.error('Error fetching stories:', error);
-        console.error('Error details:', error.message, error.stack);
-        setStories([]);
+        setLoading(true);
+        const response = await api.get('/stories');
+        setStories(response.data.data || []);
+      } catch (err) {
+        setError('Failed to load stories. Please try again.');
+        console.error('Error fetching stories:', err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchStories();
-  }, [selectedCategory, currentPage]);
+  }, []);
 
-  // Handle category change
-  const handleCategoryChange = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setCurrentPage(1);
+  const stripHtml = (html) => {
+    if (!html) return '';
+    return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   };
 
-  // Get current stories for pagination
-  const indexOfLastStory = currentPage * 6;
-  const indexOfFirstStory = indexOfLastStory - 6;
-  const currentStories = Array.isArray(stories) ? stories.slice(indexOfFirstStory, indexOfLastStory) : [];
+  const makeExcerpt = (content, limit = 120) => {
+    const text = stripHtml(content);
+    if (!text) return '';
+    return text.length > limit ? `${text.slice(0, limit).trim()}...` : text;
+  };
+
+  const categories = ['All', ...new Set(stories.map((story) => story.categoryName).filter(Boolean))];
+  const filteredStories = stories.filter((story) => {
+    const matchesCategory = selectedCategory === 'All' || story.categoryName === selectedCategory;
+    const query = searchQuery.toLowerCase();
+    const matchesSearch =
+      !query ||
+      (story.title && story.title.toLowerCase().includes(query)) ||
+      makeExcerpt(story.content).toLowerCase().includes(query);
+    return matchesCategory && matchesSearch;
+  });
+
+  if (loading) {
+    return (
+      <div className="stories-page">
+        <div className="container">
+          <div className="stories-loading">
+            <p>Loading stories...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="stories-page">
+        <div className="container">
+          <div className="stories-error">
+            <h2>Oops! Something went wrong</h2>
+            <p>{error}</p>
+            <button onClick={() => window.location.reload()} className="retry-btn">
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="stories-page">
-      {/* All Stories Section */}
-      <section className="all-stories">
+      {/* Hero Section */}
+      <section className="stories-hero">
         <div className="container">
-          <h2 className="section-title">
-            <i className="fas fa-feather-alt"></i> {selectedCategory === 'all' ? 'All Stories' : categories.find(c => c.id === selectedCategory)?.name}
-          </h2>
-
-          {loading ? (
-            <div className="loader-container">
-              <div className="loader"></div>
-              <p>Loading stories...</p>
-            </div>
-          ) : (
-            <>
-              {currentStories.length > 0 ? (
-                <>
-                  <div className="stories-grid">
-                    {currentStories.map(story => (
-                      <Link key={story.id} to={`/stories/${story.slug}`} className="story-card">
-                        <div className="story-image">
-                          <img
-                            src={story.imageUrl || '/music.jpeg'}
-                            alt={story.title}
-                            onError={(e) => {
-                              e.target.src = '/music.jpeg';
-                            }}
-                          />
-                        </div>
-                        <div className="story-content">
-                          <span style={{ fontSize: '9px', fontWeight: '600', color: '#b87c4b', backgroundColor: 'transparent', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0', padding: '4px 8px', borderRadius: '8px', display: 'inline-block', maxWidth: 'fit-content', whiteSpace: 'nowrap' }}>{story.categoryName}</span>
-                          <h3 className="story-title" style={{ '--text-3xl': '10px', marginTop: '8px' }}>{story.title}</h3>
-                          <div className="story-meta">
-                            <div className="story-author">
-                              <span 
-                                className="author-link" 
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  navigate(`/author/${story.author?.id}`);
-                                }}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                <img src={story.author?.avatar || '/images/default-avatar.png'} alt={story.author?.name || 'Author'} />
-                                <span style={{ fontSize: '9px !important' }}>{story.author?.name || 'Unknown Author'}</span>
-                              </span>
-                              <span className="story-published-date" style={{ fontSize: '8px !important' }}>{formatPublishedDate(story.publishedDate)}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-
-                  {/* Pagination */}
-                  {totalPages > 1 && (
-                    <div className="pagination">
-                      <button 
-                        className={`pagination-btn ${currentPage === 1 ? 'disabled' : ''}`}
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                        disabled={currentPage === 1}
-                      >
-                        <i className="fas fa-chevron-left"></i> Previous
-                      </button>
-                      <div className="page-numbers">
-                        {[...Array(totalPages)].map((_, index) => (
-                          <button
-                            key={index + 1}
-                            className={`page-number ${currentPage === index + 1 ? 'active' : ''}`}
-                            onClick={() => setCurrentPage(index + 1)}
-                          >
-                            {index + 1}
-                          </button>
-                        ))}
-                      </div>
-                      <button 
-                        className={`pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`}
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                      >
-                        Next <i className="fas fa-chevron-right"></i>
-                      </button>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="no-stories">
-                  <i className="fas fa-book-open"></i>
-                  <h3>No stories found</h3>
-                  <p>Be the first to write a story in this category!</p>
-                  <Link to="/write" className="btn btn-primary write-story-btn" style={{ padding: '6px 10px', fontSize: '11px', maxWidth: '100px', width: 'auto', minWidth: 'auto', whiteSpace: 'nowrap' }}>Write a Story</Link>
-                </div>
-              )}
-            </>
-          )}
+          <h1 className="stories-title">
+            <span className="african-pattern">✦</span> 
+            Latest Stories
+            <span className="african-pattern">✦</span>
+          </h1>
+          <p className="stories-subtitle">
+            Discover the people, ideas, businesses and cultural movements shaping tomorrow's African narrative.
+          </p>
         </div>
       </section>
 
-      </div>
+      {/* Main Content */}
+      <section className="stories-content">
+        <div className="container">
+          <div className="stories-header">
+            <h2>All Stories</h2>
+            <p>{filteredStories.length} stories available</p>
+          </div>
+
+          <div className="stories-filter">
+            <input
+              type="text"
+              placeholder="Search stories..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="stories-search"
+            />
+            <div className="stories-categories">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={`stories-category-btn ${selectedCategory === category ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {filteredStories.length > 0 ? (
+            <div className="stories-grid">
+              {filteredStories.map((story) => (
+                <Link
+                  key={story.id}
+                  to={`/stories/${story.slug || story.id}`}
+                  className="story-card"
+                >
+                  <div className="story-image">
+                    {story.imageUrl ? (
+                      <img
+                        src={story.imageUrl}
+                        alt={story.title}
+                        className="story-img"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div className="story-image-placeholder">
+                        <span>STORY</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="story-info">
+                    <span className="story-tag">
+                      {story.categoryName || 'Story'}
+                    </span>
+                    <h3>{story.title}</h3>
+                    <p className="story-excerpt">
+                      {makeExcerpt(story.content)}
+                    </p>
+                    <div className="story-meta">
+                      <span className="story-date">
+                        {story.createdAt ? new Date(story.createdAt).toLocaleDateString() : 'Recent'}
+                      </span>
+                      <span className="story-read-time">5 min read</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="no-stories">
+              <h3>No stories available</h3>
+              <p>Check back later for new stories.</p>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
   );
 };
 

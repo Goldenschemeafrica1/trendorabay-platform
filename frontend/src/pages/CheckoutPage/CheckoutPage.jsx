@@ -227,7 +227,7 @@ const CheckoutPage = () => {
                     <h4 className="summary-item-name">{item.name}</h4>
                     <p className="summary-item-quantity">Qty: {item.quantity}</p>
                   </div>
-                  <p className="summary-item-price">${((item.price || 0) * (item.quantity || 0)).toFixed(2)}</p>
+                  <p className="summary-item-price">KSH {((item.price || 0) * (item.quantity || 0)).toFixed(2)}</p>
                 </div>
               ))}
             </div>
@@ -236,15 +236,15 @@ const CheckoutPage = () => {
             
             <div className="summary-row">
               <span>Subtotal:</span>
-              <span>${total.toFixed(2)}</span>
+              <span>KSH {total.toFixed(2)}</span>
             </div>
             <div className="summary-row">
               <span>Shipping:</span>
-              <span>$10.00</span>
+              <span>KSH 1,300.00</span>
             </div>
             <div className="summary-row total">
               <span>Total:</span>
-              <span>${(total + 10).toFixed(2)}</span>
+              <span>KSH {(total + 10).toFixed(2)}</span>
             </div>
           </div>
         </div>

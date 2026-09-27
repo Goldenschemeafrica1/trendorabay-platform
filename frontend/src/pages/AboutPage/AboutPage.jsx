@@ -1,477 +1,293 @@
-import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './AboutPage.css';
-import teamService from '../../services/teamService';
 
-const AboutPage = () => {
-  const [teamMembers, setTeamMembers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedMember, setSelectedMember] = useState(null);
-  const [stats, setStats] = useState({
-    readers: 0,
-    countries: 0,
-    creators: 0,
-    stories: 0
-  });
+const AboutPage = () => (
+  <div className="about-page">
+    <main className="container">
+      {/* Hero */}
+      <section className="about-hero">
+        <div>
+          <span className="kicker">About Trendorabay</span>
+          <h1>
+            Africa is writing
+            <br />
+            what&apos;s <span>next.</span>
+          </h1>
+          <p>
+            Trendorabay is a modern media and opportunity platform telling African stories with
+            depth, style and purpose — and connecting a new generation to the opportunities shaping
+            the continent&apos;s future.
+          </p>
+        </div>
+        <div className="hero-stat-grid">
+          <div className="hero-stat">
+            <strong>100+</strong>
+            <span>Stories published</span>
+          </div>
+          <div className="hero-stat">
+            <strong>25+</strong>
+            <span>Niche communities</span>
+          </div>
+          <div className="hero-stat">
+            <strong>6</strong>
+            <span>Countries covered</span>
+          </div>
+          <div className="hero-stat">
+            <strong>2026</strong>
+            <span>Just getting started</span>
+          </div>
+        </div>
+      </section>
 
-  // Impact statistics (animated counter)
-  const targetStats = {
-    readers: 50000,
-    countries: 35,
-    creators: 250,
-    stories: 1200
-  };
+      {/* Mission */}
+      <section className="section">
+        <div className="mission-grid">
+          <div className="mission-visual">
+            <div className="mv-brand">TRENDORABAY</div>
+            <div className="mv-title">
+              THE
+              <br />
+              AFRICAN
+              <br />
+              FUTURE.
+            </div>
+            <div className="mv-bottom">STORIES • STYLE • SOLUTIONS</div>
+          </div>
+          <div className="mission-copy">
+            <span className="kicker">Our Mission</span>
+            <h2>To tell Africa&apos;s story on its own terms.</h2>
+            <p>
+              For too long, Africa&apos;s narrative has been told by others — filtered through
+              stereotypes, framed by crisis, reduced to a single story. Trendorabay exists to change
+              that.
+            </p>
+            <p>
+              We document the founders, creators, innovators and everyday people building what comes
+              next. We celebrate African excellence without ignoring African complexity. And we
+              connect a new generation to the opportunities, tools and ideas they need to shape
+              their own futures.
+            </p>
+            <p>
+              This is not just a publication. It is a platform — a place where stories meet
+              opportunity, where culture meets business, and where Africa&apos;s next chapter is
+              written by Africans.
+            </p>
+          </div>
+        </div>
+      </section>
 
-  useEffect(() => {
-    // Fetch team members from API
-    const fetchTeamMembers = async () => {
-      try {
-        console.log('=== AboutPage: Fetching team members from API ===');
-        const response = await teamService.getTeamMembers();
-        console.log('=== AboutPage: API response received ===', response);
+      {/* Values */}
+      <section className="section">
+        <div className="section-head">
+          <div>
+            <span className="tag">What guides us</span>
+            <h2>✦ Our Values</h2>
+          </div>
+        </div>
+        <div className="values-grid">
+          <div className="value-card">
+            <div className="value-icon">🌍</div>
+            <h3>Africa First</h3>
+            <p>
+              Every story, every opportunity, every decision starts with Africa at the centre. We
+              are building for this continent, not about it.
+            </p>
+          </div>
+          <div className="value-card">
+            <div className="value-icon">🔍</div>
+            <h3>Depth &amp; Truth</h3>
+            <p>
+              We go beyond headlines. We verify, we contextualise, and we tell the full story —
+              even when it is complicated.
+            </p>
+          </div>
+          <div className="value-card">
+            <div className="value-icon">⚡</div>
+            <h3>Bold &amp; Modern</h3>
+            <p>
+              We reject the tired, dusty narratives. Our storytelling is fresh, visual, and built
+              for how Africa&apos;s youth consume media today.
+            </p>
+          </div>
+          <div className="value-card">
+            <div className="value-icon">🤝</div>
+            <h3>Opportunity for All</h3>
+            <p>
+              We believe access to information can change lives. That is why we surface funding,
+              jobs, grants and events — and send you straight to the source.
+            </p>
+          </div>
+        </div>
+      </section>
 
-        let members = [];
+      {/* What We Do */}
+      <section className="section">
+        <div className="section-head">
+          <div>
+            <span className="tag">The platform</span>
+            <h2>✦ What We Do</h2>
+          </div>
+        </div>
+        <div className="what-grid">
+          <div className="what-card">
+            <div className="wc-icon">📰</div>
+            <h3>Stories &amp; Journalism</h3>
+            <p>
+              Long-form features, profiles, analysis and cultural commentary covering business,
+              technology, culture, lifestyle and innovation across Africa.
+            </p>
+            <Link to="/stories">READ LATEST STORIES →</Link>
+          </div>
+          <div className="what-card">
+            <div className="wc-icon">🎯</div>
+            <h3>Opportunities Hub</h3>
+            <p>
+              A curated, verified directory of grants, jobs, scholarships, competitions,
+              fellowships and events — always linking you to the official source.
+            </p>
+            <Link to="/events">FIND OPPORTUNITIES →</Link>
+          </div>
+          <div className="what-card">
+            <div className="wc-icon">🎙</div>
+            <h3>Podcasts &amp; Audio</h3>
+            <p>
+              Honest, in-depth conversations with the founders, creators and change-makers building
+              Africa&apos;s next chapter — beyond the headlines.
+            </p>
+            <Link to="/podcasts">LISTEN NOW →</Link>
+          </div>
+        </div>
+      </section>
 
-        // Handle axios response structure
-        if (response && response.data && Array.isArray(response.data.data)) {
-          members = response.data.data;
-          console.log('=== AboutPage: Response has data.data array, using response.data.data ===');
-        } else if (response && Array.isArray(response.data)) {
-          members = response.data;
-          console.log('=== AboutPage: Response has data array, using response.data ===');
-        } else if (Array.isArray(response)) {
-          members = response;
-          console.log('=== AboutPage: Response is an array, using directly ===');
-        } else {
-          console.log('=== AboutPage: Response structure unexpected ===', typeof response, response);
-        }
+      {/* Timeline */}
+      <section className="section">
+        <div className="section-head">
+          <div>
+            <span className="tag">The journey</span>
+            <h2>✦ How We Got Here</h2>
+          </div>
+        </div>
+        <div className="timeline">
+          <div className="timeline-item">
+            <div className="tl-year">2025</div>
+            <h3>The idea</h3>
+            <p>
+              Trendorabay began as a simple frustration: Africa&apos;s stories were being told by
+              everyone except Africans. A small team came together with a shared belief — that the
+              continent&apos;s next chapter deserved a platform of its own.
+            </p>
+          </div>
+          <div className="timeline-item">
+            <div className="tl-year">Early 2026</div>
+            <h3>Building the platform</h3>
+            <p>
+              We launched our editorial, communities, magazine store, merchandise and podcast. We
+              started publishing stories about the founders, creators and innovators shaping
+              Africa&apos;s future.
+            </p>
+          </div>
+          <div className="timeline-item">
+            <div className="tl-year">2026</div>
+            <h3>Opportunities launched</h3>
+            <p>
+              We introduced the Trendorabay Opportunities platform — a curated, verified directory
+              connecting Africa&apos;s next generation to funding, jobs, grants, scholarships and
+              events.
+            </p>
+          </div>
+          <div className="timeline-item">
+            <div className="tl-year">Next</div>
+            <h3>The app &amp; beyond</h3>
+            <p>
+              We are building the Trendorabay mobile app, expanding our community network, and
+              growing our editorial team across the continent. This is just the beginning.
+            </p>
+          </div>
+        </div>
+      </section>
 
-        console.log('=== AboutPage: Team members from API ===', members);
-        console.log('=== AboutPage: Number of team members ===', members.length);
-
-        // Transform data to match frontend expectations
-        const transformed = members.map(member => {
-          const avatarUrl = member.avatar || member.avatar_url || member.image_url || member.profile_image;
-          const cmsUrl = import.meta.env.VITE_CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
-          const image = avatarUrl
-            ? (avatarUrl.startsWith('http') ? avatarUrl : `${cmsUrl}${avatarUrl}`)
-            : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop';
-
-          return {
-            id: member.id,
-            name: member.name || member.full_name,
-            role: member.role || member.position || member.title,
-            image: image,
-            bio: member.bio || member.description || member.about || '',
-            social: {
-              twitter: member.twitter || '',
-              linkedin: member.linkedin || '',
-              instagram: member.instagram || ''
-            },
-            expertise: member.expertise ? (Array.isArray(member.expertise) ? member.expertise : [member.expertise]) : [],
-            quote: member.quote || ''
-          };
-        });
-
-        console.log('=== AboutPage: Transformed team members ===', transformed);
-        console.log('=== AboutPage: Setting teamMembers state ===');
-        setTeamMembers(transformed);
-      } catch (error) {
-        console.error('=== AboutPage: Error fetching team members ===', error);
-        console.error('=== AboutPage: Error details ===', error.message, error.stack);
-        // Set fallback data if API fails
-        console.log('=== AboutPage: Using fallback data due to error ===');
-        setTeamMembers([
-          {
-            id: 1,
-            name: "Kingsley George",
-            role: "Founder & Editor-in-Chief",
-            bio: "Former financial journalist turned media entrepreneur. Kingsley founded Trendorabay to amplify African voices in business and culture. He has been featured in Forbes Africa and serves on the board of the African Media Initiative.",
-            image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop",
-            social: {
-              twitter: "@wanjikumwangi",
-              linkedin: "wanjiku-mwangi",
-              instagram: "@wanjiku.creates"
-            },
-            expertise: ["Editorial Strategy", "Business Journalism", "Brand Development"],
-            quote: "Storytelling is the most powerful tool we have to shape Africa's narrative."
-          }
-        ]);
-      }
-    };
-
-    fetchTeamMembers();
-    
-    // Animated counter for stats
-    const duration = 2000;
-    const interval = 20;
-    const steps = duration / interval;
-    
-    let currentStep = 0;
-    const timer = setInterval(() => {
-      currentStep++;
-      const progress = currentStep / steps;
-      
-      setStats({
-        readers: Math.floor(targetStats.readers * progress),
-        countries: Math.floor(targetStats.countries * progress),
-        creators: Math.floor(targetStats.creators * progress),
-        stories: Math.floor(targetStats.stories * progress)
-      });
-      
-      if (currentStep >= steps) {
-        clearInterval(timer);
-        setStats(targetStats);
-      }
-    }, interval);
-    
-    setLoading(false);
-    
-    return () => clearInterval(timer);
-  }, []);
-
-  // Timeline milestones
-  const milestones = [
-    {
-      year: "2019",
-      title: "The Beginning",
-      description: "Trendorabay Magazine launches as a digital-first publication spotlighting emerging Kenyan entrepreneurs."
-    },
-    {
-      year: "2020",
-      title: "Expansion Across Africa",
-      description: "Expanded coverage to 15 African countries, launching our first physical edition."
-    },
-    {
-      year: "2021",
-      title: "TRENDORAFEST Launch",
-      description: "Hosted our first annual festival celebrating African creativity and innovation in Nairobi."
-    },
-    {
-      year: "2022",
-      title: "Creator Hub",
-      description: "Launched the Creator Hub platform, connecting 200+ African content creators."
-    },
-    {
-      year: "2023",
-      title: "Global Recognition",
-      description: "Featured in international media and recognized as a leading voice in African media."
-    },
-    {
-      year: "2024",
-      title: "The Future",
-      description: "Continuing to amplify African stories, launch new initiatives, and shape tomorrow's narrative."
-    },
-    {
-      year: "2025",
-      title: "Global Expansion",
-      description: "Expanded to new markets and launched innovative digital platforms."
-    },
-    {
-      year: "2026",
-      title: "Present Day",
-      description: "Growing our community and expanding our reach across Africa and beyond."
-    }
-  ];
-
-  // Values
-  const values = [
-    {
-      title: "Authenticity",
-      description: "We tell real stories from real people, celebrating genuine African voices and experiences."
-    },
-    {
-      title: "Innovation",
-      description: "We embrace new ideas, technologies, and approaches to storytelling and media."
-    },
-    {
-      title: "Community",
-      description: "We believe in the power of connection and collaboration across the continent."
-    },
-    {
-      title: "Impact",
-      description: "We measure success by the positive change we create in our communities."
-    }
-  ];
-
-  // Press mentions
-  const press = [
-    {
-      outlet: "Forbes Africa",
-      title: "30 Under 30: Media Innovators Shaping the Continent",
-      year: "2024",
-      link: "#"
-    },
-    {
-      outlet: "BBC News",
-      title: "How Digital Magazines Are Changing African Narratives",
-      year: "2025",
-      link: "#"
-    },
-    {
-      outlet: "TechCabal",
-      title: "Trendorabay's Rise as a Media Powerhouse",
-      year: "2025",
-      link: "#"
-    },
-    {
-      outlet: "Nation Media",
-      title: "Kenyan Platform Making Waves Globally",
-      year: "2026",
-      link: "#"
-    }
-  ];
-
-  // Open modal for team member
-  const openTeamModal = (member) => {
-    setSelectedMember(member);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeTeamModal = () => {
-    setSelectedMember(null);
-    document.body.style.overflow = 'auto';
-  };
-
-  if (loading) {
-    return (
-      <div className="about-loading">
-        <div className="loading-spinner"></div>
-        <p>Discovering our story...</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="about-page">
-      <div className="about-content">
-        {/* Our Story Section */}
-        <div className="story-tab">
-            <div className="story-intro">
-              <h2>A Movement, Not Just a Magazine</h2>
+      {/* Team */}
+      <section className="section">
+        <div className="section-head">
+          <div>
+            <span className="tag">The people</span>
+            <h2>✦ Behind Trendorabay</h2>
+          </div>
+        </div>
+        <div className="team-grid">
+          <div className="team-card">
+            <div className="team-avatar">👩🏾‍💻</div>
+            <div className="team-info">
+              <h3>Amara Okafor</h3>
+              <div className="role">Founder &amp; Editor-in-Chief</div>
               <p>
-                Trendorabay Magazine was born from a simple yet powerful idea: Africa's stories deserve 
-                to be told with the same sophistication, depth, and premium quality as any global publication. 
-                What started as a small digital newsletter in Nairobi has grown into a continent-wide platform 
-                that reaches hundreds of thousands of readers monthly.
+                Journalist and storyteller with a decade of experience covering African business,
+                culture and innovation.
               </p>
             </div>
-
-            <div className="story-journey-values-container">
-              <div className="story-milestones">
-                <h3>Our Journey</h3>
-                <div className="timeline">
-                  {milestones.map((milestone, index) => (
-                    <div key={index} className="timeline-item">
-                      <div className="timeline-content">
-                        <div className="timeline-year">{milestone.year}</div>
-                        <h4>{milestone.title}</h4>
-                        <p>{milestone.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="story-values">
-                <h3>What We Stand For</h3>
-                {values.map((value, index) => (
-                  <div key={index} className="value-card">
-                    <h4>{value.title}</h4>
-                    <p>{value.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
-
-        {/* Mission & Vision Section */}
-        <div className="mission-tab">
-            <div className="mission-vision-grid">
-              <div className="mission-card">
-                <h2>Our Mission</h2>
-                <p>
-                  To be the ultimate platform for emerging businesses and trendsetters in Africa, 
-                  providing a space where innovative ideas meet impactful storytelling.
-                </p>
-                <div className="mission-points">
-                  <div className="mission-point">
-                    <span>✨</span>
-                    <span>Amplify underrepresented African voices and stories</span>
-                  </div>
-                  <div className="mission-point">
-                    <span>📈</span>
-                    <span>Connect entrepreneurs with resources and opportunities</span>
-                  </div>
-                  <div className="mission-point">
-                    <span>🌍</span>
-                    <span>Build bridges across African markets and global audiences</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="vision-card">
-                <h2>Our Vision</h2>
-                <p>
-                  Shaping tomorrow's African narrative through stories, style, and solutions — 
-                  becoming the most trusted media partner for Africa's next generation of leaders.
-                </p>
-                <div className="vision-goals">
-                  <div className="vision-goal">
-                    <h4>2027</h4>
-                    <p>Reach 1 million monthly readers across all platforms</p>
-                  </div>
-                  <div className="vision-goal">
-                    <h4>2028</h4>
-                    <p>Launch Trendorabay Foundation to support young storytellers</p>
-                  </div>
-                  <div className="vision-goal">
-                    <h4>2030</h4>
-                    <p>Become Africa's leading media brand for business and culture</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="commitment-section">
-              <h3>Our Commitment</h3>
-              <div className="commitment-grid">
-                <div className="commitment-item">
-                  <div className="commitment-check">✓</div>
-                  <div>
-                    <strong>Editorial Integrity</strong>
-                    <p>Fact-checked, authentic journalism you can trust</p>
-                  </div>
-                </div>
-                <div className="commitment-item">
-                  <div className="commitment-check">✓</div>
-                  <div>
-                    <strong>Diversity & Inclusion</strong>
-                    <p>Representing voices from every corner of Africa</p>
-                  </div>
-                </div>
-                <div className="commitment-item">
-                  <div className="commitment-check">✓</div>
-                  <div>
-                    <strong>Sustainable Growth</strong>
-                    <p>Building a media business that lasts</p>
-                  </div>
-                </div>
-                <div className="commitment-item">
-                  <div className="commitment-check">✓</div>
-                  <div>
-                    <strong>Community First</strong>
-                    <p>Putting our audience at the center of everything</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        {/* Team Section */}
-        <div className="team-tab">
-            <div className="team-intro">
-              <h2>The People Behind Trendorabay</h2>
+          <div className="team-card">
+            <div className="team-avatar">👨🏾‍💼</div>
+            <div className="team-info">
+              <h3>David Mwangi</h3>
+              <div className="role">Head of Opportunities</div>
               <p>
-                Our team is a diverse group of storytellers, strategists, and creatives united by 
-                a shared passion for African excellence. Meet the minds shaping our narrative.
+                Former startup ecosystem builder connecting African talent to global and local
+                opportunities.
               </p>
             </div>
-
-            <div className="team-grid">
-              {teamMembers.map(member => (
-                <div key={member.id} className="team-card" onClick={() => openTeamModal(member)}>
-                  <div className="team-card-image">
-                    <img src={member.image} alt={member.name} />
-                    <div className="team-card-overlay">
-                      <span>View Profile →</span>
-                    </div>
-                  </div>
-                  <div className="team-card-info">
-                    <h3>{member.name}</h3>
-                    <p>{member.role}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="join-team-section">
-              <h3>Join Our Team</h3>
-              <p>We're always looking for passionate storytellers, creatives, and innovators to join our growing team.</p>
-              <button className="join-team-btn">View Open Positions →</button>
+          </div>
+          <div className="team-card">
+            <div className="team-avatar">👩🏽‍🎨</div>
+            <div className="team-info">
+              <h3>Zara Diallo</h3>
+              <div className="role">Creative Director</div>
+              <p>
+                Visual designer and brand strategist shaping Trendorabay&apos;s bold, modern
+                editorial identity.
+              </p>
             </div>
           </div>
-
-        {/* Impact Section */}
-        <div className="impact-tab">
-            <div className="impact-stories">
-              <h3>Success Stories</h3>
-              <div className="impact-stories-grid">
-                <div className="impact-story-card">
-                  <h4>Startup Spotlight</h4>
-                  <p>Featured 50+ startups that went on to raise over $2.5M in combined funding</p>
-                </div>
-                <div className="impact-story-card">
-                  <h4>Creator Program</h4>
-                  <p>Trained 200+ creators across 12 African countries through our workshops</p>
-                </div>
-                <div className="impact-story-card">
-                  <h4>Media Recognition</h4>
-                  <p>Cited by global publications and academic institutions for our reporting</p>
-                </div>
-                <div className="impact-story-card">
-                  <h4>Partnerships</h4>
-                  <p>Collaborated with 75+ brands and organizations across the continent</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="press-section">
-              <h3>Press & Recognition</h3>
-              <div className="press-grid">
-                {press.map((item, index) => (
-                  <a key={index} href={item.link} className="press-card">
-                    <div className="press-outlet">{item.outlet}</div>
-                    <div className="press-title">{item.title}</div>
-                    <div className="press-year">{item.year}</div>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-      </div>
-
-      {/* Team Member Modal */}
-      {selectedMember && (
-        <div className="team-modal" onClick={closeTeamModal}>
-          <div className="team-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={closeTeamModal}>×</button>
-            <div className="modal-grid">
-              <div className="modal-image">
-                <img src={selectedMember.image} alt={selectedMember.name} />
-              </div>
-              <div className="modal-info">
-                <h2>{selectedMember.name}</h2>
-                <p className="modal-role">{selectedMember.role}</p>
-                <p className="modal-bio">{selectedMember.bio}</p>
-                <div className="modal-expertise">
-                  <strong>Expertise:</strong>
-                  <div className="expertise-tags">
-                    {selectedMember.expertise.map((exp, i) => (
-                      <span key={i} className="expertise-tag">{exp}</span>
-                    ))}
-                  </div>
-                </div>
-                <div className="modal-quote">
-                  <span className="quote-mark">"</span>
-                  {selectedMember.quote}
-                </div>
-              </div>
+          <div className="team-card">
+            <div className="team-avatar">👨🏿‍💻</div>
+            <div className="team-info">
+              <h3>Kofi Mensah</h3>
+              <div className="role">Head of Product &amp; Technology</div>
+              <p>Engineer and product builder leading the platform&apos;s digital experience and future app.</p>
             </div>
           </div>
         </div>
-      )}
-    </div>
-  );
-};
+      </section>
+
+      {/* CTA */}
+      <section className="section">
+        <div className="about-cta">
+          <div>
+            <span className="kicker" style={{ background: '#111', color: '#fff' }}>
+              Join us
+            </span>
+            <h2>
+              Be part of
+              <br />
+              the story.
+            </h2>
+            <p>
+              Whether you are a reader, a creator, an organisation or an investor — there is a
+              place for you in the Trendorabay community.
+            </p>
+          </div>
+          <div className="cta-buttons">
+            <Link to="/stories" className="btn-dark">
+              READ OUR STORIES
+            </Link>
+            <Link to="/contact" className="btn-outline-dark">
+              CONTACT US
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+);
 
 export default AboutPage;

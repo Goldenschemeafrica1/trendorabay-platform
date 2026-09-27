@@ -8,8 +8,8 @@ const router = express.Router();
 // Get all podcasts
 router.get('/', cache(300), async (req, res, next) => {
   try {
-    const { status, trending, series } = req.query;
-    let query = 'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, plays, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE 1=1';
+    const { status, trending, series, limit } = req.query;
+    let query = 'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE 1=1';
     const params = [];
 
     if (status) {
@@ -28,7 +28,14 @@ router.get('/', cache(300), async (req, res, next) => {
 
     query += ' ORDER BY created_at DESC';
 
+    if (limit) {
+      query += ' LIMIT ?';
+      params.push(parseInt(limit));
+    }
+
     const [rows] = await pool.query(query, params);
+
+    console.log('Podcasts query result:', rows.length, 'rows found');
 
     // Map podcast titles/guests to actual image files in frontend public folder
     const podcastImageMap = {
@@ -133,7 +140,7 @@ router.get('/', cache(300), async (req, res, next) => {
 router.get('/:id', cache(300), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
-      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, plays, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE id = ?',
+      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE id = ?',
       [req.params.id]
     );
     if (rows.length === 0) {
@@ -297,7 +304,7 @@ router.patch('/:id/trending', async (req, res, next) => {
       [trending ? 1 : 0, req.params.id]
     );
     const [updated] = await pool.query(
-      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, plays, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE id = ?',
+      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE id = ?',
       [req.params.id]
     );
     res.json({ success: true, data: updated[0] });
@@ -310,11 +317,11 @@ router.patch('/:id/trending', async (req, res, next) => {
 router.patch('/:id/plays', async (req, res, next) => {
   try {
     await pool.query(
-      'UPDATE podcasts SET plays = plays + 1 WHERE id = ?',
+      'UPDATE podcasts SET trending = trending + 1 WHERE id = ?',
       [req.params.id]
     );
     const [updated] = await pool.query(
-      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, plays, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE id = ?',
+      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE id = ?',
       [req.params.id]
     );
     res.json({ success: true, data: updated[0] });
@@ -341,7 +348,7 @@ router.get('/trending/list', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     const [rows] = await pool.query(
-      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, plays, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE trending = 1 AND status = "published" ORDER BY plays DESC LIMIT ?',
+      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE trending = 1 AND status = "published" ORDER BY created_at DESC LIMIT ?',
       [limit]
     );
     res.json({ success: true, data: rows });
@@ -355,7 +362,7 @@ router.get('/published/list', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 20;
     const [rows] = await pool.query(
-      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, plays, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE status = "published" ORDER BY published_at DESC LIMIT ?',
+      'SELECT id, title, episode_number, description, cover_art_url, audio_file_url, video_file_url, category_id, guest, series, duration, host, host_id, trending, status, related_story_id, is_featured_guest, published_at, created_at, updated_at FROM podcasts WHERE status = "published" ORDER BY published_at DESC LIMIT ?',
       [limit]
     );
     res.json({ success: true, data: rows });

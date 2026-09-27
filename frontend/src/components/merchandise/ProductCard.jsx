@@ -24,13 +24,9 @@ const ProductCard = ({ product }) => {
     return stars;
   };
 
-  const handleAddToCart = () => {
-    console.log('Added to cart:', product.name);
-  };
+  const handleAddToCart = () => {};
 
-  const handleViewDetails = () => {
-    console.log('View details:', product.name);
-  };
+  const handleViewDetails = () => {};
 
   return (
     <div className="product-card">
@@ -74,9 +70,9 @@ const ProductCard = ({ product }) => {
         
         <div className="product-meta">
           <div className="price-container">
-            <span className="product-price">${product.price}</span>
+            <span className="product-price">KSH {product.price}</span>
             {product.originalPrice && (
-              <span className="original-price">${product.originalPrice}</span>
+              <span className="original-price">KSH {product.originalPrice}</span>
             )}
           </div>
           <span className="product-category">{product.category}</span>

@@ -5,32 +5,32 @@ const DonatePage = () => {
   const donationOptions = [
     {
       id: 1,
-      amount: 10,
+      amount: 1300,
       title: 'Supporter',
       description: 'Help us continue creating quality content'
     },
     {
       id: 2,
-      amount: 25,
+      amount: 3250,
       title: 'Patron',
       description: 'Support our mission and get exclusive updates'
     },
     {
       id: 3,
-      amount: 50,
+      amount: 6500,
       title: 'Benefactor',
       description: 'Major support with special recognition'
     },
     {
       id: 4,
-      amount: 100,
+      amount: 13000,
       title: 'Champion',
       description: 'Premium support with all benefits included'
     }
   ];
 
   const handleDonate = (amount) => {
-    alert(`Thank you for your donation of $${amount}! This would redirect to a payment processor.`);
+    alert(`Thank you for your donation of KSH ${amount}! This would redirect to a payment processor.`);
   };
 
   return (
@@ -75,14 +75,14 @@ const DonatePage = () => {
             <div className="donation-cards">
               {donationOptions.map(option => (
                 <div key={option.id} className="donation-card">
-                  <div className="donation-amount">${option.amount}</div>
+                  <div className="donation-amount">KSH {option.amount.toLocaleString()}</div>
                   <h3 className="donation-title">{option.title}</h3>
                   <p className="donation-description">{option.description}</p>
-                  <button 
+                  <button
                     className="donate-button"
                     onClick={() => handleDonate(option.amount)}
                   >
-                    Donate ${option.amount}
+                    Donate KSH {option.amount.toLocaleString()}
                   </button>
                 </div>
               ))}

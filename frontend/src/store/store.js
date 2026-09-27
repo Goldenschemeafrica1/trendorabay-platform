@@ -4,6 +4,7 @@ import magazineReducer from './slices/magazineSlice';
 import merchReducer from './slices/merchSlice';
 import storyReducer from './slices/storySlice';
 import uiReducer from './slices/uiSlice';
+import authReducer from './slices/authSlice';
 
 // Load cart from localStorage
 const loadCartFromStorage = () => {
@@ -31,6 +32,7 @@ const store = configureStore({
     merch: merchReducer,
     stories: storyReducer,
     ui: uiReducer,
+    auth: authReducer,
   },
   preloadedState,
   middleware: (getDefaultMiddleware) =>

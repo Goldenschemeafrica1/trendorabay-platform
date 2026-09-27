@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import './MagazineDetails.css';
 
 // Sample magazine data - same as LatestMagazine component - updated for fresh deployment
-const sampleMagazines = [
+const _sampleMagazines = [
   {
     id: 1,
     title: 'Tech & Innovation',
@@ -2314,7 +2314,7 @@ const sampleMagazines = [
 ];
 
 // Sample related magazines
-const relatedMagazinesData = {
+const _relatedMagazinesData = {
   2: {
     id: 2,
     title: 'Vogue Africa',
@@ -2353,7 +2353,6 @@ const MagazineDetails = ({ magazine }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
-  const [previewPage, setPreviewPage] = useState(0);
   const [selectedFormat, setSelectedFormat] = useState('digital');
 
   // Generate preview pages if not available
@@ -2463,10 +2462,6 @@ const MagazineDetails = ({ magazine }) => {
     window.open(shareUrl, '_blank', 'width=600,height=400');
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   const handleDownloadPreview = () => {
     toast.info('Preview download started...');
   };
@@ -2572,7 +2567,7 @@ const MagazineDetails = ({ magazine }) => {
                   <div className="format-info">
                     <h4>Digital</h4>
                     <p>Instant download, access on all devices</p>
-                    <div className="format-price">${magazine.digitalPrice || magazine.price || 9.99}</div>
+                    <div className="format-price">KES {magazine.digitalPrice || magazine.price || 9.99}</div>
                   </div>
                 </div>
                 <div
@@ -2582,7 +2577,7 @@ const MagazineDetails = ({ magazine }) => {
                   <div className="format-info">
                     <h4>Print</h4>
                     <p>Physical copy delivered to your door</p>
-                    <div className="format-price">${magazine.printPrice || (magazine.price || 9.99) + 4}</div>
+                    <div className="format-price">KES {magazine.printPrice || (magazine.price || 9.99) + 4}</div>
                   </div>
                 </div>
               </div>

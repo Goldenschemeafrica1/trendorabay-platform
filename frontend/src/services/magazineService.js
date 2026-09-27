@@ -33,7 +33,7 @@ const magazineService = {
       } else if (typeof previewData === 'string' && !previewData.startsWith('/uploads/')) {
         try {
           previewPages = JSON.parse(previewData);
-        } catch (e) {
+        } catch {
           previewPages = null;
         }
       }
@@ -45,7 +45,32 @@ const magazineService = {
       ...mag,
       slug,
       coverImage: mag.coverImage || mag.cover_image_url || '/music.jpeg',
-      previewPages
+      coverImageLarge: mag.coverImageLarge || mag.coverImage || mag.cover_image_url || '/music.jpeg',
+      previewPages,
+      // Add missing fields that MagazineDetails component expects
+      fullDescription: mag.fullDescription || mag.description || 'Explore this exciting magazine issue featuring the latest stories and insights.',
+      reviewCount: mag.reviewCount || mag.review_count || 0,
+      rating: mag.rating || 4.5,
+      readers: mag.readers || 1000,
+      isNew: mag.isNew || false,
+      isFeatured: mag.isFeatured || false,
+      editorPick: mag.editorPick || false,
+      subcategory: mag.subcategory || mag.category || 'General',
+      issue: mag.issue || 'Vol. 1 / 2026',
+      contributors: mag.contributors || [],
+      tableOfContents: mag.tableOfContents || mag.table_of_contents || [],
+      reviews: mag.reviews || [],
+      relatedMagazines: mag.relatedMagazines || [],
+      // Ensure price fields exist
+      price: mag.price || 9.99,
+      digitalPrice: mag.digitalPrice || mag.digital_price || 9.99,
+      printPrice: mag.printPrice || mag.print_price || 13.99,
+      subscriptionPrice: mag.subscriptionPrice || mag.subscription_price || 99.99,
+      pages: mag.pages || 100,
+      language: mag.language || 'English',
+      publisher: mag.publisher || 'Trendorabay',
+      editor: mag.editor || 'Trendorabay Editorial',
+      publishDate: mag.publishDate || mag.publish_date || mag.created_at || new Date().toISOString(),
     };
   },
 

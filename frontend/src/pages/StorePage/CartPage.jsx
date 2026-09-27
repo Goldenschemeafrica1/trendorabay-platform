@@ -3,16 +3,55 @@ import { useCart } from '../../store/hooks/useCart';
 import { useNavigate } from 'react-router-dom';
 import './CartPage.css';
 
-const CartPage = ({ onCheckoutComplete }) => {
+const recommendedData = [
+  {
+    id: 101,
+    name: 'Trendorabay Issue #04 - "Future Forward"',
+    price: 24.99,
+    image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=250&fit=crop',
+    category: 'Magazine'
+  },
+  {
+    id: 102,
+    name: 'Street Culture Poster Set',
+    price: 39.99,
+    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=250&fit=crop',
+    category: 'Art'
+  },
+  {
+    id: 103,
+    name: 'Trendorabay Water Bottle',
+    price: 19.99,
+    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=200&h=250&fit=crop',
+    category: 'Accessories'
+  },
+  {
+    id: 104,
+    name: 'Digital Creator Bundle',
+    price: 149.99,
+    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200&h=250&fit=crop',
+    category: 'Digital'
+  }
+];
+
+const CartPage = () => {
   const navigate = useNavigate();
-  const { cartItems, removeFromCart, updateItemQuantity, subtotal, calculateTotal, clearAllItems } = useCart();
-  const [loading, setLoading] = useState(true);
+  const { cartItems, removeFromCart, updateItemQuantity, subtotal } = useCart();
+  const [loading] = useState(false);
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoError, setPromoError] = useState('');
-  const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const [savedItems, setSavedItems] = useState([]);
+  const [recommendedProducts] = useState(recommendedData);
+  const [savedItems] = useState(() => {
+    try {
+      const savedItemsData = localStorage.getItem('trendorabay_saved_items');
+      return savedItemsData ? JSON.parse(savedItemsData) : [];
+    } catch {
+      localStorage.removeItem('trendorabay_saved_items');
+      return [];
+    }
+  });
   const [shippingMethod, setShippingMethod] = useState('standard');
 
   // Valid promo codes
@@ -22,53 +61,6 @@ const CartPage = ({ onCheckoutComplete }) => {
     'FREESHIP': { discount: 10, type: 'fixed', name: 'Free Shipping Discount' },
     'AFRICAN50': { discount: 50, type: 'percentage', name: 'African Innovators Special' }
   };
-
-  // Recommended products based on cart items
-  const recommendedData = [
-    {
-      id: 101,
-      name: 'Trendorabay Issue #04 - "Future Forward"',
-      price: 24.99,
-      image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=250&fit=crop',
-      category: 'Magazine'
-    },
-    {
-      id: 102,
-      name: 'Street Culture Poster Set',
-      price: 39.99,
-      image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=250&fit=crop',
-      category: 'Art'
-    },
-    {
-      id: 103,
-      name: 'Trendorabay Water Bottle',
-      price: 19.99,
-      image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=200&h=250&fit=crop',
-      category: 'Accessories'
-    },
-    {
-      id: 104,
-      name: 'Digital Creator Bundle',
-      price: 149.99,
-      image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200&h=250&fit=crop',
-      category: 'Digital'
-    }
-  ];
-
-  // Load cart from localStorage
-  useEffect(() => {
-    try {
-      const savedItemsData = localStorage.getItem('trendorabay_saved_items');
-      if (savedItemsData) {
-        setSavedItems(JSON.parse(savedItemsData));
-      }
-    } catch {
-      localStorage.removeItem('trendorabay_saved_items');
-    }
-    
-    setLoading(false);
-    setRecommendedProducts(recommendedData);
-  }, []);
 
   // Save saved items to localStorage
   useEffect(() => {
@@ -111,47 +103,6 @@ const CartPage = ({ onCheckoutComplete }) => {
   const handleRemoveItem = (itemId, size, color) => {
     removeFromCart(itemId, size, color);
     showNotification('Item removed from cart');
-  };
-
-  // Move item to saved for later
-  const moveToSaved = (item) => {
-    handleRemoveItem(item.id, item.size, item.color);
-    setSavedItems([...savedItems, { ...item, savedAt: new Date().toISOString() }]);
-    showNotification('Item moved to Saved for Later');
-  };
-
-  // Move saved item back to cart
-  const moveToCart = (savedItem) => {
-    setSavedItems(savedItems.filter(i =>
-      !(i.id === savedItem.id && i.size === savedItem.size)
-    ));
-
-    const existingItem = cartItems.find(item =>
-      item.id === savedItem.id && item.size === savedItem.size
-    );
-
-    if (existingItem) {
-      updateItemQuantity(savedItem.id, savedItem.size, savedItem.color, existingItem.quantity + 1);
-    } else {
-      const cartItem = {
-        id: savedItem.id,
-        name: savedItem.name,
-        price: savedItem.price,
-        image: savedItem.image,
-        size: savedItem.size || '',
-        color: savedItem.color || '',
-        quantity: 1
-      };
-      updateItemQuantity(cartItem.id, cartItem.size, cartItem.color, 1);
-    }
-
-    showNotification('Item moved back to cart');
-  };
-
-  // Remove saved item
-  const removeSavedItem = (itemId, size) => {
-    setSavedItems(savedItems.filter(item => !(item.id === itemId && item.size === size)));
-    showNotification('Item removed from saved list');
   };
 
   // Apply promo code
@@ -217,38 +168,6 @@ const CartPage = ({ onCheckoutComplete }) => {
         document.body.removeChild(notification);
       }, 300);
     }, 2000);
-  };
-
-  // Proceed to checkout
-  const handleCheckout = () => {
-    if (cartItems.length === 0) {
-      showNotification('Your cart is empty');
-      return;
-    }
-
-    // Simulate checkout process
-    const orderData = {
-      items: cartItems,
-      subtotal,
-      shipping: shippingCost(),
-      discount: discountAmount,
-      total,
-      promoApplied: promoApplied ? discount.name : null,
-      shippingMethod,
-      orderDate: new Date().toISOString(),
-      orderNumber: 'TRX-' + Math.random().toString(36).substr(2, 8).toUpperCase()
-    };
-
-    localStorage.setItem('trendorabay_last_order', JSON.stringify(orderData));
-
-    if (onCheckoutComplete) {
-      onCheckoutComplete(orderData);
-    } else {
-      alert(`Order placed successfully!\nOrder #: ${orderData.orderNumber}\nTotal: $${(parseFloat(total) || 0).toFixed(2)}\n\nThank you for shopping with Trendorabay!`);
-      // Clear cart
-      clearAllItems();
-      navigate('/checkout/success');
-    }
   };
 
   if (loading) {
@@ -343,7 +262,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                             checked={shippingMethod === 'standard'}
                             onChange={() => setShippingMethod('standard')}
                           />
-                          <span>Standard (3-5 days) - ${shippingCost() === 0 ? 'FREE' : '$5.99'}</span>
+                          <span>Standard (3-5 days) - {shippingCost() === 0 ? 'FREE' : 'KSH 778.70'}</span>
                         </label>
                         <label className="shipping-option">
                           <input
@@ -353,7 +272,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                             checked={shippingMethod === 'express'}
                             onChange={() => setShippingMethod('express')}
                           />
-                          <span>Express (1-2 days) - $12.99</span>
+                          <span>Express (1-2 days) - KSH 1,688.70</span>
                         </label>
                         <label className="shipping-option">
                           <input
@@ -363,7 +282,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                             checked={shippingMethod === 'overnight'}
                             onChange={() => setShippingMethod('overnight')}
                           />
-                          <span>Overnight (Next day) - $24.99</span>
+                          <span>Overnight (Next day) - KSH 3,248.70</span>
                         </label>
                       </div>
                     </div>
@@ -413,7 +332,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                         <circle cx="12" cy="12" r="10"/>
                         <path d="M12 16v-4M12 8h.01"/>
                       </svg>
-                      <span>Free shipping on orders over $100</span>
+                      <span>Free shipping on orders over KSH 13,000</span>
                     </div>
                     
                     <button className="checkout-button" onClick={() => navigate('/checkout')}>
@@ -482,7 +401,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                       checked={shippingMethod === 'standard'}
                       onChange={() => setShippingMethod('standard')}
                     />
-                    <span>Standard (3-5 days) - ${shippingCost() === 0 ? 'FREE' : '$5.99'}</span>
+                    <span>Standard (3-5 days) - {shippingCost() === 0 ? 'FREE' : 'KSH 778.70'}</span>
                   </label>
                   <label className="shipping-option">
                     <input
@@ -492,7 +411,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                       checked={shippingMethod === 'express'}
                       onChange={() => setShippingMethod('express')}
                     />
-                    <span>Express (1-2 days) - $12.99</span>
+                    <span>Express (1-2 days) - KSH 1,688.70</span>
                   </label>
                   <label className="shipping-option">
                     <input
@@ -502,7 +421,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                       checked={shippingMethod === 'overnight'}
                       onChange={() => setShippingMethod('overnight')}
                     />
-                    <span>Overnight (Next day) - $24.99</span>
+                    <span>Overnight (Next day) - KSH 3,248.70</span>
                   </label>
                 </div>
               </div>
@@ -552,7 +471,7 @@ const CartPage = ({ onCheckoutComplete }) => {
                   <circle cx="12" cy="12" r="10"/>
                   <path d="M12 16v-4M12 8h.01"/>
                 </svg>
-                <span>Free shipping on orders over $100</span>
+                <span>Free shipping on orders over KSH 13,000</span>
               </div>
               
               <button className="checkout-button" onClick={() => navigate('/checkout')}>

@@ -4,20 +4,6 @@ import axios from 'axios';
 const cache = new Map();
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes for instant responses
 
-// Token refresh state
-let isRefreshing = false;
-let refreshSubscribers = [];
-
-// Add subscriber to be notified when token is refreshed
-const subscribeTokenRefresh = (callback) => {
-  refreshSubscribers.push(callback);
-};
-
-// Notify all subscribers that token is refreshed
-const onTokenRefreshed = (token) => {
-  refreshSubscribers.forEach(callback => callback(token));
-  refreshSubscribers = [];
-};
 
 const getCacheKey = (url, params) => {
   return `${url}?${JSON.stringify(params)}`;
@@ -92,7 +78,6 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       // Token is in httpOnly cookie, clear user data and redirect to login
-      console.log('Token expired, redirecting to login for re-authentication');
       localStorage.removeItem('user');
       
       if (window.location.pathname !== '/login') {
@@ -102,7 +87,6 @@ api.interceptors.response.use(
 
     // Handle network errors - retry with exponential backoff
     if (!error.response && error.code === 'ECONNABORTED' || error.message.includes('timeout') || error.message.includes('Network Error')) {
-      console.log('Network error, retrying request...');
       if (!originalRequest._retryCount) {
         originalRequest._retryCount = 0;
       }
@@ -132,7 +116,6 @@ export const apiRequest = {
 // Clear cache function
 api.clearCache = () => {
   cache.clear();
-  console.log('API cache cleared');
 };
 
 export default api;

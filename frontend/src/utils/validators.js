@@ -280,7 +280,7 @@ export const validateUniqueEmail = async (email) => {
     }
     
     return null;
-  } catch (error) {
+  } catch {
     return 'Unable to validate email';
   }
 };

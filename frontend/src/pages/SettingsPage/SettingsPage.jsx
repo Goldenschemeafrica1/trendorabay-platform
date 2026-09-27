@@ -41,7 +41,6 @@ const SettingsPage = () => {
         const user = localStorage.getItem('user');
         
         if (!user) {
-          console.log('No user found, user not authenticated');
           setLoading(false);
           return;
         }
@@ -53,7 +52,6 @@ const SettingsPage = () => {
         if (!response.ok) {
           console.error('Profile fetch failed with status:', response.status);
           if (response.status === 401) {
-            console.log('User not authenticated, redirecting to login');
             // Optionally redirect to login
             // window.location.href = '/login';
           }
@@ -62,8 +60,6 @@ const SettingsPage = () => {
         }
 
         const data = await response.json();
-        
-        console.log('Fetched user data:', data);
         
         if (data.success) {
           setAccountSettings({

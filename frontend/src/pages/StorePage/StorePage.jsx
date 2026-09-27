@@ -10,25 +10,13 @@ const StorePage = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('featured');
-      const [showFilters, setShowFilters] = useState(false);
+  const [selectedCategory] = useState('all');
+  const [searchQuery] = useState('');
+  const [sortBy] = useState('featured');
   const [wishlist, setWishlist] = useState([]);
 
-  // Product categories
-  const categories = [
-    { id: 'all', name: 'All Products', icon: '🛍️', count: 0 },
-    { id: 'magazine', name: 'Magazines', icon: '📖', count: 0 },
-    { id: 'apparel', name: 'Apparel', icon: '👕', count: 0 },
-    { id: 'accessories', name: 'Accessories', icon: '⌚', count: 0 },
-    { id: 'art', name: 'Art', icon: '🎨', count: 0 },
-    { id: 'digital', name: 'Digital', icon: '💻', count: 0 }
-  ];
-
-  
   // Sample product data (in production, this would come from an API)
-  const productsData = [
+  const _productsData = [
     {
       id: 1,
       name: 'Trendorabay Issue #01 - "The Origin"',
@@ -484,25 +472,10 @@ const StorePage = () => {
 
   // Format price
   const formatPrice = (price) => {
-    if (price === undefined || price === null) return '$0.00';
+    if (price === undefined || price === null) return 'KSH 0.00';
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-    if (isNaN(numPrice)) return '$0.00';
-    return `$${numPrice.toFixed(2)}`;
-  };
-
-  // Render stars for rating
-  const renderStars = (rating) => {
-    const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.5;
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-    
-    return (
-      <>
-        {'★'.repeat(fullStars)}
-        {halfStar && '½'}
-        {'☆'.repeat(emptyStars)}
-      </>
-    );
+    if (isNaN(numPrice)) return 'KSH 0.00';
+    return `KSH ${numPrice.toFixed(2)}`;
   };
 
   if (loading) {

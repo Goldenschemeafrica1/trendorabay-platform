@@ -16,25 +16,32 @@ fontLink.onload = () => {
 };
 document.head.appendChild(fontLink);
 
-// Register service worker for offline caching and instant loading
+// Register service worker for offline caching and instant loading (production only)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    // Unregister any existing service workers to force reload
-    navigator.serviceWorker.getRegistrations().then((registrations) => {
-      for (const registration of registrations) {
-        registration.unregister();
-      }
-    }).then(() => {
-      // Register new service worker
-      navigator.serviceWorker.register('/sw-v3.js')
-        .then((registration) => {
-          console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch((error) => {
-          console.log('Service Worker registration failed:', error);
-        });
-    });
+    if (import.meta.env.PROD) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister();
+        }
+      }).then(() => {
+        navigator.serviceWorker.register('/sw-v4.js')
+          .then(() => {})
+          .catch(() => {});
+      });
+    } else {
+      // Dev: unregister all service workers to avoid stale caches causing old pages to flash
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
   });
+}
+
+if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

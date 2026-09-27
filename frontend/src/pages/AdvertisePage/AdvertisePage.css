@@ -58,40 +58,55 @@
 
 /* ===== Benefits Grid ===== */
 .benefits-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .benefit-card {
   background: #faf6f0;
-  padding: 24px;
-  border-radius: 12px;
-  text-align: center;
+  padding: 20px 24px;
+  border-radius: 0;
+  text-align: left;
   transition: transform 0.2s ease;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.benefit-card:last-child {
+  border-bottom: none;
+  border-radius: 0 0 12px 12px;
+}
+
+.benefit-card:first-child {
+  border-radius: 12px 12px 0 0;
 }
 
 .benefit-card:hover {
-  transform: translateY(-4px);
+  transform: none;
+  background: #f5efe6;
 }
 
 .benefit-card i {
-  font-size: 32px;
+  font-size: 24px;
   color: #b87c4b;
-  margin-bottom: 16px;
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
 
 .benefit-card h3 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #1f2937;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .benefit-card p {
   font-size: 14px;
   color: #6b7280;
-  line-height: 1.5;
+  line-height: 1.4;
   margin: 0;
 }
 
@@ -395,7 +410,7 @@
   }
   
   .benefits-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 }
 
@@ -474,6 +489,11 @@ body.dark-mode .info-section h2 {
 
 body.dark-mode .benefit-card {
   background: #162116;
+  border-bottom-color: #2C5530;
+}
+
+body.dark-mode .benefit-card:hover {
+  background: #1E2A1E;
 }
 
 body.dark-mode .benefit-card i {

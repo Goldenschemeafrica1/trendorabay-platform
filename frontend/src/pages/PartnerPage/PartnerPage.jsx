@@ -15,7 +15,6 @@ const PartnerPage = () => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const partnershipTypes = [
@@ -98,7 +97,6 @@ const PartnerPage = () => {
       });
       
       setIsSubmitting(false);
-      setSubmitSuccess(true);
       setShowSuccessPopup(true);
       
       // Reset form after successful submission
@@ -112,7 +110,6 @@ const PartnerPage = () => {
           message: '',
           agreeToTerms: false
         });
-        setSubmitSuccess(false);
         setShowSuccessPopup(false);
       }, 5000);
     } catch (error) {

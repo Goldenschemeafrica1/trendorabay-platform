@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Input from '../../components/forms/Input';
-import Textarea from '../../components/forms/Textarea';
-import Button from '../../components/forms/Button';
-import FormError from '../../components/forms/FormError';
+import Input from '../../components/Input';
+import Textarea from '../../components/Textarea';
+import Button from '../../components/Button';
+import FormError from '../../components/FormError';
 import contactService from '../../services/contactService';
 
 const ContactForm = ({ onSubmit }) => {
@@ -81,7 +81,7 @@ const ContactForm = ({ onSubmit }) => {
         message: ''
       });
       setErrors({});
-    } catch (error) {
+    } catch {
       setErrors({ submit: 'Failed to send message. Please try again.' });
     } finally {
       setIsSubmitting(false);

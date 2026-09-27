@@ -17,9 +17,9 @@ export const PAGINATION = {
 
 // Currency Constants
 export const CURRENCY = {
-  DEFAULT: 'USD',
-  SYMBOL: '$',
-  LOCALE: 'en-US',
+  DEFAULT: 'KSH',
+  SYMBOL: 'KSH',
+  LOCALE: 'en-KE',
 };
 
 // Shipping Constants
@@ -55,8 +55,8 @@ export const SOCIAL_MEDIA = {
 
 // Contact Constants
 export const CONTACT = {
-  EMAIL: 'hello@trendorabay.com',
-  SUPPORT_EMAIL: 'support@trendorabay.com',
+  EMAIL: 'trendorabay@trendorabay.com',
+  SUPPORT_EMAIL: 'trendorabay@trendorabay.com',
   PHONE: '+1 (555) 123-4567',
   ADDRESS: {
     street: '123 Culture Street',
@@ -117,7 +117,7 @@ export const LOADING_MESSAGES = {
 // Validation Constants
 export const VALIDATION = {
   EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  PHONE_REGEX: /^\+?[\d\s\-\(\)]+$/,
+  PHONE_REGEX: /^\+?[\d\s\-()]+$/,
   ZIP_CODE_REGEX: /^\d{5}(-\d{4})?$/,
   PASSWORD_MIN_LENGTH: 8,
   NAME_MIN_LENGTH: 2,

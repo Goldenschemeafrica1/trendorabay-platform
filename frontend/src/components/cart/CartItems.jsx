@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaTimes, FaShoppingCart, FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
-import Button from '../forms/Button';
+import Button from '../Button';
 import './CartItems.css';
 
 const CartItems = ({ 
@@ -9,10 +9,6 @@ const CartItems = ({
   onUpdateQuantity,
   showHeader = true 
 }) => {
-  const calculateTotal = () => {
-    return items.reduce((total, item) => total + item.price * item.quantity, 0);
-  };
-
   const calculateSubtotal = () => {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
   };
@@ -72,7 +68,7 @@ const CartItems = ({
                   {item.variant.issue && <span>Issue: {item.variant.issue}</span>}
                 </div>
               )}
-              <p className="cart-item-price">${item.price.toFixed(2)}</p>
+              <p className="cart-item-price">KSH {item.price.toFixed(2)}</p>
             </div>
 
             <div className="cart-item-quantity">
@@ -96,7 +92,7 @@ const CartItems = ({
 
             <div className="cart-item-total">
               <span className="item-total">
-                ${(item.price * item.quantity).toFixed(2)}
+                KSH {(item.price * item.quantity).toFixed(2)}
               </span>
             </div>
 
@@ -115,30 +111,30 @@ const CartItems = ({
       <div className="cart-summary">
         <div className="summary-row">
           <span>Subtotal</span>
-          <span>${calculateSubtotal().toFixed(2)}</span>
+          <span>KSH {calculateSubtotal().toFixed(2)}</span>
         </div>
         <div className="summary-row">
           <span>Tax</span>
-          <span>${calculateTax().toFixed(2)}</span>
+          <span>KSH {calculateTax().toFixed(2)}</span>
         </div>
         <div className="summary-row">
           <span>Shipping</span>
           <span>
-            {calculateShipping() === 0 ? 'FREE' : `$${calculateShipping().toFixed(2)}`}
+            {calculateShipping() === 0 ? 'FREE' : `KSH ${calculateShipping().toFixed(2)}`}
           </span>
         </div>
         <div className="summary-row discount">
           <span>Discount</span>
-          <span>-$0.00</span>
+          <span>-KSH 0.00</span>
         </div>
         <div className="summary-row total">
           <span>Total</span>
-          <span>${calculateGrandTotal().toFixed(2)}</span>
+          <span>KSH {calculateGrandTotal().toFixed(2)}</span>
         </div>
-        
+
         {calculateShipping() > 0 && (
           <div className="shipping-note">
-            <p>Add ${(50 - calculateSubtotal()).toFixed(2)} more for FREE shipping!</p>
+            <p>Add KSH {(50 - calculateSubtotal()).toFixed(2)} more for FREE shipping!</p>
           </div>
         )}
       </div>

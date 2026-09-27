@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="scroll-position" content="top" />
 
     <title>Trendorabay | Digital Magazine, Stories, Podcasts & Culture</title>
 
@@ -36,7 +37,68 @@
   </head>
 
   <body>
+    <style>
+      /* Prevent footer flash on page load */
+      body {
+        overflow-x: hidden;
+      }
+      
+      /* Hide content initially to prevent flash */
+      #root {
+        opacity: 0;
+        transition: opacity 0.25s ease-in;
+      }
+      
+      /* Show content after scroll is set */
+      body.loaded #root {
+        opacity: 1;
+      }
+    </style>
     <div id="root"></div>
+    <script>
+      // Force scroll to top immediately before any content loads
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+
+      // Clear any hash from URL to prevent auto-scrolling
+      if (window.location.hash) {
+        history.replaceState(null, null, ' ');
+      }
+
+      // Force scroll to top with multiple methods
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      document.documentElement.style.scrollBehavior = 'auto';
+      document.body.style.scrollBehavior = 'auto';
+
+      // Additional force scroll after multiple delays
+      setTimeout(function() {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }, 0);
+
+      setTimeout(function() {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }, 50);
+
+      setTimeout(function() {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }, 100);
+
+      setTimeout(function() {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }, 200);
+
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

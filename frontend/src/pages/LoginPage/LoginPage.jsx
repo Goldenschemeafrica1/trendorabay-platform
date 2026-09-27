@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { apiRequest } from '../../services/api';
+import { loginSuccess } from '../../store/slices/authSlice';
 import './LoginPage.css';
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -12,8 +16,6 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -60,13 +62,8 @@ const LoginPage = () => {
       });
       
       if (response.data.success) {
-        // Save user data to localStorage (token is now in httpOnly cookie)
-        localStorage.setItem('user', JSON.stringify(response.data.data.user));
-        
-        // Redirect to profile or home
+        dispatch(loginSuccess(response.data.data));
         navigate('/');
-        // Reload the page to update header
-        window.location.reload();
       }
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';

@@ -1,0 +1,457 @@
+/* ===== New Look Header Styles ===== */
+.nl-header {
+  --nl-ink: #111318;
+  --nl-muted: #6b7280;
+  --nl-paper: #f7f7f5;
+  --nl-card: #fff;
+  --nl-line: #e5e7eb;
+  --nl-accent: #e6ff3f;
+  --nl-dark: #111318;
+  --nl-max: 1240px;
+
+  background: #fff;
+  border-bottom: 1px solid var(--nl-line);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.nl-container {
+  width: min(var(--nl-max), 92%);
+  margin: auto;
+}
+
+.nl-nav {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.nl-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.nl-logo img {
+  height: 46px;
+  width: auto;
+  display: block;
+}
+
+.nl-navlinks {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.nl-navlinks > button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+  color: var(--nl-ink);
+}
+
+.nl-navlinks > button:hover {
+  opacity: 0.55;
+}
+
+.nl-nav-community-trigger {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+  color: var(--nl-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nl-nav-badge {
+  background: var(--nl-accent);
+  color: #111;
+  padding: 4px 7px;
+  border-radius: 99px;
+  font-size: 9px;
+  margin-left: 4px;
+}
+
+.nl-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.nl-iconbtn,
+.nl-menubtn {
+  border: 1px solid var(--nl-line);
+  background: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nl-menubtn {
+  display: none;
+  border-radius: 10px;
+}
+
+.nl-loginbtn {
+  display: inline-block;
+  background: transparent;
+  color: var(--nl-ink);
+  padding: 9px 0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  transition: 0.2s;
+  text-decoration: none;
+}
+
+.nl-loginbtn:hover {
+  background: transparent;
+  color: var(--nl-ink);
+}
+
+body.dark-mode .nl-loginbtn {
+  color: #f7f7f5;
+}
+
+body.dark-mode .nl-loginbtn:hover {
+  color: #f7f7f5;
+}
+
+.nl-profile-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #111318;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  overflow: hidden;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.nl-profile-icon:hover {
+  background: #222;
+}
+
+.nl-profile-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nl-profile-avatar {
+  font-size: 18px;
+}
+
+.nl-profile-wrap {
+  position: relative;
+}
+
+.nl-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 6px;
+  min-width: 120px;
+  z-index: 1000;
+}
+
+.nl-profile-logout {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #ef4444;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.nl-profile-logout:hover {
+  background: #fee2e2;
+}
+
+body.dark-mode .nl-profile-dropdown {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+body.dark-mode .nl-profile-logout {
+  color: #f87171;
+}
+
+body.dark-mode .nl-profile-logout:hover {
+  background: #374151;
+}
+
+body.dark-mode .nl-mobile-nav {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+body.dark-mode .nl-mobile-nav button:hover,
+body.dark-mode .nl-mobile-login:hover,
+body.dark-mode .nl-mobile-theme-toggle:hover {
+  background: #374151;
+}
+
+.nl-theme-toggle {
+  font-size: 16px;
+  background: transparent;
+  border: none;
+}
+
+.nl-mobile-theme-toggle {
+  color: var(--nl-accent);
+  background: none;
+  border: none;
+  padding: 9px 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.nl-mobile-login {
+  display: block;
+  padding: 9px 0;
+  font-weight: 700;
+  color: var(--nl-ink);
+  text-decoration: none;
+}
+
+.nl-cart-toggle {
+  position: relative;
+}
+
+.nl-cart-count {
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  background: #111;
+  color: #fff;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nl-mobile-nav {
+  background: var(--nl-card);
+  border-top: 1px solid var(--nl-line);
+  border-bottom: 1px solid var(--nl-line);
+  padding: 12px 0 18px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.nl-mobile-nav button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 10px 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--nl-ink);
+  border-radius: 6px;
+}
+
+.nl-mobile-nav button:hover {
+  background: #f5f5f5;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .nl-navlinks {
+    display: none;
+  }
+
+  .nl-menubtn {
+    display: flex;
+  }
+}
+
+@media (max-width: 560px) {
+  .nl-nav {
+    height: 65px;
+  }
+
+  .nl-logo img {
+    height: 38px;
+  }
+
+  .nl-actions .nl-iconbtn {
+    display: none;
+  }
+
+  .nl-actions .nl-theme-toggle {
+    display: flex;
+  }
+}
+
+/* ===== Community Mega Menu ===== */
+.nl-nav-community-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nl-nav-community-trigger .nl-chevron {
+  font-size: 9px;
+  transition: transform 0.2s;
+}
+
+.nl-nav-community-wrap.nl-open .nl-chevron {
+  transform: rotate(180deg);
+}
+
+.nl-community-mega-menu {
+  position: absolute;
+  z-index: 9999;
+  top: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  width: min(940px, calc(100vw - 32px));
+  background-color: #111318;
+  color: #fff !important;
+  border: 1px solid #ffffff18;
+  border-radius: 18px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.28);
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+
+.nl-community-mega-menu:before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 0;
+  right: 0;
+  height: 16px;
+}
+
+.nl-nav-community-wrap:hover .nl-community-mega-menu,
+.nl-nav-community-wrap.nl-open .nl-community-mega-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nl-community-mega-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #ffffff17;
+  margin-bottom: 18px;
+}
+
+.nl-community-mega-head .nl-mega-tag {
+  color: var(--nl-accent);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.nl-community-mega-head h3 {
+  font-size: 25px;
+  letter-spacing: -1px;
+  margin-top: 4px;
+  color: #fff !important;
+}
+
+.nl-community-mega-head p {
+  font-size: 11px;
+  color: #fff !important;
+  margin: 0;
+  max-width: 420px;
+  text-align: right;
+}
+
+.nl-community-mega-groups {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.nl-community-mega-group h4 {
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  color: #fff !important;
+  margin: 0 0 10px;
+}
+
+.nl-community-mega-list {
+  display: grid;
+  gap: 2px;
+}
+
+.nl-community-mega-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 7px 6px;
+  color: #fff !important;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: 0.15s;
+  cursor: default;
+  border: 0;
+  background: none;
+  text-align: left;
+}
+
+.nl-community-mega-footer {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #ffffff17;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nl-community-mega-footer span {
+  font-size: 10px;
+  color: #fff !important;
+}

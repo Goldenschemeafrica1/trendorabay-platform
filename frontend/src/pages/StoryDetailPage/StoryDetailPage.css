@@ -1,0 +1,133 @@
+.story-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.story-detail-loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 16px;
+  color: #555;
+}
+
+.story-detail-header {
+  margin-bottom: 24px;
+}
+
+.story-detail-tag {
+  display: inline-block;
+  background: #111318;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.story-detail h1 {
+  font-size: 32px;
+  line-height: 1.1;
+  margin: 0 0 12px;
+  letter-spacing: -1px;
+}
+
+.story-detail-meta {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+.story-detail-image {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 28px;
+  object-fit: cover;
+}
+
+.story-detail-inline-left,
+.story-detail-inline-right {
+  width: 45%;
+  max-width: 320px;
+  max-height: 280px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 12px 0;
+}
+
+.story-detail-inline-left {
+  float: left;
+  margin-right: 20px;
+}
+
+.story-detail-inline-right {
+  float: right;
+  margin-left: 20px;
+}
+
+.story-detail-inline-last {
+  float: none;
+  display: block;
+  clear: both;
+  width: 100%;
+  max-width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 24px 0;
+}
+
+.story-detail-body {
+  line-height: 1.7;
+  font-size: 16px;
+  color: #222;
+  display: flow-root;
+}
+
+.story-detail-body p {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 600px) {
+  .story-detail-inline-left,
+  .story-detail-inline-right {
+    float: none;
+    width: 100%;
+    max-width: none;
+    margin: 20px 0;
+  }
+}
+
+.story-detail-back {
+  display: inline-block;
+  margin-top: 32px;
+  color: #111;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+body.dark-mode .story-detail {
+  background: #111318;
+}
+
+body.dark-mode .story-detail-header h1 {
+  color: #f7f7f5;
+}
+
+body.dark-mode .story-detail-meta {
+  color: #9ca3af;
+}
+
+body.dark-mode .story-detail-body {
+  color: #f7f7f5;
+}
+
+body.dark-mode .story-detail-body p {
+  color: #f7f7f5;
+}
+
+body.dark-mode .story-detail-back {
+  color: #e6ff3f;
+}

@@ -8,7 +8,7 @@ const paymentService = {
   },
 
   // Create payment intent
-  createPaymentIntent: async (amount, currency = 'USD') => {
+  createPaymentIntent: async (amount, currency = 'KSH') => {
     const response = await apiRequest.post('/payments/create-intent', { amount, currency });
     return response.data;
   },

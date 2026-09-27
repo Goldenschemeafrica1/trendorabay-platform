@@ -8,47 +8,6 @@ const OrdersPage = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
-  // Mock orders data
-  const mockOrders = [
-    {
-      id: 'ORD-2024-001',
-      date: '2024-06-15',
-      status: 'delivered',
-      total: 4500,
-      items: [
-        { name: 'Trendorabay Magazine - June 2024', quantity: 1, price: 2500 },
-        { name: 'Premium Subscription - 3 Months', quantity: 1, price: 2000 }
-      ]
-    },
-    {
-      id: 'ORD-2024-002',
-      date: '2024-05-20',
-      status: 'shipped',
-      total: 1200,
-      items: [
-        { name: 'Trendorabay Magazine - May 2024', quantity: 1, price: 1200 }
-      ]
-    },
-    {
-      id: 'ORD-2024-003',
-      date: '2024-04-10',
-      status: 'processing',
-      total: 7500,
-      items: [
-        { name: 'Annual Subscription', quantity: 1, price: 7500 }
-      ]
-    },
-    {
-      id: 'ORD-2024-004',
-      date: '2024-03-05',
-      status: 'delivered',
-      total: 1800,
-      items: [
-        { name: 'Trendorabay Magazine - March 2024', quantity: 1, price: 1800 }
-      ]
-    }
-  ];
-
   useEffect(() => {
     const fetchOrders = async () => {
       try {

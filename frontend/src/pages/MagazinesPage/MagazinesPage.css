@@ -1,71 +1,291 @@
 .magazines-page {
+  --mp-ink: #111318;
+  --mp-muted: #6b7280;
+  --mp-paper: #f7f7f5;
+  --mp-card: #fff;
+  --mp-line: #e5e7eb;
+  --mp-accent: #e6ff3f;
+  --mp-dark: #111318;
+  --mp-max: 1240px;
+
+  background: var(--mp-paper);
+  color: var(--mp-ink);
+  font-family: Inter, Arial, sans-serif;
   min-height: 100vh;
-  padding-top: 0;
-  margin-top: 0;
+  padding-bottom: 60px;
 }
 
-.magazines-page .container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.page-header {
-  padding: 20px 0;
-  margin-bottom: 20px;
-}
-
-.page-header p {
-  font-size: 14px;
-  color: #6a7a6a;
-  text-align: center;
-  margin: 0;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.magazines-content {
-  padding: 0;
-  margin: 0;
-}
-
-.magazines-main {
-  padding: 0;
-  margin: 0;
-}
-
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-  padding-top: 2rem;
-}
-
-@media (max-width: 768px) {
-  .magazines-page .container {
-    padding: 0 12px;
-  }
-
-  .pagination-container {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .magazines-page .container {
-    padding: 0 8px;
-  }
-}
-
-/* ============================================
-   DARK MODE STYLES
-   ============================================ */
 body.dark-mode .magazines-page {
-  background: #0A0F0A;
+  --mp-ink: #f7f7f5;
+  --mp-muted: #9ca3af;
+  --mp-paper: #111318;
+  --mp-card: #1f2937;
+  --mp-line: #374151;
+  --mp-accent: #e6ff3f;
+  --mp-dark: #f7f7f5;
 }
 
-body.dark-mode .page-header p {
-  color: #D4A373;
+.container {
+  width: min(var(--mp-max), 92%);
+  margin: auto;
+}
+
+/* Hero Section */
+.magazines-hero {
+  background: var(--mp-dark);
+  color: #fff;
+  padding: 30px 0;
+  text-align: center;
+}
+
+.magazines-title {
+  font-size: clamp(24px, 4vw, 40px);
+  line-height: 1;
+  letter-spacing: -2px;
+  margin: 0 0 12px;
+  color: #fff;
+}
+
+.african-pattern {
+  color: var(--mp-accent);
+  margin: 0 8px;
+}
+
+.magazines-subtitle {
+  font-size: 14px;
+  color: #c9cbd0;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.4;
+}
+
+/* Main Content */
+.magazines-content {
+  padding: 40px 0;
+}
+
+.magazines-header {
+  margin-bottom: 30px;
+}
+
+.magazines-header h2 {
+  font-size: 32px;
+  letter-spacing: -1.5px;
+  margin: 0 0 8px;
+  color: var(--mp-ink);
+}
+
+.magazines-header p {
+  font-size: 14px;
+  color: var(--mp-muted);
+  margin: 0;
+}
+
+/* Magazines Grid */
+.magazines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.magazine-card {
+  background: var(--mp-card);
+  border: 1px solid var(--mp-line);
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.magazine-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px #0000000c;
+}
+
+.magazine-cover {
+  aspect-ratio: 3/4;
+  background: linear-gradient(145deg, #dce6a0 0%, #89943e 45%, #161616 46%, #303030 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.magazine-cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.magazine-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+  color: #fff;
+}
+
+.cover-brand {
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: -1px;
+}
+
+.cover-title {
+  font-size: 16px;
+  line-height: 0.9;
+  font-weight: 950;
+  letter-spacing: -1.5px;
+  max-width: 150px;
+}
+
+.magazine-info {
+  padding: 10px;
+}
+
+.magazine-tag {
+  display: inline-block;
+  background: var(--mp-accent);
+  color: #111;
+  padding: 2px 5px;
+  border-radius: 99px;
+  font-size: 7px;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.magazine-info h3 {
+  font-size: 13px;
+  line-height: 1.2;
+  margin: 0 0 4px;
+  color: var(--mp-ink);
+}
+
+.magazine-description {
+  font-size: 10px;
+  color: var(--mp-muted);
+  line-height: 1.3;
+  margin: 0 0 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.magazine-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid var(--mp-line);
+}
+
+.magazine-price {
+  font-size: 13px;
+  font-weight: 950;
+  color: var(--mp-ink);
+}
+
+.magazine-date {
+  font-size: 9px;
+  color: var(--mp-muted);
+}
+
+/* Loading and Error States */
+.magazines-loading,
+.magazines-error {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.magazines-loading p,
+.magazines-error p {
+  font-size: 16px;
+  color: var(--mp-muted);
+}
+
+.magazines-error h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
+  color: var(--mp-ink);
+}
+
+.retry-btn {
+  background: var(--mp-accent);
+  color: #111;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 950;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.2s;
+}
+
+.retry-btn:hover {
+  transform: translateY(-2px);
+}
+
+.no-magazines {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--mp-muted);
+}
+
+.no-magazines h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--mp-ink);
+}
+
+/* Dark Mode */
+body.dark-mode .magazine-card {
+  background: #000;
+  border-color: #333;
+}
+
+body.dark-mode .magazine-info h3 {
+  color: #fff;
+}
+
+body.dark-mode .magazine-description {
+  color: #ccc;
+}
+
+body.dark-mode .magazine-meta {
+  border-color: #333;
+}
+
+body.dark-mode .magazine-price {
+  color: #fff;
+}
+
+body.dark-mode .magazine-date {
+  color: #ccc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .magazines-hero {
+    padding: 40px 0;
+  }
+
+  .magazines-title {
+    font-size: 32px;
+  }
+
+  .magazines-subtitle {
+    font-size: 16px;
+  }
+
+  .magazines-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
 }

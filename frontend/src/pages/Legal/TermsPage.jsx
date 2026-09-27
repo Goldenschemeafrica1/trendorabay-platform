@@ -110,7 +110,7 @@ const TermsPage = () => {
           <section>
             <h2>14. Contact Information</h2>
             <p>
-              Questions about the Terms of Service should be sent to us at legal@trendorabay.com.
+              Questions about the Terms of Service should be sent to us at trendorabay@trendorabay.com.
             </p>
           </section>
         </div>
