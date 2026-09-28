@@ -493,18 +493,20 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     
     if (isNumeric) {
       [rows] = await pool.query(
-        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
+         LEFT JOIN categories c ON s.category_id = c.id
          WHERE s.id = ?`,
         [param]
       );
     } else {
       // Fast lookup by stored slug column
       [rows] = await pool.query(
-        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
+         LEFT JOIN categories c ON s.category_id = c.id
          WHERE s.slug = ?`,
         [param]
       );
@@ -512,6 +514,17 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     
     if (rows.length === 0) {
       return res.status(404).json({ success: false, error: 'Story not found' });
+    }
+
+    // Auto-generate slug if null and update database
+    const story = rows[0];
+    if (!story.slug) {
+      const cleanTitle = story.title?.trim() || '';
+      const generatedSlug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+      
+      // Update the slug in database
+      await pool.query('UPDATE stories SET slug = ? WHERE id = ?', [generatedSlug, story.id]);
+      story.slug = generatedSlug;
     }
 
     // Helper function to get avatar URL (serve CMS uploads)
@@ -535,10 +548,8 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     };
 
     // Transform the story data
-    const story = rows[0];
-    // Generate slug from title if not exists (for consistency) - trim whitespace first
-    const cleanTitle = story.title?.trim() || '';
-    const slug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+    // Use the slug (either from database or auto-generated)
+    const slug = story.slug;
     
     // Helper function to get image URL (handle Cloudinary and CMS uploads)
     const getImageUrl = (url, category) => {
@@ -567,21 +578,22 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     // Combine image URLs into an array
     const imageUrls = [];
     if (story.featured_image_url) {
-      imageUrls.push(getImageUrl(story.featured_image_url, story.category_name));
+      imageUrls.push(getImageUrl(story.featured_image_url, story.category_name || 'General'));
     }
     if (story.featured_image_url_2) {
-      imageUrls.push(getImageUrl(story.featured_image_url_2, story.category_name));
+      imageUrls.push(getImageUrl(story.featured_image_url_2, story.category_name || 'General'));
     }
     if (story.featured_image_url_3) {
-      imageUrls.push(getImageUrl(story.featured_image_url_3, story.category_name));
+      imageUrls.push(getImageUrl(story.featured_image_url_3, story.category_name || 'General'));
     }
     if (story.featured_image_url_4) {
-      imageUrls.push(getImageUrl(story.featured_image_url_4, story.category_name));
+      imageUrls.push(getImageUrl(story.featured_image_url_4, story.category_name || 'General'));
     }
     
     const transformed = {
       ...story,
       slug,
+      category: story.category_name || 'General',
       author_avatar: getAvatarUrl(story.author_avatar),
       featured_image_url: imageUrls.length > 0 ? imageUrls : null
     };
@@ -700,10 +712,27 @@ router.get('/author/:authorId', cache(300), async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags } = req.body;
+    
+    // Generate slug from title
+    const cleanTitle = title?.trim() || '';
+    let slug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(Date.now());
+    
+    // Check if slug already exists and make it unique if needed
+    let counter = 1;
+    let originalSlug = slug;
+    
+    while (true) {
+      const [existing] = await pool.query('SELECT id FROM stories WHERE slug = ?', [slug]);
+      if (existing.length === 0) break;
+      
+      slug = `${originalSlug}-${counter}`;
+      counter++;
+    }
+    
     const [result] = await pool.query(
-      `INSERT INTO stories (title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags]
+      `INSERT INTO stories (title, slug, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [title, slug, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags]
     );
     const [newStory] = await pool.query(
       `SELECT s.*, a.name as author_name 
@@ -727,11 +756,39 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     const { title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags } = req.body;
+    
+    // Get current story to check if title changed
+    const [current] = await pool.query('SELECT title, slug FROM stories WHERE id = ?', [req.params.id]);
+    if (current.length === 0) {
+      return res.status(404).json({ success: false, error: 'Story not found' });
+    }
+    
+    // Generate new slug if title changed
+    let slug = current[0].slug;
+    if (title && title !== current[0].title) {
+      const cleanTitle = title.trim();
+      let newSlug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(Date.now());
+      
+      // Check if slug already exists and make it unique if needed
+      let counter = 1;
+      let originalSlug = newSlug;
+      
+      while (true) {
+        const [existing] = await pool.query('SELECT id FROM stories WHERE slug = ? AND id != ?', [newSlug, req.params.id]);
+        if (existing.length === 0) break;
+        
+        newSlug = `${originalSlug}-${counter}`;
+        counter++;
+      }
+      
+      slug = newSlug;
+    }
+    
     await pool.query(
       `UPDATE stories 
-       SET title = ?, content = ?, featured_image_url = ?, featured_image_url_2 = ?, featured_image_url_3 = ?, featured_image_url_4 = ?, author_id = ?, category_id = ?, tags = ?
+       SET title = ?, slug = ?, content = ?, featured_image_url = ?, featured_image_url_2 = ?, featured_image_url_3 = ?, featured_image_url_4 = ?, author_id = ?, category_id = ?, tags = ?
        WHERE id = ?`,
-      [title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags, req.params.id]
+      [title, slug, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags, req.params.id]
     );
     const [updated] = await pool.query(
       `SELECT s.*, a.name as author_name 

@@ -47,7 +47,7 @@ router.get('/', cache(300), async (req, res, next) => {
 
     // Helper function to get image URL (handle Cloudinary and CMS uploads)
     const getImageUrl = (url, title, guest) => {
-      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
       
       if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
         // Check title first
@@ -68,9 +68,9 @@ router.get('/', cache(300), async (req, res, next) => {
       // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       
-      // If it's a relative path starting with /uploads, serve from CMS
+      // If it's a relative path starting with /uploads, serve from local backend
       if (url.startsWith('/uploads/')) {
-        return `${cmsUrl}${url}`;
+        return `${backendUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {
@@ -86,11 +86,12 @@ router.get('/', cache(300), async (req, res, next) => {
 
     // Helper function to get audio URL with fallback
     const getAudioUrl = (url, id) => {
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
       // Return the exact audio_file_url from database
       if (url) {
         // If it's a relative path starting with /uploads, serve from backend
         if (url.startsWith('/uploads/')) {
-          return `${process.env.BACKEND_URL || 'http://localhost:3001'}${url}`;
+          return `${backendUrl}${url}`;
         }
         return url;
       }
@@ -99,9 +100,10 @@ router.get('/', cache(300), async (req, res, next) => {
 
     // Helper function to get video URL with fallback
     const getVideoUrl = (url, id) => {
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
       if (!url) return null;
       if (url.includes('/uploads/')) {
-        return `http://localhost:3001${url}`;
+        return `${backendUrl}${url}`;
       }
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       if (!url.includes('/') && !url.startsWith('/')) {
@@ -157,7 +159,7 @@ router.get('/:id', cache(300), async (req, res, next) => {
 
     // Helper function to get image URL (handle Cloudinary and CMS uploads)
     const getImageUrl = (url, title, guest) => {
-      const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
       
       if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
         // Check title first
@@ -178,9 +180,9 @@ router.get('/:id', cache(300), async (req, res, next) => {
       // Return full URLs as-is (Cloudinary, external images)
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       
-      // If it's a relative path starting with /uploads, serve from CMS
+      // If it's a relative path starting with /uploads, serve from local backend
       if (url.startsWith('/uploads/')) {
-        return `${cmsUrl}${url}`;
+        return `${backendUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {
@@ -196,11 +198,12 @@ router.get('/:id', cache(300), async (req, res, next) => {
 
     // Helper function to get audio URL with fallback
     const getAudioUrl = (url, id) => {
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
       // Return the exact audio_file_url from database
       if (url) {
         // If it's a relative path starting with /uploads, serve from backend
         if (url.startsWith('/uploads/')) {
-          return `${process.env.BACKEND_URL || 'http://localhost:3001'}${url}`;
+          return `${backendUrl}${url}`;
         }
         return url;
       }
@@ -209,9 +212,10 @@ router.get('/:id', cache(300), async (req, res, next) => {
 
     // Helper function to get video URL with fallback
     const getVideoUrl = (url, id) => {
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
       if (!url) return null;
       if (url.includes('/uploads/')) {
-        return `http://localhost:3001${url}`;
+        return `${backendUrl}${url}`;
       }
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       if (!url.includes('/') && !url.startsWith('/')) {
