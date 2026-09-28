@@ -131,11 +131,11 @@ const MagazineCover = ({ magazine, variant = '' }) => (
 const LandingPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [latestStories, setLatestStories] = useState(initialLatestStories);
-  const [magazines, setMagazines] = useState(initialMagazines);
-  const [mustReadFeatures, setMustReadFeatures] = useState(initialMustReadFeatures);
-  const [innovationStories, setInnovationStories] = useState(initialInnovationStories);
-  const [opportunities, setOpportunities] = useState(initialOpportunities);
+  const [latestStories, setLatestStories] = useState([]);
+  const [magazines, setMagazines] = useState([]);
+  const [mustReadFeatures, setMustReadFeatures] = useState([]);
+  const [innovationStories, setInnovationStories] = useState([]);
+  const [opportunities, setOpportunities] = useState([]);
   const [heroStory, setHeroStory] = useState(null);
   const [podcasts, setPodcasts] = useState([]);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
@@ -143,7 +143,7 @@ const LandingPage = () => {
   const [audioError, setAudioError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const featured = magazines[0];
 
   // Force scroll to top on mount - before any rendering
@@ -310,6 +310,14 @@ const LandingPage = () => {
         setPodcasts(podcastData.slice(0, 3));
       } catch (error) {
         console.error('Failed to load landing page data:', error.message);
+        // Fallback to hardcoded data if API fails
+        setLatestStories(initialLatestStories);
+        setMagazines(initialMagazines);
+        setMustReadFeatures(initialMustReadFeatures);
+        setInnovationStories(initialInnovationStories);
+        setOpportunities(initialOpportunities);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -413,6 +421,19 @@ const LandingPage = () => {
   };
 
 
+
+  if (isLoading) {
+    return (
+      <section className="landing-page">
+        <div className="nl-container">
+          <div className="loading-spinner-container">
+            <div className="loading-spinner"></div>
+            <p>Loading amazing content...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="landing-page">
