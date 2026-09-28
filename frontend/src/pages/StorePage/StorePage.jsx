@@ -337,19 +337,10 @@ const StorePage = () => {
         const response = await merchService.getProducts();
         let products = [];
         
-        // Handle different response formats
         if (Array.isArray(response)) {
           products = response;
         } else if (response && Array.isArray(response.data)) {
           products = response.data;
-        } else if (response && response.success && Array.isArray(response.data)) {
-          products = response.data;
-        }
-        
-        // If no products from API, use sample data as fallback
-        if (products.length === 0) {
-          console.log('No products from API, using sample data');
-          products = _productsData;
         }
         
         // Transform data to match frontend expectations
@@ -372,19 +363,8 @@ const StorePage = () => {
         setFilteredProducts(transformed);
       } catch (error) {
         console.error('Error fetching products:', error);
-        // Use sample data as fallback on error
-        console.log('Error fetching from API, using sample data');
-        const transformed = _productsData.map(product => ({
-          ...product,
-          image: product.image || '/images/product-placeholder.jpg',
-          hoverImage: product.hoverImage || product.image || '/images/product-placeholder.jpg',
-          inStock: product.inStock !== undefined ? product.inStock : true,
-          featured: product.featured ? 1 : 0,
-          new: product.new || false,
-          sale: product.sale || false
-        }));
-        setProducts(transformed);
-        setFilteredProducts(transformed);
+        setProducts([]);
+        setFilteredProducts([]);
       } finally {
         setLoading(false);
       }
