@@ -22,6 +22,7 @@ import CartPage from './pages/StorePage/CartPage';
 import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
 import CheckoutSuccessPage from './pages/CheckoutPage/CheckoutSuccessPage';
 import EventsPage from './components/events/EventsPage';
+import OpportunitiesPage from './components/opportunities/OpportunitiesPage';
 import AboutPage from './pages/AboutPage/AboutPage';
 import MissionPage from './pages/MissionPage/MissionPage';
 import ContactPage from './pages/ContactPage/ContactPage';
@@ -230,6 +231,7 @@ function App() {
 
         {/* Community Routes */}
         <Route path="/events" element={<EventsPage />} />
+        <Route path="/opportunities" element={<OpportunitiesPage />} />
         <Route path="/community/music" element={<MusicPage />} />
 
         {/* Information Pages */}

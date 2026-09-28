@@ -99,9 +99,9 @@ const initialInnovationStories = [
 ];
 
 const initialOpportunities = [
-  { tag: 'GRANT', title: 'Startup Growth Fund', meta: 'For early-stage African founders • Deadline: Coming soon' },
-  { tag: 'JOB', title: 'Product Designer', meta: 'Technology • Nairobi • Full-time' },
-  { tag: 'EVENT', title: 'Africa Innovation Summit', meta: 'Founders & creators • Registration open' },
+  { tag: 'GRANT', title: 'Startup Growth Fund', meta: 'Africa • No deadline' },
+  { tag: 'JOB', title: 'Product Designer', meta: 'Nairobi • No deadline' },
+  { tag: 'EVENT', title: 'Africa Innovation Summit', meta: 'Virtual • No deadline' },
 ];
 
 const formatPrice = (price) => `KES ${price.toLocaleString()}`;
@@ -136,6 +136,7 @@ const LandingPage = () => {
   const [mustReadFeatures, setMustReadFeatures] = useState([]);
   const [innovationStories, setInnovationStories] = useState([]);
   const [opportunities, setOpportunities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [heroStory, setHeroStory] = useState(null);
   const [podcasts, setPodcasts] = useState([]);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
@@ -143,63 +144,28 @@ const LandingPage = () => {
   const [audioError, setAudioError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const featured = magazines[0];
+  const featured = magazines[0] || initialMagazines[0];
 
-  // Force scroll to top on mount - before any rendering
+  // Smooth scroll to top on mount
   useLayoutEffect(() => {
     // Disable scroll restoration first
     if (window.history) {
       window.history.scrollRestoration = 'manual';
     }
 
-    // Force scroll to top immediately
+    // Smooth scroll to top
+    document.documentElement.style.scrollBehavior = 'smooth';
+    document.body.style.scrollBehavior = 'smooth';
     window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    document.documentElement.style.scrollBehavior = 'auto';
-    document.body.style.scrollBehavior = 'auto';
-
-    // Force scroll again after multiple delays to catch any browser restoration
-    const timeout1 = setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 0);
-
-    const timeout2 = setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 50);
-
-    const timeout3 = setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 100);
-
-    const timeout4 = setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 200);
-
-    return () => {
-      clearTimeout(timeout1);
-      clearTimeout(timeout2);
-      clearTimeout(timeout3);
-      clearTimeout(timeout4);
-    };
   }, []);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [homeRes, magRes, eventRes, storiesRes] = await Promise.all([
+        const [homeRes, magRes, oppRes, storiesRes] = await Promise.all([
           api.get('/stories/homepage'),
           api.get('/magazines?limit=5'),
-          api.get('/events?limit=3'),
+          api.get('/opportunities?limit=3'),
           api.get('/stories/latest?limit=4'),
         ]);
 
@@ -226,16 +192,18 @@ const LandingPage = () => {
         };
 
         const formatDate = (dateString) => {
-          if (!dateString) return 'Coming soon';
+          if (!dateString) return 'No deadline';
           try {
             const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
+            // Check if date is valid
+            if (isNaN(date.getTime())) return 'No deadline';
+            return `Deadline: ${date.toLocaleDateString('en-US', { 
               month: 'short', 
               day: 'numeric', 
               year: 'numeric' 
-            });
+            })}`;
           } catch (error) {
-            return 'Coming soon';
+            return 'No deadline';
           }
         };
 
@@ -300,10 +268,10 @@ const LandingPage = () => {
           previewPages: m.previewPages || [],
         })));
 
-        setOpportunities((eventRes.data.data || []).slice(0, 3).map((e) => ({
-          tag: (e.event_type || 'EVENT').toUpperCase(),
-          title: e.title,
-          meta: `${e.location || 'Online'} • ${formatDate(e.event_date)}`,
+        setOpportunities((oppRes.data.data || []).slice(0, 3).map((o) => ({
+          tag: (o.category || 'OPPORTUNITY').toUpperCase(),
+          title: o.title,
+          meta: `${o.location || o.country || 'Remote'} • ${formatDate(o.deadline)}`,
         })));
 
         // Set podcasts data
@@ -420,19 +388,8 @@ const LandingPage = () => {
     setAudioError(true);
   };
 
-
-
   if (isLoading) {
-    return (
-      <section className="landing-page">
-        <div className="nl-container">
-          <div className="loading-spinner-container">
-            <div className="loading-spinner"></div>
-            <p>Loading amazing content...</p>
-          </div>
-        </div>
-      </section>
-    );
+    return null;
   }
 
   return (
@@ -852,7 +809,7 @@ const LandingPage = () => {
           <div className="nl-opps">
             <div className="nl-section-head">
               <h2>✦ Opportunities</h2>
-              <Link to="/events">SEE ALL →</Link>
+              <Link to="/opportunities">SEE ALL →</Link>
             </div>
             <p>Funding, jobs, grants, scholarships, competitions and events worth knowing about.</p>
             <div className="nl-opp-grid">
