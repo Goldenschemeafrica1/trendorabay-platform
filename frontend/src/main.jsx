@@ -26,7 +26,12 @@ if ('serviceWorker' in navigator) {
         }
       }).then(() => {
         navigator.serviceWorker.register('/sw-v4.js')
-          .then(() => {})
+          .then((registration) => {
+            // Force update the service worker
+            if (registration.waiting) {
+              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+          })
           .catch(() => {});
       });
     } else {

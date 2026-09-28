@@ -29,3 +29,4 @@ Thumbs.db
 
 # Uploads directory (large files)
 backend/uploads/
+.vercel

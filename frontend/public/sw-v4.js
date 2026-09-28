@@ -1,4 +1,5 @@
-const CACHE_NAME = 'trendorabay-v4';
+const CACHE_NAME = 'trendorabay-v5';
+const API_CACHE_NAME = 'trendorabay-api-v5';
 const urlsToCache = [
   '/',
   '/magazines',
@@ -19,6 +20,13 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// Handle skip waiting message
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 // Fetch event - network first for navigations, cache first for assets
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') {
@@ -27,7 +35,22 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (event.request.url.includes('/api/')) {
-    event.respondWith(fetch(event.request));
+    // Stale-while-revalidate for API calls
+    event.respondWith(
+      caches.open(API_CACHE_NAME).then((cache) => {
+        return cache.match(event.request).then((cachedResponse) => {
+          // Return cached response immediately if available
+          const fetchPromise = fetch(event.request).then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(event.request, networkResponse.clone());
+            }
+            return networkResponse;
+          }).catch(() => cachedResponse);
+          
+          return cachedResponse || fetchPromise;
+        });
+      })
+    );
     return;
   }
 
@@ -79,7 +102,7 @@ self.addEventListener('fetch', (event) => {
 // Activate event - clean up old caches and take control of pages immediately
 self.addEventListener('activate', (event) => {
   self.clients.claim();
-  const cacheWhitelist = [CACHE_NAME];
+  const cacheWhitelist = [CACHE_NAME, API_CACHE_NAME];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(

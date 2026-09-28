@@ -10,12 +10,12 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'trendorabay',
   waitForConnections: true,
-  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT) || 10,
+  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT) || 20,
   queueLimit: 0,
   enableKeepAlive: true,
   keepAliveInitialDelay: 10000,
   // Timeout settings to prevent hanging connections
-  connectTimeout: 30000,
+  connectTimeout: 10000,
   // SSL/TLS configuration
   ssl: process.env.DB_SSL === 'true' ? {
     rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false'
@@ -33,12 +33,12 @@ if (process.env.DB_READ_REPLICA_HOST) {
     password: process.env.DB_READ_REPLICA_PASSWORD || process.env.DB_PASSWORD || '',
     database: process.env.DB_READ_REPLICA_NAME || process.env.DB_NAME || 'trendorabay',
     waitForConnections: true,
-    connectionLimit: parseInt(process.env.DB_READ_REPLICA_CONNECTION_LIMIT) || 10,
+    connectionLimit: parseInt(process.env.DB_READ_REPLICA_CONNECTION_LIMIT) || 20,
     queueLimit: 0,
     enableKeepAlive: true,
     keepAliveInitialDelay: 10000,
     // Timeout settings to prevent hanging connections
-    connectTimeout: 30000,
+    connectTimeout: 10000,
     // SSL/TLS configuration
     ssl: process.env.DB_READ_REPLICA_SSL === 'true' ? {
       rejectUnauthorized: process.env.DB_READ_REPLICA_SSL_REJECT_UNAUTHORIZED !== 'false'

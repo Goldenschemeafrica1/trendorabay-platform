@@ -339,15 +339,106 @@ router.get('/latest', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     const [rows] = await pool.query(
-      `SELECT s.*, a.name as author_name
+      `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
        FROM stories s
        LEFT JOIN authors a ON s.author_id = a.id
+       LEFT JOIN categories c ON s.category_id = c.id
        WHERE s.status = 'published'
        ORDER BY s.created_at DESC
        LIMIT ?`,
       [limit]
     );
-    res.json({ success: true, data: rows });
+
+    // Map categories to actual image files in frontend public folder
+    const categoryImageMap = {
+      'Music': '/music.jpeg',
+      'Fashion': '/fashionandbusiness.jpeg',
+      'Business': '/financeandinvestment.jpeg',
+      'Technology': '/blockchain.jpeg',
+      'Travel': '/community.jpeg',
+      'Lifestyle': '/womeninbusiness.jpeg',
+      'Finance': '/financeandinvestment.jpeg',
+      'Sports': '/boxing.jpeg',
+      'Art': '/photography.jpeg',
+      'Food': '/barandrestaurant.jpeg',
+      'Health': '/kids.jpeg',
+      'Automotive': '/automotives.jpeg'
+    };
+
+    // Helper function to get image URL (handle Cloudinary and CMS uploads)
+    const getImageUrl = (url, category) => {
+      if (!url || url === 'undefined' || url === '/uploads/stories/undefined') return categoryImageMap[category] || '/music.jpeg';
+      
+      // Return full URLs as-is (Cloudinary, external images)
+      if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      
+      // If it's a relative path starting with /uploads, try backend URL first, fall back to category image
+      if (url.startsWith('/uploads/')) {
+        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        return `${backendUrl}${url}`;
+      }
+      // If it starts with /, it's in the frontend public folder - return as-is
+      if (url.startsWith('/')) {
+        return url;
+      }
+      // If it's just a filename, it's in the frontend public folder
+      if (!url.includes('/')) {
+        return `/${url}`;
+      }
+      // If it has a path, return as-is
+      return url;
+    };
+
+    // Helper function to get avatar URL (serve CMS uploads)
+    const getAvatarUrl = (url) => {
+      if (!url) return '/logo.jpeg';
+      if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      // If it's a relative path starting with /uploads, fall back to logo since CMS files don't exist
+      if (url.startsWith('/uploads/')) {
+        return '/logo.jpeg';
+      }
+      // If it starts with /, it's in the frontend public folder - return as-is
+      if (url.startsWith('/')) {
+        return url;
+      }
+      // If it's just a filename, it's in the frontend public folder
+      if (!url.includes('/')) {
+        return `/${url}`;
+      }
+      // If it has a path, return as-is
+      return url;
+    };
+
+    // Transform data to match frontend expectations
+    const transformedStories = rows.map(story => {
+      // Generate slug from title if not exists - trim whitespace first
+      const cleanTitle = story.title?.trim() || '';
+      const slug = story.slug || cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+      
+      return {
+        id: story.id,
+        slug,
+        title: story.title,
+        content: story.content,
+        imageUrl: getImageUrl(story.featured_image_url, story.category_name),
+        categoryName: story.category_name,
+        category: story.category_name,
+        featured: story.featured === 1,
+        author: story.author_id ? {
+          id: story.author_id,
+          name: story.author_name || 'Unknown Author',
+          avatar: getAvatarUrl(story.author_avatar)
+        } : null,
+        publishedDate: story.published_at || story.created_at,
+        createdAt: story.created_at,
+        updatedAt: story.updated_at,
+        status: story.status,
+        author_name: story.author_name,
+        author_id: story.author_id
+      };
+    });
+
+    res.json({ success: true, data: transformedStories });
   } catch (error) {
     next(error);
   }

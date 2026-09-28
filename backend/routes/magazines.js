@@ -82,7 +82,7 @@ const fetchContributorsWithCache = async (contributorIds) => {
 };
 
 // Get all magazines
-router.get('/', cache(300), async (req, res, next) => {
+router.get('/', cache(600), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || null;
     const category = req.query.category || null;
@@ -165,7 +165,7 @@ router.get('/', cache(300), async (req, res, next) => {
 });
 
 // Search magazines
-router.get('/search', cache(60), async (req, res, next) => {
+router.get('/search', cache(300), async (req, res, next) => {
   try {
     const { q } = req.query;
     const page = parseInt(req.query.page) || 1;
@@ -184,7 +184,7 @@ router.get('/search', cache(60), async (req, res, next) => {
 });
 
 // Get magazines by category
-router.get('/category/:category', cache(300), async (req, res, next) => {
+router.get('/category/:category', cache(600), async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
@@ -201,7 +201,7 @@ router.get('/category/:category', cache(300), async (req, res, next) => {
 });
 
 // Get featured magazines
-router.get('/featured', cache(300), async (req, res, next) => {
+router.get('/featured', cache(600), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
     const [rows] = await pool.query(
@@ -215,7 +215,7 @@ router.get('/featured', cache(300), async (req, res, next) => {
 });
 
 // Get magazine by slug or ID
-router.get('/:slug', cache(300), async (req, res, next) => {
+router.get('/:slug', cache(600), async (req, res, next) => {
   try {
     const param = req.params.slug;
     const isNumeric = /^\d+$/.test(param);

@@ -2,7 +2,7 @@ import { apiRequest } from './api';
 
 // Simple in-memory cache
 const cache = new Map();
-const CACHE_DURATION = 30000; // 30 seconds
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 const getCached = (key) => {
   const cached = cache.get(key);

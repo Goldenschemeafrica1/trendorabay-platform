@@ -2,7 +2,7 @@ import { cacheGet, cacheSet, cacheDel, cacheDelPattern } from '../config/redis.j
 import { recordCacheHit, recordCacheMiss } from '../config/metrics.js';
 
 // Cache middleware for GET requests
-export const cache = (ttl = 300) => {
+export const cache = (ttl = 600) => {
   return async (req, res, next) => {
     // Only cache GET requests
     if (req.method !== 'GET') {

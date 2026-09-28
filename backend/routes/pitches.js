@@ -173,18 +173,18 @@ router.post('/', auth, upload.single('articleAttachment'), async (req, res, next
         article_attachment
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        fullName,
-        email,
-        phone,
-        topic,
+        fullName || null,
+        email || null,
+        phone || null,
+        topic || null,
         pitchTitle,
         pitchDescription,
-        authorBio,
+        authorBio || null,
         socialMedia ? JSON.stringify(socialMedia) : null,
         topicsOfInterest ? JSON.stringify(topicsOfInterest) : null,
-        previousPublications,
-        experience,
-        articleAttachment
+        previousPublications || null,
+        experience || null,
+        articleAttachment || null
       ]
     );
     console.log('Pitch inserted successfully');

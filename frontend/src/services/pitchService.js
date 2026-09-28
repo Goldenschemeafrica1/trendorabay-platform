@@ -24,32 +24,33 @@ const pitchService = {
     const response = await axios.post(`${API_BASE_URL}/pitches`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
-      }
+      },
+      withCredentials: true
     });
     return response.data;
   },
 
   // Get all pitches
   getPitches: async (params = {}) => {
-    const response = await axios.get(`${API_BASE_URL}/pitches`, { params });
+    const response = await axios.get(`${API_BASE_URL}/pitches`, { params, withCredentials: true });
     return response.data;
   },
 
   // Get pitch by ID
   getPitchById: async (id) => {
-    const response = await axios.get(`${API_BASE_URL}/pitches/${id}`);
+    const response = await axios.get(`${API_BASE_URL}/pitches/${id}`, { withCredentials: true });
     return response.data;
   },
 
   // Update pitch status
   updatePitchStatus: async (id, status) => {
-    const response = await axios.patch(`${API_BASE_URL}/pitches/${id}/status`, { status });
+    const response = await axios.patch(`${API_BASE_URL}/pitches/${id}/status`, { status }, { withCredentials: true });
     return response.data;
   },
 
   // Delete pitch
   deletePitch: async (id) => {
-    const response = await axios.delete(`${API_BASE_URL}/pitches/${id}`);
+    const response = await axios.delete(`${API_BASE_URL}/pitches/${id}`, { withCredentials: true });
     return response.data;
   }
 };

@@ -2,8 +2,11 @@ import axios from 'axios';
 
 // Simple in-memory cache with TTL
 const cache = new Map();
-const CACHE_TTL = 10 * 60 * 1000; // 10 minutes for instant responses
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes for instant responses
+const STALE_TTL = 5 * 60 * 1000; // 5 minutes for stale-while-revalidate
 
+// Request deduplication - prevent duplicate in-flight requests
+const pendingRequests = new Map();
 
 const getCacheKey = (url, params) => {
   return `${url}?${JSON.stringify(params)}`;
@@ -12,7 +15,10 @@ const getCacheKey = (url, params) => {
 const getCachedData = (key) => {
   const cached = cache.get(key);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    return cached.data;
+    return {
+      data: cached.data,
+      isStale: Date.now() - cached.timestamp > STALE_TTL
+    };
   }
   cache.delete(key);
   return null;
@@ -35,20 +41,38 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    // Check cache for GET requests
+    // Check cache for GET requests with stale-while-revalidate
     if (config.method === 'get') {
       const cacheKey = getCacheKey(config.url, config.params);
-      const cachedData = getCachedData(cacheKey);
-      if (cachedData) {
+      const cached = getCachedData(cacheKey);
+      
+      if (cached) {
+        // If data is stale, return it immediately but fetch fresh data in background
+        if (cached.isStale) {
+          // Trigger background refresh without blocking
+          api.get(config.url, { ...config, skipCache: true }).then(response => {
+            setCachedData(cacheKey, response.data);
+          }).catch(() => {
+            // Silent fail - user already has stale data
+          });
+        }
+        
         config.adapter = () => Promise.resolve({
-          data: cachedData,
+          data: cached.data,
           status: 200,
           statusText: 'OK',
           headers: {},
           config,
           request: {},
-          cached: true
+          cached: true,
+          isStale: cached.isStale
         });
+        return config;
+      }
+
+      // Request deduplication - if same request is in flight, return the existing promise
+      if (pendingRequests.has(cacheKey)) {
+        return pendingRequests.get(cacheKey);
       }
     }
 
@@ -63,8 +87,8 @@ api.interceptors.request.use(
 // Response interceptor for error handling
 api.interceptors.response.use(
   (response) => {
-    // Cache successful GET responses
-    if (response.config.method === 'get' && response.status === 200 && !response.cached) {
+    // Cache successful GET responses (skip if this was a background refresh)
+    if (response.config.method === 'get' && response.status === 200 && !response.cached && !response.config.skipCache) {
       const cacheKey = getCacheKey(response.config.url, response.config.params);
       setCachedData(cacheKey, response.data);
     }
@@ -104,9 +128,24 @@ api.interceptors.response.use(
   }
 );
 
-// Helper functions for common HTTP methods
+// Helper functions for common HTTP methods with request deduplication
 export const apiRequest = {
-  get: (url, config = {}) => api.get(url, config),
+  get: (url, config = {}) => {
+    const cacheKey = getCacheKey(url, config.params);
+    
+    // Check if request is already in flight
+    if (pendingRequests.has(cacheKey)) {
+      return pendingRequests.get(cacheKey);
+    }
+    
+    // Create and store the request
+    const request = api.get(url, config).finally(() => {
+      pendingRequests.delete(cacheKey);
+    });
+    pendingRequests.set(cacheKey, request);
+    
+    return request;
+  },
   post: (url, data = {}, config = {}) => api.post(url, data, config),
   put: (url, data = {}, config = {}) => api.put(url, data, config),
   patch: (url, data = {}, config = {}) => api.patch(url, data, config),

@@ -143,7 +143,7 @@ const LandingPage = () => {
   const [audioError, setAudioError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const featured = magazines[0];
 
   // Force scroll to top on mount - before any rendering
@@ -200,7 +200,7 @@ const LandingPage = () => {
           api.get('/stories/homepage'),
           api.get('/magazines?limit=5'),
           api.get('/events?limit=3'),
-          api.get('/stories?limit=4'),
+          api.get('/stories/latest?limit=4'),
         ]);
 
         // Try to fetch podcasts separately to avoid breaking the whole page if it fails
@@ -223,6 +223,20 @@ const LandingPage = () => {
           const text = stripHtml(content);
           if (!text) return '';
           return text.length > limit ? `${text.slice(0, limit).trim()}...` : text;
+        };
+
+        const formatDate = (dateString) => {
+          if (!dateString) return 'Coming soon';
+          try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+              month: 'short', 
+              day: 'numeric', 
+              year: 'numeric' 
+            });
+          } catch (error) {
+            return 'Coming soon';
+          }
         };
 
         const mapStories = (stories, label = 'FEATURE') => (stories || []).map((s) => ({
@@ -289,15 +303,13 @@ const LandingPage = () => {
         setOpportunities((eventRes.data.data || []).slice(0, 3).map((e) => ({
           tag: (e.event_type || 'EVENT').toUpperCase(),
           title: e.title,
-          meta: `${e.location || 'Online'} • ${e.event_date || 'Coming soon'}`,
+          meta: `${e.location || 'Online'} • ${formatDate(e.event_date)}`,
         })));
 
         // Set podcasts data
         setPodcasts(podcastData.slice(0, 3));
       } catch (error) {
         console.error('Failed to load landing page data:', error.message);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -310,7 +322,8 @@ const LandingPage = () => {
     return () => {
       if (audio) {
         audio.pause();
-        audio.src = '';
+        audio.removeAttribute('src');
+        audio.load();
       }
     };
   }, []);
@@ -352,7 +365,8 @@ const LandingPage = () => {
       // Stop current audio if playing
       if (audioRef.current) {
         audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+        audioRef.current.removeAttribute('src');
+        audioRef.current.load();
       }
 
       // Play new podcast
@@ -376,7 +390,8 @@ const LandingPage = () => {
   const handleStopPodcast = () => {
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current.src = '';
+      audioRef.current.removeAttribute('src');
+      audioRef.current.load();
     }
     setIsPlaying(false);
     setAudioError(false);
@@ -397,9 +412,7 @@ const LandingPage = () => {
     setAudioError(true);
   };
 
-  if (isLoading) {
-    return null;
-  }
+
 
   return (
     <section className="landing-page">

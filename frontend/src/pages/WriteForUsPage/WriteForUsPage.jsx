@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import pitchService from '../../services/pitchService';
 import './WriteForUsPage.css';
 
 const WriteForUsPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -29,6 +31,14 @@ const WriteForUsPage = () => {
   const [activeTab, setActiveTab] = useState('pitch');
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Check if user is authenticated
+  useEffect(() => {
+    const userData = localStorage.getItem('trendorabay-user');
+    if (!userData) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const topicsOptions = [
     'Startups & Entrepreneurship',
