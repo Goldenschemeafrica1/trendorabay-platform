@@ -8,8 +8,8 @@ import './Header.css';
 
 const navLinks = [
   { label: 'Latest', target: 'nl-latest' },
-  { label: 'Magazines', target: 'nl-magazines', badge: 'SHOP' },
-  { label: 'Merchandise', target: 'nl-merchandise' },
+  { label: 'Magazines', target: 'nl-magazines' },
+  { label: 'Merchandise', target: '/merchandise', isRoute: true, badge: 'SHOP' },
   { label: 'Podcasts', target: 'nl-podcasts' },
   { label: 'Opportunities', target: '/events', isRoute: true },
 ];
@@ -190,13 +190,7 @@ const Header = () => {
             </button>
             <CommunityMegaMenu />
           </div>
-          {navLinks.slice(1, 4).map((link) => (
-            <button key={link.target} type="button" onClick={() => scrollToSection(link.target)}>
-              {link.label}
-              {link.badge && <span className="nl-nav-badge">{link.badge}</span>}
-            </button>
-          ))}
-          {navLinks.slice(4).map((link) => (
+          {navLinks.slice(1).map((link) => (
             <button key={link.target} type="button" onClick={() => scrollToSection(link.target)}>
               {link.label}
               {link.badge && <span className="nl-nav-badge">{link.badge}</span>}
@@ -260,14 +254,10 @@ const Header = () => {
           <button type="button" onClick={() => scrollToSection('nl-latest')}>
             Latest
           </button>
-          {navLinks.slice(1, 4).map((link) => (
+          {navLinks.slice(1).map((link) => (
             <button key={`${link.target}-mobile`} type="button" onClick={() => scrollToSection(link.target)}>
               {link.label}
-            </button>
-          ))}
-          {navLinks.slice(4).map((link) => (
-            <button key={`${link.target}-mobile`} type="button" onClick={() => scrollToSection(link.target)}>
-              {link.label}
+              {link.badge && <span className="nl-nav-badge">{link.badge}</span>}
             </button>
           ))}
         </div>
