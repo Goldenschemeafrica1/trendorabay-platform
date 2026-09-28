@@ -11,12 +11,12 @@ const getImageUrl = (url) => {
   // Return full URLs as-is (Cloudinary, external images)
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
   
-  // For relative paths, construct full URL using CMS base
-  const cmsUrl = process.env.CMS_URL || 'https://trendorabay-content-management-system.onrender.com';
+  // For relative paths, construct full URL using backend URL
+  const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
   
-  // If it's a relative path starting with /uploads, serve from CMS
+  // If it's a relative path starting with /uploads, serve from local backend
   if (url.startsWith('/uploads/')) {
-    return `${cmsUrl}${url}`;
+    return `${backendUrl}${url}`;
   }
   // If it starts with /, it's in the frontend public folder - return as-is
   if (url.startsWith('/')) {

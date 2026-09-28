@@ -13,25 +13,29 @@ const merchService = {
     if (filters.search) params.append('search', filters.search);
     
     const response = await apiRequest.get(`/products?${params.toString()}`);
-    return response.data;
+    // Handle backend response format: {success: true, data: [...]}
+    if (response.data?.success === false) {
+      return { data: [] };
+    }
+    return response.data?.data || response.data || [];
   },
 
   // Get product by ID
   getProductById: async (id) => {
     const response = await apiRequest.get(`/products/${id}`);
-    return response.data;
+    return response.data?.data || response.data;
   },
 
   // Get products by category
   getProductsByCategory: async (category, page = 1, limit = 12) => {
     const response = await apiRequest.get(`/products/category/${category}?page=${page}&limit=${limit}`);
-    return response.data;
+    return response.data?.data || response.data || [];
   },
 
   // Get featured products
   getFeaturedProducts: async (limit = 8) => {
     const response = await apiRequest.get(`/products/featured?limit=${limit}`);
-    return response.data;
+    return response.data?.data || response.data || [];
   },
 
   // Search products
@@ -55,25 +59,25 @@ const merchService = {
   // Get product categories
   getCategories: async () => {
     const response = await apiRequest.get('/products/categories');
-    return response.data;
+    return response.data?.data || response.data || [];
   },
 
   // Get product sizes and colors
   getProductOptions: async (productId) => {
     const response = await apiRequest.get(`/products/${productId}/options`);
-    return response.data;
+    return response.data?.data || response.data;
   },
 
   // Check product availability
   checkAvailability: async (productId, size, color) => {
     const response = await apiRequest.get(`/products/${productId}/availability?size=${size}&color=${color}`);
-    return response.data;
+    return response.data?.data || response.data;
   },
 
   // Get related products
   getRelatedProducts: async (productId, limit = 4) => {
     const response = await apiRequest.get(`/products/${productId}/related?limit=${limit}`);
-    return response.data;
+    return response.data?.data || response.data || [];
   },
 };
 
