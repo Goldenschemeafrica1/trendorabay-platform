@@ -222,6 +222,16 @@ body.dark-mode .nl-mobile-theme-toggle:hover {
   background: #374151;
 }
 
+body.dark-mode .nl-mobile-community-dropdown {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+body.dark-mode .nl-mobile-community-item:hover {
+  background: #374151 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 .nl-theme-toggle {
   font-size: 16px;
   background: transparent;
@@ -271,26 +281,126 @@ body.dark-mode .nl-mobile-theme-toggle:hover {
   background: var(--nl-card);
   border-top: 1px solid var(--nl-line);
   border-bottom: 1px solid var(--nl-line);
-  padding: 12px 0 18px;
+  padding: 16px 0 20px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .nl-mobile-nav button {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   text-align: left;
   border: 0;
   background: none;
-  padding: 10px 0;
+  padding: 14px 16px;
   font: inherit;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
   color: var(--nl-ink);
-  border-radius: 6px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nl-mobile-nav button .nl-nav-badge {
+  margin-left: auto;
 }
 
 .nl-mobile-nav button:hover {
   background: #f5f5f5;
+  transform: translateX(4px);
+}
+
+.nl-mobile-nav button:active {
+  background: #ebebeb;
+  transform: translateX(2px);
+}
+
+.nl-mobile-community-wrap {
+  margin: 8px 0;
+}
+
+.nl-mobile-community-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 16px !important;
+}
+
+.nl-mobile-chevron {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+  color: var(--nl-muted);
+}
+
+.nl-mobile-community-wrap.nl-open .nl-mobile-chevron {
+  transform: rotate(180deg);
+}
+
+.nl-mobile-community-dropdown {
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid var(--nl-line);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.nl-mobile-community-group {
+  margin-bottom: 12px;
+}
+
+.nl-mobile-community-group:last-child {
+  margin-bottom: 0;
+}
+
+.nl-mobile-community-group h5 {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--nl-muted);
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.nl-mobile-community-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px !important;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  background: transparent !important;
+}
+
+.nl-mobile-community-item:hover {
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 /* ===== Responsive ===== */

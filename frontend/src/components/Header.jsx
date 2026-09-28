@@ -254,9 +254,41 @@ const Header = () => {
           <button type="button" onClick={() => scrollToSection('nl-latest')}>
             Latest
           </button>
+          <div className={`nl-mobile-community-wrap ${communityOpen ? 'nl-open' : ''}`}>
+            <button
+              type="button"
+              className="nl-mobile-community-trigger"
+              onClick={(e) => {
+                e.stopPropagation();
+                setCommunityOpen((open) => !open);
+              }}
+            >
+              <span>Communities</span>
+              <span className="nl-mobile-chevron">▼</span>
+            </button>
+            {communityOpen && (
+              <div className="nl-mobile-community-dropdown">
+                {communityGroups.map((group) => (
+                  <div key={group.title} className="nl-mobile-community-group">
+                    <h5>{group.title}</h5>
+                    {group.items.map((item) => (
+                      <button
+                        key={item.slug}
+                        type="button"
+                        className="nl-mobile-community-item"
+                        onClick={() => scrollToSection(`nl-community-${item.slug}`)}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           {navLinks.slice(1).map((link) => (
             <button key={`${link.target}-mobile`} type="button" onClick={() => scrollToSection(link.target)}>
-              {link.label}
+              <span>{link.label}</span>
               {link.badge && <span className="nl-nav-badge">{link.badge}</span>}
             </button>
           ))}
