@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../store/hooks/useCart';
 import merchService from '../../services/merchService';
+import api from '../../services/api';
 import './StorePage.css';
 
 const StorePage = () => {
@@ -9,10 +10,11 @@ const StorePage = () => {
   const { addToCart, openCartDrawer } = useCart();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [categories, setCategories] = useState(['All']);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory] = useState('all');
-  const [searchQuery] = useState('');
-  const [sortBy] = useState('featured');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('featured');
   const [wishlist, setWishlist] = useState([]);
 
   // Load wishlist from localStorage
@@ -32,24 +34,29 @@ const StorePage = () => {
     localStorage.setItem('trendorabay_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
-  // Load products
+  // Load products and categories
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        console.log('Fetching products...');
-        const response = await merchService.getProducts();
-        console.log('API response:', response);
+        console.log('Fetching products and categories...');
+        const [productsResponse, categoriesResponse] = await Promise.all([
+          merchService.getProducts(),
+          api.get('/stories/categories')
+        ]);
+        
+        console.log('Products API response:', productsResponse);
+        console.log('Categories API response:', categoriesResponse);
         
         let products = [];
         
-        if (Array.isArray(response)) {
-          products = response;
+        if (Array.isArray(productsResponse)) {
+          products = productsResponse;
           console.log('Response is an array, using directly');
-        } else if (response && Array.isArray(response.data)) {
-          products = response.data;
+        } else if (productsResponse && Array.isArray(productsResponse.data)) {
+          products = productsResponse.data;
           console.log('Response has data array, using response.data');
         } else {
-          console.log('Response format unexpected:', typeof response, response);
+          console.log('Response format unexpected:', typeof productsResponse, productsResponse);
         }
         
         console.log('Products count:', products.length);
@@ -73,8 +80,15 @@ const StorePage = () => {
         console.log('Transformed products:', transformed.length);
         setProducts(transformed);
         setFilteredProducts(transformed);
+        
+        // Set categories from API
+        if (categoriesResponse.data && Array.isArray(categoriesResponse.data.data)) {
+          setCategories(['All', ...categoriesResponse.data.data]);
+        } else if (categoriesResponse.data && Array.isArray(categoriesResponse.data)) {
+          setCategories(['All', ...categoriesResponse.data]);
+        }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching data:', error);
         console.error('Error details:', error.message, error.stack);
         setProducts([]);
         setFilteredProducts([]);
@@ -83,7 +97,7 @@ const StorePage = () => {
       }
     };
     
-    fetchProducts();
+    fetchData();
   }, []);
 
   // Filter and sort products
@@ -96,7 +110,7 @@ const StorePage = () => {
     let filtered = [...products];
 
     // Category filter
-    if (selectedCategory !== 'all') {
+    if (selectedCategory !== 'All') {
       filtered = filtered.filter(p => p.category === selectedCategory);
     }
 
@@ -204,7 +218,8 @@ const StorePage = () => {
     <div className="store-page">
       {/* Hero Section */}
       <div className="store-hero">
-        <div className="store-hero-content">
+        <div className="container">
+          <div className="store-hero-content">
           <div className="store-hero-text">
             <h1>Trendorabay Hoodie Collection</h1>
             <p>Premium 100% cotton hoodies featuring the Trendorabay logo and African-inspired patterns. Perfect for casual wear and making a statement.</p>
@@ -230,15 +245,48 @@ const StorePage = () => {
             </div>
           </div>
         </div>
+        </div>
+      </div>
+
+      {/* Filter Section */}
+      <div className="store-filter-section">
+        <div className="container">
+          <div className="store-filter-header">
+            <h2>Shop by Category</h2>
+            <p>{filteredProducts.length} products available</p>
+          </div>
+          <div className="store-filter">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="store-search"
+            />
+            <div className="store-categories">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={`store-category-btn ${selectedCategory === category ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Our Collection Section */}
       <div className="our-collection-section">
-        <div className="our-collection-header">
-          <h2>Our Collection</h2>
-          <p>Explore our full range of products</p>
-        </div>
-        <div className="our-collection-grid">
+        <div className="container">
+          <div className="our-collection-header">
+            <h2>Our Collection</h2>
+            <p>Explore our full range of products</p>
+          </div>
+          <div className="our-collection-grid">
           {filteredProducts.slice(0, 8).map(product => (
             <div key={product.id} className="best-selling-card">
               <div className="best-selling-image-section">
@@ -274,11 +322,13 @@ const StorePage = () => {
             </div>
           ))}
         </div>
+        </div>
       </div>
 
       {/* Best Selling Section */}
       <div className="best-selling-section">
-        <div className="best-selling-header">
+        <div className="container">
+          <div className="best-selling-header">
           <h2>Best Selling</h2>
           <p>Our most popular products loved by customers</p>
         </div>
@@ -311,6 +361,7 @@ const StorePage = () => {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </div>

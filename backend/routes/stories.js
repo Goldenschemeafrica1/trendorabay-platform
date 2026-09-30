@@ -483,6 +483,53 @@ router.get('/recent', cache(300), async (req, res, next) => {
   }
 });
 
+// Get story categories
+router.get('/categories', cache(600), async (req, res, next) => {
+  try {
+    const [rows] = await pool.query(
+      'SELECT name FROM categories ORDER BY name'
+    );
+    const categories = rows.map(row => row.name);
+    res.json({ success: true, data: categories });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get authors
+router.get('/authors', cache(300), async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = (page - 1) * limit;
+    
+    const [rows] = await pool.query(
+      `SELECT id, name, avatar_url, bio, created_at 
+       FROM authors 
+       ORDER BY created_at DESC 
+       LIMIT ? OFFSET ?`,
+      [limit, offset]
+    );
+    
+    const [countResult] = await pool.query('SELECT COUNT(*) as total FROM authors');
+    const total = countResult[0].total;
+    const totalPages = Math.ceil(total / limit);
+    
+    res.json({
+      success: true,
+      data: rows,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get story by slug or ID
 router.get('/:slug', cache(300), async (req, res, next) => {
   try {
@@ -520,8 +567,23 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     const story = rows[0];
     if (!story.slug) {
       const cleanTitle = story.title?.trim() || '';
-      const generatedSlug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
-      
+      let generatedSlug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+
+      // Check if slug already exists and make it unique if needed
+      let counter = 1;
+      let originalSlug = generatedSlug;
+
+      while (true) {
+        const [existing] = await pool.query(
+          'SELECT id FROM stories WHERE slug = ? AND id != ?',
+          [generatedSlug, story.id]
+        );
+        if (existing.length === 0) break;
+
+        generatedSlug = `${originalSlug}-${counter}`;
+        counter++;
+      }
+
       // Update the slug in database
       await pool.query('UPDATE stories SET slug = ? WHERE id = ?', [generatedSlug, story.id]);
       story.slug = generatedSlug;
@@ -599,36 +661,6 @@ router.get('/:slug', cache(300), async (req, res, next) => {
     };
 
     res.json({ success: true, data: transformed });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get story categories
-router.get('/categories', cache(600), async (req, res, next) => {
-  try {
-    const [rows] = await pool.query(
-      'SELECT DISTINCT category FROM stories WHERE category IS NOT NULL ORDER BY category'
-    );
-    const categories = rows.map(row => row.category);
-    res.json({ success: true, data: categories });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get authors
-router.get('/authors', cache(300), async (req, res, next) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
-    const offset = (page - 1) * limit;
-    
-    const [rows] = await pool.query(
-      'SELECT * FROM authors ORDER BY name LIMIT ? OFFSET ?',
-      [limit, offset]
-    );
-    res.json({ success: true, data: rows });
   } catch (error) {
     next(error);
   }
@@ -712,40 +744,40 @@ router.get('/author/:authorId', cache(300), async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const { title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags } = req.body;
-    
-    // Generate slug from title
+
+    // Generate slug from title - ensure it's never null
     const cleanTitle = title?.trim() || '';
-    let slug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(Date.now());
-    
+    let slug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${Date.now()}`;
+
     // Check if slug already exists and make it unique if needed
     let counter = 1;
     let originalSlug = slug;
-    
+
     while (true) {
       const [existing] = await pool.query('SELECT id FROM stories WHERE slug = ?', [slug]);
       if (existing.length === 0) break;
-      
+
       slug = `${originalSlug}-${counter}`;
       counter++;
     }
-    
+
     const [result] = await pool.query(
-      `INSERT INTO stories (title, slug, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags) 
+      `INSERT INTO stories (title, slug, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [title, slug, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags]
     );
     const [newStory] = await pool.query(
-      `SELECT s.*, a.name as author_name 
-       FROM stories s 
-       LEFT JOIN authors a ON s.author_id = a.id 
+      `SELECT s.*, a.name as author_name
+       FROM stories s
+       LEFT JOIN authors a ON s.author_id = a.id
        WHERE s.id = ?`,
       [result.insertId]
     );
-    
+
     // Invalidate cache
     const { cacheDelPattern } = await import('../config/redis.js');
     await cacheDelPattern(cachePatterns.stories);
-    
+
     res.status(201).json({ success: true, data: newStory[0] });
   } catch (error) {
     next(error);
@@ -756,44 +788,44 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     const { title, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags } = req.body;
-    
+
     // Get current story to check if title changed
     const [current] = await pool.query('SELECT title, slug FROM stories WHERE id = ?', [req.params.id]);
     if (current.length === 0) {
       return res.status(404).json({ success: false, error: 'Story not found' });
     }
-    
-    // Generate new slug if title changed
+
+    // Generate new slug if title changed or if current slug is null
     let slug = current[0].slug;
-    if (title && title !== current[0].title) {
+    if (title && (title !== current[0].title || !slug)) {
       const cleanTitle = title.trim();
-      let newSlug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(Date.now());
-      
+      let newSlug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `story-${req.params.id}`;
+
       // Check if slug already exists and make it unique if needed
       let counter = 1;
       let originalSlug = newSlug;
-      
+
       while (true) {
         const [existing] = await pool.query('SELECT id FROM stories WHERE slug = ? AND id != ?', [newSlug, req.params.id]);
         if (existing.length === 0) break;
-        
+
         newSlug = `${originalSlug}-${counter}`;
         counter++;
       }
-      
+
       slug = newSlug;
     }
-    
+
     await pool.query(
-      `UPDATE stories 
+      `UPDATE stories
        SET title = ?, slug = ?, content = ?, featured_image_url = ?, featured_image_url_2 = ?, featured_image_url_3 = ?, featured_image_url_4 = ?, author_id = ?, category_id = ?, tags = ?
        WHERE id = ?`,
       [title, slug, content, featured_image_url, featured_image_url_2, featured_image_url_3, featured_image_url_4, author_id, category_id, tags, req.params.id]
     );
     const [updated] = await pool.query(
-      `SELECT s.*, a.name as author_name 
-       FROM stories s 
-       LEFT JOIN authors a ON s.author_id = a.id 
+      `SELECT s.*, a.name as author_name
+       FROM stories s
+       LEFT JOIN authors a ON s.author_id = a.id
        WHERE s.id = ?`,
       [req.params.id]
     );

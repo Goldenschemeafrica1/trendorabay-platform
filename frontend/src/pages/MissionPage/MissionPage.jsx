@@ -221,7 +221,7 @@ const MissionPage = () => {
             <h2>Be Part of Our Mission</h2>
             <p>Join us in reshaping how African stories are told and shared with the world.</p>
             <div className="cta-buttons">
-              <Link to="/contribute" className="btn btn-primary">
+              <Link to="/writers" className="btn btn-primary">
                 <i className="fas fa-feather-alt"></i>
                 Write for Us
               </Link>

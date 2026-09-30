@@ -45,42 +45,42 @@ api.interceptors.request.use(
   (config) => {
     console.log('API request:', config.method.toUpperCase(), config.baseURL + config.url);
     
-    // TEMPORARILY DISABLED: Check cache for GET requests with stale-while-revalidate
-    // if (config.method === 'get') {
-    //   const cacheKey = getCacheKey(config.url, config.params);
-    //   const cached = getCachedData(cacheKey);
-    //   
-    //   if (cached) {
-    //     console.log('Returning cached data for:', config.url);
-    //     // If data is stale, return it immediately but fetch fresh data in background
-    //     if (cached.isStale) {
-    //       // Trigger background refresh without blocking
-    //       api.get(config.url, { ...config, skipCache: true }).then(response => {
-    //         setCachedData(cacheKey, response.data);
-    //       }).catch(() => {
-    //         // Silent fail - user already has stale data
-    //       });
-    //     }
-    //     
-    //     config.adapter = () => Promise.resolve({
-    //       data: cached.data,
-    //       status: 200,
-    //       statusText: 'OK',
-    //       headers: {},
-    //       config,
-    //       request: {},
-    //       cached: true,
-    //       isStale: cached.isStale
-    //     });
-    //     return config;
-    //   }
+    // Check cache for GET requests with stale-while-revalidate
+    if (config.method === 'get' && !config.skipCache) {
+      const cacheKey = getCacheKey(config.url, config.params);
+      const cached = getCachedData(cacheKey);
+      
+      if (cached) {
+        console.log('Returning cached data for:', config.url);
+        // If data is stale, return it immediately but fetch fresh data in background
+        if (cached.isStale) {
+          // Trigger background refresh without blocking
+          api.get(config.url, { ...config, skipCache: true }).then(response => {
+            setCachedData(cacheKey, response.data);
+          }).catch(() => {
+            // Silent fail - user already has stale data
+          });
+        }
+        
+        config.adapter = () => Promise.resolve({
+          data: cached.data,
+          status: 200,
+          statusText: 'OK',
+          headers: {},
+          config,
+          request: {},
+          cached: true,
+          isStale: cached.isStale
+        });
+        return config;
+      }
 
-    //   // Request deduplication - if same request is in flight, return the existing promise
-    //   if (pendingRequests.has(cacheKey)) {
-    //     console.log('Request deduplication: returning existing promise for:', config.url);
-    //     return pendingRequests.get(cacheKey);
-    //   }
-    // }
+      // Request deduplication - if same request is in flight, return the existing promise
+      if (pendingRequests.has(cacheKey)) {
+        console.log('Request deduplication: returning existing promise for:', config.url);
+        return pendingRequests.get(cacheKey);
+      }
+    }
 
     // Token is now sent via httpOnly cookie, no need for Authorization header
     return config;
@@ -143,11 +143,11 @@ export const apiRequest = {
     
     console.log('apiRequest.get called with URL:', url, 'config:', config);
     
-    // TEMPORARILY DISABLED: Check if request is already in flight
-    // if (pendingRequests.has(cacheKey)) {
-    //   console.log('Request already in flight, returning existing promise');
-    //   return pendingRequests.get(cacheKey);
-    // }
+    // Check if request is already in flight
+    if (pendingRequests.has(cacheKey) && !config.skipCache) {
+      console.log('Request already in flight, returning existing promise');
+      return pendingRequests.get(cacheKey);
+    }
     
     // Create and store the request
     const request = api.get(url, config).finally(() => {

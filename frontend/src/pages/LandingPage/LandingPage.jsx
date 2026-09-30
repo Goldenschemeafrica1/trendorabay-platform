@@ -3,6 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
 import podcastService from '../../services/podcastService';
+import LandingPageSkeleton from '../../components/LandingPageSkeleton';
+import HeroSection from '../../components/landing/HeroSection';
+import LatestStories from '../../components/landing/LatestStories';
+import CommunityCard from '../../components/landing/CommunityCard';
+import MagazineSection from '../../components/landing/MagazineSection';
 import './LandingPage.css';
 
 const initialLatestStories = [
@@ -105,28 +110,6 @@ const initialOpportunities = [
 ];
 
 const formatPrice = (price) => `KES ${price.toLocaleString()}`;
-
-const MagazineCover = ({ magazine, variant = '' }) => (
-  <div className={`nl-mag-cover nl-cover-${magazine.cover} ${variant}`}>
-    {magazine.image ? (
-      <img
-        src={magazine.image}
-        alt={`${magazine.title} cover`}
-        className="nl-mag-cover-img"
-        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-      />
-    ) : (
-      <>
-        <div>
-          <div className="nl-cover-brand">TRENDORABAY</div>
-          <div className="nl-cover-issue">{magazine.coverIssue}</div>
-        </div>
-        <div className="nl-cover-title">{magazine.coverTitle}</div>
-        <div className="nl-cover-bottom">{magazine.coverBottom}</div>
-      </>
-    )}
-  </div>
-);
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -236,7 +219,7 @@ const LandingPage = () => {
 
         setMagazines((magRes.data.data || []).map((m) => ({
           id: m.id,
-          slug: m.slug,
+          slug: m.slug || String(m.id), // Ensure slug always exists
           title: m.title,
           image: m.coverImage,
           cover: 'future',
@@ -315,8 +298,19 @@ const LandingPage = () => {
   const handlePlayPodcast = async (podcast) => {
     const audioUrl = podcast.audioUrl || podcast.audio_file_url;
 
+    // Validate audio URL
     if (!audioUrl || typeof audioUrl !== 'string') {
+      console.warn('No audio URL available for podcast:', podcast);
       toast.error('Audio not available for this podcast');
+      return;
+    }
+
+    // Check if URL is valid
+    try {
+      new URL(audioUrl);
+    } catch (e) {
+      console.error('Invalid audio URL:', audioUrl);
+      toast.error('Invalid audio URL');
       return;
     }
 
@@ -325,16 +319,21 @@ const LandingPage = () => {
     if (currentlyPlaying === podcast.id) {
       // Toggle play/pause for current podcast
       if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
+        if (audioRef.current) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+        }
       } else {
         try {
-          await audioRef.current.play();
-          setIsPlaying(true);
+          if (audioRef.current) {
+            await audioRef.current.play();
+            setIsPlaying(true);
+          }
         } catch (error) {
           console.error('Error playing audio:', error);
           setIsPlaying(false);
           setAudioError(true);
+          toast.error('Could not play audio');
         }
       }
     } else {
@@ -349,15 +348,37 @@ const LandingPage = () => {
       setCurrentlyPlaying(podcast.id);
       setCurrentPodcast(podcast);
       setIsPlaying(true);
+      
       if (audioRef.current) {
         audioRef.current.src = audioUrl;
+        
+        // Wait for the audio to be ready before playing
+        audioRef.current.oncanplay = () => {
+          audioRef.current.play()
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch((error) => {
+              console.error('Error playing audio after canplay:', error);
+              setIsPlaying(false);
+              setAudioError(true);
+              toast.error('Could not play audio. The file may not be supported.');
+            });
+        };
+
+        audioRef.current.onerror = () => {
+          console.error('Audio element error');
+          setIsPlaying(false);
+          setAudioError(true);
+          toast.error('Could not load audio file');
+        };
+
         try {
+          // Try to play immediately, fallback to canplay event
           await audioRef.current.play();
         } catch (error) {
           console.error('Error playing audio:', error);
-          setIsPlaying(false);
-          setAudioError(true);
-          toast.error('Error playing audio');
+          // Will be handled by oncanplay or onerror
         }
       }
     }
@@ -389,7 +410,7 @@ const LandingPage = () => {
   };
 
   if (isLoading) {
-    return null;
+    return <LandingPageSkeleton />;
   }
 
   return (
@@ -397,159 +418,20 @@ const LandingPage = () => {
       <div className="nl-container">
         {/* Top Ad */}
         <div className="top-ad">
-          <img src="/ad1.png" alt="Advertisement" />
+          <img src="/ad1.png" alt="Advertisement" loading="lazy" />
         </div>
 
         {/* Hero */}
-        <section id="nl-hero" className="hero-stories">
-          <div className="hero-stories-content">
-            <span className="hero-stories-kicker">TRENDORABAY • STORIES</span>
-            <h1>
-              STORIES THAT
-              <br />
-              SHAPE <span>AFRICA&apos;S</span>
-              <br />
-              NEXT CHAPTER.
-            </h1>
-            <p>
-              Real people. Bold ideas. The businesses, culture and innovation writing Africa&apos;s
-              tomorrow — told with depth and style.
-            </p>
-            <div className="hero-stories-buttons">
-              <Link to="/stories" className="hero-stories-btn-primary">
-                READ LATEST STORIES →
-              </Link>
-              <Link to="/stories" className="hero-stories-btn-secondary">
-                BROWSE BY TOPIC
-              </Link>
-            </div>
-          </div>
-
-          <div className="hero-stories-visual">
-            <div className="hero-stories-feature">
-              <div className="hero-stories-feature-tag">FEATURED STORY</div>
-              <div>
-                <h2>The Future of Health: Why Prevention Is Becoming the Most Powerful Medicine</h2>
-                <p>Founders, creators and innovators turning bold ideas into real impact.</p>
-                <Link
-                  to={heroStory?.slug ? `/stories/${heroStory.slug}` : '/stories'}
-                >
-                  READ THE STORY →
-                </Link>
-              </div>
-            </div>
-
-            <div className="hero-stories-strip">
-              {latestStories.slice(0, 2).map((story) => (
-                <Link
-                  key={story.id || story.title}
-                  to={story.slug ? `/stories/${story.slug}` : '/stories'}
-                  className="hero-stories-mini"
-                >
-                  <span className="hero-stories-mini-tag">
-                    {(story.tag || 'STORY').toUpperCase()}
-                  </span>
-                  <strong>{story.title}</strong>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
+        <HeroSection heroStory={heroStory} latestStories={latestStories} />
 
         {/* Latest Stories */}
-        <section id="nl-latest" className="nl-section">
-          <div className="nl-section-head">
-            <h2>✦ Latest Stories</h2>
-            <Link to="/stories">VIEW ALL →</Link>
-          </div>
-          <div className="nl-trending">
-            {latestStories.map((story) => (
-              <Link
-                key={story.id || story.title}
-                to={story.slug ? `/stories/${story.slug}` : '/stories'}
-                className="nl-story-link"
-              >
-                <article className="nl-story-card">
-                  <div className="nl-card-img">
-                    {story.image && (
-                      <img
-                        src={story.image}
-                        alt={story.title}
-                        className="nl-card-media"
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                      />
-                    )}
-                    {story.imgLabel}
-                  </div>
-                  <div className="nl-card-body">
-                    <span className="nl-tag">{story.tag}</span>
-                    <h3>{story.title}</h3>
-                    <p>{story.excerpt}</p>
-                    <div className="nl-meta">{story.meta}</div>
-                  </div>
-                </article>
-              </Link>
-            ))}
-          </div>
-        </section>
+        <LatestStories stories={latestStories} />
+
+        {/* Community Card */}
+        <CommunityCard />
 
         {/* Magazines */}
-        <section id="nl-magazines" className="nl-section">
-          <div className="nl-store-view">
-            <div className="nl-section-head">
-              <div>
-                <span className="nl-tag">TRENDORABAY STORE</span>
-                <h2>✦ Magazines</h2>
-              </div>
-              <Link to="/magazines">ALL ISSUES →</Link>
-            </div>
-
-            <div className="nl-magazine-hero">
-              <MagazineCover magazine={featured} />
-              <div>
-                <span className="nl-kicker">Latest Issue</span>
-                <h2>{featured.title}.</h2>
-                <p className="nl-hero-lead">{featured.lead}</p>
-                <div className="nl-price">{formatPrice(featured.price)}</div>
-                <Link to="/cart" className="nl-buybtn">BUY MAGAZINE</Link>
-                <button
-                  type="button"
-                  className="nl-secondarybtn"
-                  onClick={() => navigate(`/magazines/${featured.slug || featured.id}`)}
-                >
-                  VIEW ISSUE
-                </button>
-              </div>
-              <img
-                src="/music1.jpeg"
-                alt="Upcoming issue preview"
-                className="nl-mag-hero-thumb"
-                onError={(e) => { e.currentTarget.style.display = 'none'; }}
-              />
-            </div>
-
-            <div className="nl-section-head nl-section-head-spaced">
-              <h2>Latest Issues</h2>
-              <Link to="/magazines">BROWSE ALL →</Link>
-            </div>
-            <div className="nl-mag-grid">
-              {magazines.map((magazine) => (
-                <article
-                  key={magazine.id}
-                  className="nl-mag-card"
-                  onClick={() => navigate(`/magazines/${magazine.slug || magazine.id}`)}
-                >
-                  <MagazineCover magazine={magazine} variant="nl-mag-cover-small" />
-                  <div className="nl-mag-info">
-                    <span className="nl-tag">{magazine.tag.toUpperCase()}</span>
-                    <h3>{magazine.title}</h3>
-                    <div className="nl-mag-price">{formatPrice(magazine.price)}</div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <MagazineSection magazines={magazines} />
 
         {/* Merchandise */}
         <section id="nl-merchandise" className="nl-section">
@@ -558,7 +440,7 @@ const LandingPage = () => {
               <span className="nl-tag">TRENDORABAY STORE</span>
               <h2>✦ Merchandise</h2>
             </div>
-            <Link to="/store">VIEW STORE →</Link>
+            <Link to="/store" onClick={(e) => e.preventDefault()}>VIEW STORE →</Link>
           </div>
           <div className="nl-merch-hero">
             <div>
@@ -568,12 +450,13 @@ const LandingPage = () => {
                 Official Trendorabay merchandise inspired by African creativity, youth culture and
                 the ideas shaping tomorrow.
               </p>
-              <Link to="/store" className="nl-buybtn nl-buybtn-spaced">SHOP THE DROP</Link>
+              <Link to="/store" className="nl-buybtn nl-buybtn-spaced" onClick={(e) => e.preventDefault()}>SHOP THE DROP</Link>
             </div>
             <img
               src="/merch-banner.jpg"
               alt="Trendorabay T-shirt merchandise"
               className="nl-merch-visual"
+              loading="lazy"
               style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
@@ -599,6 +482,7 @@ const LandingPage = () => {
                         src={feature.image}
                         alt={feature.title}
                         className="nl-card-media"
+                        loading="lazy"
                         onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     )}
@@ -628,7 +512,7 @@ const LandingPage = () => {
               </div>
             </aside>
             <div className="nl-ad-sidebar">
-              <img src="https://placehold.co/300x250?text=Ad" alt="Sidebar Advertisement" />
+              <img src="https://placehold.co/300x250?text=Ad" alt="Sidebar Advertisement" loading="lazy" />
             </div>
           </div>
         </section>
@@ -653,6 +537,7 @@ const LandingPage = () => {
                         src={story.image}
                         alt={story.title}
                         className="nl-card-media"
+                        loading="lazy"
                         onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     )}
@@ -688,6 +573,7 @@ const LandingPage = () => {
                       src={podcast.coverImage || podcast.image || '/music7.jpeg'}
                       alt={podcast.title || `Episode ${index + 1}`}
                       className="nl-podcast-episode-img"
+                      loading="lazy"
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                     <button
@@ -713,6 +599,7 @@ const LandingPage = () => {
                       src="/music7.jpeg"
                       alt="Episode 1"
                       className="nl-podcast-episode-img"
+                      loading="lazy"
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                     <button className="nl-podcast-play-center">▶</button>
@@ -730,6 +617,7 @@ const LandingPage = () => {
                       src="/music1.jpeg"
                       alt="Episode 2"
                       className="nl-podcast-episode-img"
+                      loading="lazy"
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                     <button className="nl-podcast-play-center">▶</button>
@@ -747,6 +635,7 @@ const LandingPage = () => {
                       src="/blockchain.jpeg"
                       alt="Episode 3"
                       className="nl-podcast-episode-img"
+                      loading="lazy"
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                     <button className="nl-podcast-play-center">▶</button>
@@ -801,7 +690,7 @@ const LandingPage = () => {
 
         {/* Middle Ad */}
         <div className="top-ad">
-          <img src="https://placehold.co/1200x100?text=AD" alt="Advertisement" />
+          <img src="https://placehold.co/1200x100?text=AD" alt="Advertisement" loading="lazy" />
         </div>
 
         {/* Opportunities */}
@@ -832,7 +721,7 @@ const LandingPage = () => {
               <h2>Share Your Story.</h2>
               <p>Have a story, idea, or perspective to share? We're looking for writers and storytellers across Africa.</p>
             </div>
-            <Link to="/write-for-us" className="nl-writer-cta">
+            <Link to="/writers" className="nl-writer-cta">
               Become a Writer <span>→</span>
             </Link>
           </div>
@@ -879,7 +768,7 @@ const LandingPage = () => {
               <summary>How can I contribute or write for Trendorabay?</summary>
               <p>
                 We welcome stories from founders, creators and thinkers across the continent. Visit
-                our Write for Us page to submit your idea.
+                our <Link to="/writers">Writers page</Link> to learn more and submit your idea.
               </p>
             </details>
             <details className="nl-faq-item">

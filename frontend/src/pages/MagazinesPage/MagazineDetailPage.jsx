@@ -12,8 +12,10 @@ const MagazineDetailPage = () => {
   useEffect(() => {
     const fetchMagazine = async () => {
       try {
+        console.log('Fetching magazine with slug:', slug);
         setLoading(true);
         const data = await magazineService.getMagazineBySlug(slug);
+        console.log('Magazine data received:', data);
         setMagazine(data);
       } catch (err) {
         console.error('Error fetching magazine:', err);
@@ -25,6 +27,10 @@ const MagazineDetailPage = () => {
 
     if (slug && slug !== 'undefined') {
       fetchMagazine();
+    } else {
+      console.log('Invalid slug:', slug);
+      setLoading(false);
+      setError('Invalid magazine slug');
     }
   }, [slug]);
 
