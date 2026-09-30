@@ -5,26 +5,31 @@ import './StoriesPage.css';
 
 const StoriesPage = () => {
   const [stories, setStories] = useState([]);
+  const [categories, setCategories] = useState(['All']);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
-    const fetchStories = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/stories');
-        setStories(response.data.data || []);
+        const [storiesResponse, categoriesResponse] = await Promise.all([
+          api.get('/stories'),
+          api.get('/stories/categories')
+        ]);
+        setStories(storiesResponse.data.data || []);
+        setCategories(['All', ...(categoriesResponse.data.data || [])]);
       } catch (err) {
         setError('Failed to load stories. Please try again.');
-        console.error('Error fetching stories:', err);
+        console.error('Error fetching data:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchStories();
+    fetchData();
   }, []);
 
   const stripHtml = (html) => {
@@ -38,7 +43,6 @@ const StoriesPage = () => {
     return text.length > limit ? `${text.slice(0, limit).trim()}...` : text;
   };
 
-  const categories = ['All', ...new Set(stories.map((story) => story.categoryName).filter(Boolean))];
   const filteredStories = stories.filter((story) => {
     const matchesCategory = selectedCategory === 'All' || story.categoryName === selectedCategory;
     const query = searchQuery.toLowerCase();

@@ -45,6 +45,7 @@ import teamRoutes from './routes/team.js';
 import galleryRoutes from './routes/gallery.js';
 import analyticsRoutes from './routes/analytics.js';
 import opportunityRoutes from './routes/opportunities.js';
+import writeApplicationRoutes from './routes/writeApplications.js';
 
 const app = express();
 
@@ -224,6 +225,7 @@ app.use(`/api/${API_VERSION}/team`, teamRoutes);
 app.use(`/api/${API_VERSION}/gallery`, galleryRoutes);
 app.use(`/api/${API_VERSION}/analytics`, analyticsRoutes);
 app.use(`/api/${API_VERSION}/opportunities`, opportunityRoutes);
+app.use(`/api/${API_VERSION}/write-applications`, writeApplicationRoutes);
 
 // Legacy API routes (backward compatibility - will be deprecated)
 app.use('/api/users', userRoutes);
@@ -248,6 +250,7 @@ app.use('/api/team', teamRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/opportunities', opportunityRoutes);
+app.use('/api/write-applications', writeApplicationRoutes);
 
 // Make upload middleware available to routes
 app.set('upload', upload);
@@ -314,6 +317,52 @@ const createInquiriesTable = async () => {
   }
 };
 
+// Fix stories with null or empty slugs at startup
+const fixStorySlugs = async () => {
+  try {
+    const [stories] = await pool.query(
+      'SELECT id, title, slug FROM stories WHERE slug IS NULL OR slug = ""'
+    );
+
+    if (stories.length === 0) {
+      return;
+    }
+
+    console.log(`Found ${stories.length} stories with null/empty slugs. Fixing...`);
+
+    for (const story of stories) {
+      const cleanTitle = story.title?.trim() || '';
+      let slug = cleanTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(story.id);
+
+      // Check if slug already exists and make it unique if needed
+      let counter = 1;
+      let originalSlug = slug;
+
+      while (true) {
+        const [existing] = await pool.query(
+          'SELECT id FROM stories WHERE slug = ? AND id != ?',
+          [slug, story.id]
+        );
+        if (existing.length === 0) break;
+
+        slug = `${originalSlug}-${counter}`;
+        counter++;
+      }
+
+      await pool.query(
+        'UPDATE stories SET slug = ? WHERE id = ?',
+        [slug, story.id]
+      );
+
+      console.log(`✓ Fixed story ID ${story.id}: "${story.title}" -> slug: "${slug}"`);
+    }
+
+    console.log('All null/empty slugs have been fixed!');
+  } catch (error) {
+    console.error('Error fixing story slugs:', error);
+  }
+};
+
 // Start server
 const startServer = async () => {
   try {
@@ -346,6 +395,8 @@ const startServer = async () => {
       await validateTablesAtStartup();
       // Create tables if they don't exist
       await createInquiriesTable();
+      // Fix stories with null/empty slugs
+      await fixStorySlugs();
     }
     
     startQueueWorker();

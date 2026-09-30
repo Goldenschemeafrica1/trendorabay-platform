@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useLayoutEffect } from 'react';
+import React, { Suspense, useEffect, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -14,38 +13,47 @@ import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import './App.css';
 
-// Page Components
-import LandingPage from './pages/LandingPage/LandingPage';
-import StorePage from './pages/StorePage/StorePage';
-import ProductDetailPage from './pages/StorePage/ProductDetailPage';
-import CartPage from './pages/StorePage/CartPage';
-import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
-import CheckoutSuccessPage from './pages/CheckoutPage/CheckoutSuccessPage';
-import EventsPage from './components/events/EventsPage';
-import OpportunitiesPage from './components/opportunities/OpportunitiesPage';
-import AboutPage from './pages/AboutPage/AboutPage';
-import MissionPage from './pages/MissionPage/MissionPage';
-import ContactPage from './pages/ContactPage/ContactPage';
-import WriteForUsPage from './pages/WriteForUsPage/WriteForUsPage';
-import PartnerPage from './pages/PartnerPage/PartnerPage';
-import TermsPage from './pages/Legal/TermsPage';
-import PrivacyPage from './pages/Legal/PrivacyPage';
-import LoginPage from './pages/LoginPage/LoginPage';
-import SignupPage from './pages/SignupPage/SignupPage';
-import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage';
-import AdvertisePage from './pages/AdvertisePage/AdvertisePage';
-import SubscribePage from './pages/SubscribePage/SubscribePage';
-import DonatePage from './pages/DonatePage/DonatePage';
-import OrdersPage from './pages/OrdersPage/OrdersPage';
-import SettingsPage from './pages/SettingsPage/SettingsPage';
-import ProfilePage from './pages/ProfilePage/ProfilePage';
-import GalleryPage from './pages/GalleryPage/GalleryPage';
-import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
-import MagazineDetailPage from './pages/MagazinesPage/MagazineDetailPage';
-import MagazinesPage from './pages/MagazinesPage/MagazinesPage';
-import StoriesPage from './pages/StoriesPage/StoriesPage';
-import StoryDetailPage from './pages/StoryDetailPage/StoryDetailPage';
-import MusicPage from './pages/MusicPage/MusicPage';
+// Lazy load page components for code splitting
+const LandingPage = React.lazy(() => import('./pages/LandingPage/LandingPage'));
+const StorePage = React.lazy(() => import('./pages/StorePage/StorePage'));
+const ProductDetailPage = React.lazy(() => import('./pages/StorePage/ProductDetailPage'));
+const CartPage = React.lazy(() => import('./pages/StorePage/CartPage'));
+const CheckoutPage = React.lazy(() => import('./pages/CheckoutPage/CheckoutPage'));
+const CheckoutSuccessPage = React.lazy(() => import('./pages/CheckoutPage/CheckoutSuccessPage'));
+const EventsPage = React.lazy(() => import('./components/events/EventsPage'));
+const OpportunitiesPage = React.lazy(() => import('./components/opportunities/OpportunitiesPage'));
+const AboutPage = React.lazy(() => import('./pages/AboutPage/AboutPage'));
+const MissionPage = React.lazy(() => import('./pages/MissionPage/MissionPage'));
+const ContactPage = React.lazy(() => import('./pages/ContactPage/ContactPage'));
+const WriteForUsPage = React.lazy(() => import('./pages/WriteForUsPage/WriteForUsPage'));
+const PartnerPage = React.lazy(() => import('./pages/PartnerPage/PartnerPage'));
+const TermsPage = React.lazy(() => import('./pages/Legal/TermsPage'));
+const PrivacyPage = React.lazy(() => import('./pages/Legal/PrivacyPage'));
+const LoginPage = React.lazy(() => import('./pages/LoginPage/LoginPage'));
+const SignupPage = React.lazy(() => import('./pages/SignupPage/SignupPage'));
+const ForgotPasswordPage = React.lazy(() => import('./pages/ForgotPasswordPage/ForgotPasswordPage'));
+const AdvertisePage = React.lazy(() => import('./pages/AdvertisePage/AdvertisePage'));
+const SubscribePage = React.lazy(() => import('./pages/SubscribePage/SubscribePage'));
+const DonatePage = React.lazy(() => import('./pages/DonatePage/DonatePage'));
+const OrdersPage = React.lazy(() => import('./pages/OrdersPage/OrdersPage'));
+const SettingsPage = React.lazy(() => import('./pages/SettingsPage/SettingsPage'));
+const ProfilePage = React.lazy(() => import('./pages/ProfilePage/ProfilePage'));
+const GalleryPage = React.lazy(() => import('./pages/GalleryPage/GalleryPage'));
+const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage/NotFoundPage'));
+const MagazineDetailPage = React.lazy(() => import('./pages/MagazinesPage/MagazineDetailPage'));
+const MagazinesPage = React.lazy(() => import('./pages/MagazinesPage/MagazinesPage'));
+const StoriesPage = React.lazy(() => import('./pages/StoriesPage/StoriesPage'));
+const StoryDetailPage = React.lazy(() => import('./pages/StoryDetailPage/StoryDetailPage'));
+const MusicPage = React.lazy(() => import('./pages/MusicPage/MusicPage'));
+const WritersPage = React.lazy(() => import('./pages/WritersPage/WritersPage'));
+const WriterApplicationPage = React.lazy(() => import('./pages/WriterApplicationPage/WriterApplicationPage'));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+    <div style={{ color: '#666', fontSize: '1.2rem' }}>Loading...</div>
+  </div>
+);
 
 function App() {
   const location = useLocation();
@@ -216,67 +224,74 @@ function App() {
 
 
       {/* Main Content Area */}
-      <Routes>
-        {/* Home */}
-        <Route path="/" element={<LandingPage />} />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* Home */}
+          <Route path="/" element={<LandingPage />} />
 
 
-        {/* Merchandise Routes */}
-        <Route path="/merchandise" element={<StorePage />} />
-        <Route path="/store" element={<StorePage />} />
-        <Route path="/merchandise/:id" element={<ProductDetailPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+          {/* Merchandise Routes */}
+          <Route path="/merchandise" element={<StorePage />} />
+          <Route path="/store" element={<StorePage />} />
+          <Route path="/merchandise/:id" element={<ProductDetailPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
 
-        {/* Community Routes */}
-        <Route path="/events" element={<EventsPage />} />
-        <Route path="/opportunities" element={<OpportunitiesPage />} />
-        <Route path="/community/music" element={<MusicPage />} />
+          {/* Community Routes */}
+          <Route path="/events" element={<EventsPage />} />
+          <Route path="/opportunities" element={<OpportunitiesPage />} />
+          <Route path="/community/music" element={<MusicPage />} />
 
-        {/* Information Pages */}
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/mission" element={<MissionPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/write" element={<WriteForUsPage />} />
-        <Route path="/write-for-us" element={<WriteForUsPage />} />
-        <Route path="/partner" element={<PartnerPage />} />
-        <Route path="/partner-with-us" element={<PartnerPage />} />
-        <Route path="/terms" element={<TermsPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
+          {/* Information Pages */}
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/mission" element={<MissionPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/write" element={<WriteForUsPage />} />
+          <Route path="/write-for-us" element={<WriteForUsPage />} />
+          <Route path="/partner" element={<PartnerPage />} />
+          <Route path="/partner-with-us" element={<PartnerPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
 
-        {/* Authentication */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          {/* Authentication */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-        {/* User Account Pages */}
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+          {/* User Account Pages */}
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
 
-        {/* Business Pages */}
-        <Route path="/advertise" element={<AdvertisePage />} />
-        <Route path="/subscribe" element={<SubscribePage />} />
-        <Route path="/donate" element={<DonatePage />} />
+          {/* Business Pages */}
+          <Route path="/advertise" element={<AdvertisePage />} />
+          <Route path="/subscribe" element={<SubscribePage />} />
+          <Route path="/donate" element={<DonatePage />} />
 
-        {/* Gallery Page */}
-        <Route path="/gallery" element={<GalleryPage />} />
+          {/* Gallery Page */}
+          <Route path="/gallery" element={<GalleryPage />} />
 
-        {/* Magazine Routes */}
-        <Route path="/magazines" element={<MagazinesPage />} />
-        <Route path="/magazines/:slug" element={<MagazineDetailPage />} />
+          {/* Magazine Routes */}
+          <Route path="/magazines" element={<MagazinesPage />} />
+          <Route path="/magazines/:slug" element={<MagazineDetailPage />} />
 
-        {/* Story Routes */}
-        <Route path="/stories" element={<StoriesPage />} />
-        <Route path="/stories/:slug" element={<StoryDetailPage />} />
+          {/* Story Routes */}
+          <Route path="/stories" element={<StoriesPage />} />
+          <Route path="/stories/:slug" element={<StoryDetailPage />} />
 
-        {/* 404 Page */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+          {/* Writers Page */}
+          <Route path="/writers" element={<WritersPage />} />
+          <Route path="/become-a-writer" element={<WritersPage />} />
+          <Route path="/writers/writer-application" element={<WriterApplicationPage />} />
+
+          {/* 404 Page */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
 
       {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, about, magazines, write, partner, advertise, events, podcast detail, author detail, terms, privacy, search, and forgot-password pages */}
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && location.pathname !== '/about' && !location.pathname.startsWith('/magazines') && location.pathname !== '/write' && location.pathname !== '/write-for-us' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && location.pathname !== '/community/music' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && <Footer />}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && location.pathname !== '/about' && !location.pathname.startsWith('/magazines') && location.pathname !== '/write' && location.pathname !== '/write-for-us' && location.pathname !== '/writers' && location.pathname !== '/become-a-writer' && location.pathname !== '/writers/writer-application' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && location.pathname !== '/community/music' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && <Footer />}
 
       {/* Quick View Modal (can be added here) */}
       {/* <QuickViewModal /> */}

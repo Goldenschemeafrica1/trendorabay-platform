@@ -228,6 +228,22 @@ body.dark-mode .footer {
   font-size: 10px !important;
 }
 
+.footer-contact {
+  margin-top: 12px !important;
+  color: #e6ff3f !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-contact::before {
+  content: "📞";
+  font-size: 12px;
+}
+
 @media (max-width: 900px) {
   .footer-grid {
     grid-template-columns: 1fr 1fr;

@@ -9,9 +9,9 @@ import './Header.css';
 const navLinks = [
   { label: 'Latest', target: 'nl-latest' },
   { label: 'Magazines', target: 'nl-magazines' },
-  { label: 'Merchandise', target: '/merchandise', isRoute: true, badge: 'SHOP' },
+  { label: 'Merchandise', target: 'nl-merchandise', isRoute: false, badge: 'SHOP' },
   { label: 'Podcasts', target: 'nl-podcasts' },
-  { label: 'Opportunities', target: '/events', isRoute: true },
+  { label: 'Opportunities', target: '/opportunities', isRoute: true },
 ];
 
 const communityGroups = [
