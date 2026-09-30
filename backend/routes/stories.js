@@ -81,7 +81,7 @@ router.get('/homepage', cache(300), async (req, res, next) => {
         if (!url || url === 'undefined' || url === '/uploads/stories/undefined') return categoryImageMap[category] || '/music.jpeg';
         if (url.startsWith('http://') || url.startsWith('https://')) return url;
         if (url.startsWith('/uploads/')) {
-          const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+          const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
           return `${backendUrl}${url}`;
         }
         if (url.startsWith('/')) return url;
@@ -236,7 +236,7 @@ router.get('/', cache(300), async (req, res, next) => {
       
       // If it's a relative path starting with /uploads, try backend URL first, fall back to category image
       if (url.startsWith('/uploads/')) {
-        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
         return `${backendUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
@@ -374,7 +374,7 @@ router.get('/latest', cache(300), async (req, res, next) => {
       
       // If it's a relative path starting with /uploads, try backend URL first, fall back to category image
       if (url.startsWith('/uploads/')) {
-        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
         return `${backendUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
@@ -622,7 +622,7 @@ router.get('/:slug', cache(300), async (req, res, next) => {
       
       // If it's a relative path starting with /uploads, try backend URL first
       if (url.startsWith('/uploads/')) {
-        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
         return `${backendUrl}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is

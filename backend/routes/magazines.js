@@ -109,7 +109,7 @@ router.get('/', cache(600), async (req, res, next) => {
       if (!url || url === 'undefined') return '/music.jpeg';
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       if (url.startsWith('/uploads/')) {
-        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
         return `${backendUrl}${url}`;
       }
       if (url.startsWith('/')) return url;
@@ -275,7 +275,7 @@ router.get('/:slug', cache(600), async (req, res, next) => {
       
       // If it's a relative path starting with /uploads, try backend URL first, fall back to category image
       if (url.startsWith('/uploads/')) {
-        const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+        const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
         return `${backendUrl}${url}`;
       }
       // If it starts with / but not /uploads, check if it's a fallback and use preview_pages if available

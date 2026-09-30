@@ -90,7 +90,7 @@ router.get('/:id', async (req, res, next) => {
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
       // If it's a relative path starting with /uploads, serve from backend
       if (url.startsWith('/uploads/')) {
-        return `${process.env.BACKEND_URL || 'http://localhost:3001'}${url}`;
+        return `${process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`}${url}`;
       }
       // If it starts with /, it's in the frontend public folder - return as-is
       if (url.startsWith('/')) {
