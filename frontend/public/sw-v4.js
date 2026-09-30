@@ -75,7 +75,12 @@ self.addEventListener('fetch', (event) => {
           })
           .catch((error) => {
             console.error('Service worker navigation fetch error:', error);
-            return cachedResponse || new Response('Network error', { status: 503 });
+            // If network fails and we have a cached version, return it
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            // Otherwise, let the error propagate
+            throw error;
           });
       }
 
@@ -104,7 +109,12 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       }).catch((error) => {
         console.error('Service worker fetch error:', error);
-        return cachedResponse || new Response('Network error', { status: 503 });
+        // If network fails and we have a cached version, return it
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        // Otherwise, let the error propagate
+        throw error;
       });
     })
   );
