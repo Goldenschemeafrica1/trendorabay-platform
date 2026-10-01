@@ -47,7 +47,7 @@ router.get('/', cache(300), async (req, res, next) => {
 
     // Helper function to get image URL (handle Cloudinary and CMS uploads)
     const getImageUrl = (url, title, guest) => {
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
       
       if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
         // Check title first
@@ -86,7 +86,7 @@ router.get('/', cache(300), async (req, res, next) => {
 
     // Helper function to get audio URL with fallback
     const getAudioUrl = (url, id) => {
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
       // Return the exact audio_file_url from database
       if (url) {
         // If it's a relative path starting with /uploads, serve from backend
@@ -100,7 +100,7 @@ router.get('/', cache(300), async (req, res, next) => {
 
     // Helper function to get video URL with fallback
     const getVideoUrl = (url, id) => {
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
       if (!url) return null;
       if (url.includes('/uploads/')) {
         return `${backendUrl}${url}`;
@@ -159,7 +159,7 @@ router.get('/:id', cache(300), async (req, res, next) => {
 
     // Helper function to get image URL (handle Cloudinary and CMS uploads)
     const getImageUrl = (url, title, guest) => {
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
       
       if (!url || url === 'undefined' || url === '/uploads/stories/undefined') {
         // Check title first
@@ -198,7 +198,7 @@ router.get('/:id', cache(300), async (req, res, next) => {
 
     // Helper function to get audio URL with fallback
     const getAudioUrl = (url, id) => {
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
       // Return the exact audio_file_url from database
       if (url) {
         // If it's a relative path starting with /uploads, serve from backend
@@ -212,7 +212,7 @@ router.get('/:id', cache(300), async (req, res, next) => {
 
     // Helper function to get video URL with fallback
     const getVideoUrl = (url, id) => {
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
       if (!url) return null;
       if (url.includes('/uploads/')) {
         return `${backendUrl}${url}`;

@@ -34,6 +34,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip third-party analytics and tracking requests
+  const url = new URL(event.request.url);
+  if (url.hostname.includes('doubleclick.net') ||
+      url.hostname.includes('google-analytics.com') ||
+      url.hostname.includes('googletagmanager.com') ||
+      url.hostname.includes('googlesyndication.com')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   if (event.request.url.includes('/api/')) {
     // Stale-while-revalidate for API calls
     event.respondWith(
@@ -45,7 +55,10 @@ self.addEventListener('fetch', (event) => {
               cache.put(event.request, networkResponse.clone());
             }
             return networkResponse;
-          }).catch(() => cachedResponse);
+          }).catch((error) => {
+            console.error('Service worker API fetch error:', error);
+            return cachedResponse;
+          });
           
           return cachedResponse || fetchPromise;
         });
@@ -62,7 +75,7 @@ self.addEventListener('fetch', (event) => {
         // Always try network first for HTML pages so updates show immediately
         return fetch(event.request)
           .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+            if (networkResponse && networkResponse.status === 200) {
               const responseToCache = networkResponse.clone();
               caches.open(CACHE_NAME).then((cache) => {
                 cache.put(event.request, responseToCache);
@@ -70,23 +83,33 @@ self.addEventListener('fetch', (event) => {
             }
             return networkResponse;
           })
-          .catch(() => cachedResponse);
+          .catch((error) => {
+            console.error('Service worker navigation fetch error:', error);
+            // If network fails and we have a cached version, return it
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            // Otherwise, let the error propagate
+            throw error;
+          });
       }
 
       // For assets, serve from cache and update in the background
       if (cachedResponse) {
         fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          if (networkResponse && networkResponse.status === 200) {
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(event.request, networkResponse);
             });
           }
-        }).catch(() => {});
+        }).catch((error) => {
+          console.error('Service worker asset update error:', error);
+        });
         return cachedResponse;
       }
 
       return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+        if (!networkResponse || networkResponse.status !== 200) {
           return networkResponse;
         }
         const responseToCache = networkResponse.clone();
@@ -94,6 +117,14 @@ self.addEventListener('fetch', (event) => {
           cache.put(event.request, responseToCache);
         });
         return networkResponse;
+      }).catch((error) => {
+        console.error('Service worker fetch error:', error);
+        // If network fails and we have a cached version, return it
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        // Otherwise, let the error propagate
+        throw error;
       });
     })
   );
