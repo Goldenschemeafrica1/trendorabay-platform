@@ -34,6 +34,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip third-party analytics and tracking requests
+  const url = new URL(event.request.url);
+  if (url.hostname.includes('doubleclick.net') ||
+      url.hostname.includes('google-analytics.com') ||
+      url.hostname.includes('googletagmanager.com') ||
+      url.hostname.includes('googlesyndication.com')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   if (event.request.url.includes('/api/')) {
     // Stale-while-revalidate for API calls
     event.respondWith(

@@ -47,6 +47,7 @@ const StoryDetailPage = React.lazy(() => import('./pages/StoryDetailPage/StoryDe
 const MusicPage = React.lazy(() => import('./pages/MusicPage/MusicPage'));
 const WritersPage = React.lazy(() => import('./pages/WritersPage/WritersPage'));
 const WriterApplicationPage = React.lazy(() => import('./pages/WriterApplicationPage/WriterApplicationPage'));
+const CommunityPage = React.lazy(() => import('./pages/CommunityPage/CommunityPage'));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -122,11 +123,19 @@ function App() {
     }
   }, [location]);
 
-  // Suppress Vercel Analytics console errors when blocked by ad blockers
+  // Suppress Vercel Analytics and Google Analytics console errors when blocked by ad blockers
   useEffect(() => {
     const originalError = console.error;
     console.error = (...args) => {
       if (typeof args[0] === 'string' && args[0].includes('Vercel Web Analytics')) {
+        return;
+      }
+      // Suppress Google Analytics errors
+      if (typeof args[0] === 'string' && (
+        args[0].includes('google-analytics') ||
+        args[0].includes('doubleclick.net') ||
+        args[0].includes('Failed to fetch') && args[0].includes('google')
+      )) {
         return;
       }
       // Suppress API errors for non-critical features
@@ -241,6 +250,7 @@ function App() {
           {/* Community Routes */}
           <Route path="/events" element={<EventsPage />} />
           <Route path="/opportunities" element={<OpportunitiesPage />} />
+          <Route path="/community" element={<CommunityPage />} />
           <Route path="/community/music" element={<MusicPage />} />
 
           {/* Information Pages */}
@@ -291,7 +301,7 @@ function App() {
       </Suspense>
 
       {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, about, magazines, write, partner, advertise, events, podcast detail, author detail, terms, privacy, search, and forgot-password pages */}
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && location.pathname !== '/about' && !location.pathname.startsWith('/magazines') && location.pathname !== '/write' && location.pathname !== '/write-for-us' && location.pathname !== '/writers' && location.pathname !== '/become-a-writer' && location.pathname !== '/writers/writer-application' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && location.pathname !== '/community/music' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && <Footer />}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && location.pathname !== '/about' && !location.pathname.startsWith('/magazines') && location.pathname !== '/write' && location.pathname !== '/write-for-us' && location.pathname !== '/writers' && location.pathname !== '/become-a-writer' && location.pathname !== '/writers/writer-application' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && location.pathname !== '/community' && location.pathname !== '/community/music' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && <Footer />}
 
       {/* Quick View Modal (can be added here) */}
       {/* <QuickViewModal /> */}
