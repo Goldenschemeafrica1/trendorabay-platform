@@ -116,15 +116,21 @@ const magazineService = {
 
   // Get magazine by slug
   getMagazineBySlug: async (slug) => {
+    console.log('magazineService.getMagazineBySlug called with slug:', slug);
     const cacheKey = `magazine_${slug}`;
     const cached = getCached(cacheKey);
     if (cached) {
+      console.log('Returning cached magazine for slug:', slug);
       return cached;
     }
 
+    console.log('Fetching magazine from API for slug:', slug);
     const response = await apiRequest.get(`/magazines/${slug}`);
+    console.log('API response received for slug:', slug, response);
     const magazine = response.data?.data || response.data;
+    console.log('Magazine data extracted:', magazine);
     const result = magazineService.transformMagazine(magazine);
+    console.log('Transformed magazine:', result);
 
     setCached(cacheKey, result);
     return result;
