@@ -26,7 +26,6 @@ import OpportunitiesPage from './components/opportunities/OpportunitiesPage';
 import AboutPage from './pages/AboutPage/AboutPage';
 import MissionPage from './pages/MissionPage/MissionPage';
 import ContactPage from './pages/ContactPage/ContactPage';
-import WriteForUsPage from './pages/WriteForUsPage/WriteForUsPage';
 import WritersPage from './pages/WritersPage/WritersPage';
 import SearchPage from './pages/SearchPage/SearchPage';
 import PartnerPage from './pages/PartnerPage/PartnerPage';
@@ -235,8 +234,6 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/mission" element={<MissionPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/write" element={<WriteForUsPage />} />
-        <Route path="/write-for-us" element={<WriteForUsPage />} />
         <Route path="/writers" element={<WritersPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/partner" element={<PartnerPage />} />
@@ -274,8 +271,8 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, magazines, write, partner, advertise, events, podcast detail, author detail, terms, privacy, search, and forgot-password pages */}
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/magazines') && location.pathname !== '/write' && location.pathname !== '/write-for-us' && location.pathname !== '/writers' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && location.pathname !== '/community/music' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && <Footer />}
+      {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, magazines, writers, partner, advertise, events, podcast detail, author detail, terms, privacy, search, and forgot-password pages */}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/magazines') && location.pathname !== '/writers' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && location.pathname !== '/community/music' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && <Footer />}
 
       {/* Quick View Modal (can be added here) */}
       {/* <QuickViewModal /> */}

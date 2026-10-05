@@ -232,7 +232,7 @@ const Header = () => {
                     onClick={() => {
                       dispatch(logout());
                       setProfileOpen(false);
-                      navigate('/login');
+                      navigate('/');
                     }}
                   >
                     Logout

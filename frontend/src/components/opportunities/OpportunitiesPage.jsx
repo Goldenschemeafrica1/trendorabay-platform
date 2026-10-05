@@ -34,6 +34,7 @@ const OpportunitiesPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const startTime = Date.now();
       try {
         const [oppResponse, catResponse] = await Promise.all([
           opportunityService.getOpportunities({ limit: 50 }),
@@ -46,7 +47,10 @@ const OpportunitiesPage = () => {
         setOpportunities([]);
         setCategories([]);
       } finally {
-        setLoading(false);
+        // Ensure minimum loading time of 800ms
+        const elapsed = Date.now() - startTime;
+        const remainingTime = Math.max(0, 800 - elapsed);
+        setTimeout(() => setLoading(false), remainingTime);
       }
     };
 
@@ -164,6 +168,15 @@ const OpportunitiesPage = () => {
   };
 
   const filtered = getFilteredOpportunities();
+
+  if (loading) {
+    return (
+      <div className="opportunities-loading">
+        <div className="loading-spinner"></div>
+        <p>Loading opportunities...</p>
+      </div>
+    );
+  }
 
   return (
     <main className="opportunities-page">
