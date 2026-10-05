@@ -440,7 +440,7 @@ const LandingPage = () => {
               <span className="nl-tag">TRENDORABAY STORE</span>
               <h2>✦ Merchandise</h2>
             </div>
-            <Link to="/store" onClick={(e) => e.preventDefault()}>VIEW STORE →</Link>
+            <Link to="/store">VIEW STORE →</Link>
           </div>
           <div className="nl-merch-hero">
             <div>
@@ -450,7 +450,7 @@ const LandingPage = () => {
                 Official Trendorabay merchandise inspired by African creativity, youth culture and
                 the ideas shaping tomorrow.
               </p>
-              <Link to="/store" className="nl-buybtn nl-buybtn-spaced" onClick={(e) => e.preventDefault()}>SHOP THE DROP</Link>
+              <Link to="/store" className="nl-buybtn nl-buybtn-spaced">SHOP THE DROP</Link>
             </div>
             <img
               src="/merch-banner.jpg"
