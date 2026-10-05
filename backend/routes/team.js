@@ -17,9 +17,9 @@ router.get('/', async (req, res, next) => {
 
     query += ' ORDER BY created_at DESC';
 
-    console.log('Executing team query');
+    console.log('Executing team query:', query);
     const [rows] = await pool.query(query, params);
-    console.log('Team members fetched successfully');
+    console.log('Team members fetched successfully, count:', rows.length);
     res.json({ success: true, data: rows });
   } catch (error) {
     console.error('Error fetching team members:', error);
@@ -73,11 +73,11 @@ router.get('/role/:role', async (req, res, next) => {
 // Create team member
 router.post('/', async (req, res, next) => {
   try {
-    const { name, role, avatar, bio, status, email, linkedin, twitter, instagram } = req.body;
+    const { name, role, avatar_url, bio, status, email, linkedin, twitter, instagram } = req.body;
     const [result] = await pool.query(
-      `INSERT INTO team_members (name, role, avatar, bio, status, email, linkedin, twitter, instagram)
+      `INSERT INTO team_members (name, role, avatar_url, bio, status, email, linkedin, twitter, instagram)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, role, avatar, bio, status || 'active', email, linkedin, twitter, instagram]
+      [name, role, avatar_url, bio, status || 'active', email, linkedin, twitter, instagram]
     );
     const [newMember] = await pool.query(
       'SELECT * FROM team_members WHERE id = ?',
@@ -92,12 +92,12 @@ router.post('/', async (req, res, next) => {
 // Update team member
 router.put('/:id', async (req, res, next) => {
   try {
-    const { name, role, avatar, bio, status, email, linkedin, twitter, instagram } = req.body;
+    const { name, role, avatar_url, bio, status, email, linkedin, twitter, instagram } = req.body;
     await pool.query(
       `UPDATE team_members
-       SET name = ?, role = ?, avatar = ?, bio = ?, status = ?, email = ?, linkedin = ?, twitter = ?, instagram = ?
+       SET name = ?, role = ?, avatar_url = ?, bio = ?, status = ?, email = ?, linkedin = ?, twitter = ?, instagram = ?
        WHERE id = ?`,
-      [name, role, avatar, bio, status, email, linkedin, twitter, instagram, req.params.id]
+      [name, role, avatar_url, bio, status, email, linkedin, twitter, instagram, req.params.id]
     );
     const [updated] = await pool.query(
       'SELECT * FROM team_members WHERE id = ?',

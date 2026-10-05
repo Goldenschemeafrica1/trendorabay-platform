@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS login_attempts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  attempts INT DEFAULT 1,
+  last_attempt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  locked_until TIMESTAMP NULL,
+  INDEX idx_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

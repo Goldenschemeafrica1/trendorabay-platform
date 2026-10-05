@@ -2,27 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../store/hooks/useCart';
 import merchService from '../../services/merchService';
-import api from '../../services/api';
 import './StorePage.css';
 
 const StorePage = () => {
   const navigate = useNavigate();
-  const { addToCart, openCartDrawer } = useCart();
+  const { addToCart, openCartDrawer, cartItems } = useCart();
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState(['All']);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [currentCategory, setCurrentCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('featured');
-  const [wishlist, setWishlist] = useState([]);
+  const [saved, setSaved] = useState(new Set());
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [showAllOfficial, setShowAllOfficial] = useState(false);
 
   // Load wishlist from localStorage
   useEffect(() => {
     try {
       const savedWishlist = localStorage.getItem('trendorabay_wishlist');
       if (savedWishlist) {
-        setWishlist(JSON.parse(savedWishlist));
+        setSaved(new Set(JSON.parse(savedWishlist)));
       }
     } catch {
       localStorage.removeItem('trendorabay_wishlist');
@@ -31,179 +32,149 @@ const StorePage = () => {
 
   // Save wishlist to localStorage
   useEffect(() => {
-    localStorage.setItem('trendorabay_wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
+    localStorage.setItem('trendorabay_wishlist', JSON.stringify(Array.from(saved)));
+  }, [saved]);
 
-  // Load products and categories
+  // Load categories
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCategories = async () => {
       try {
-        console.log('Fetching products and categories...');
-        const [productsResponse, categoriesResponse] = await Promise.all([
-          merchService.getProducts(),
-          api.get('/stories/categories')
-        ]);
+        const response = await merchService.getCategories();
+        let categoryList = [];
         
-        console.log('Products API response:', productsResponse);
-        console.log('Categories API response:', categoriesResponse);
+        if (Array.isArray(response)) {
+          categoryList = response;
+        } else if (response && Array.isArray(response.data)) {
+          categoryList = response.data;
+        }
+        
+        setCategories(['All', ...categoryList]);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setCategories(['All']);
+      }
+    };
+    
+    fetchCategories();
+  }, []);
+
+  // Load products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await merchService.getProducts();
         
         let products = [];
         
-        if (Array.isArray(productsResponse)) {
-          products = productsResponse;
-          console.log('Response is an array, using directly');
-        } else if (productsResponse && Array.isArray(productsResponse.data)) {
-          products = productsResponse.data;
-          console.log('Response has data array, using response.data');
-        } else {
-          console.log('Response format unexpected:', typeof productsResponse, productsResponse);
+        if (Array.isArray(response)) {
+          products = response;
+        } else if (response && Array.isArray(response.data)) {
+          products = response.data;
         }
-        
-        console.log('Products count:', products.length);
         
         // Transform data to match frontend expectations
         const transformed = products.map(product => ({
           ...product,
           image: product.image_url || product.image || '/images/product-placeholder.jpg',
-          hoverImage: product.hover_image_url || product.hoverImage || product.image_url || product.image || '/images/product-placeholder.jpg',
-          originalPrice: product.original_price || product.originalPrice || null,
-          inStock: product.in_stock !== undefined ? product.in_stock : (product.stock !== undefined ? product.stock > 0 : (product.inStock !== undefined ? product.inStock : true)),
-          badge: product.badge || null,
-          badgeColor: product.badge_color || product.badgeColor || null,
-          featured: product.featured ? 1 : 0,
-          new: product.new_product || product.new || false,
-          sale: product.on_sale || product.sale || false,
-          rating: product.rating || 4.5,
-          reviews: product.reviews || 0
+          category: product.category || 'Fashion',
+          seller: product.seller || 'Official Trendorabay',
+          community: product.community || 'Official'
         }));
         
-        console.log('Transformed products:', transformed.length);
         setProducts(transformed);
-        setFilteredProducts(transformed);
-        
-        // Set categories from API
-        if (categoriesResponse.data && Array.isArray(categoriesResponse.data.data)) {
-          setCategories(['All', ...categoriesResponse.data.data]);
-        } else if (categoriesResponse.data && Array.isArray(categoriesResponse.data)) {
-          setCategories(['All', ...categoriesResponse.data]);
-        }
       } catch (error) {
-        console.error('Error fetching data:', error);
-        console.error('Error details:', error.message, error.stack);
+        console.error('Error fetching products:', error);
         setProducts([]);
-        setFilteredProducts([]);
       } finally {
         setLoading(false);
       }
     };
     
-    fetchData();
+    fetchProducts();
   }, []);
 
-  // Filter and sort products
-  useEffect(() => {
-    if (!Array.isArray(products)) {
-      setFilteredProducts([]);
-      return;
-    }
-    
-    let filtered = [...products];
-
-    // Category filter
-    if (selectedCategory !== 'All') {
-      filtered = filtered.filter(p => p.category === selectedCategory);
-    }
-
-    // Search filter
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(p =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.description.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // Sorting
-    switch (sortBy) {
-      case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case 'rating':
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      case 'newest':
-        filtered.sort((a, b) => (b.new ? 1 : 0) - (a.new ? 1 : 0));
-        break;
-      default:
-        filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
-    }
-
-    setFilteredProducts(filtered);
-  }, [products, selectedCategory, searchQuery, sortBy]);
+  // Format price
+  const formatPrice = (price) => {
+    if (price === undefined || price === null) return 'KSh 0';
+    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+    if (isNaN(numPrice)) return 'KSh 0';
+    return `KSh ${numPrice.toLocaleString('en-KE')}`;
+  };
 
   // Toggle wishlist
-  const toggleWishlist = (productId) => {
-    if (wishlist.includes(productId)) {
-      setWishlist(wishlist.filter(id => id !== productId));
+  const toggleSave = (productName) => {
+    const newSaved = new Set(saved);
+    if (newSaved.has(productName)) {
+      newSaved.delete(productName);
     } else {
-      setWishlist([...wishlist, productId]);
+      newSaved.add(productName);
+      setToastMessage('Added to wishlist');
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 2200);
     }
+    setSaved(newSaved);
   };
 
   // Handle add to cart
-  const handleAddToCart = (product, size = null) => {
-    // Check if user is logged in
-    const user = localStorage.getItem('user');
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-
+  const handleAddToCart = (product) => {
     const cartItem = {
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.image,
-      size: size || '',
+      size: '',
+      color: '',
+      quantity: 1
+    };
+
+    addToCart(cartItem);
+    setToastMessage(`${product.name} added to cart`);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2200);
+  };
+
+  // Handle buy now
+  const handleBuyNow = (product) => {
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: '',
       color: '',
       quantity: 1
     };
 
     addToCart(cartItem);
     openCartDrawer();
-
-    // Show notification
-    showNotification(`${product.name} added to cart!`);
   };
 
-  // Show notification
-  const showNotification = (message) => {
-    const notification = document.createElement('div');
-    notification.className = 'store-notification';
-    notification.textContent = message;
-    document.body.appendChild(notification);
+  // Filter products by category and search
+  const filterProducts = (category, query) => {
+    const q = query.toLowerCase().trim();
     
-    setTimeout(() => {
-      notification.classList.add('show');
-    }, 10);
-    
-    setTimeout(() => {
-      notification.classList.remove('show');
-      setTimeout(() => {
-        document.body.removeChild(notification);
-      }, 300);
-    }, 2000);
+    return products.filter(p => {
+      const matchesCategory = category === 'All' || p.category === category;
+      const matchesSearch = !q || 
+        p.name.toLowerCase().includes(q) ||
+        (p.seller && p.seller.toLowerCase().includes(q)) ||
+        (p.community && p.community.toLowerCase().includes(q));
+      return matchesCategory && matchesSearch;
+    });
   };
 
-  // Format price
-  const formatPrice = (price) => {
-    if (price === undefined || price === null) return 'KSH 0.00';
-    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-    if (isNaN(numPrice)) return 'KSH 0.00';
-    return `KSH ${numPrice.toFixed(2)}`;
-  };
+  // Separate official and community products
+  const officialProducts = products.filter(p => p.seller === 'Official Trendorabay' || !p.seller);
+  const communityProducts = products.filter(p => p.seller && p.seller !== 'Official Trendorabay');
+
+  const filteredOfficial = filterProducts(currentCategory, searchQuery).filter(p => 
+    p.seller === 'Official Trendorabay' || !p.seller
+  );
+  const filteredCommunity = filterProducts(currentCategory, searchQuery).filter(p => 
+    p.seller && p.seller !== 'Official Trendorabay'
+  );
+
+
 
   if (loading) {
     return (
@@ -217,153 +188,269 @@ const StorePage = () => {
   return (
     <div className="store-page">
       {/* Hero Section */}
-      <div className="store-hero">
+      <section className="hero">
+        <div className="container hero-grid">
+          <div>
+            <div className="eyebrow">Trendorabay Marketplace</div>
+            <h1>The store for the culture.</h1>
+            <p>Discover official Trendorabay merchandise and products created by the people, creators and businesses inside our communities.</p>
+            <div className="search">
+              <span style={{paddingLeft: '13px'}}>⌕</span>
+              <input 
+                type="text"
+                placeholder="Search products, brands, or communities..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button onClick={() => {}}>Search</button>
+            </div>
+            <div className="hero-cta">
+              <button 
+                className="dark-btn"
+                onClick={() => document.getElementById('community').scrollIntoView({ behavior: 'smooth' })}
+              >
+                Shop the community
+              </button>
+              <button 
+                className="light-btn"
+                onClick={() => {
+                  setToastMessage('Seller onboarding would open here');
+                  setShowToast(true);
+                  setTimeout(() => setShowToast(false), 2200);
+                }}
+              >
+                Start selling
+              </button>
+            </div>
+          </div>
+          <div className="hero-art">
+            <div className="tile t1">
+              <img src="/store-hero-3.jpg" alt="Trendorabay Hoodie" />
+            </div>
+            <div className="tile t2">
+              <img src="/store-hero-2.jpg" alt="Trendorabay Merchandise Bag" />
+            </div>
+            <div className="tile t3">
+              <img src="/store-hero-1.jpg" alt="Trendorabay Smartwatch" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Categories Section */}
+      <section className="section">
         <div className="container">
-          <div className="store-hero-content">
-          <div className="store-hero-text">
-            <h1>Trendorabay Hoodie Collection</h1>
-            <p>Premium 100% cotton hoodies featuring the Trendorabay logo and African-inspired patterns. Perfect for casual wear and making a statement.</p>
-            <button className="shop-now-btn" onClick={() => {
-              const hoodie = products.find(p => p.id === 2);
-              if (hoodie) handleAddToCart(hoodie);
-            }}>
-              Shop Now <i className="fas fa-arrow-right"></i>
+          <div className="section-head">
+            <div>
+              <div className="eyebrow">Shop</div>
+              <h2>Browse categories</h2>
+              <p>Find something from the spaces you love.</p>
+            </div>
+          </div>
+          <div className="chips">
+            {categories.map(cat => (
+              <button 
+                key={cat}
+                className={`chip ${currentCategory === cat ? 'active' : ''}`}
+                onClick={() => setCurrentCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Official Merchandise Section */}
+      <section className="section" style={{paddingTop: '0', marginTop: '-50px'}}>
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <div className="eyebrow">Official</div>
+              <h2>Trendorabay merchandise</h2>
+              <p>Rep the platform. Wear the culture.</p>
+            </div>
+            {filteredOfficial.length > 5 && (
+              <a className="link" href="#" onClick={(e) => { e.preventDefault(); setShowAllOfficial(!showAllOfficial); }}>
+                {showAllOfficial ? 'Show less' : 'View all'}
+              </a>
+            )}
+          </div>
+          <div className="grid">
+            {filteredOfficial.length > 0 ? (
+              (showAllOfficial ? filteredOfficial : filteredOfficial.slice(0, 5)).map(product => (
+                <article key={product.id} className="product">
+                  <div className="product-img">
+                    <img src={product.image} alt={product.name} loading="lazy" />
+                    <span className="badge">Official</span>
+                    <button 
+                      className={`heart ${saved.has(product.name) ? 'saved' : ''}`}
+                      onClick={() => toggleSave(product.name)}
+                    >
+                      ♡
+                    </button>
+                  </div>
+                  <div className="product-info">
+                    <div className="product-name">{product.name}</div>
+                    <div className="price">{formatPrice(product.price)}</div>
+                    <div className="meta">
+                      <span>{product.meta || 'Official Trendorabay'}</span>
+                    </div>
+                    <div className="product-buttons">
+                      <button 
+                        className="add"
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        Add to Cart
+                      </button>
+                      <button 
+                        className="buy-now"
+                        onClick={() => handleBuyNow(product)}
+                      >
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <p style={{gridColumn: '1 / -1', textAlign: 'center', color: '#777'}}>
+                No official merchandise available.
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Community Marketplace Section */}
+      <section className="section soft-section" id="community">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <div className="eyebrow">Community marketplace</div>
+              <h2>Shop the community</h2>
+              <p>Products created, made and sold by Trendorabay members.</p>
+            </div>
+            <a className="link" href="#">Explore marketplace</a>
+          </div>
+          <div className="grid">
+            {filteredCommunity.length > 0 ? (
+              filteredCommunity.map(product => (
+                <article key={product.id} className="product">
+                  <div className="product-img">
+                    <img src={product.image} alt={product.name} loading="lazy" />
+                    <span className="badge">Community Seller</span>
+                    <button 
+                      className={`heart ${saved.has(product.name) ? 'saved' : ''}`}
+                      onClick={() => toggleSave(product.name)}
+                    >
+                      ♡
+                    </button>
+                  </div>
+                  <div className="product-info">
+                    <div className="product-name">{product.name}</div>
+                    <div className="price">{formatPrice(product.price)}</div>
+                    <div className="meta">
+                      <span>{product.seller}</span>
+                    </div>
+                    {product.community && (
+                      <div className="meta">
+                        <span>Community: {product.community}</span>
+                      </div>
+                    )}
+                    <div className="product-buttons">
+                      <button 
+                        className="add"
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        Add to Cart
+                      </button>
+                      <button 
+                        className="buy-now"
+                        onClick={() => handleBuyNow(product)}
+                      >
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <p style={{gridColumn: '1 / -1', textAlign: 'center', color: '#777'}}>
+                No community products available.
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Creator Banner */}
+      <section className="section">
+        <div className="container">
+          <div className="creator-banner">
+            <div>
+              <div className="eyebrow">For creators & businesses</div>
+              <h2>Turn your craft into a business.</h2>
+              <p>Are you a creator, farmer, designer, artist, business owner or community member? Sell your products to the Trendorabay community.</p>
+              <div className="stats">
+                <div><b>✓</b>Create your store</div>
+                <div><b>✓</b>Reach communities</div>
+                <div><b>✓</b>Track orders</div>
+              </div>
+            </div>
+            <button 
+              className="white-btn"
+              onClick={() => {
+                setToastMessage('Seller onboarding would open here');
+                setShowToast(true);
+                setTimeout(() => setShowToast(false), 2200);
+              }}
+            >
+              Start selling →
             </button>
           </div>
-          <div className="store-hero-images">
-            <div className="hoodie-item">
-              <img src="/hoodie.jpeg" alt="Trendorabay Hoodie Urban" />
-              <span className="hoodie-label">Urban Edition</span>
-            </div>
-            <div className="hoodie-item">
-              <img src="/hoodie7.jpeg" alt="Trendorabay Hoodie Street" />
-              <span className="hoodie-label">Street Style</span>
-            </div>
-            <div className="hoodie-item">
-              <img src="/hoodie5.jpeg" alt="Trendorabay Hoodie Limited" />
-              <span className="hoodie-label">Limited Edition</span>
-            </div>
-          </div>
         </div>
-        </div>
-      </div>
+      </section>
 
-      {/* Filter Section */}
-      <div className="store-filter-section">
+      {/* Newsletter Section */}
+      <section className="section" style={{paddingTop: '10px'}}>
         <div className="container">
-          <div className="store-filter-header">
-            <h2>Shop by Category</h2>
-            <p>{filteredProducts.length} products available</p>
-          </div>
-          <div className="store-filter">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="store-search"
-            />
-            <div className="store-categories">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  type="button"
-                  className={`store-category-btn ${selectedCategory === category ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+          <div className="newsletter">
+            <div className="eyebrow">Stay in the trend</div>
+            <h2>New products. New creators. New stories.</h2>
+            <p>Get community updates, product drops and exclusive Trendorabay offers.</p>
+            <form 
+              className="newsform"
+              onSubmit={(e) => {
+                e.preventDefault();
+                setToastMessage('Thanks for subscribing!');
+                setShowToast(true);
+                setTimeout(() => setShowToast(false), 2200);
+              }}
+            >
+              <input type="email" required placeholder="Enter your email" />
+              <button>Subscribe</button>
+            </form>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Our Collection Section */}
-      <div className="our-collection-section">
-        <div className="container">
-          <div className="our-collection-header">
-            <h2>Our Collection</h2>
-            <p>Explore our full range of products</p>
-          </div>
-          <div className="our-collection-grid">
-          {filteredProducts.slice(0, 8).map(product => (
-            <div key={product.id} className="best-selling-card">
-              <div className="best-selling-image-section">
-                <img src={product.image} alt={product.name} />
-                {product.badge ? (
-                  <span className="new-arrival-badge" style={{ background: product.badgeColor || 'linear-gradient(135deg, #10B981 0%, #059669 100%)' }}>
-                    {product.badge}
-                  </span>
-                ) : (
-                  <span className="new-arrival-badge">New Arrival</span>
-                )}
-              </div>
-              <div className="best-selling-content-section">
-                <h3>{product.name}</h3>
-                <p className="best-selling-price">{formatPrice(product.price)}</p>
-                <div className="best-selling-actions">
-                  <button 
-                    className="add-to-cart-btn"
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    Add to Cart
-                  </button>
-                  <button 
-                    className={`wishlist-btn ${wishlist.includes(product.id) ? 'active' : ''}`}
-                    onClick={() => toggleWishlist(product.id)}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill={wishlist.includes(product.id) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        </div>
-      </div>
+      {/* Floating Cart Button */}
+      <button 
+        className="floating-cart"
+        onClick={openCartDrawer}
+        aria-label="Open cart"
+      >
+        🛍
+        <span className="cart-count">{cartItems.length}</span>
+      </button>
 
-      {/* Best Selling Section */}
-      <div className="best-selling-section">
-        <div className="container">
-          <div className="best-selling-header">
-          <h2>Best Selling</h2>
-          <p>Our most popular products loved by customers</p>
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="toast show">
+          {toastMessage}
         </div>
-        <div className="best-selling-grid">
-          {filteredProducts.filter(p => p.category === 'apparel').slice(0, 4).map(product => (
-            <div key={product.id} className="best-selling-card">
-              <div className="best-selling-image-section">
-                <img src={product.image} alt={product.name} />
-                <span className="new-arrival-badge">New Arrival</span>
-              </div>
-              <div className="best-selling-content-section">
-                <h3>{product.name}</h3>
-                <p className="best-selling-price">{formatPrice(product.price)}</p>
-                <div className="best-selling-actions">
-                  <button 
-                    className="add-to-cart-btn"
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    Add to Cart
-                  </button>
-                  <button 
-                    className={`wishlist-btn ${wishlist.includes(product.id) ? 'active' : ''}`}
-                    onClick={() => toggleWishlist(product.id)}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill={wishlist.includes(product.id) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

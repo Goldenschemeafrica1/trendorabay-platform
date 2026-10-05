@@ -51,7 +51,6 @@ const Footer = () => {
             <Link className="footer-logo" to="/" onClick={handleLogoClick}><img src="/weblogo.png" alt="Trendorabay" /></Link>
             <p>From mtaa to global — stories, style, solutions and opportunities shaping Africa’s tomorrow.</p>
             <p className="footer-location">Based in Ruiru, Kenya • Connecting Africa and the world.</p>
-            <p className="footer-contact">Contact: 0111773508, 0787809638</p>
 
             <div className="footer-social" aria-label="Follow Trendorabay">
               <a href="https://x.com/Trendorabayke" target="_blank" rel="noopener noreferrer" aria-label="X">𝕏</a>
@@ -72,11 +71,11 @@ const Footer = () => {
 
           <div className="footer-links">
             <span className="footer-kicker">Trendorabay</span>
-            <Link to="/events">Opportunities</Link>
+            <Link to="/opportunities">Opportunities</Link>
             <Link to="/writers">Write for Us</Link>
             <Link to="/advertise">Advertise</Link>
             <Link to="/subscribe">Subscribe</Link>
-            <a href="#" onClick={(e) => e.preventDefault()} aria-disabled="true">About Us</a>
+            <Link to="/about" onClick={(e) => e.preventDefault()}>About Us</Link>
             <a href="mailto:trendorabay@trendorabay.com">Contact Us</a>
           </div>
 

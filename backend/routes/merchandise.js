@@ -139,6 +139,19 @@ router.get('/featured', cache(300), async (req, res, next) => {
   }
 });
 
+// Get product categories (must be before /:id route)
+router.get('/categories', cache(600), async (req, res, next) => {
+  try {
+    const [rows] = await pool.query(
+      'SELECT name FROM categories ORDER BY name'
+    );
+    const categories = rows.map(row => row.name);
+    res.json({ success: true, data: categories });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get merchandise by ID
 router.get('/:id', cache(300), async (req, res, next) => {
   try {
@@ -155,19 +168,6 @@ router.get('/:id', cache(300), async (req, res, next) => {
       image_url: getImageUrl(rows[0].image_url)
     };
     res.json({ success: true, data: transformed });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get product categories
-router.get('/categories', cache(600), async (req, res, next) => {
-  try {
-    const [rows] = await pool.query(
-      'SELECT DISTINCT category FROM products WHERE category IS NOT NULL ORDER BY category'
-    );
-    const categories = rows.map(row => row.category);
-    res.json({ success: true, data: categories });
   } catch (error) {
     next(error);
   }

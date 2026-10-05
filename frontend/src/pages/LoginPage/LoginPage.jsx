@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { apiRequest } from '../../services/api';
@@ -16,6 +16,20 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // Check if user is already logged in and redirect if needed
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const redirectUrl = localStorage.getItem('redirectAfterLogin');
+      if (redirectUrl) {
+        localStorage.removeItem('redirectAfterLogin');
+        navigate(redirectUrl);
+      } else {
+        navigate('/');
+      }
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -46,24 +60,32 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     setIsLoading(true);
     setErrors({});
-    
+
     try {
       const response = await apiRequest.post('/users/login', {
         email: formData.email,
         password: formData.password
       });
-      
+
       if (response.data.success) {
         dispatch(loginSuccess(response.data.data));
-        navigate('/');
+
+        // Check if there's a redirect URL stored
+        const redirectUrl = localStorage.getItem('redirectAfterLogin');
+        if (redirectUrl) {
+          localStorage.removeItem('redirectAfterLogin');
+          navigate(redirectUrl);
+        } else {
+          navigate('/');
+        }
       }
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';

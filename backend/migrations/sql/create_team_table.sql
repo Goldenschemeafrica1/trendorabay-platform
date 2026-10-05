@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS team_members (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  role VARCHAR(255) NOT NULL,
+  avatar_url VARCHAR(500),
+  bio TEXT,
+  status VARCHAR(50) DEFAULT 'active',
+  email VARCHAR(255),
+  linkedin VARCHAR(500),
+  twitter VARCHAR(500),
+  instagram VARCHAR(500),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

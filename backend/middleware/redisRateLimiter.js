@@ -105,32 +105,49 @@ export const redisAuthLimiter = async (req, res, next) => {
     const maxRequests = 5;
     let current;
 
-    if (client) {
+    if (client && client.isOpen) {
       const key = `authlimit:${ip}`;
       current = await client.incr(key);
-      
+
       if (current === 1) {
         await client.expire(key, windowMs / 1000);
       }
 
       if (current > maxRequests) {
+        console.warn(`Auth rate limit exceeded for IP: ${ip}, count: ${current}`);
+        res.setHeader('X-RateLimit-Limit', maxRequests);
+        res.setHeader('X-RateLimit-Remaining', 0);
+        res.setHeader('X-RateLimit-Reset', await client.ttl(key));
         return res.status(429).json({
           success: false,
           error: 'Too many authentication attempts, please try again later.',
           retryAfter: await client.ttl(key)
         });
       }
+
+      // Add rate limit headers
+      res.setHeader('X-RateLimit-Limit', maxRequests);
+      res.setHeader('X-RateLimit-Remaining', maxRequests - current);
+      res.setHeader('X-RateLimit-Reset', await client.ttl(key));
     } else {
       // Fallback to in-memory rate limiting
       const key = `authlimit:${ip}`;
       current = getInMemoryCount(key, windowMs);
 
       if (current > maxRequests) {
+        console.warn(`Auth rate limit exceeded for IP: ${ip}, count: ${current}`);
+        res.setHeader('X-RateLimit-Limit', maxRequests);
+        res.setHeader('X-RateLimit-Remaining', 0);
+        res.setHeader('X-RateLimit-Reset', Math.ceil(windowMs / 1000));
         return res.status(429).json({
           success: false,
           error: 'Too many authentication attempts, please try again later.'
         });
       }
+
+      res.setHeader('X-RateLimit-Limit', maxRequests);
+      res.setHeader('X-RateLimit-Remaining', maxRequests - current);
+      res.setHeader('X-RateLimit-Reset', Math.ceil(windowMs / 1000));
     }
 
     next();
@@ -144,6 +161,10 @@ export const redisAuthLimiter = async (req, res, next) => {
     const current = getInMemoryCount(key, windowMs);
 
     if (current > maxRequests) {
+      console.warn(`Auth rate limit exceeded for IP: ${ip}, count: ${current}`);
+      res.setHeader('X-RateLimit-Limit', maxRequests);
+      res.setHeader('X-RateLimit-Remaining', 0);
+      res.setHeader('X-RateLimit-Reset', Math.ceil(windowMs / 1000));
       return res.status(429).json({
         success: false,
         error: 'Too many authentication attempts, please try again later.'

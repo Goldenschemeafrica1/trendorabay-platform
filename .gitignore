@@ -31,3 +31,8 @@ Thumbs.db
 backend/uploads/
 .vercel
 .env*
+
+# Logs
+*.log
+backend/logs/
+nginx.log

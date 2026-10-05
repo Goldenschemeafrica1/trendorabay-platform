@@ -9,6 +9,9 @@ const STALE_TTL = 5 * 60 * 1000; // 5 minutes for stale-while-revalidate
 const pendingRequests = new Map();
 
 const getCacheKey = (url, params) => {
+  if (!params || Object.keys(params).length === 0) {
+    return url;
+  }
   return `${url}?${JSON.stringify(params)}`;
 };
 
@@ -30,7 +33,7 @@ const setCachedData = (key, data) => {
 
 // Create axios instance with default configuration
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   timeout: 60000, // Increased timeout to 60 seconds
   headers: {
     'Content-Type': 'application/json',
@@ -44,12 +47,12 @@ console.log('API baseURL:', api.defaults.baseURL);
 api.interceptors.request.use(
   (config) => {
     console.log('API request:', config.method.toUpperCase(), config.baseURL + config.url);
-    
+
     // Check cache for GET requests with stale-while-revalidate
     if (config.method === 'get' && !config.skipCache) {
       const cacheKey = getCacheKey(config.url, config.params);
       const cached = getCachedData(cacheKey);
-      
+
       if (cached) {
         console.log('Returning cached data for:', config.url);
         // If data is stale, return it immediately but fetch fresh data in background
@@ -61,7 +64,7 @@ api.interceptors.request.use(
             // Silent fail - user already has stale data
           });
         }
-        
+
         config.adapter = () => Promise.resolve({
           data: cached.data,
           status: 200,
@@ -75,11 +78,11 @@ api.interceptors.request.use(
         return config;
       }
 
-      // Request deduplication - if same request is in flight, return the existing promise
-      if (pendingRequests.has(cacheKey)) {
-        console.log('Request deduplication: returning existing promise for:', config.url);
-        return pendingRequests.get(cacheKey);
-      }
+      // Temporarily disable request deduplication in interceptor to debug
+      // if (pendingRequests.has(cacheKey)) {
+      //   console.log('Request deduplication: returning existing promise for:', config.url);
+      //   return pendingRequests.get(cacheKey);
+      // }
     }
 
     // Token is now sent via httpOnly cookie, no need for Authorization header
@@ -102,7 +105,7 @@ api.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.error('API error:', error.config?.url, error.message, error.response?.status);
+    console.error('API error:', error.config?.url, error.message, error.response?.status, error.code);
     const originalRequest = error.config;
 
     // Handle 401 errors - token expired
@@ -140,21 +143,26 @@ api.interceptors.response.use(
 export const apiRequest = {
   get: (url, config = {}) => {
     const cacheKey = getCacheKey(url, config.params);
-    
+
     console.log('apiRequest.get called with URL:', url, 'config:', config);
-    
-    // Check if request is already in flight
-    if (pendingRequests.has(cacheKey) && !config.skipCache) {
-      console.log('Request already in flight, returning existing promise');
-      return pendingRequests.get(cacheKey);
-    }
-    
+
+    // Temporarily disable request deduplication to debug hanging requests
+    // if (pendingRequests.has(cacheKey)) {
+    //   console.log('Request already in flight, returning existing promise');
+    //   return pendingRequests.get(cacheKey);
+    // }
+
     // Create and store the request
-    const request = api.get(url, config).finally(() => {
-      pendingRequests.delete(cacheKey);
-    });
+    const request = api.get(url, config)
+      .finally(() => {
+        pendingRequests.delete(cacheKey);
+      })
+      .catch(error => {
+        console.error('Request failed for:', url, error);
+        throw error;
+      });
     pendingRequests.set(cacheKey, request);
-    
+
     return request;
   },
   post: (url, data = {}, config = {}) => api.post(url, data, config),

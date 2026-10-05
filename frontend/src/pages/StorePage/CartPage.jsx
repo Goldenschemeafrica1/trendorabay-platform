@@ -9,28 +9,36 @@ const recommendedData = [
     name: 'Trendorabay Issue #04 - "Future Forward"',
     price: 24.99,
     image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=250&fit=crop',
-    category: 'Magazine'
+    category: 'Magazine',
+    seller: 'Official Trendorabay',
+    badge: 'Official'
   },
   {
     id: 102,
     name: 'Street Culture Poster Set',
     price: 39.99,
     image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&h=250&fit=crop',
-    category: 'Art'
+    category: 'Art',
+    seller: 'Community Artist',
+    badge: 'Community'
   },
   {
     id: 103,
     name: 'Trendorabay Water Bottle',
     price: 19.99,
     image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=200&h=250&fit=crop',
-    category: 'Accessories'
+    category: 'Accessories',
+    seller: 'Official Trendorabay',
+    badge: 'Official'
   },
   {
     id: 104,
     name: 'Digital Creator Bundle',
     price: 149.99,
     image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200&h=250&fit=crop',
-    category: 'Digital'
+    category: 'Digital',
+    seller: 'Community Creator',
+    badge: 'Community'
   }
 ];
 
@@ -43,15 +51,6 @@ const CartPage = () => {
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoError, setPromoError] = useState('');
   const [recommendedProducts] = useState(recommendedData);
-  const [savedItems] = useState(() => {
-    try {
-      const savedItemsData = localStorage.getItem('trendorabay_saved_items');
-      return savedItemsData ? JSON.parse(savedItemsData) : [];
-    } catch {
-      localStorage.removeItem('trendorabay_saved_items');
-      return [];
-    }
-  });
   const [shippingMethod, setShippingMethod] = useState('standard');
 
   // Valid promo codes
@@ -61,13 +60,6 @@ const CartPage = () => {
     'FREESHIP': { discount: 10, type: 'fixed', name: 'Free Shipping Discount' },
     'AFRICAN50': { discount: 50, type: 'percentage', name: 'African Innovators Special' }
   };
-
-  // Save saved items to localStorage
-  useEffect(() => {
-    if (!loading) {
-      localStorage.setItem('trendorabay_saved_items', JSON.stringify(savedItems));
-    }
-  }, [savedItems, loading]);
 
   // Calculate shipping cost
   const shippingCost = () => {
@@ -79,9 +71,6 @@ const CartPage = () => {
       default: return 5.99;
     }
   };
-
-  // Calculate gift wrap cost
-  // const giftWrapCost = giftWrap ? 4.99 : 0;
 
   // Calculate discount amount
   const discountAmount = promoApplied ? (discount.type === 'percentage' ? (subtotal * discount.discount / 100) : discount.discount) : 0;
@@ -154,7 +143,7 @@ const CartPage = () => {
   // Show notification
   const showNotification = (message) => {
     const notification = document.createElement('div');
-    notification.className = 'cart-notification';
+    notification.className = 'toast';
     notification.textContent = message;
     document.body.appendChild(notification);
     
@@ -170,6 +159,14 @@ const CartPage = () => {
     }, 2000);
   };
 
+  // Format money
+  const formatMoney = (amount) => {
+    return `KSh ${Math.round(amount).toLocaleString('en-KE')}`;
+  };
+
+  // Get item count
+  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
   if (loading) {
     return (
       <div className="cart-page-loading">
@@ -181,313 +178,184 @@ const CartPage = () => {
 
   return (
     <div className="cart-page">
-      <div className="cart-container">
-        {/* Main Cart Content */}
-        <div className="cart-main">
-          {cartItems.length === 0 && savedItems.length === 0 ? (
-            <div className="empty-cart">
-              <div className="empty-cart-icon">🛒</div>
-              <h2>Your cart is empty</h2>
-              <p>Looks like you haven't added any items to your cart yet.</p>
-              <button onClick={() => navigate('/store')} className="continue-shopping-btn">Continue Shopping</button>
-            </div>
-          ) : (
-            <>
-              {/* Cart Items */}
-              {cartItems.length > 0 && (
-                <div className="cart-items-section">
-                  <h2 className="cart-items-title">Cart Items ({cartItems.length})</h2>
-                  <div className="cart-items-list">
-                    {cartItems.map((item, index) => (
-                      <div key={`${item.id}-${item.size || ''}-${item.color || ''}-${index}`} className="cart-item-card">
-                        <div className="cart-item-image">
-                          <img src={item.image} alt={item.name} />
-                        </div>
-                        <div className="cart-item-details">
-                          <h3 className="cart-item-name">{item.name}</h3>
-                          {item.size && <span className="cart-item-size">Size: {item.size}</span>}
-                          <div className="cart-item-price">${(parseFloat(item.price) || 0).toFixed(2)}</div>
-                          <div className="cart-item-actions">
-                            <div className="quantity-selector">
-                              <button
-                                onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.format, item.quantity - 1)}
-                                aria-label="Decrease quantity"
-                              >
-                                −
-                              </button>
-                              <span>{item.quantity}</span>
-                              <button
-                                onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.format, item.quantity + 1)}
-                                aria-label="Increase quantity"
-                              >
-                                +
-                              </button>
-                            </div>
-                            <button
-                              className="remove-btn"
-                              onClick={() => handleRemoveItem(item.id, item.size, item.color, item.format)}
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                        <div className="cart-item-total">
-                          ${((parseFloat(item.price) || 0) * item.quantity).toFixed(2)}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Order Summary - Mobile */}
-              {cartItems.length > 0 && (
-                <div className="cart-summary">
-                  <h2 className="summary-title">Order Summary</h2>
-                  
-                  <div className="summary-details">
-                    <div className="summary-row">
-                      <span>Subtotal</span>
-                      <span>${(parseFloat(subtotal) || 0).toFixed(2)}</span>
-                    </div>
-                    
-                    <div className="summary-row">
-                      <span>Shipping</span>
-                      <div className="shipping-options">
-                        <label className="shipping-option">
-                          <input
-                            type="radio"
-                            name="shipping"
-                            value="standard"
-                            checked={shippingMethod === 'standard'}
-                            onChange={() => setShippingMethod('standard')}
-                          />
-                          <span>Standard (3-5 days) - {shippingCost() === 0 ? 'FREE' : 'KSH 778.70'}</span>
-                        </label>
-                        <label className="shipping-option">
-                          <input
-                            type="radio"
-                            name="shipping"
-                            value="express"
-                            checked={shippingMethod === 'express'}
-                            onChange={() => setShippingMethod('express')}
-                          />
-                          <span>Express (1-2 days) - KSH 1,688.70</span>
-                        </label>
-                        <label className="shipping-option">
-                          <input
-                            type="radio"
-                            name="shipping"
-                            value="overnight"
-                            checked={shippingMethod === 'overnight'}
-                            onChange={() => setShippingMethod('overnight')}
-                          />
-                          <span>Overnight (Next day) - KSH 3,248.70</span>
-                        </label>
-                      </div>
-                    </div>
-                    
-                    {/* Promo Code Section */}
-                    <div className="promo-section">
-                      {!promoApplied ? (
-                        <div className="promo-input-group">
-                          <input
-                            type="text"
-                            placeholder="Promo code"
-                            value={promoCode}
-                            onChange={(e) => setPromoCode(e.target.value)}
-                            className="promo-input"
-                          />
-                          <button onClick={applyPromoCode} className="apply-promo-btn">
-                            Apply
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="promo-applied">
-                          <span>{discount.name}: -${(parseFloat(discountAmount) || 0).toFixed(2)}</span>
-                          <button onClick={removePromoCode} className="remove-promo-btn">
-                            Remove
-                          </button>
-                        </div>
-                      )}
-                      {promoError && <p className="promo-error">{promoError}</p>}
-                    </div>
-                    
-                    {discountAmount > 0 && (
-                      <div className="summary-row discount-row">
-                        <span>Discount</span>
-                        <span>-${(parseFloat(discountAmount) || 0).toFixed(2)}</span>
-                      </div>
-                    )}
-                    
-                    <div className="summary-divider"></div>
-                    
-                    <div className="summary-row total-row">
-                      <span>Total</span>
-                      <span>${(parseFloat(total) || 0).toFixed(2)}</span>
-                    </div>
-                    
-                    <div className="checkout-note">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M12 16v-4M12 8h.01"/>
-                      </svg>
-                      <span>Free shipping on orders over KSH 13,000</span>
-                    </div>
-                    
-                    <button className="checkout-button" onClick={() => navigate('/checkout')}>
-                      Proceed to Checkout
-                    </button>
-                    
-                    <div className="payment-icons">
-                      <span>Visa</span>
-                      <span>Mastercard</span>
-                      <span>M-Pesa</span>
-                      <span>PayPal</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Recommended Products */}
-              <div className="recommended-section">
-                <h2 className="recommended-title">You Might Also Like</h2>
-                <div className="recommended-grid">
-                  {recommendedProducts.slice(0, 2).map(product => (
-                    <div key={product.id} className="best-selling-card">
-                      <div className="best-selling-image-section">
-                        <img src={product.image} alt={product.name} />
-                        <span className="new-arrival-badge">New Arrival</span>
-                      </div>
-                      <div className="best-selling-content-section">
-                        <h3>{product.name}</h3>
-                        <p className="best-selling-price">${(parseFloat(product.price) || 0).toFixed(2)}</p>
-                        <div className="best-selling-actions">
-                          <button 
-                            className="add-to-cart-btn"
-                            onClick={() => addRecommendedToCart(product)}
-                          >
-                            Add to Cart
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
+      {/* PAGE HEADER */}
+      <section className="page-head">
+        <div className="container">
+          <div className="eyebrow">Shopping Cart</div>
+          <h1>Your Cart</h1>
+          <p>Review your items, apply a promo code, and check out when ready.</p>
         </div>
+      </section>
 
-        {/* Order Summary Sidebar - Desktop Only */}
-        {cartItems.length > 0 && (
-          <div className="cart-summary-desktop">
-            <h2 className="summary-title">Order Summary</h2>
-            
-            <div className="summary-details">
-              <div className="summary-row">
-                <span>Subtotal</span>
-                <span>${(parseFloat(subtotal) || 0).toFixed(2)}</span>
-              </div>
-              
-              <div className="summary-row">
-                <span>Shipping</span>
-                <div className="shipping-options">
-                  <label className="shipping-option">
-                    <input
-                      type="radio"
-                      name="shipping"
-                      value="standard"
-                      checked={shippingMethod === 'standard'}
-                      onChange={() => setShippingMethod('standard')}
-                    />
-                    <span>Standard (3-5 days) - {shippingCost() === 0 ? 'FREE' : 'KSH 778.70'}</span>
-                  </label>
-                  <label className="shipping-option">
-                    <input
-                      type="radio"
-                      name="shipping"
-                      value="express"
-                      checked={shippingMethod === 'express'}
-                      onChange={() => setShippingMethod('express')}
-                    />
-                    <span>Express (1-2 days) - KSH 1,688.70</span>
-                  </label>
-                  <label className="shipping-option">
-                    <input
-                      type="radio"
-                      name="shipping"
-                      value="overnight"
-                      checked={shippingMethod === 'overnight'}
-                      onChange={() => setShippingMethod('overnight')}
-                    />
-                    <span>Overnight (Next day) - KSH 3,248.70</span>
-                  </label>
-                </div>
-              </div>
-              
-              {/* Promo Code Section */}
-              <div className="promo-section">
-                {!promoApplied ? (
-                  <div className="promo-input-group">
-                    <input
-                      type="text"
-                      placeholder="Promo code"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                      className="promo-input"
-                    />
-                    <button onClick={applyPromoCode} className="apply-promo-btn">
-                      Apply
-                    </button>
-                  </div>
-                ) : (
-                  <div className="promo-applied">
-                    <span>{discount.name}: -${(parseFloat(discountAmount) || 0).toFixed(2)}</span>
-                    <button onClick={removePromoCode} className="remove-promo-btn">
-                      Remove
-                    </button>
-                  </div>
-                )}
-                {promoError && <p className="promo-error">{promoError}</p>}
-              </div>
-              
-              {discountAmount > 0 && (
-                <div className="summary-row discount-row">
-                  <span>Discount</span>
-                  <span>-${(parseFloat(discountAmount) || 0).toFixed(2)}</span>
-                </div>
-              )}
-              
-              <div className="summary-divider"></div>
-              
-              <div className="summary-row total-row">
-                <span>Total</span>
-                <span>${(parseFloat(total) || 0).toFixed(2)}</span>
-              </div>
-              
-              <div className="checkout-note">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M12 16v-4M12 8h.01"/>
-                </svg>
-                <span>Free shipping on orders over KSH 13,000</span>
-              </div>
-              
-              <button className="checkout-button" onClick={() => navigate('/checkout')}>
-                Proceed to Checkout
-              </button>
-              
-              <div className="payment-icons">
-                <span>Visa</span>
-                <span>Mastercard</span>
-                <span>M-Pesa</span>
-                <span>PayPal</span>
-              </div>
-            </div>
+      {/* EMPTY STATE */}
+      {cartItems.length === 0 ? (
+        <section className="container" style={{ padding: '44px 0 80px' }}>
+          <div className="empty-cart">
+            <div className="icon">🛍</div>
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added anything yet. Explore the store and find something you love.</p>
+            <button className="btn" onClick={() => navigate('/store')}>Browse the store →</button>
           </div>
-        )}
-      </div>
+        </section>
+      ) : (
+        <main className="container layout">
+          {/* CART ITEMS COLUMN */}
+          <div style={{ minWidth: 0 }}>
+            <div className="cart-header">
+              <div>
+                <h2>Items in your cart</h2>
+                <div className="count">{itemCount} {itemCount === 1 ? 'item' : 'items'}</div>
+              </div>
+              <button 
+                className="clear" 
+                onClick={() => {
+                  cartItems.forEach(item => removeFromCart(item.id, item.size, item.color));
+                  showNotification('Cart cleared');
+                }}
+              >
+                Clear cart
+              </button>
+            </div>
+
+            <div className="cart-list">
+              {cartItems.map((item, index) => (
+                <article key={`${item.id}-${item.size || ''}-${item.color || ''}-${index}`} className="cart-item">
+                  <div className="item-img">
+                    <img src={item.image} alt={item.name} loading="lazy" />
+                    <span className="item-badge">Official</span>
+                  </div>
+                  <div className="item-info">
+                    <div className="seller">Official Trendorabay</div>
+                    <h3>{item.name}</h3>
+                    <div className="variant">
+                      {item.size && <span>Size {item.size}</span>}
+                      {item.color && <span>{item.color}</span>}
+                    </div>
+                    <div className="stock">In stock</div>
+                    <div className="item-actions">
+                      <button 
+                        className="remove" 
+                        onClick={() => handleRemoveItem(item.id, item.size, item.color)}
+                      >
+                        Remove
+                      </button>
+                      <button 
+                        className="remove" 
+                        onClick={() => showNotification('Saved to wishlist')}
+                      >
+                        Save for later
+                      </button>
+                    </div>
+                  </div>
+                  <div className="item-right">
+                    <div className="item-price">{formatMoney(item.price * item.quantity)}</div>
+                    <div className="qty">
+                      <button 
+                        onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.format, item.quantity - 1)}
+                        aria-label="Decrease"
+                      >
+                        −
+                      </button>
+                      <input 
+                        type="number" 
+                        value={item.quantity} 
+                        readOnly
+                      />
+                      <button 
+                        onClick={() => handleUpdateQuantity(item.id, item.size, item.color, item.format, item.quantity + 1)}
+                        aria-label="Increase"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {/* Recommended products */}
+            <section className="recommended">
+              <div className="recommended-head">
+                <div className="eyebrow">You may also like</div>
+                <h2>Hand-picked for you.</h2>
+              </div>
+              <div className="rec-grid">
+                {recommendedProducts.slice(0, 4).map(product => (
+                  <article key={product.id} className="rec-card">
+                    <div className="rec-img">
+                      <img src={product.image} alt={product.name} loading="lazy" />
+                      <span className="rec-badge">{product.badge}</span>
+                    </div>
+                    <div className="rec-info">
+                      <h4>{product.name}</h4>
+                      <div className="seller">{product.seller}</div>
+                      <div className="price">{formatMoney(product.price)}</div>
+                      <button onClick={() => addRecommendedToCart(product)}>Add to cart</button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          {/* SUMMARY COLUMN */}
+          <aside className="summary">
+            <h2>Order Summary</h2>
+
+            <div className="promo">
+              <input
+                type="text"
+                placeholder="Promo code"
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value)}
+              />
+              <button onClick={applyPromoCode}>Apply</button>
+            </div>
+
+            <div className="summary-row">
+              <span>Subtotal</span>
+              <span>{formatMoney(subtotal)}</span>
+            </div>
+            <div className="summary-row">
+              <span>Delivery</span>
+              <span>{shippingCost() === 0 ? 'FREE' : formatMoney(shippingCost())}</span>
+            </div>
+            {discountAmount > 0 && (
+              <div className="summary-row discount">
+                <span>Discount</span>
+                <span>-{formatMoney(discountAmount)}</span>
+              </div>
+            )}
+
+            <div className="summary-divider"></div>
+
+            <div className="summary-total">
+              <span>Total</span>
+              <span>{formatMoney(total)}</span>
+            </div>
+
+            <button className="checkout-btn" onClick={() => navigate('/checkout')}>
+              Proceed to checkout
+            </button>
+            <a 
+              className="continue-link" 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/store');
+              }}
+            >
+              ← Continue shopping
+            </a>
+
+            <div className="trust">
+              <div>Secure checkout</div>
+              <div>Free returns within 14 days</div>
+              <div>Delivery in 2–5 business days</div>
+            </div>
+          </aside>
+        </main>
+      )}
     </div>
   );
 };

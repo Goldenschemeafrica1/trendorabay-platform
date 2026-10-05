@@ -212,7 +212,7 @@ const LandingPage = () => {
           title: s.title,
           meta: `${s.categoryName || 'Story'} • 5 min read`,
         })));
-        setInnovationStories(mapStories(home.textOnlyStories || home.featuredStories || [], 'INNOVATION').slice(0, 4).map((s) => ({
+        setInnovationStories(mapStories(home.innovationStories || home.featuredStories || [], 'INNOVATION').slice(0, 4).map((s) => ({
           ...s,
           slug: s.slug,
         })));

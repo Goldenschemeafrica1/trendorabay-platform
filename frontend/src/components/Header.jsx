@@ -54,7 +54,7 @@ const communityGroups = [
       { icon: '🥗', label: 'Food & Nutrition', slug: 'food-nutrition' },
       { icon: '✈️', label: 'Travel', slug: 'travel' },
       { icon: '⚽', label: 'Sports', slug: 'sports' },
-      { icon: '�', label: 'Opportunities', slug: 'events' },
+      { icon: '🎒', label: 'Opportunities', slug: 'events' },
       { icon: '🏡', label: 'Home', slug: 'home' },
       { icon: '🏍️', label: 'Riders', slug: 'riders' },
       { icon: '🎒', label: 'Youth / Student Life', slug: 'youth-student-life' },
@@ -77,19 +77,20 @@ const CommunityMegaMenu = () => (
           <h4>{group.title}</h4>
           <div className="nl-community-mega-list">
             {group.items.map((item) => (
-              <div
+              <Link
                 key={item.slug}
+                to="/communities"
                 className="nl-community-mega-item"
               >
                 {item.label}
-              </div>
+              </Link>
             ))}
           </div>
         </div>
       ))}
     </div>
     <div className="nl-community-mega-footer">
-      <span>25 niche communities • One Trendorabay</span>
+      <Link to="/communities">View All Communities →</Link>
     </div>
   </div>
 );
@@ -100,10 +101,11 @@ const Header = () => {
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.ui.theme);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const { totalItems, openCartDrawer } = useCart();
+  const { totalItems } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [communityOpen, setCommunityOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -125,8 +127,17 @@ const Header = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.nl-mobile-theme-wrap')) {
+        setThemeOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   const scrollToSection = (target) => {
-    // Check if it's a route or a section
     if (target.startsWith('/')) {
       navigate(target);
     } else {
@@ -169,8 +180,6 @@ const Header = () => {
     e.stopPropagation();
     setCommunityOpen((open) => !open);
   };
-
-
 
   return (
     <header className="nl-header">
@@ -242,10 +251,18 @@ const Header = () => {
           >
             {theme === 'dark' ? '☀' : '☾'}
           </button>
-          <button className="nl-iconbtn nl-cart-toggle" onClick={openCartDrawer} aria-label="Cart">
-            🛒
-            <span className="nl-cart-count">{totalItems}</span>
+          <button className="nl-iconbtn nl-search-toggle" onClick={() => navigate('/search')} aria-label="Search">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m20 20-3.5-3.5"/>
+            </svg>
           </button>
+          {isAuthenticated && (
+            <button className="nl-iconbtn nl-cart-toggle" onClick={() => navigate('/cart')} aria-label="Cart">
+              🛒
+              <span className="nl-cart-count">{totalItems}</span>
+            </button>
+          )}
           <button className="nl-menubtn" onClick={() => setMenuOpen((open) => !open)} aria-label="Menu">☰</button>
         </div>
       </div>
@@ -272,14 +289,14 @@ const Header = () => {
                   <div key={group.title} className="nl-mobile-community-group">
                     <h5>{group.title}</h5>
                     {group.items.map((item) => (
-                      <button
+                      <Link
                         key={item.slug}
-                        type="button"
+                        to="/communities"
                         className="nl-mobile-community-item"
-                        onClick={() => scrollToSection(`nl-community-${item.slug}`)}
+                        onClick={() => setCommunityOpen(false)}
                       >
                         {item.label}
-                      </button>
+                      </Link>
                     ))}
                   </div>
                 ))}
@@ -287,11 +304,68 @@ const Header = () => {
             )}
           </div>
           {navLinks.slice(1).map((link) => (
-            <button key={`${link.target}-mobile`} type="button" onClick={() => scrollToSection(link.target)}>
+            <button
+              key={`${link.target}-mobile`}
+              type="button"
+              onClick={() => scrollToSection(link.target)}
+            >
               <span>{link.label}</span>
               {link.badge && <span className="nl-nav-badge">{link.badge}</span>}
             </button>
           ))}
+          <button
+            type="button"
+            onClick={() => {
+              navigate('/search');
+              setMenuOpen(false);
+            }}
+            className="nl-mobile-cart-btn"
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m20 20-3.5-3.5"/>
+            </svg>
+            Search
+          </button>
+          <div className={`nl-mobile-theme-wrap ${themeOpen ? 'nl-open' : ''}`}>
+            <button
+              type="button"
+              className="nl-mobile-theme-trigger"
+              onClick={(e) => {
+                e.stopPropagation();
+                setThemeOpen((open) => !open);
+              }}
+            >
+              <span>Theme</span>
+              <span className="nl-mobile-chevron">▼</span>
+            </button>
+            {themeOpen && (
+              <div className="nl-mobile-theme-dropdown">
+                <button
+                  type="button"
+                  className="nl-mobile-theme-option"
+                  onClick={() => {
+                    dispatch(toggleTheme());
+                    setThemeOpen(false);
+                  }}
+                >
+                  {theme === 'dark' ? '☀ Light Mode' : '☾ Dark Mode'}
+                </button>
+              </div>
+            )}
+          </div>
+          {isAuthenticated && (
+            <button
+              type="button"
+              onClick={() => {
+                navigate('/cart');
+                setMenuOpen(false);
+              }}
+              className="nl-mobile-cart-btn"
+            >
+              🛒 Cart ({totalItems})
+            </button>
+          )}
         </div>
       )}
     </header>

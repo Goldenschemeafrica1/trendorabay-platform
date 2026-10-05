@@ -29,52 +29,65 @@ const getImageUrl = (url) => {
   return url;
 };
 
+// Get all categories
+router.get('/categories', async (req, res, next) => {
+  try {
+    const [rows] = await pool.query(
+      'SELECT DISTINCT category FROM opportunities WHERE category IS NOT NULL AND category != "" ORDER BY category ASC'
+    );
+    const categories = rows.map(row => row.category);
+    res.json({ success: true, data: categories });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get all opportunities
 router.get('/', async (req, res, next) => {
   try {
     const { status, featured, category, country, opportunity_type, page = 1, limit = 20 } = req.query;
     const offset = (page - 1) * limit;
-    
+
     let query = 'SELECT * FROM opportunities WHERE 1=1';
     const params = [];
-    
+
     if (status) {
       query += ' AND status = ?';
       params.push(status);
     }
     // Don't filter by status by default - show all opportunities
-    
+
     if (featured === 'true' || featured === true) {
       query += ' AND featured = 1';
     }
-    
+
     if (category) {
       query += ' AND category = ?';
       params.push(category);
     }
-    
+
     if (country) {
       query += ' AND country = ?';
       params.push(country);
     }
-    
+
     if (opportunity_type) {
       query += ' AND opportunity_type = ?';
       params.push(opportunity_type);
     }
-    
+
     query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
     params.push(parseInt(limit), offset);
-    
+
     const [rows] = await pool.query(query, params);
-    
+
     // Transform image URLs to serve CMS uploads
     const transformed = rows.map(opportunity => ({
       ...opportunity,
       image_url: getImageUrl(opportunity.image_url),
       organization_logo: getImageUrl(opportunity.organization_logo)
     }));
-    
+
     res.json({ success: true, data: transformed });
   } catch (error) {
     next(error);

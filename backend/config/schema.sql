@@ -56,7 +56,9 @@ CREATE TABLE IF NOT EXISTS stories (
   author_id INT,
   category_id INT,
   status ENUM('draft', 'published') DEFAULT 'draft',
+  display_section ENUM('featured', 'horizontal', 'must_read', 'text_only', 'innovation', 'latest_stories') DEFAULT 'featured',
   featured TINYINT(1) DEFAULT 0,
+  views INT DEFAULT 0,
   published_at TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -138,3 +140,245 @@ CREATE TABLE IF NOT EXISTS orders (
 
 -- INSERT INTO merchandise (name, description, price, category, stock_quantity, available) 
 -- VALUES ('Trendorabay T-Shirt', 'Premium cotton t-shirt', 29.99, 'Clothing', 50, true);
+
+-- Categories table
+CREATE TABLE IF NOT EXISTS categories (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  slug VARCHAR(255) UNIQUE NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Team members table
+CREATE TABLE IF NOT EXISTS team_members (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  role VARCHAR(255) NOT NULL,
+  avatar_url VARCHAR(500),
+  bio TEXT,
+  status VARCHAR(50) DEFAULT 'active',
+  email VARCHAR(255),
+  linkedin VARCHAR(500),
+  twitter VARCHAR(500),
+  instagram VARCHAR(500),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Write applications table
+CREATE TABLE IF NOT EXISTS write_applications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  full_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone_number VARCHAR(50),
+  location VARCHAR(255) NOT NULL,
+  short_bio TEXT NOT NULL,
+  areas_of_interest JSON,
+  writing_experience TEXT NOT NULL,
+  portfolio_url VARCHAR(500),
+  social_media_links JSON,
+  writing_sample_url VARCHAR(500),
+  why_write_for_trendorabay TEXT NOT NULL,
+  agree_to_guidelines TINYINT(1) DEFAULT 0,
+  status ENUM('pending', 'reviewed', 'approved', 'rejected') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status),
+  INDEX idx_email (email),
+  INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Communities table
+CREATE TABLE IF NOT EXISTS communities (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  slug VARCHAR(180) NOT NULL UNIQUE,
+  description TEXT,
+  short_description VARCHAR(500),
+  category VARCHAR(100) NOT NULL,
+  icon_url VARCHAR(500),
+  cover_image_url VARCHAR(500),
+  community_type ENUM('open', 'approval', 'invite_only') NOT NULL DEFAULT 'open',
+  status ENUM('active', 'inactive', 'archived') NOT NULL DEFAULT 'active',
+  rules TEXT,
+  created_by INT UNSIGNED NULL,
+  member_count INT UNSIGNED NOT NULL DEFAULT 0,
+  post_count INT UNSIGNED NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_category (category),
+  INDEX idx_status (status),
+  INDEX idx_community_type (community_type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Community members table
+CREATE TABLE IF NOT EXISTS community_members (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT UNSIGNED NOT NULL,
+  community_id BIGINT UNSIGNED NOT NULL,
+  role ENUM('owner', 'admin', 'moderator', 'contributor', 'member') NOT NULL DEFAULT 'member',
+  status ENUM('active', 'pending', 'left', 'banned') NOT NULL DEFAULT 'active',
+  joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  left_at TIMESTAMP NULL,
+  UNIQUE KEY unique_user_community (user_id, community_id),
+  INDEX idx_user (user_id),
+  INDEX idx_community (community_id),
+  INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Likes table
+CREATE TABLE IF NOT EXISTS likes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  likeable_id INT NOT NULL,
+  likeable_type ENUM('story', 'magazine', 'podcast', 'comment') NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_like (user_id, likeable_id, likeable_type),
+  INDEX idx_likeable (likeable_type, likeable_id),
+  INDEX idx_user (user_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Comments table
+CREATE TABLE IF NOT EXISTS comments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  commentable_id INT NOT NULL,
+  commentable_type ENUM('story', 'magazine', 'podcast') NOT NULL,
+  content TEXT NOT NULL,
+  parent_id INT DEFAULT NULL,
+  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_commentable (commentable_type, commentable_id),
+  INDEX idx_user (user_id),
+  INDEX idx_status (status),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Gallery table
+CREATE TABLE IF NOT EXISTS gallery (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  image_url VARCHAR(500) NOT NULL,
+  category VARCHAR(100),
+  uploaded_by INT,
+  status ENUM('draft', 'published') DEFAULT 'draft',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status),
+  INDEX idx_category (category),
+  FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Gallery likes table
+CREATE TABLE IF NOT EXISTS gallery_likes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  gallery_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_gallery_like (user_id, gallery_id),
+  INDEX idx_gallery (gallery_id),
+  INDEX idx_user (user_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (gallery_id) REFERENCES gallery(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Login attempts table
+CREATE TABLE IF NOT EXISTS login_attempts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  ip_address VARCHAR(45),
+  success TINYINT(1) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_email (email),
+  INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Advertisement inquiries table
+CREATE TABLE IF NOT EXISTS advertisement_inquiries (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  company VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(50),
+  budget VARCHAR(50),
+  campaign_type VARCHAR(100),
+  message TEXT,
+  status ENUM('pending', 'contacted', 'in_progress', 'completed', 'rejected') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status),
+  INDEX idx_email (email),
+  INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Pitch submissions table
+CREATE TABLE IF NOT EXISTS pitch_submissions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  pitch_content TEXT NOT NULL,
+  author_name VARCHAR(255) NOT NULL,
+  author_email VARCHAR(255) NOT NULL,
+  category VARCHAR(100),
+  status ENUM('pending', 'reviewed', 'accepted', 'rejected') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status),
+  INDEX idx_email (author_email),
+  INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Podcast guest applications table
+CREATE TABLE IF NOT EXISTS podcast_guest_applications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(50),
+  topic VARCHAR(255),
+  bio TEXT,
+  social_media_links JSON,
+  status ENUM('pending', 'reviewed', 'accepted', 'rejected') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status),
+  INDEX idx_email (email),
+  INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Events table
+CREATE TABLE IF NOT EXISTS events (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  event_date DATE NOT NULL,
+  event_time TIME,
+  location VARCHAR(255),
+  venue VARCHAR(255),
+  image_url VARCHAR(500),
+  registration_url VARCHAR(500),
+  status ENUM('draft', 'published', 'cancelled') DEFAULT 'draft',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status),
+  INDEX idx_event_date (event_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Partners table
+CREATE TABLE IF NOT EXISTS partners (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  logo_url VARCHAR(500),
+  website_url VARCHAR(500),
+  partnership_type VARCHAR(100),
+  status ENUM('active', 'inactive') DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
