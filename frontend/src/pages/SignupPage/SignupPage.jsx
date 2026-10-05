@@ -107,6 +107,12 @@ const SignupPage = () => {
       // Check if response exists and has success property (axios wraps in data)
       if (response?.data?.success === true) {
         dispatch(loginSuccess({ user: response.data.data }));
+
+        // Store token in localStorage for cross-domain scenarios
+        if (response.data.token) {
+          localStorage.setItem('authToken', response.data.token);
+        }
+
         toast.success('Account created successfully! Redirecting to home...');
         setTimeout(() => {
           navigate('/');

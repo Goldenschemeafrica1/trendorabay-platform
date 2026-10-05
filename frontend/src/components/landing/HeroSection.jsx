@@ -15,7 +15,7 @@ const HeroSection = ({ heroStory, latestStories }) => {
         </div>
         <div className="hero-art">
           <div className="tile ta"><img src="/hero.jpeg" alt="African fashion" /></div>
-          <div className="tile tb"><img src="/hero1.jpeg" alt="Creator" /></div>
+          <div className="tile tb"><img src="/road.jpeg" alt="Creator" /></div>
           <div className="tile tc"><img src="/hero2.jpeg" alt="Art" /></div>
         </div>
       </div>

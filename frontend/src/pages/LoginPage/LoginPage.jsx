@@ -89,8 +89,8 @@ const LoginPage = () => {
         dispatch(loginSuccess(response.data.data));
 
         // Store token in localStorage for cross-domain scenarios
-        if (response.data.token) {
-          localStorage.setItem('authToken', response.data.token);
+        if (response.data.data?.token) {
+          localStorage.setItem('authToken', response.data.data.token);
         }
 
         // Check if there's a redirect URL stored

@@ -27,6 +27,11 @@ const authSlice = createSlice({
       state.user = userData;
       state.isAuthenticated = true;
       localStorage.setItem('trendorabay-user', JSON.stringify(userData));
+
+      // Store token if provided
+      if (action.payload.token || userData.token) {
+        localStorage.setItem('authToken', action.payload.token || userData.token);
+      }
     },
     logout: (state) => {
       state.user = null;

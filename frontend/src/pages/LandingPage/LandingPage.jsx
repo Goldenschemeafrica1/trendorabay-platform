@@ -210,6 +210,7 @@ const LandingPage = () => {
           image: s.imageUrl,
           tag: s.categoryName || 'Story',
           title: s.title,
+          excerpt: makeExcerpt(s.content, 120),
           meta: `${s.categoryName || 'Story'} • 5 min read`,
         })));
         setInnovationStories(mapStories(home.innovationStories || home.featuredStories || [], 'INNOVATION').slice(0, 4).map((s) => ({
@@ -491,6 +492,7 @@ const LandingPage = () => {
                   <div>
                     <span className="nl-tag">{feature.tag}</span>
                     <h3>{feature.title}</h3>
+                    <p className="nl-excerpt">{feature.excerpt}</p>
                     <p className="nl-meta">{feature.meta}</p>
                   </div>
                 </article>
