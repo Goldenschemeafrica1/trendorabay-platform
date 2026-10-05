@@ -1,9 +1,22 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// Plugin to remove console statements in production
+function removeConsole() {
+  return {
+    name: 'remove-console',
+    transform(code, id) {
+      if (id.includes('node_modules')) return null
+      if (process.env.NODE_ENV === 'production') {
+        return code.replace(/console\.(log|warn|error|debug|info)\([^)]*\);?/g, '')
+      }
+    }
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), removeConsole()],
   server: {
     host: true,
     port: 5173,
@@ -22,7 +35,7 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
+        drop_console: process.env.NODE_ENV === 'production',
         drop_debugger: true
       }
     },

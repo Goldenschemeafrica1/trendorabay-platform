@@ -41,20 +41,15 @@ const api = axios.create({
   withCredentials: true, // Enable credentials to send httpOnly cookies
 });
 
-console.log('API baseURL:', api.defaults.baseURL);
-
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    console.log('API request:', config.method.toUpperCase(), config.baseURL + config.url);
-
     // Check cache for GET requests with stale-while-revalidate
     if (config.method === 'get' && !config.skipCache) {
       const cacheKey = getCacheKey(config.url, config.params);
       const cached = getCachedData(cacheKey);
 
       if (cached) {
-        console.log('Returning cached data for:', config.url);
         // If data is stale, return it immediately but fetch fresh data in background
         if (cached.isStale) {
           // Trigger background refresh without blocking
@@ -78,11 +73,10 @@ api.interceptors.request.use(
         return config;
       }
 
-      // Temporarily disable request deduplication in interceptor to debug
-      // if (pendingRequests.has(cacheKey)) {
-      //   console.log('Request deduplication: returning existing promise for:', config.url);
-      //   return pendingRequests.get(cacheKey);
-      // }
+      // Request deduplication
+      if (pendingRequests.has(cacheKey)) {
+        return pendingRequests.get(cacheKey);
+      }
     }
 
     // Token is now sent via httpOnly cookie, no need for Authorization header
@@ -96,7 +90,6 @@ api.interceptors.request.use(
 // Response interceptor for error handling
 api.interceptors.response.use(
   (response) => {
-    console.log('API response received:', response.config.url, response.status);
     // Cache successful GET responses (skip if this was a background refresh)
     if (response.config.method === 'get' && response.status === 200 && !response.cached && !response.config.skipCache) {
       const cacheKey = getCacheKey(response.config.url, response.config.params);
@@ -105,7 +98,6 @@ api.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.error('API error:', error.config?.url, error.message, error.response?.status, error.code);
     const originalRequest = error.config;
 
     // Handle 401 errors - token expired
@@ -144,13 +136,10 @@ export const apiRequest = {
   get: (url, config = {}) => {
     const cacheKey = getCacheKey(url, config.params);
 
-    console.log('apiRequest.get called with URL:', url, 'config:', config);
-
-    // Temporarily disable request deduplication to debug hanging requests
-    // if (pendingRequests.has(cacheKey)) {
-    //   console.log('Request already in flight, returning existing promise');
-    //   return pendingRequests.get(cacheKey);
-    // }
+    // Request deduplication
+    if (pendingRequests.has(cacheKey)) {
+      return pendingRequests.get(cacheKey);
+    }
 
     // Create and store the request
     const request = api.get(url, config)
@@ -158,7 +147,6 @@ export const apiRequest = {
         pendingRequests.delete(cacheKey);
       })
       .catch(error => {
-        console.error('Request failed for:', url, error);
         throw error;
       });
     pendingRequests.set(cacheKey, request);
