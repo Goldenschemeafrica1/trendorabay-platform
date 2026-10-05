@@ -77,7 +77,20 @@ const StoryDetailPage = () => {
       setLikeCount(res.data.likes);
     } catch (err) {
       console.error('Failed to like story:', err);
-      alert('Failed to like story. Please try again.');
+      console.error('Error details:', {
+        status: err.response?.status,
+        message: err.message,
+        data: err.response?.data
+      });
+      if (err.response?.status === 401) {
+        alert('Authentication error. Please try logging in again.');
+      } else if (err.response?.status === 403) {
+        alert('You do not have permission to like this story.');
+      } else if (err.response?.status === 404) {
+        alert('Story not found.');
+      } else {
+        alert('Failed to like story. Please try again.');
+      }
     }
   };
 
