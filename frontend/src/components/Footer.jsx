@@ -51,6 +51,7 @@ const Footer = () => {
             <Link className="footer-logo" to="/" onClick={handleLogoClick}><img src="/weblogo.png" alt="Trendorabay" /></Link>
             <p>From mtaa to global — stories, style, solutions and opportunities shaping Africa’s tomorrow.</p>
             <p className="footer-location">Based in Ruiru, Kenya • Connecting Africa and the world.</p>
+            <p className="footer-contact">0111773508 • 0787809638</p>
 
             <div className="footer-social" aria-label="Follow Trendorabay">
               <a href="https://x.com/Trendorabayke" target="_blank" rel="noopener noreferrer" aria-label="X">𝕏</a>
