@@ -20,7 +20,7 @@ router.post('/forgot-password', redisAuthLimiter, async (req, res, next) => {
     const normalizedEmail = email.trim().toLowerCase();
     
     const [users] = await pool.query(
-      'SELECT * FROM users WHERE email = ?',
+      'SELECT id, email FROM users WHERE email = ?',
       [normalizedEmail]
     );
     
