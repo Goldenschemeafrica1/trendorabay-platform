@@ -121,10 +121,6 @@ const WritersPage = () => {
 
   const faqs = [
     {
-      q: 'Do you pay writers?',
-      a: 'Yes. We pay for every piece we commission. Rates are agreed upfront before you write and payment is made within 14 days of publication. We do not accept unpaid contributions.'
-    },
-    {
       q: 'Do I need to have published work?',
       a: 'Not necessarily. If you\'re a new writer, we\'re happy to look at unpublished samples, a personal blog, a Substack, or a strong first-person pitch that shows your voice.'
     },
