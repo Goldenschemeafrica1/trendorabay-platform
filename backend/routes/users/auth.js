@@ -77,6 +77,7 @@ router.post('/register', redisAuthLimiter, async (req, res, next) => {
     res.status(201).json({
       success: true,
       data: userData,
+      token: token, // Include token in response for cross-domain scenarios
       message: 'User registered successfully'
     });
   } catch (error) {
@@ -162,7 +163,8 @@ router.post('/login', redisAuthLimiter, async (req, res, next) => {
     res.json({
       success: true,
       data: {
-        user: userWithoutPassword
+        user: userWithoutPassword,
+        token: token // Include token in response for cross-domain scenarios
       }
     });
   } catch (error) {

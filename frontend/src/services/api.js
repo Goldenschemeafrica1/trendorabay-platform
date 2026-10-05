@@ -85,7 +85,13 @@ api.interceptors.request.use(
       // }
     }
 
-    // Token is now sent via httpOnly cookie, no need for Authorization header
+    // Token is sent via httpOnly cookie in same-domain scenarios
+    // For cross-domain scenarios, use Authorization header from localStorage
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => {
