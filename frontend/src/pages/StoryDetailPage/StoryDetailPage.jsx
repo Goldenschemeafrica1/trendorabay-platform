@@ -64,9 +64,32 @@ const StoryDetailPage = () => {
   }, [slug]);
 
   const handleLike = async () => {
+    // Debug: Log user object structure
+    console.log('Full user object from Redux:', user);
+    console.log('User ID from user.id:', user?.id);
+    console.log('User ID from user.user?.id:', user?.user?.id);
+    console.log('Is authenticated:', !!user);
+
     const userId = user?.id || user?.user?.id;
+
     if (!userId) {
       console.error('No user ID found. User object:', user);
+      console.error('Keys in user object:', user ? Object.keys(user) : 'user is null/undefined');
+
+      // Check if user data exists in localStorage
+      const storedUser = localStorage.getItem('trendorabay-user');
+      console.log('Stored user in localStorage:', storedUser);
+
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          console.log('Parsed stored user:', parsedUser);
+          console.log('Parsed user ID:', parsedUser?.id || parsedUser?.user?.id);
+        } catch (e) {
+          console.error('Failed to parse stored user:', e);
+        }
+      }
+
       // Save current URL for redirect after login
       localStorage.setItem('redirectAfterLogin', window.location.pathname);
       window.location.href = '/login';
