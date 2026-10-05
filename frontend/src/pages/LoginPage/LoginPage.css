@@ -159,6 +159,17 @@
   text-align: center;
 }
 
+.info-message {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 /* ===== Form Options ===== */
 .form-options {
   display: flex;

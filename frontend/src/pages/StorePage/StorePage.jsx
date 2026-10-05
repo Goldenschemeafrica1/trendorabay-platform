@@ -61,17 +61,18 @@ const StorePage = () => {
   // Load products
   useEffect(() => {
     const fetchProducts = async () => {
+      const startTime = Date.now();
       try {
         const response = await merchService.getProducts();
-        
+
         let products = [];
-        
+
         if (Array.isArray(response)) {
           products = response;
         } else if (response && Array.isArray(response.data)) {
           products = response.data;
         }
-        
+
         // Transform data to match frontend expectations
         const transformed = products.map(product => ({
           ...product,
@@ -80,16 +81,19 @@ const StorePage = () => {
           seller: product.seller || 'Official Trendorabay',
           community: product.community || 'Official'
         }));
-        
+
         setProducts(transformed);
       } catch (error) {
         console.error('Error fetching products:', error);
         setProducts([]);
       } finally {
-        setLoading(false);
+        // Ensure minimum loading time of 800ms
+        const elapsed = Date.now() - startTime;
+        const remainingTime = Math.max(0, 800 - elapsed);
+        setTimeout(() => setLoading(false), remainingTime);
       }
     };
-    
+
     fetchProducts();
   }, []);
 

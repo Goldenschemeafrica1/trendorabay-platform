@@ -5,7 +5,7 @@ import './StoriesPage.css';
 
 const StoriesPage = () => {
   const [stories, setStories] = useState([]);
-  const [categories, setCategories] = useState(['All']);
+  const [categories, setCategories] = useState(['All', 'Business', 'Technology', 'Culture', 'Fashion', 'Lifestyle', 'Sports', 'Entertainment', 'Agriculture', 'Education', 'Health', 'Travel', 'Food', 'Music', 'Art']);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -13,19 +13,19 @@ const StoriesPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const startTime = Date.now();
       try {
         setLoading(true);
-        const [storiesResponse, categoriesResponse] = await Promise.all([
-          api.get('/stories'),
-          api.get('/stories/categories')
-        ]);
+        const storiesResponse = await api.get('/stories');
         setStories(storiesResponse.data.data || []);
-        setCategories(['All', ...(categoriesResponse.data.data || [])]);
       } catch (err) {
         setError('Failed to load stories. Please try again.');
         console.error('Error fetching data:', err);
       } finally {
-        setLoading(false);
+        // Ensure minimum loading time of 800ms
+        const elapsed = Date.now() - startTime;
+        const remainingTime = Math.max(0, 800 - elapsed);
+        setTimeout(() => setLoading(false), remainingTime);
       }
     };
 

@@ -16,6 +16,16 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loginMessage, setLoginMessage] = useState('');
+
+  // Check for login message and redirect URL
+  useEffect(() => {
+    const message = localStorage.getItem('loginMessage');
+    if (message) {
+      setLoginMessage(message);
+      localStorage.removeItem('loginMessage');
+    }
+  }, []);
 
   // Check if user is already logged in and redirect if needed
   useEffect(() => {
@@ -102,6 +112,12 @@ const LoginPage = () => {
           <h1>Login to Your Account</h1>
           <p>Sign in to access your account</p>
         </div>
+
+        {loginMessage && (
+          <div className="info-message">
+            {loginMessage}
+          </div>
+        )}
 
         <form className="login-form" onSubmit={handleSubmit}>
           {errors.general && (
