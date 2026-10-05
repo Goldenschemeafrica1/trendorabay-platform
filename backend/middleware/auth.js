@@ -6,6 +6,7 @@ const auth = (req, res, next) => {
     const token = req.cookies?.token || req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
+      console.log('Auth failed: No token found. Cookies:', Object.keys(req.cookies || {}));
       return res.status(401).json({
         success: false,
         error: 'No authentication token, access denied'
@@ -28,6 +29,7 @@ const auth = (req, res, next) => {
 
     next();
   } catch (error) {
+    console.log('Auth failed: Token verification error:', error.message);
     res.status(401).json({
       success: false,
       error: 'Token is not valid'

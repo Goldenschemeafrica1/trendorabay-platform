@@ -183,13 +183,9 @@ const WritersPage = () => {
                 <h3>Real editorial support</h3>
                 <p>Every piece goes through a proper edit. You'll work with experienced editors who help you sharpen the angle, structure and language.</p>
               </div>
+
               <div className="why-card">
                 <div className="num">02</div>
-                <h3>Paid, always</h3>
-                <p>We pay for every piece we publish. No free labour, no exposure-only. Rates are agreed upfront and paid on publication.</p>
-              </div>
-              <div className="why-card">
-                <div className="num">03</div>
                 <h3>Reach across Africa</h3>
                 <p>Your work reaches over 85,000 readers across 54 countries, and is shared across our social channels and newsletters.</p>
               </div>
@@ -208,21 +204,16 @@ const WritersPage = () => {
               <div className="perks-grid">
                 <div className="perk">
                   <div className="num">01</div>
-                  <strong>Competitive rates</strong>
-                  <span>Paid per piece, with rates agreed upfront based on length and reporting needs.</span>
-                </div>
-                <div className="perk">
-                  <div className="num">02</div>
                   <strong>Your own profile</strong>
                   <span>A public author page on Trendorabay with your bio, photo and every piece you've written.</span>
                 </div>
                 <div className="perk">
-                  <div className="num">03</div>
+                  <div className="num">02</div>
                   <strong>Distribution across Africa</strong>
                   <span>Your work is distributed across our entire community platform — the magazine, newsletter, social channels, and every community space within Trendorabay.</span>
                 </div>
                 <div className="perk">
-                  <div className="num">04</div>
+                  <div className="num">03</div>
                   <strong>Access to the network</strong>
                   <span>Invitations to Trendorabay events, workshops and community gatherings across the continent.</span>
                 </div>
