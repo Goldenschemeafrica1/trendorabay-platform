@@ -3,7 +3,13 @@ import jwt from 'jsonwebtoken';
 const auth = (req, res, next) => {
   try {
     // Try to get token from httpOnly cookie first, fallback to Authorization header
-    const token = req.cookies?.token || req.header('Authorization')?.replace('Bearer ', '');
+    const cookieToken = req.cookies?.token;
+    const headerToken = req.header('Authorization')?.replace('Bearer ', '');
+    const token = cookieToken || headerToken;
+
+    console.log('Auth middleware - Cookie token exists:', !!cookieToken);
+    console.log('Auth middleware - Header token exists:', !!headerToken);
+    console.log('Auth middleware - Origin:', req.header('origin'));
 
     if (!token) {
       console.log('Auth failed: No token found. Cookies:', Object.keys(req.cookies || {}));
@@ -27,6 +33,7 @@ const auth = (req, res, next) => {
     req.userEmail = decoded.email;
     req.userRole = decoded.role;
 
+    console.log('Auth success - User ID:', decoded.userId);
     next();
   } catch (error) {
     console.log('Auth failed: Token verification error:', error.message);

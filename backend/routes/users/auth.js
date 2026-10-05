@@ -66,10 +66,12 @@ router.post('/register', redisAuthLimiter, async (req, res, next) => {
     const token = UserService.generateToken(userData);
 
     const isProduction = process.env.NODE_ENV === 'production';
+    const isCrossDomain = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('localhost');
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? 'strict' : 'lax',
+      sameSite: isCrossDomain ? 'none' : (isProduction ? 'strict' : 'lax'),
       maxAge: 30 * 24 * 60 * 60 * 1000,
       path: '/'
     });
@@ -152,10 +154,12 @@ router.post('/login', redisAuthLimiter, async (req, res, next) => {
     const userWithoutPassword = UserService.sanitizeUser(user);
 
     const isProduction = process.env.NODE_ENV === 'production';
+    const isCrossDomain = process.env.FRONTEND_URL && !process.env.FRONTEND_URL.includes('localhost');
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? 'strict' : 'lax',
+      sameSite: isCrossDomain ? 'none' : (isProduction ? 'strict' : 'lax'),
       maxAge: 30 * 24 * 60 * 60 * 1000,
       path: '/'
     });
