@@ -67,7 +67,6 @@ const StoryDetailPage = () => {
     if (!user?.id) {
       // Save current URL for redirect after login
       localStorage.setItem('redirectAfterLogin', window.location.pathname);
-      localStorage.setItem('loginMessage', 'You must login first to like this story');
       window.location.href = '/login';
       return;
     }
@@ -78,11 +77,17 @@ const StoryDetailPage = () => {
       setLikeCount(res.data.likes);
     } catch (err) {
       console.error('Failed to like story:', err);
+      console.error('Error details:', {
+        status: err.response?.status,
+        message: err.message,
+        data: err.response?.data
+      });
       if (err.response?.status === 401) {
-        // Save current URL for redirect after login
-        localStorage.setItem('redirectAfterLogin', window.location.pathname);
-        localStorage.setItem('loginMessage', 'Your session has expired. Please log in again.');
-        window.location.href = '/login';
+        alert('Authentication error. Please try logging in again.');
+      } else if (err.response?.status === 403) {
+        alert('You do not have permission to like this story.');
+      } else if (err.response?.status === 404) {
+        alert('Story not found.');
       } else {
         alert('Failed to like story. Please try again.');
       }

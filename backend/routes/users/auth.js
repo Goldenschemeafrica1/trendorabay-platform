@@ -63,11 +63,7 @@ router.post('/register', redisAuthLimiter, async (req, res, next) => {
 
     console.log('User created successfully');
 
-    const token = UserService.generateToken({
-      id: userData.id,
-      email: normalizedEmail,
-      role: 'user'
-    });
+    const token = UserService.generateToken(userData);
 
     const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('token', token, {
