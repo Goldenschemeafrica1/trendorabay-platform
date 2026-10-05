@@ -64,7 +64,9 @@ const StoryDetailPage = () => {
   }, [slug]);
 
   const handleLike = async () => {
-    if (!user?.id) {
+    const userId = user?.id || user?.user?.id;
+    if (!userId) {
+      console.error('No user ID found. User object:', user);
       // Save current URL for redirect after login
       localStorage.setItem('redirectAfterLogin', window.location.pathname);
       window.location.href = '/login';
@@ -72,6 +74,10 @@ const StoryDetailPage = () => {
     }
 
     try {
+      console.log('Attempting to like story - User ID:', userId);
+      console.log('Token in localStorage:', !!localStorage.getItem('authToken'));
+      console.log('User object:', user);
+
       const res = await api.post(`/stories/${story.id}/like`);
       setLiked(res.data.liked);
       setLikeCount(res.data.likes);
@@ -83,7 +89,16 @@ const StoryDetailPage = () => {
         data: err.response?.data
       });
       if (err.response?.status === 401) {
-        alert('Authentication error. Please try logging in again.');
+        // Check if token exists
+        const token = localStorage.getItem('authToken');
+        console.error('401 Error - Token exists:', !!token);
+        if (!token) {
+          alert('You are not logged in. Please log in to like stories.');
+          localStorage.setItem('redirectAfterLogin', window.location.pathname);
+          window.location.href = '/login';
+        } else {
+          alert('Authentication error. Please try logging in again.');
+        }
       } else if (err.response?.status === 403) {
         alert('You do not have permission to like this story.');
       } else if (err.response?.status === 404) {

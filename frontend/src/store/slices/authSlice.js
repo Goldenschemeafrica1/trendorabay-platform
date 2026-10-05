@@ -29,8 +29,12 @@ const authSlice = createSlice({
       localStorage.setItem('trendorabay-user', JSON.stringify(userData));
 
       // Store token if provided
-      if (action.payload.token || userData.token) {
-        localStorage.setItem('authToken', action.payload.token || userData.token);
+      const token = action.payload.token || userData.token;
+      if (token) {
+        localStorage.setItem('authToken', token);
+        console.log('Token stored in localStorage on login');
+      } else {
+        console.warn('No token found in login response');
       }
     },
     logout: (state) => {
