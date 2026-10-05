@@ -161,8 +161,9 @@ const LoginPage = () => {
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={isLoading}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
-                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                {showPassword ? '🙈' : '👁️'}
               </button>
             </div>
             {errors.password && (
