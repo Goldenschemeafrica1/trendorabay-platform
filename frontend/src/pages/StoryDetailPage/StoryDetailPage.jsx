@@ -133,11 +133,21 @@ const StoryDetailPage = () => {
   };
 
   const handleShare = async () => {
+    // Strip HTML tags from content for sharing
+    const stripHtml = (html) => {
+      if (!html) return '';
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      return tmp.textContent || tmp.innerText || '';
+    };
+
+    const shareText = story.excerpt || stripHtml(story.content)?.substring(0, 200);
+
     if (navigator.share) {
       try {
         await navigator.share({
           title: story.title,
-          text: story.excerpt || story.content?.substring(0, 200),
+          text: shareText,
           url: window.location.href,
         });
       } catch (err) {
