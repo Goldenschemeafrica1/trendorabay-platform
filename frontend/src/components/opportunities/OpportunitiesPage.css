@@ -435,6 +435,12 @@
   font-size: 14px;
   line-height: 1.65;
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .opp-meta {
@@ -1268,4 +1274,137 @@ body.dark-mode .btn-secondary:hover:not(:disabled) {
 body.dark-mode .submit-note {
   background: #374151;
   color: #9ca3af;
+}
+
+/* ===== DETAIL MODAL ===== */
+.detail-modal {
+  max-width: 650px;
+}
+
+.detail-content {
+  padding: 32px;
+}
+
+.detail-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.detail-meta .opp-type {
+  font-size: 11px;
+  padding: 7px 14px;
+}
+
+.detail-org {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.detail-location {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.detail-description p,
+.detail-salary p,
+.detail-contact p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #555;
+  margin: 0 0 20px;
+}
+
+.detail-description {
+  margin-bottom: 24px;
+}
+
+.detail-salary h3,
+.detail-contact h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-salary {
+  margin-bottom: 20px;
+}
+
+.detail-contact {
+  margin-bottom: 24px;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+/* Dark mode for detail modal */
+body.dark-mode .detail-org {
+  color: #9ca3af;
+}
+
+body.dark-mode .detail-location {
+  border-color: #374151;
+  color: #9ca3af;
+}
+
+body.dark-mode .detail-description h3,
+body.dark-mode .detail-salary h3,
+body.dark-mode .detail-contact h3 {
+  color: #f7f7f5;
+}
+
+body.dark-mode .detail-description p,
+body.dark-mode .detail-salary p,
+body.dark-mode .detail-contact p {
+  color: #9ca3af;
+}
+
+body.dark-mode .detail-actions {
+  border-color: #374151;
+}
+
+/* Detail modal responsive */
+@media (max-width: 768px) {
+  .detail-content {
+    padding: 24px;
+  }
+
+  .detail-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .detail-location {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .detail-actions {
+    flex-direction: column;
+  }
+
+  .detail-actions .btn-primary {
+    width: 100%;
+  }
+
+  .detail-actions .btn-secondary {
+    flex: 1;
+  }
 }

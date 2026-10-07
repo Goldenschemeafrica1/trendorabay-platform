@@ -14,6 +14,8 @@ const OpportunitiesPage = () => {
   const [toast, setToast] = useState({ show: false, message: '' });
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [selectedOpportunity, setSelectedOpportunity] = useState(null);
+  const [loadingDetail, setLoadingDetail] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     organization_name: '',
@@ -74,6 +76,30 @@ const OpportunitiesPage = () => {
     setSaved(newSaved);
   };
 
+  const handleShare = async (opp) => {
+    const shareData = {
+      title: opp.title,
+      text: `${opp.title} - ${opp.short_description || opp.description}`,
+      url: opp.application_url || window.location.href
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        showToast('Shared successfully');
+      } else {
+        // Fallback: copy URL to clipboard
+        await navigator.clipboard.writeText(shareData.url);
+        showToast('Link copied to clipboard');
+      }
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Share failed:', error);
+        showToast('Failed to share');
+      }
+    }
+  };
+
   const getTypeClass = (type) => {
     const typeLower = type?.toLowerCase() || '';
     if (typeLower === 'remote') return 'remote';
@@ -109,6 +135,21 @@ const OpportunitiesPage = () => {
 
   const scrollToListings = () => {
     document.getElementById('listings')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleOpportunityClick = async (opp) => {
+    setLoadingDetail(true);
+    try {
+      const response = await opportunityService.getOpportunityById(opp.id);
+      setSelectedOpportunity(response.data || response);
+    } catch (error) {
+      console.error('Failed to fetch opportunity details:', error);
+      showToast('Failed to load opportunity details');
+      // Fallback to the data we already have
+      setSelectedOpportunity(opp);
+    } finally {
+      setLoadingDetail(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -266,13 +307,21 @@ const OpportunitiesPage = () => {
                 const isSaved = saved.has(opp.title);
                 const typeLabel = opp.remote === 1 ? 'Remote' : (opp.category || 'Job');
                 return (
-                  <article key={opp.id || index} className="opp">
+                  <article
+                    key={opp.id || index}
+                    className="opp"
+                    onClick={() => handleOpportunityClick(opp)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <div className="opp-top">
                       <span className={`opp-type ${getTypeClass(typeLabel)}`}>{typeLabel}</span>
                       <button
                         className={`opp-close ${isSaved ? 'saved' : ''}`}
                         title="Save"
-                        onClick={() => toggleSave(opp.title)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleSave(opp.title);
+                        }}
                       >
                         {isSaved ? '♥' : '♡'}
                       </button>
@@ -281,13 +330,14 @@ const OpportunitiesPage = () => {
                     <p className="opp-org">{opp.organization_name} • {opp.location || opp.country || 'Location'}</p>
                     <p className="opp-desc">{opp.short_description || opp.description}</p>
                     <div className="opp-meta">
-                      <span>💰 {opp.salary || 'Competitive'}</span>
+                      <span>{opp.salary || 'Competitive'}</span>
                       {opp.category && <span>{opp.category}</span>}
                     </div>
                     <div className="opp-actions">
                       <button
                         className="opp-apply"
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           if (opp.application_url) {
                             window.open(opp.application_url, '_blank');
                           } else {
@@ -297,7 +347,15 @@ const OpportunitiesPage = () => {
                       >
                         Apply now
                       </button>
-                      <button className="opp-save" onClick={() => showToast('Share: ' + opp.title)}>↗</button>
+                      <button
+                        className="opp-save"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleShare(opp);
+                        }}
+                      >
+                        ↗
+                      </button>
                     </div>
                   </article>
                 );
@@ -535,6 +593,95 @@ const OpportunitiesPage = () => {
                 Your opportunity will be submitted as a draft. Our editorial team reviews and verifies every submission before publishing.
               </p>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* OPPORTUNITY DETAIL MODAL */}
+      {selectedOpportunity && (
+        <div className="submit-modal-overlay" onClick={() => !loadingDetail && setSelectedOpportunity(null)}>
+          <div className="submit-modal detail-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="submit-modal-header">
+              <h2>{loadingDetail ? 'Loading...' : selectedOpportunity.title}</h2>
+              <button
+                className="close-modal"
+                onClick={() => !loadingDetail && setSelectedOpportunity(null)}
+                disabled={loadingDetail}
+              >
+                ✕
+              </button>
+            </div>
+            {loadingDetail ? (
+              <div className="detail-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+                <div className="loading-spinner" style={{ width: '40px', height: '40px', borderWidth: '3px' }}></div>
+              </div>
+            ) : (
+              <div className="detail-content">
+                <div className="detail-description">
+                  <p>{selectedOpportunity.description || selectedOpportunity.short_description}</p>
+                </div>
+
+                <div className="detail-meta">
+                  <span className={`opp-type ${getTypeClass(selectedOpportunity.remote === 1 ? 'Remote' : (selectedOpportunity.category || 'Job'))}`}>
+                    {selectedOpportunity.remote === 1 ? 'Remote' : (selectedOpportunity.category || 'Job')}
+                  </span>
+                  {selectedOpportunity.organization_name && (
+                    <span className="detail-org">{selectedOpportunity.organization_name}</span>
+                  )}
+                </div>
+
+                <div className="detail-location">
+                  {selectedOpportunity.location && <span>📍 {selectedOpportunity.location}</span>}
+                  {selectedOpportunity.country && <span>🌍 {selectedOpportunity.country}</span>}
+                  {selectedOpportunity.deadline && <span>📅 Deadline: {new Date(selectedOpportunity.deadline).toLocaleDateString()}</span>}
+                </div>
+
+                {selectedOpportunity.salary && (
+                  <div className="detail-salary">
+                    <h3>Compensation</h3>
+                    <p>{selectedOpportunity.salary}</p>
+                  </div>
+                )}
+
+                {selectedOpportunity.contact_name || selectedOpportunity.contact_email && (
+                  <div className="detail-contact">
+                    <h3>Contact</h3>
+                    {selectedOpportunity.contact_name && <p>Name: {selectedOpportunity.contact_name}</p>}
+                    {selectedOpportunity.contact_email && <p>Email: {selectedOpportunity.contact_email}</p>}
+                  </div>
+                )}
+
+                <div className="detail-actions">
+                  {selectedOpportunity.application_url && (
+                    <button
+                      className="btn-primary"
+                      onClick={() => {
+                        window.open(selectedOpportunity.application_url, '_blank');
+                        setSelectedOpportunity(null);
+                      }}
+                    >
+                      Apply Now
+                    </button>
+                  )}
+                  <button
+                    className="btn-secondary"
+                    onClick={() => {
+                      toggleSave(selectedOpportunity.title);
+                    }}
+                  >
+                    {saved.has(selectedOpportunity.title) ? '♥ Saved' : '♡ Save'}
+                  </button>
+                  <button
+                    className="btn-secondary"
+                    onClick={() => {
+                      handleShare(selectedOpportunity);
+                    }}
+                  >
+                    ↗ Share
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

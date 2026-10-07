@@ -27,20 +27,6 @@ const LoginPage = () => {
     }
   }, []);
 
-  // Check if user is already logged in and redirect if needed
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const redirectUrl = localStorage.getItem('redirectAfterLogin');
-      if (redirectUrl) {
-        localStorage.removeItem('redirectAfterLogin');
-        navigate(redirectUrl);
-      } else {
-        navigate('/');
-      }
-    }
-  }, [navigate]);
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({

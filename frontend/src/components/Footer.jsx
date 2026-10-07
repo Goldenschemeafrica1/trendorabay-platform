@@ -76,7 +76,7 @@ const Footer = () => {
             <Link to="/writers">Write for Us</Link>
             <Link to="/advertise">Advertise</Link>
             <Link to="/subscribe">Subscribe</Link>
-            <Link to="/about" onClick={(e) => e.preventDefault()}>About Us</Link>
+            <Link to="/about">About Us</Link>
             <a href="mailto:trendorabay@trendorabay.com">Contact Us</a>
           </div>
 
