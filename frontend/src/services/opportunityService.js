@@ -3,6 +3,12 @@ import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
 
 const opportunityService = {
+  // Get all work types
+  getWorkTypes: async () => {
+    const response = await axios.get(`${API_BASE_URL}/opportunities/work-types`);
+    return response.data;
+  },
+
   // Get all categories
   getCategories: async () => {
     const response = await axios.get(`${API_BASE_URL}/opportunities/categories`);

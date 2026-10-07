@@ -81,7 +81,7 @@
 /* ===== HERO ===== */
 .hero {
   background: #f3f2ee;
-  padding: 80px 0 64px;
+  padding: 100px 0 64px;
 }
 
 .hero-grid {
@@ -269,6 +269,16 @@
   scrollbar-width: none;
   justify-content: flex-start;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 4px;
 }
 
 .category-filters {
@@ -284,11 +294,13 @@
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 11px;
+  padding: 3px 7px;
+  font-size: 7px;
   font-weight: 700;
   flex-shrink: 0;
   transition: 0.2s;
+  position: relative;
+  z-index: 1;
 }
 
 .filter.active,
@@ -395,6 +407,46 @@
 .opp-type.gig {
   background: #f0e6ff;
   color: #5a1aa0;
+}
+
+.opp-type.internship {
+  background: #e0f4ff;
+  color: #0a5a8a;
+}
+
+.opp-type.scholarship {
+  background: #ffe6f0;
+  color: #8a0a4a;
+}
+
+.opp-type.fellowship {
+  background: #f0ffe6;
+  color: #4a8a0a;
+}
+
+.opp-type.competition {
+  background: #fff0e6;
+  color: #8a5a0a;
+}
+
+.opp-type.event {
+  background: #e6f0ff;
+  color: #0a4a8a;
+}
+
+.opp-type.training {
+  background: #f5e6ff;
+  color: #6a0a8a;
+}
+
+.opp-type.course {
+  background: #e6fff0;
+  color: #0a8a4a;
+}
+
+.opp-type.volunteering {
+  background: #ffe6e6;
+  color: #8a0a0a;
 }
 
 .opp-close {
@@ -895,6 +947,46 @@ body.dark-mode .opp-type.job {
 body.dark-mode .opp-type.gig {
   background: #2e1e3f;
   color: #b366ff;
+}
+
+body.dark-mode .opp-type.internship {
+  background: #1e3a5f;
+  color: #7cb3ff;
+}
+
+body.dark-mode .opp-type.scholarship {
+  background: #3f1e2e;
+  color: #ff66b3;
+}
+
+body.dark-mode .opp-type.fellowship {
+  background: #1e3f2e;
+  color: #7cb39c;
+}
+
+body.dark-mode .opp-type.competition {
+  background: #3f2e1e;
+  color: #ffb366;
+}
+
+body.dark-mode .opp-type.event {
+  background: #1e3a5f;
+  color: #66b3ff;
+}
+
+body.dark-mode .opp-type.training {
+  background: #2e1e3f;
+  color: #b366ff;
+}
+
+body.dark-mode .opp-type.course {
+  background: #1e3f2e;
+  color: #66b39c;
+}
+
+body.dark-mode .opp-type.volunteering {
+  background: #3f1e1e;
+  color: #ff6666;
 }
 
 body.dark-mode .opp-close {

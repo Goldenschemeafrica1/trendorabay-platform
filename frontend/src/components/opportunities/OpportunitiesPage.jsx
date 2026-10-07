@@ -1,25 +1,27 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import opportunityService from '../../services/opportunityService';
 import './OpportunitiesPage.css';
 
 const OpportunitiesPage = () => {
+  const navigate = useNavigate();
   const [opportunities, setOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
   const [activeCategory, setActiveCategory] = useState('All');
+  const [workTypes, setWorkTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [saved, setSaved] = useState(new Set());
   const [toast, setToast] = useState({ show: false, message: '' });
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [selectedOpportunity, setSelectedOpportunity] = useState(null);
-  const [loadingDetail, setLoadingDetail] = useState(false);
+  const [filters, setFilters] = useState(['All', 'Jobs', 'Internships', 'Scholarships', 'Grants', 'Fellowships', 'Competitions', 'Events', 'Training', 'Courses', 'Volunteering']);
   const [formData, setFormData] = useState({
     title: '',
     organization_name: '',
     category: '',
+    work_type: '',
     opportunity_type: 'free',
     application_url: '',
     deadline: '',
@@ -32,22 +34,29 @@ const OpportunitiesPage = () => {
     contact_name: ''
   });
 
-  const filters = ['All', 'Job', 'Gig', 'Grant', 'Remote'];
-
   useEffect(() => {
     const fetchData = async () => {
       const startTime = Date.now();
       try {
-        const [oppResponse, catResponse] = await Promise.all([
+        const [oppResponse, workTypesResponse, categoriesResponse] = await Promise.all([
           opportunityService.getOpportunities({ limit: 50 }),
+          opportunityService.getWorkTypes(),
           opportunityService.getCategories()
         ]);
         setOpportunities(oppResponse.data || []);
-        setCategories(catResponse.data || []);
+        const workTypes = workTypesResponse.data || [];
+        const categories = categoriesResponse.data || [];
+        setWorkTypes(workTypes);
+        setCategories(categories);
+        // Set filters from API response with 'All' prepended
+        setFilters(['All', ...workTypes]);
       } catch (error) {
         console.error('Failed to fetch data:', error);
         setOpportunities([]);
+        setWorkTypes([]);
         setCategories([]);
+        // Fallback to default work types if API fails
+        setFilters(['All', 'Jobs', 'Internships', 'Scholarships', 'Grants', 'Fellowships', 'Competitions', 'Events', 'Training', 'Courses', 'Volunteering']);
       } finally {
         // Ensure minimum loading time of 800ms
         const elapsed = Date.now() - startTime;
@@ -76,46 +85,30 @@ const OpportunitiesPage = () => {
     setSaved(newSaved);
   };
 
-  const handleShare = async (opp) => {
-    const shareData = {
-      title: opp.title,
-      text: `${opp.title} - ${opp.short_description || opp.description}`,
-      url: opp.application_url || window.location.href
-    };
-
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-        showToast('Shared successfully');
-      } else {
-        // Fallback: copy URL to clipboard
-        await navigator.clipboard.writeText(shareData.url);
-        showToast('Link copied to clipboard');
-      }
-    } catch (error) {
-      if (error.name !== 'AbortError') {
-        console.error('Share failed:', error);
-        showToast('Failed to share');
-      }
-    }
-  };
-
   const getTypeClass = (type) => {
     const typeLower = type?.toLowerCase() || '';
-    if (typeLower === 'remote') return 'remote';
-    if (typeLower === 'grant') return 'grant';
-    if (typeLower === 'job') return 'job';
-    if (typeLower === 'gig') return 'gig';
+    if (typeLower === 'jobs' || typeLower === 'job') return 'job';
+    if (typeLower === 'internships' || typeLower === 'internship') return 'internship';
+    if (typeLower === 'scholarships' || typeLower === 'scholarship') return 'scholarship';
+    if (typeLower === 'grants' || typeLower === 'grant') return 'grant';
+    if (typeLower === 'fellowships' || typeLower === 'fellowship') return 'fellowship';
+    if (typeLower === 'competitions' || typeLower === 'competition') return 'competition';
+    if (typeLower === 'events' || typeLower === 'event') return 'event';
+    if (typeLower === 'training') return 'training';
+    if (typeLower === 'courses' || typeLower === 'course') return 'course';
+    if (typeLower === 'volunteering' || typeLower === 'volunteer') return 'volunteering';
     return '';
   };
 
   const getFilteredOpportunities = () => {
     const query = searchQuery.toLowerCase().trim();
     return opportunities.filter(o => {
-      const matchesFilter = activeFilter === 'All' ||
-        (activeFilter === 'Remote' && o.remote === 1) ||
+      // Filter by work type (Jobs, Internships, etc.)
+      const matchesWorkType = activeFilter === 'All' ||
+        o.work_type?.toLowerCase() === activeFilter.toLowerCase() ||
         o.category?.toLowerCase() === activeFilter.toLowerCase();
 
+      // Filter by category (industry/sector)
       const matchesCategory = activeCategory === 'All' ||
         o.category === activeCategory;
 
@@ -129,7 +122,7 @@ const OpportunitiesPage = () => {
       ).toLowerCase();
 
       const matchesQuery = !query || haystack.includes(query);
-      return matchesFilter && matchesCategory && matchesQuery;
+      return matchesWorkType && matchesCategory && matchesQuery;
     });
   };
 
@@ -137,19 +130,8 @@ const OpportunitiesPage = () => {
     document.getElementById('listings')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleOpportunityClick = async (opp) => {
-    setLoadingDetail(true);
-    try {
-      const response = await opportunityService.getOpportunityById(opp.id);
-      setSelectedOpportunity(response.data || response);
-    } catch (error) {
-      console.error('Failed to fetch opportunity details:', error);
-      showToast('Failed to load opportunity details');
-      // Fallback to the data we already have
-      setSelectedOpportunity(opp);
-    } finally {
-      setLoadingDetail(false);
-    }
+  const handleOpportunityClick = (opp) => {
+    navigate(`/opportunities/${opp.id}`);
   };
 
   const handleInputChange = (e) => {
@@ -175,7 +157,9 @@ const OpportunitiesPage = () => {
         ...formData,
         slug,
         status: 'draft',
-        featured: false
+        featured: false,
+        // Map work_type to category for backward compatibility
+        category: formData.work_type || formData.category
       };
 
       await opportunityService.createOpportunity(opportunityData);
@@ -185,6 +169,7 @@ const OpportunitiesPage = () => {
         title: '',
         organization_name: '',
         category: '',
+        work_type: '',
         opportunity_type: 'free',
         application_url: '',
         deadline: '',
@@ -227,7 +212,7 @@ const OpportunitiesPage = () => {
           <div>
             <div className="eyebrow">Opportunities</div>
             <h1>Find work. Fund ideas. <em>Build your future.</em></h1>
-            <p>Jobs, gigs, grants and remote roles from across Africa's creative, agricultural, tech and business communities. Curated for creators, entrepreneurs and community members on Trendorabay.</p>
+            <p>Jobs, internships, scholarships, grants, fellowships, competitions, events, training, courses and volunteering opportunities from across Africa's creative, agricultural, tech and business communities. Curated for creators, entrepreneurs and community members on Trendorabay.</p>
             <div className="hero-cta">
               <button className="dark-btn" onClick={scrollToListings}>Browse opportunities</button>
               <button className="light-btn" onClick={() => setShowSubmitForm(true)}>Post an opportunity</button>
@@ -250,8 +235,9 @@ const OpportunitiesPage = () => {
             <p>Filter by type, search by keyword, and apply directly. New listings added every week.</p>
           </div>
 
-          {/* Filters */}
+          {/* Work Type Filters */}
           <div className="filters">
+            <span className="filter-label">Work Type:</span>
             {filters.map(filter => (
               <button
                 key={filter}
@@ -266,6 +252,7 @@ const OpportunitiesPage = () => {
           {/* Category Filters */}
           {categories.length > 0 && (
             <div className="filters category-filters">
+              <span className="filter-label">Category:</span>
               <button
                 className={`filter ${activeCategory === 'All' ? 'active' : ''}`}
                 onClick={() => setActiveCategory('All')}
@@ -292,7 +279,9 @@ const OpportunitiesPage = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button onClick={() => {}}>Search</button>
+            {searchQuery && (
+              <button onClick={() => setSearchQuery('')}>✕</button>
+            )}
           </div>
 
           {/* Grid */}
@@ -305,7 +294,7 @@ const OpportunitiesPage = () => {
             ) : (
               filtered.map((opp, index) => {
                 const isSaved = saved.has(opp.title);
-                const typeLabel = opp.remote === 1 ? 'Remote' : (opp.category || 'Job');
+                const typeLabel = opp.work_type || opp.category || 'Jobs';
                 return (
                   <article
                     key={opp.id || index}
@@ -331,7 +320,7 @@ const OpportunitiesPage = () => {
                     <p className="opp-desc">{opp.short_description || opp.description}</p>
                     <div className="opp-meta">
                       <span>{opp.salary || 'Competitive'}</span>
-                      {opp.category && <span>{opp.category}</span>}
+                      {opp.remote === 1 && <span>Remote</span>}
                     </div>
                     <div className="opp-actions">
                       <button
@@ -351,7 +340,7 @@ const OpportunitiesPage = () => {
                         className="opp-save"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleShare(opp);
+                          showToast('Share: ' + opp.title);
                         }}
                       >
                         ↗
@@ -423,25 +412,25 @@ const OpportunitiesPage = () => {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label>Category *</label>
+                  <label>Work Type *</label>
                   <select
-                    name="category"
-                    value={formData.category}
+                    name="work_type"
+                    value={formData.work_type}
                     onChange={handleInputChange}
                     required
                     disabled={submitting}
                   >
-                    <option value="">Select category</option>
-                    <option value="Job">Job</option>
-                    <option value="Grant">Grant</option>
-                    <option value="Scholarship">Scholarship</option>
-                    <option value="Competition">Competition</option>
-                    <option value="Fellowship">Fellowship</option>
-                    <option value="Event">Event</option>
-                    <option value="Funding programme">Funding programme</option>
-                    <option value="Internship">Internship</option>
+                    <option value="">Select work type</option>
+                    <option value="Jobs">Jobs</option>
+                    <option value="Internships">Internships</option>
+                    <option value="Scholarships">Scholarships</option>
+                    <option value="Grants">Grants</option>
+                    <option value="Fellowships">Fellowships</option>
+                    <option value="Competitions">Competitions</option>
+                    <option value="Events">Events</option>
                     <option value="Training">Training</option>
-                    <option value="Accelerator">Accelerator</option>
+                    <option value="Courses">Courses</option>
+                    <option value="Volunteering">Volunteering</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -593,95 +582,6 @@ const OpportunitiesPage = () => {
                 Your opportunity will be submitted as a draft. Our editorial team reviews and verifies every submission before publishing.
               </p>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* OPPORTUNITY DETAIL MODAL */}
-      {selectedOpportunity && (
-        <div className="submit-modal-overlay" onClick={() => !loadingDetail && setSelectedOpportunity(null)}>
-          <div className="submit-modal detail-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="submit-modal-header">
-              <h2>{loadingDetail ? 'Loading...' : selectedOpportunity.title}</h2>
-              <button
-                className="close-modal"
-                onClick={() => !loadingDetail && setSelectedOpportunity(null)}
-                disabled={loadingDetail}
-              >
-                ✕
-              </button>
-            </div>
-            {loadingDetail ? (
-              <div className="detail-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-                <div className="loading-spinner" style={{ width: '40px', height: '40px', borderWidth: '3px' }}></div>
-              </div>
-            ) : (
-              <div className="detail-content">
-                <div className="detail-description">
-                  <p>{selectedOpportunity.description || selectedOpportunity.short_description}</p>
-                </div>
-
-                <div className="detail-meta">
-                  <span className={`opp-type ${getTypeClass(selectedOpportunity.remote === 1 ? 'Remote' : (selectedOpportunity.category || 'Job'))}`}>
-                    {selectedOpportunity.remote === 1 ? 'Remote' : (selectedOpportunity.category || 'Job')}
-                  </span>
-                  {selectedOpportunity.organization_name && (
-                    <span className="detail-org">{selectedOpportunity.organization_name}</span>
-                  )}
-                </div>
-
-                <div className="detail-location">
-                  {selectedOpportunity.location && <span>📍 {selectedOpportunity.location}</span>}
-                  {selectedOpportunity.country && <span>🌍 {selectedOpportunity.country}</span>}
-                  {selectedOpportunity.deadline && <span>📅 Deadline: {new Date(selectedOpportunity.deadline).toLocaleDateString()}</span>}
-                </div>
-
-                {selectedOpportunity.salary && (
-                  <div className="detail-salary">
-                    <h3>Compensation</h3>
-                    <p>{selectedOpportunity.salary}</p>
-                  </div>
-                )}
-
-                {selectedOpportunity.contact_name || selectedOpportunity.contact_email && (
-                  <div className="detail-contact">
-                    <h3>Contact</h3>
-                    {selectedOpportunity.contact_name && <p>Name: {selectedOpportunity.contact_name}</p>}
-                    {selectedOpportunity.contact_email && <p>Email: {selectedOpportunity.contact_email}</p>}
-                  </div>
-                )}
-
-                <div className="detail-actions">
-                  {selectedOpportunity.application_url && (
-                    <button
-                      className="btn-primary"
-                      onClick={() => {
-                        window.open(selectedOpportunity.application_url, '_blank');
-                        setSelectedOpportunity(null);
-                      }}
-                    >
-                      Apply Now
-                    </button>
-                  )}
-                  <button
-                    className="btn-secondary"
-                    onClick={() => {
-                      toggleSave(selectedOpportunity.title);
-                    }}
-                  >
-                    {saved.has(selectedOpportunity.title) ? '♥ Saved' : '♡ Save'}
-                  </button>
-                  <button
-                    className="btn-secondary"
-                    onClick={() => {
-                      handleShare(selectedOpportunity);
-                    }}
-                  >
-                    ↗ Share
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}

@@ -29,7 +29,29 @@ const getImageUrl = (url) => {
   return url;
 };
 
-// Get all categories
+// Get all work types
+router.get('/work-types', async (req, res, next) => {
+  try {
+    // Return predefined work types
+    const workTypes = [
+      'Jobs',
+      'Internships',
+      'Scholarships',
+      'Grants',
+      'Fellowships',
+      'Competitions',
+      'Events',
+      'Training',
+      'Courses',
+      'Volunteering'
+    ];
+    res.json({ success: true, data: workTypes });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get all categories (industry/sector categories)
 router.get('/categories', async (req, res, next) => {
   try {
     const [rows] = await pool.query(

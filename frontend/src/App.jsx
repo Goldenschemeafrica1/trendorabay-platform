@@ -48,6 +48,7 @@ import StoriesPage from './pages/StoriesPage/StoriesPage';
 import StoryDetailPage from './pages/StoryDetailPage/StoryDetailPage';
 import MusicPage from './pages/MusicPage/MusicPage';
 import CommunityPage from './pages/CommunityPage/CommunityPage';
+import OpportunityDetailPage from './pages/OpportunityDetailPage/OpportunityDetailPage';
 
 function App() {
   const location = useLocation();
@@ -201,8 +202,8 @@ function App() {
         toastClassName="african-toast"
       />
 
-      {/* Main Header - Hidden on login, signup, terms, privacy, and forgot-password pages */}
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/forgot-password' && <Header />}
+      {/* Main Header - Hidden on login, signup, terms, privacy, forgot-password, and opportunity detail pages */}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/forgot-password' && !location.pathname.startsWith('/opportunities/') && <Header />}
 
 
 
@@ -228,6 +229,7 @@ function App() {
         <Route path="/communities" element={<CommunityPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/opportunities" element={<OpportunitiesPage />} />
+        <Route path="/opportunities/:id" element={<OpportunityDetailPage />} />
         <Route path="/community/music" element={<MusicPage />} />
 
         {/* Information Pages */}
@@ -271,8 +273,8 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, magazines, writers, partner, advertise, events, podcast detail, author detail, terms, privacy, search, and forgot-password pages */}
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/magazines') && location.pathname !== '/writers' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && location.pathname !== '/community/music' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && <Footer />}
+      {/* Footer - Hidden on login, signup, settings, cart, orders, contributors, stories, magazines, writers, partner, advertise, events, podcast detail, author detail, terms, privacy, search, forgot-password, and opportunity detail pages */}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/settings' && location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.match(/^\/community\/contributors/) && !location.pathname.startsWith('/stories') && !location.pathname.startsWith('/magazines') && location.pathname !== '/writers' && location.pathname !== '/partner' && location.pathname !== '/partner-with-us' && location.pathname !== '/advertise' && location.pathname !== '/events' && location.pathname !== '/community/music' && !location.pathname.match(/^\/podcast\/\d+/) && !location.pathname.startsWith('/author') && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/search' && location.pathname !== '/forgot-password' && !location.pathname.startsWith('/opportunities/') && <Footer />}
 
       {/* Quick View Modal (can be added here) */}
       {/* <QuickViewModal /> */}

@@ -1,0 +1,376 @@
+.opportunity-detail-page {
+  padding: 40px 0;
+  min-height: 100vh;
+}
+
+.opportunity-detail-loading,
+.opportunity-detail-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 20px;
+}
+
+.loading-spinner {
+  width: 56px;
+  height: 56px;
+  border: 4px solid #eaeef2;
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.back-button {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 30px;
+}
+
+.back-button:hover {
+  background: #f4f4f4;
+}
+
+.detail-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.opp-type {
+  display: inline-block;
+  background: #f3f2ee;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #555;
+}
+
+.opp-type.remote {
+  background: #e6f0ff;
+  color: #1a4fa0;
+}
+
+.opp-type.job {
+  background: #fff2e0;
+  color: #a05a00;
+}
+
+.opp-type.internship {
+  background: #e0f4ff;
+  color: #0a5a8a;
+}
+
+.opp-type.scholarship {
+  background: #ffe6f0;
+  color: #8a0a4a;
+}
+
+.opp-type.grant {
+  background: #e6f5ea;
+  color: #1a7a3c;
+}
+
+.opp-type.fellowship {
+  background: #f0ffe6;
+  color: #4a8a0a;
+}
+
+.opp-type.competition {
+  background: #fff0e6;
+  color: #8a5a0a;
+}
+
+.opp-type.event {
+  background: #e6f0ff;
+  color: #0a4a8a;
+}
+
+.opp-type.training {
+  background: #f5e6ff;
+  color: #6a0a8a;
+}
+
+.opp-type.course {
+  background: #e6fff0;
+  color: #0a8a4a;
+}
+
+.opp-type.volunteering {
+  background: #ffe6e6;
+  color: #8a0a0a;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.action-button {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 700;
+  font-size: 11px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.action-button:hover {
+  background: #f4f4f4;
+}
+
+.detail-title {
+  font-size: clamp(28px, 5vw, 48px);
+  letter-spacing: -0.04em;
+  margin: 0 0 20px;
+  line-height: 1.1;
+}
+
+.detail-meta {
+  margin-bottom: 30px;
+}
+
+.detail-org {
+  font-size: 16px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.detail-location {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 14px;
+  color: #666;
+}
+
+.detail-description,
+.detail-salary,
+.detail-section,
+.detail-contact {
+  margin-bottom: 30px;
+}
+
+.detail-description h3,
+.detail-salary h3,
+.detail-section h3,
+.detail-contact h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: #111;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-description p,
+.detail-salary p,
+.detail-section p,
+.detail-contact p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #555;
+  margin: 0;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 30px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.btn-primary {
+  border: 0;
+  background: #111;
+  color: #fff;
+  border-radius: 999px;
+  padding: 14px 28px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .opportunity-detail-page {
+    padding: 30px 0;
+  }
+
+  .detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .action-button {
+    flex: 1;
+  }
+
+  .detail-location {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .detail-actions {
+    flex-direction: column;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+}
+
+/* Dark mode */
+body.dark-mode .opportunity-detail-page {
+  background: #111318;
+}
+
+body.dark-mode .back-button {
+  background: #1f2937;
+  border-color: #374151;
+  color: #f7f7f5;
+}
+
+body.dark-mode .back-button:hover {
+  background: #4b5563;
+}
+
+body.dark-mode .opp-type {
+  background: #374151;
+  color: #9ca3af;
+}
+
+body.dark-mode .opp-type.remote {
+  background: #1e3a5f;
+  color: #7cb3ff;
+}
+
+body.dark-mode .opp-type.job {
+  background: #3f2e1e;
+  color: #ffb366;
+}
+
+body.dark-mode .opp-type.internship {
+  background: #1e3a5f;
+  color: #7cb3ff;
+}
+
+body.dark-mode .opp-type.scholarship {
+  background: #3f1e2e;
+  color: #ff66b3;
+}
+
+body.dark-mode .opp-type.grant {
+  background: #1e3f2e;
+  color: #7cb39c;
+}
+
+body.dark-mode .opp-type.fellowship {
+  background: #1e3f2e;
+  color: #7cb39c;
+}
+
+body.dark-mode .opp-type.competition {
+  background: #3f2e1e;
+  color: #ffb366;
+}
+
+body.dark-mode .opp-type.event {
+  background: #1e3a5f;
+  color: #66b3ff;
+}
+
+body.dark-mode .opp-type.training {
+  background: #2e1e3f;
+  color: #b366ff;
+}
+
+body.dark-mode .opp-type.course {
+  background: #1e3f2e;
+  color: #66b39c;
+}
+
+body.dark-mode .opp-type.volunteering {
+  background: #3f1e1e;
+  color: #ff6666;
+}
+
+body.dark-mode .action-button {
+  background: #1f2937;
+  border-color: #374151;
+  color: #f7f7f5;
+}
+
+body.dark-mode .action-button:hover {
+  background: #4b5563;
+}
+
+body.dark-mode .detail-title {
+  color: #f7f7f5;
+}
+
+body.dark-mode .detail-org {
+  color: #9ca3af;
+}
+
+body.dark-mode .detail-location {
+  color: #9ca3af;
+}
+
+body.dark-mode .detail-description h3,
+body.dark-mode .detail-salary h3,
+body.dark-mode .detail-section h3,
+body.dark-mode .detail-contact h3 {
+  color: #f7f7f5;
+}
+
+body.dark-mode .detail-description p,
+body.dark-mode .detail-salary p,
+body.dark-mode .detail-section p,
+body.dark-mode .detail-contact p {
+  color: #9ca3af;
+}
+
+body.dark-mode .detail-actions {
+  border-color: #374151;
+}
+
+body.dark-mode .btn-primary {
+  background: #e6ff3f;
+  color: #111;
+}
+
+body.dark-mode .btn-primary:hover {
+  opacity: 0.9;
+}
