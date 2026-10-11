@@ -119,7 +119,7 @@ export const StoryService = {
        FROM stories s
        LEFT JOIN authors a ON s.author_id = a.id
        LEFT JOIN categories c ON s.category_id = c.id
-       WHERE s.status = 'published' AND (s.display_section IS NULL OR s.display_section = '')
+       WHERE s.status = 'published' AND s.display_section IS NULL
        ORDER BY s.created_at DESC
        LIMIT ?`,
       [limit]
