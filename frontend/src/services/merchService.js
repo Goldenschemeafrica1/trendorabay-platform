@@ -11,10 +11,14 @@ const merchService = {
     if (filters.page) params.append('page', filters.page);
     if (filters.limit) params.append('limit', filters.limit);
     if (filters.search) params.append('search', filters.search);
-    
-    console.log('merchService.getProducts calling API with params:', params.toString());
+
+    if (import.meta.env.DEV) {
+      console.log('merchService.getProducts calling API with params:', params.toString());
+    }
     const response = await apiRequest.get(`/products?${params.toString()}`);
-    console.log('merchService.getProducts received response:', response);
+    if (import.meta.env.DEV) {
+      console.log('merchService.getProducts received response:', response);
+    }
     return response.data;
   },
 

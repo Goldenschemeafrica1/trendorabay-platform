@@ -36,7 +36,9 @@ const CommunityPage = () => {
   const fetchUserJoinedCommunities = async (userId) => {
     // Prevent duplicate calls
     if (hasFetchedJoinedCommunities.current) {
-      console.log('Already fetched joined communities, skipping');
+      if (import.meta.env.DEV) {
+        console.log('Already fetched joined communities, skipping');
+      }
       return;
     }
 
@@ -57,10 +59,14 @@ const CommunityPage = () => {
         localStorage.setItem('joinedCommunities', JSON.stringify([...newSet]));
         setJoinedCommunities(newSet);
         hasFetchedJoinedCommunities.current = true;
-        console.log('Fetched joined communities from database:', communityIds);
+        if (import.meta.env.DEV) {
+          console.log('Fetched joined communities from database:', communityIds);
+        }
       }
     } catch (error) {
-      console.error('Error fetching joined communities:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error fetching joined communities:', error);
+      }
     }
   };
 
@@ -282,7 +288,9 @@ const CommunityPage = () => {
         const response = await fetch(`${API_BASE}/communities/${currentCommunity.dbId}/members`);
         const data = await response.json();
 
-        console.log('Members API response:', data);
+        if (import.meta.env.DEV) {
+          console.log('Members API response:', data);
+        }
 
         if (data.success && data.data) {
           // Transform API data to match expected format
@@ -293,13 +301,19 @@ const CommunityPage = () => {
             location: m.location || 'Unknown',
             posts: m.post_count || 0
           }));
-          console.log('Transformed members:', transformed);
+          if (import.meta.env.DEV) {
+            console.log('Transformed members:', transformed);
+          }
           setMembers(transformed);
         } else {
-          console.log('No members data or success false');
+          if (import.meta.env.DEV) {
+            console.log('No members data or success false');
+          }
         }
       } catch (error) {
-        console.error('Error fetching members:', error);
+        if (import.meta.env.DEV) {
+          console.error('Error fetching members:', error);
+        }
         // Keep existing members if fetch fails
       }
     };
@@ -464,7 +478,9 @@ const CommunityPage = () => {
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user?.id;
 
-    console.log('Joining community with user:', user, 'userId:', userId);
+    if (import.meta.env.DEV) {
+      console.log('Joining community with user:', user, 'userId:', userId);
+    }
 
     if (!userId) {
       showToast('Please log in to join a community');
@@ -483,7 +499,9 @@ const CommunityPage = () => {
       });
 
       const result = await response.json();
-      console.log('Join API response:', result);
+      if (import.meta.env.DEV) {
+        console.log('Join API response:', result);
+      }
 
       if (response.ok && result.success) {
         const newJoined = new Set(joinedCommunities);
@@ -495,7 +513,9 @@ const CommunityPage = () => {
         if (currentCommunity && currentCommunity.dbId === dbId) {
           const membersResponse = await fetch(`${API_BASE}/communities/${dbId}/members`);
           const membersData = await membersResponse.json();
-          console.log('Members after join:', membersData);
+          if (import.meta.env.DEV) {
+            console.log('Members after join:', membersData);
+          }
           if (membersData.success && membersData.data) {
             const transformed = membersData.data.map(m => ({
               name: m.username || `${m.first_name} ${m.last_name}`.trim(),
@@ -529,7 +549,9 @@ const CommunityPage = () => {
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user?.id;
 
-    console.log('Toggle join with user:', user, 'userId:', userId);
+    if (import.meta.env.DEV) {
+      console.log('Toggle join with user:', user, 'userId:', userId);
+    }
 
     if (!userId) {
       showToast('Please log in to join a community');
@@ -659,8 +681,10 @@ const CommunityPage = () => {
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user?.id;
 
-    console.log('Submitting comment with user:', user, 'userId:', userId, 'postId:', postId, 'text:', text);
-    console.log('Current posts in state:', posts.map(p => ({ id: p.id, author: p.author })));
+    if (import.meta.env.DEV) {
+      console.log('Submitting comment with user:', user, 'userId:', userId, 'postId:', postId, 'text:', text);
+      console.log('Current posts in state:', posts.map(p => ({ id: p.id, author: p.author })));
+    }
 
     if (!userId) {
       showToast('Please log in to comment');
@@ -680,7 +704,9 @@ const CommunityPage = () => {
       });
 
       const result = await response.json();
-      console.log('Comment API response:', JSON.stringify(result, null, 2));
+      if (import.meta.env.DEV) {
+        console.log('Comment API response:', JSON.stringify(result, null, 2));
+      }
 
       if (response.ok && result.success) {
         // Refetch comments for this post to get the latest from database
@@ -787,7 +813,9 @@ const CommunityPage = () => {
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user?.id;
 
-    console.log('Submitting post with user:', user, 'userId:', userId);
+    if (import.meta.env.DEV) {
+      console.log('Submitting post with user:', user, 'userId:', userId);
+    }
 
     if (!userId) {
       showToast('Please log in to post');
@@ -819,7 +847,9 @@ const CommunityPage = () => {
       });
 
       const result = await response.json();
-      console.log('Post API response:', result);
+      if (import.meta.env.DEV) {
+        console.log('Post API response:', result);
+      }
 
       if (response.ok && result.success) {
         const newPost = {
@@ -850,8 +880,10 @@ const CommunityPage = () => {
   };
 
   const submitDiscussion = async () => {
-    console.log('submitDiscussion called - isJoined:', isJoined, 'currentCommunity:', currentCommunity);
-    
+    if (import.meta.env.DEV) {
+      console.log('submitDiscussion called - isJoined:', isJoined, 'currentCommunity:', currentCommunity);
+    }
+
     if (!discTitle.trim() || !discBody.trim()) { showToast('Please fill in all fields.'); return; }
     
     // Get user data from localStorage
@@ -859,7 +891,9 @@ const CommunityPage = () => {
     const user = userStr ? JSON.parse(userStr) : null;
     const userId = user?.id;
 
-    console.log('User data:', user, 'userId:', userId);
+    if (import.meta.env.DEV) {
+      console.log('User data:', user, 'userId:', userId);
+    }
 
     if (!userId) {
       showToast('Please log in to post discussions');
@@ -892,7 +926,9 @@ const CommunityPage = () => {
       });
 
       const result = await response.json();
-      console.log('Discussion API response:', result);
+      if (import.meta.env.DEV) {
+        console.log('Discussion API response:', result);
+      }
 
       if (response.ok && result.success) {
         const newDiscussion = {
@@ -1210,7 +1246,9 @@ const CommunityPage = () => {
           </div>
           {isJoined ? (
             <button className="btn btn-dark btn-sm" onClick={() => {
-              console.log('Start discussion clicked, showDiscussionModal:', showDiscussionModal);
+              if (import.meta.env.DEV) {
+                console.log('Start discussion clicked, showDiscussionModal:', showDiscussionModal);
+              }
               setShowDiscussionModal(true);
             }}>
               <svg viewBox="0 0 24 24" style={{width:'14px',height:'14px',stroke:'currentColor',fill:'none',strokeWidth:'2',strokeLinecap:'round',strokeLinejoin:'round'}}><path d="M12 5v14M5 12h14"/></svg>

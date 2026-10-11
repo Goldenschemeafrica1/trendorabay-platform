@@ -65,28 +65,38 @@ const StoryDetailPage = () => {
 
   const handleLike = async () => {
     // Debug: Log user object structure
-    console.log('Full user object from Redux:', user);
-    console.log('User ID from user.id:', user?.id);
-    console.log('User ID from user.user?.id:', user?.user?.id);
-    console.log('Is authenticated:', !!user);
+    if (import.meta.env.DEV) {
+      console.log('Full user object from Redux:', user);
+      console.log('User ID from user.id:', user?.id);
+      console.log('User ID from user.user?.id:', user?.user?.id);
+      console.log('Is authenticated:', !!user);
+    }
 
     const userId = user?.id || user?.user?.id;
 
     if (!userId) {
-      console.error('No user ID found. User object:', user);
-      console.error('Keys in user object:', user ? Object.keys(user) : 'user is null/undefined');
+      if (import.meta.env.DEV) {
+        console.error('No user ID found. User object:', user);
+        console.error('Keys in user object:', user ? Object.keys(user) : 'user is null/undefined');
 
-      // Check if user data exists in localStorage
-      const storedUser = localStorage.getItem('trendorabay-user');
-      console.log('Stored user in localStorage:', storedUser);
+        // Check if user data exists in localStorage
+        const storedUser = localStorage.getItem('trendorabay-user');
+        if (import.meta.env.DEV) {
+          console.log('Stored user in localStorage:', storedUser);
+        }
+      }
 
       if (storedUser) {
         try {
           const parsedUser = JSON.parse(storedUser);
-          console.log('Parsed stored user:', parsedUser);
-          console.log('Parsed user ID:', parsedUser?.id || parsedUser?.user?.id);
+          if (import.meta.env.DEV) {
+            console.log('Parsed stored user:', parsedUser);
+            console.log('Parsed user ID:', parsedUser?.id || parsedUser?.user?.id);
+          }
         } catch (e) {
-          console.error('Failed to parse stored user:', e);
+          if (import.meta.env.DEV) {
+            console.error('Failed to parse stored user:', e);
+          }
         }
       }
 
@@ -97,20 +107,24 @@ const StoryDetailPage = () => {
     }
 
     try {
-      console.log('Attempting to like story - User ID:', userId);
-      console.log('Token in localStorage:', !!localStorage.getItem('authToken'));
-      console.log('User object:', user);
+      if (import.meta.env.DEV) {
+        console.log('Attempting to like story - User ID:', userId);
+        console.log('Token in localStorage:', !!localStorage.getItem('authToken'));
+        console.log('User object:', user);
+      }
 
       const res = await api.post(`/stories/${story.id}/like`);
       setLiked(res.data.liked);
       setLikeCount(res.data.likes);
     } catch (err) {
-      console.error('Failed to like story:', err);
-      console.error('Error details:', {
-        status: err.response?.status,
-        message: err.message,
-        data: err.response?.data
-      });
+      if (import.meta.env.DEV) {
+        console.error('Failed to like story:', err);
+        console.error('Error details:', {
+          status: err.response?.status,
+          message: err.message,
+          data: err.response?.data
+        });
+      }
       if (err.response?.status === 401) {
         // Check if token exists
         const token = localStorage.getItem('authToken');

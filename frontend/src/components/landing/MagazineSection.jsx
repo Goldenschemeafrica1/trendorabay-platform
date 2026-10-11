@@ -33,7 +33,9 @@ const MagazineSection = ({ magazines }) => {
 
   const handleMagazineClick = (magazine) => {
     const slug = magazine.slug || String(magazine.id);
-    console.log('Navigating to magazine:', slug);
+    if (import.meta.env.DEV) {
+      console.log('Navigating to magazine:', slug);
+    }
     navigate(`/magazines/${slug}`);
   };
 

@@ -32,9 +32,6 @@ const authSlice = createSlice({
       const token = action.payload.token || userData.token;
       if (token) {
         localStorage.setItem('authToken', token);
-        console.log('Token stored in localStorage on login');
-      } else {
-        console.warn('No token found in login response');
       }
     },
     logout: (state) => {

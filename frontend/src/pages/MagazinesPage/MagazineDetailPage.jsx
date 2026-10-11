@@ -12,13 +12,19 @@ const MagazineDetailPage = () => {
   useEffect(() => {
     const fetchMagazine = async () => {
       try {
-        console.log('Fetching magazine with slug:', slug);
+        if (import.meta.env.DEV) {
+          console.log('Fetching magazine with slug:', slug);
+        }
         setLoading(true);
         const data = await magazineService.getMagazineBySlug(slug);
-        console.log('Magazine data received:', data);
+        if (import.meta.env.DEV) {
+          console.log('Magazine data received:', data);
+        }
         setMagazine(data);
       } catch (err) {
-        console.error('Error fetching magazine:', err);
+        if (import.meta.env.DEV) {
+          console.error('Error fetching magazine:', err);
+        }
         setError('Failed to load magazine details');
       } finally {
         setLoading(false);
@@ -28,7 +34,9 @@ const MagazineDetailPage = () => {
     if (slug && slug !== 'undefined') {
       fetchMagazine();
     } else {
-      console.log('Invalid slug:', slug);
+      if (import.meta.env.DEV) {
+        console.log('Invalid slug:', slug);
+      }
       setLoading(false);
       setError('Invalid magazine slug');
     }

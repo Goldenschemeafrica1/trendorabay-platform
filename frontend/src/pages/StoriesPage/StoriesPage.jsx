@@ -17,9 +17,13 @@ const StoriesPage = () => {
       try {
         setLoading(true);
         const storiesResponse = await api.get('/stories?limit=100');
-        console.log('Stories response:', storiesResponse);
+        if (import.meta.env.DEV) {
+          console.log('Stories response:', storiesResponse);
+        }
         const storiesData = storiesResponse.data?.data || storiesResponse.data || [];
-        console.log('Stories data:', storiesData);
+        if (import.meta.env.DEV) {
+          console.log('Stories data:', storiesData);
+        }
         setStories(Array.isArray(storiesData) ? storiesData : []);
       } catch (err) {
         setError('Failed to load stories. Please try again.');
