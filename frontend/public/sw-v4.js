@@ -51,9 +51,10 @@ self.addEventListener('fetch', (event) => {
       fetch(event.request)
         .then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
-            // Cache successful responses
+            // Clone response before caching to avoid "body already used" error
+            const responseToCache = networkResponse.clone();
             caches.open(API_CACHE_NAME).then((cache) => {
-              cache.put(event.request, networkResponse.clone());
+              cache.put(event.request, responseToCache);
             });
           }
           return networkResponse;
