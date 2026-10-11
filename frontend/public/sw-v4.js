@@ -45,24 +45,34 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (event.request.url.includes('/api/')) {
-    // Stale-while-revalidate for API calls
+    // Network first for API calls in production to avoid stale data
+    // Only use cache as fallback when network fails
     event.respondWith(
-      caches.open(API_CACHE_NAME).then((cache) => {
-        return cache.match(event.request).then((cachedResponse) => {
-          // Return cached response immediately if available
-          const fetchPromise = fetch(event.request).then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            // Cache successful responses
+            caches.open(API_CACHE_NAME).then((cache) => {
               cache.put(event.request, networkResponse.clone());
-            }
-            return networkResponse;
-          }).catch((error) => {
-            console.error('Service worker API fetch error:', error);
-            return cachedResponse;
+            });
+          }
+          return networkResponse;
+        })
+        .catch((error) => {
+          // Network failed, try to return cached response
+          return caches.open(API_CACHE_NAME).then((cache) => {
+            return cache.match(event.request).then((cachedResponse) => {
+              if (cachedResponse) {
+                return cachedResponse;
+              }
+              // No cache available, return error response
+              return new Response('Network error - API unavailable', {
+                status: 503,
+                headers: new Headers({ 'Content-Type': 'text/plain' })
+              });
+            });
           });
-          
-          return cachedResponse || fetchPromise;
-        });
-      })
+        })
     );
     return;
   }
@@ -84,7 +94,6 @@ self.addEventListener('fetch', (event) => {
             return networkResponse;
           })
           .catch((error) => {
-            console.error('Service worker navigation fetch error:', error);
             // If network fails and we have a cached version, return it
             if (cachedResponse) {
               return cachedResponse;
@@ -107,8 +116,8 @@ self.addEventListener('fetch', (event) => {
               cache.put(event.request, networkResponse);
             });
           }
-        }).catch((error) => {
-          console.error('Service worker asset update error:', error);
+        }).catch(() => {
+          // Silent fail - asset update failed but cached version is still available
         });
         return cachedResponse;
       }
@@ -122,8 +131,7 @@ self.addEventListener('fetch', (event) => {
           cache.put(event.request, responseToCache);
         });
         return networkResponse;
-      }).catch((error) => {
-        console.error('Service worker fetch error:', error);
+      }).catch(() => {
         // If network fails and we have a cached version, return it
         if (cachedResponse) {
           return cachedResponse;
