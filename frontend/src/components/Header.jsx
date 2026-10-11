@@ -9,7 +9,7 @@ import './Header.css';
 const navLinks = [
   { label: 'Latest', target: 'nl-latest' },
   { label: 'Magazines', target: 'nl-magazines' },
-  { label: 'Merchandise', target: 'nl-merchandise', isRoute: false, badge: 'SHOP' },
+  { label: 'Merchandise', target: '/store', isRoute: true, badge: 'SHOP' },
   { label: 'Podcasts', target: 'nl-podcasts' },
   { label: 'Opportunities', target: '/opportunities', isRoute: true },
 ];

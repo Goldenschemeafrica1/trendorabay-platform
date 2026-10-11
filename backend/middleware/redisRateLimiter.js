@@ -33,7 +33,8 @@ export const redisRateLimiter = async (req, res, next) => {
     const client = await getRedisClient();
     const ip = req.ip || req.connection.remoteAddress;
     const windowMs = 15 * 60 * 1000; // 15 minutes
-    const maxRequests = 1000; // Increased from 300 to 1000
+    // Increase limit for development to handle React Strict Mode double-invokes
+    const maxRequests = process.env.NODE_ENV === 'development' ? 10000 : 1000;
     let current;
 
     if (client && client.isOpen) {
@@ -81,7 +82,7 @@ export const redisRateLimiter = async (req, res, next) => {
     // Fallback to in-memory rate limiting on error
     const ip = req.ip || req.connection.remoteAddress;
     const windowMs = 15 * 60 * 1000;
-    const maxRequests = 1000; // Increased from 300 to 1000
+    const maxRequests = process.env.NODE_ENV === 'development' ? 10000 : 1000;
     const key = `ratelimit:${ip}`;
     const current = getInMemoryCount(key, windowMs);
 

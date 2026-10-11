@@ -1,7 +1,7 @@
 .search-page {
   min-height: 100vh;
   background: #fff;
-  padding: 80px 20px 60px;
+  padding: 20px 20px 60px;
 }
 
 .search-container {
@@ -241,7 +241,7 @@
 
 @media (max-width: 640px) {
   .search-page {
-    padding: 100px 16px 40px;
+    padding: 40px 16px 40px;
   }
 
   .search-header h1 {

@@ -89,8 +89,13 @@ self.addEventListener('fetch', (event) => {
             if (cachedResponse) {
               return cachedResponse;
             }
-            // Otherwise, let the error propagate
-            throw error;
+            // Otherwise, return a basic offline page or redirect to home
+            return caches.match('/').then((homeResponse) => {
+              return homeResponse || new Response('Offline - Please check your connection', {
+                status: 503,
+                headers: new Headers({ 'Content-Type': 'text/plain' })
+              });
+            });
           });
       }
 
@@ -123,8 +128,11 @@ self.addEventListener('fetch', (event) => {
         if (cachedResponse) {
           return cachedResponse;
         }
-        // Otherwise, let the error propagate
-        throw error;
+        // For non-navigation requests, just let it fail silently
+        return new Response('Network error', {
+          status: 503,
+          headers: new Headers({ 'Content-Type': 'text/plain' })
+        });
       });
     })
   );

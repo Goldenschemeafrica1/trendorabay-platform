@@ -20,6 +20,8 @@ import galleryRoutes from '../routes/gallery.js';
 import analyticsRoutes from '../routes/analytics.js';
 import opportunityRoutes from '../routes/opportunities.js';
 import communityRoutes from '../routes/communities.js';
+import communityPostRoutes from '../routes/communityPosts.js';
+import communityDiscussionRoutes from '../routes/communityDiscussions.js';
 import writeApplicationRoutes from '../routes/writeApplications.js';
 
 const API_VERSION = process.env.API_VERSION || 'v1';
@@ -49,6 +51,8 @@ export function setupRoutes(app) {
   app.use(`/api/${API_VERSION}/analytics`, analyticsRoutes);
   app.use(`/api/${API_VERSION}/opportunities`, opportunityRoutes);
   app.use(`/api/${API_VERSION}/communities`, communityRoutes);
+  app.use(`/api/${API_VERSION}/community-posts`, communityPostRoutes);
+  app.use(`/api/${API_VERSION}/community-discussions`, communityDiscussionRoutes);
   app.use(`/api/${API_VERSION}/write-applications`, writeApplicationRoutes);
 
   // Legacy API routes (backward compatibility - will be deprecated)
@@ -75,5 +79,7 @@ export function setupRoutes(app) {
   app.use('/api/analytics', analyticsRoutes);
   app.use('/api/opportunities', opportunityRoutes);
   app.use('/api/communities', communityRoutes);
+  app.use('/api/community-posts', communityPostRoutes);
+  app.use('/api/community-discussions', communityDiscussionRoutes);
   app.use('/api/write-applications', writeApplicationRoutes);
 }

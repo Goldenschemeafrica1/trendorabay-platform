@@ -26,7 +26,24 @@ export const uploadToCloudinary = async (file, folder = 'pitches') => {
       throw new Error('Cloudinary not configured');
     }
 
-    // Use cloudinary.uploader.upload with file path or buffer
+    // Check if file is a base64 data URI (from memory storage)
+    if (file.path && file.path.startsWith('data:')) {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: folder,
+        resource_type: 'auto',
+        use_filename: true,
+        unique_filename: true,
+        overwrite: false
+      });
+
+      return {
+        url: result.secure_url,
+        public_id: result.public_id,
+        original_filename: result.original_filename
+      };
+    }
+
+    // Use cloudinary.uploader.upload with file path
     const result = await cloudinary.uploader.upload(file.path, {
       folder: folder,
       resource_type: 'auto',

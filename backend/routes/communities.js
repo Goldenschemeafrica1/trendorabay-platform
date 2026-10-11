@@ -1,7 +1,28 @@
 import express from 'express';
 import pool from '../config/database.js';
+import multer from 'multer';
+import { uploadToCloudinary, isCloudinaryConfigured } from '../config/cloudinary.js';
 
 const router = express.Router();
+
+// Configure multer for memory storage (for Cloudinary upload)
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif|webp/;
+    const extname = allowedTypes.test(file.originalname.toLowerCase().split('.').pop());
+    const mimetype = allowedTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('Only image files (jpeg, jpg, png, gif, webp) are allowed'));
+  }
+});
 
 // Helper function to get image URL (handle Cloudinary and CMS uploads)
 const getImageUrl = (url, category = null) => {
@@ -397,20 +418,47 @@ router.get('/:communityId/membership/:userId', async (req, res, next) => {
       'SELECT * FROM community_members WHERE user_id = ? AND community_id = ?',
       [req.params.userId, req.params.communityId]
     );
-    
+
     if (rows.length === 0) {
       return res.json({ success: true, data: { isMember: false } });
     }
-    
-    res.json({ 
-      success: true, 
-      data: { 
-        isMember: true, 
-        membership: rows[0] 
-      } 
+
+    res.json({
+      success: true,
+      data: {
+        isMember: true,
+        membership: rows[0]
+      }
     });
   } catch (error) {
     next(error);
+  }
+});
+
+// Upload community image to Cloudinary
+router.post('/upload-image', upload.single('image'), async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: 'No file uploaded' });
+    }
+
+    if (!isCloudinaryConfigured()) {
+      return res.status(500).json({ success: false, error: 'Cloudinary not configured' });
+    }
+
+    // Convert buffer to base64 for Cloudinary upload
+    const base64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+
+    // Upload to Cloudinary
+    const result = await uploadToCloudinary(
+      { path: base64 },
+      'communities'
+    );
+
+    res.json({ success: true, data: { url: result.url, public_id: result.public_id } });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 

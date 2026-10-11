@@ -52,12 +52,14 @@ const Footer = () => {
             <p>From mtaa to global — stories, style, solutions and opportunities shaping Africa’s tomorrow.</p>
             <p className="footer-location">Based in Ruiru, Kenya • Connecting Africa and the world.</p>
             <p className="footer-contact">0111773508 • 0787809638</p>
+            <p className="footer-email">trendorabay@trendorabay.com</p>
 
             <div className="footer-social" aria-label="Follow Trendorabay">
               <a href="https://x.com/Trendorabayke" target="_blank" rel="noopener noreferrer" aria-label="X">𝕏</a>
               <a href="https://bsky.app/profile/trendorabay.bsky.social" target="_blank" rel="noopener noreferrer" aria-label="Bluesky">bs</a>
               <a href="https://www.instagram.com/trendorabayafric/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
               <a href="https://www.facebook.com/profile.php?id=61584702823004" target="_blank" rel="noopener noreferrer" aria-label="Facebook">f</a>
+              <a href="https://www.linkedin.com/in/kingsley-george-006b1628b/?isSelfProfile=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
               <a href="https://www.trendorabay.com" target="_blank" rel="noopener noreferrer" aria-label="Trendorabay"><img src="/weblogo.png" alt="Trendorabay" /></a>
             </div>
           </div>
@@ -74,10 +76,10 @@ const Footer = () => {
             <span className="footer-kicker">Trendorabay</span>
             <Link to="/opportunities">Opportunities</Link>
             <Link to="/writers">Write for Us</Link>
+            <Link to="/partner">Partners</Link>
             <Link to="/advertise">Advertise</Link>
             <Link to="/subscribe">Subscribe</Link>
             <Link to="/about">About Us</Link>
-            <a href="mailto:trendorabay@trendorabay.com">Contact Us</a>
           </div>
 
           <div>

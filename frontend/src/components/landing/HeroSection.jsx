@@ -5,9 +5,9 @@ const HeroSection = ({ heroStory, latestStories }) => {
     <section className="hero">
       <div className="hero-grid">
         <div>
-          <div className="eyebrow">Stories · Style · Solutions</div>
+          <div className="eyebrow">Africa's first digital magazine with street vibe </div>
           <h1>The home of <em>Africa's creators.</em></h1>
-          <p>Trendorabay is where Africa's stories are told, its products are discovered, and its opportunities are shared. A magazine, a marketplace, and a community — all in one place.</p>
+          <p>Trendorabay is where Africa's stories are told, its products are discovered, and its opportunities are shared. A magazine, a marketplace, and a community — all in one place.-from mtaa to Global</p>
           <div className="hero-cta">
             <Link to="/store" className="dark-btn">Explore the store</Link>
             <Link to="/stories" className="light-btn">Read the magazine</Link>

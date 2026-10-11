@@ -171,10 +171,13 @@ export const StoryService = {
 
   async getStoryByIdOrId(param) {
     const isNumeric = /^\d+$/.test(param);
-    
+
+    console.log('getStoryByIdOrId called with param:', param, 'isNumeric:', isNumeric);
+
     let rows;
-    
+
     if (isNumeric) {
+      console.log('Querying by ID:', param);
       [rows] = await pool.query(
         `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
          FROM stories s
@@ -184,6 +187,7 @@ export const StoryService = {
         [param]
       );
     } else {
+      console.log('Querying by slug:', param);
       [rows] = await pool.query(
         `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
          FROM stories s
@@ -193,7 +197,9 @@ export const StoryService = {
         [param]
       );
     }
-    
+
+    console.log('Query returned', rows.length, 'rows');
+
     if (rows.length === 0) {
       return null;
     }

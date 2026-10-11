@@ -16,11 +16,15 @@ const StoriesPage = () => {
       const startTime = Date.now();
       try {
         setLoading(true);
-        const storiesResponse = await api.get('/stories');
-        setStories(storiesResponse.data.data || []);
+        const storiesResponse = await api.get('/stories?limit=100');
+        console.log('Stories response:', storiesResponse);
+        const storiesData = storiesResponse.data?.data || storiesResponse.data || [];
+        console.log('Stories data:', storiesData);
+        setStories(Array.isArray(storiesData) ? storiesData : []);
       } catch (err) {
         setError('Failed to load stories. Please try again.');
         console.error('Error fetching data:', err);
+        setStories([]);
       } finally {
         // Ensure minimum loading time of 800ms
         const elapsed = Date.now() - startTime;

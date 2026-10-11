@@ -27,6 +27,7 @@ const WritersPage = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   const areasOfInterestOptions = [
     'Fashion', 'Art', 'Agriculture', 'Food & Nutrition', 'Music', 'Beauty',
@@ -144,6 +145,11 @@ const WritersPage = () => {
 
   return (
     <div className="writers-page">
+      {/* Top Ad */}
+      <div className="top-ad">
+        <img src="/ad1.png" alt="Advertisement" loading="lazy" />
+      </div>
+
       <main>
         {/* HERO */}
         <section className="hero">
@@ -153,7 +159,7 @@ const WritersPage = () => {
               <h1>Tell the stories <em>Africa needs to hear.</em></h1>
               <p>Trendorabay is always looking for writers, journalists, essayists, and storytellers who can help us document the people, brands and ideas shaping tomorrow's African narrative.</p>
               <div className="hero-cta">
-                <button className="dark-btn" onClick={() => scrollToSection('apply')}>Apply to write</button>
+                <button className="dark-btn" onClick={() => setShowForm(true)}>Apply to write</button>
                 <button className="light-btn" onClick={() => scrollToSection('perks')}>What you get</button>
               </div>
             </div>
@@ -219,15 +225,17 @@ const WritersPage = () => {
         </section>
 
         {/* APPLICATION FORM */}
-        <section className="section apply" id="apply">
-          <div className="container">
-            <div className="section-head">
-              <div className="eyebrow">Apply</div>
-              <h2>Become a Trendorabay writer.</h2>
-              <p>Fill out the form below. If we think there's a fit, we'll reach out within 5 working days.</p>
-            </div>
+        {showForm && (
+          <section className="section apply" id="apply">
+            <div className="container">
+              <div className="section-head">
+                <div className="eyebrow">Apply</div>
+                <h2>Become a Trendorabay writer.</h2>
+                <p>Fill out the form below. If we think there's a fit, we'll reach out within 5 working days.</p>
+                <button className="close-form-btn" onClick={() => setShowForm(false)}>✕ Close</button>
+              </div>
 
-            <form className="form-card" onSubmit={handleSubmit}>
+              <form className="form-card" onSubmit={handleSubmit}>
 
               {/* SECTION 1: Personal details */}
               <div className="form-section-title">Personal details</div>
@@ -456,6 +464,7 @@ const WritersPage = () => {
             </form>
           </div>
         </section>
+        )}
 
         {/* FAQ */}
         <section className="section faq">
@@ -491,7 +500,7 @@ const WritersPage = () => {
                 <h2>Add your voice to Africa's most exciting story.</h2>
                 <p>Send us a pitch, share a sample, and let's see what we can build together.</p>
               </div>
-              <button className="white-btn" onClick={() => scrollToSection('apply')}>Apply now →</button>
+              <button className="white-btn" onClick={() => setShowForm(true)}>Apply now →</button>
             </div>
           </div>
         </section>

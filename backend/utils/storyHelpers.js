@@ -57,15 +57,16 @@ export const generateSlug = (title, id) => {
 export const transformStory = (story) => {
   const cleanTitle = story.title?.trim() || '';
   const slug = story.slug || generateSlug(cleanTitle, story.id);
-  
+  const categoryName = story.category_name || 'General';
+
   return {
     id: story.id,
     slug,
     title: story.title,
     content: story.content,
-    imageUrl: getImageUrl(story.featured_image_url, story.category_name),
-    categoryName: story.category_name,
-    category: story.category_name,
+    imageUrl: getImageUrl(story.featured_image_url, categoryName),
+    categoryName: categoryName,
+    category: categoryName,
     featured: story.featured === 1,
     displaySection: story.display_section,
     author: story.author_id ? {
@@ -85,25 +86,26 @@ export const transformStory = (story) => {
 export const transformStoryWithImages = (story) => {
   const cleanTitle = story.title?.trim() || '';
   const slug = story.slug || generateSlug(cleanTitle, story.id);
-  
+  const categoryName = story.category_name || 'General';
+
   const imageUrls = [];
   if (story.featured_image_url) {
-    imageUrls.push(getImageUrl(story.featured_image_url, story.category_name || 'General'));
+    imageUrls.push(getImageUrl(story.featured_image_url, categoryName));
   }
   if (story.featured_image_url_2) {
-    imageUrls.push(getImageUrl(story.featured_image_url_2, story.category_name || 'General'));
+    imageUrls.push(getImageUrl(story.featured_image_url_2, categoryName));
   }
   if (story.featured_image_url_3) {
-    imageUrls.push(getImageUrl(story.featured_image_url_3, story.category_name || 'General'));
+    imageUrls.push(getImageUrl(story.featured_image_url_3, categoryName));
   }
   if (story.featured_image_url_4) {
-    imageUrls.push(getImageUrl(story.featured_image_url_4, story.category_name || 'General'));
+    imageUrls.push(getImageUrl(story.featured_image_url_4, categoryName));
   }
-  
+
   return {
     ...story,
     slug,
-    category: story.category_name || 'General',
+    category: categoryName,
     author_avatar: getAvatarUrl(story.author_avatar),
     featured_image_url: imageUrls.length > 0 ? imageUrls : null
   };

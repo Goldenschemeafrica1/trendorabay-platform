@@ -42,6 +42,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.removeItem('trendorabay-user');
       localStorage.removeItem('authToken');
+      localStorage.removeItem('joinedCommunities');
     },
   },
 });

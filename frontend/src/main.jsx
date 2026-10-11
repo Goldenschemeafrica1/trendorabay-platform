@@ -50,11 +50,11 @@ if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+  // Disable StrictMode in development to prevent double-invoking effects
+  // which causes unnecessary API calls and rate limiting issues
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
 );

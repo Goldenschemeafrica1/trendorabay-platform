@@ -52,10 +52,26 @@ html {
   margin: auto;
 }
 
+/* Top Ad */
+.writers-page .top-ad {
+  width: 800px;
+  height: 100px;
+  max-width: 100%;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+.writers-page .top-ad img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+}
+
 /* ---------- HERO ---------- */
 .writers-page .hero {
   background: #f3f2ee;
-  padding: 80px 0 72px;
+  padding: 50px 0 40px;
 }
 
 .writers-page .hero-grid {
@@ -75,7 +91,7 @@ html {
 }
 
 .writers-page .hero h1 {
-  font-size: clamp(40px, 6vw, 74px);
+  font-size: clamp(32px, 5vw, 58px);
   line-height: 0.95;
   letter-spacing: -0.055em;
   margin: 0 0 24px;
@@ -89,7 +105,7 @@ html {
 }
 
 .writers-page .hero p {
-  font-size: 17px;
+  font-size: 15px;
   line-height: 1.7;
   color: #555;
   max-width: 560px;
@@ -136,7 +152,7 @@ html {
   position: relative;
   width: 100%;
   max-width: 420px;
-  height: 420px;
+  height: 320px;
   margin-left: auto;
 }
 
@@ -185,10 +201,43 @@ html {
   max-width: 760px;
   margin: 0 auto 55px;
   text-align: center;
+  position: relative;
+}
+
+.writers-page .close-form-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.2s;
+}
+
+.writers-page .close-form-btn:hover {
+  color: #111;
+}
+
+.writers-page .apply {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .writers-page .section-head h2 {
-  font-size: clamp(28px, 4vw, 44px);
+  font-size: clamp(22px, 3.5vw, 36px);
   letter-spacing: -0.045em;
   margin: 0 0 16px;
   line-height: 1.05;
@@ -212,7 +261,7 @@ html {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 22px;
-  padding: 36px 30px;
+  padding: 24px 20px;
   transition: 0.25s;
 }
 
@@ -222,17 +271,17 @@ html {
 }
 
 .writers-page .why-card .num {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 900;
   letter-spacing: 0.1em;
   color: #bbb;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .writers-page .why-card h3 {
-  font-size: 19px;
+  font-size: 16px;
   letter-spacing: -0.02em;
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   line-height: 1.2;
 }
 
@@ -653,7 +702,7 @@ html {
   }
 
   .writers-page .hero-art {
-    height: 340px;
+    height: 260px;
     max-width: 360px;
     margin: 0 auto;
   }
@@ -689,8 +738,14 @@ html {
     width: calc(100% - 24px);
   }
 
+  .writers-page .top-ad {
+    width: 100%;
+    height: 80px;
+    margin: 16px auto;
+  }
+
   .writers-page .hero {
-    padding: 52px 0 48px;
+    padding: 32px 0 28px;
   }
 
   .writers-page .hero h1 {
@@ -702,7 +757,7 @@ html {
   }
 
   .writers-page .hero-art {
-    height: 250px;
+    height: 200px;
     max-width: 280px;
   }
 
@@ -726,6 +781,14 @@ html {
 
   .writers-page .section-head {
     margin-bottom: 38px;
+  }
+
+  .writers-page .close-form-btn {
+    position: static;
+    margin-bottom: 16px;
+    font-size: 20px;
+    display: block;
+    margin-left: auto;
   }
 
   .writers-page .section-head h2 {
