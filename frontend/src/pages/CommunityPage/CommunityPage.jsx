@@ -1560,8 +1560,7 @@ const CommunityPage = () => {
                   <p>{currentCommunity.desc}</p>
                   <div className="detail-cover-stats">
                     <span>👥 {currentCommunity.members.toLocaleString()} members</span>
-                    <span>🟢 214 online</span>
-                    <span>💬 {currentDiscussions.length} discussions</span>
+                    <span> {currentDiscussions.length} discussions</span>
                   </div>
                 </div>
               </div>
