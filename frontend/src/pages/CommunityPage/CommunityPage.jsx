@@ -164,6 +164,34 @@ const CommunityPage = () => {
     return lines.slice(0, maxLines).join('\n') + '...';
   };
 
+  // Helper to format links in content
+  const formatContent = (text) => {
+    if (!text) return '';
+    
+    // URL regex pattern
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    
+    // Split by URLs and replace with clickable links
+    const parts = text.split(urlRegex);
+    
+    return parts.map((part, index) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a 
+            key={index} 
+            href={part} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="content-link"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   // Toggle post expansion
   const togglePostExpansion = (postId) => {
     const newExpanded = new Set(expandedPosts);
@@ -279,10 +307,10 @@ const CommunityPage = () => {
     fetchPosts();
   }, [currentCommunity?.dbId, currentTab, API_BASE]);
 
-  // Fetch members for current community (only when Members tab is active)
+  // Fetch members for current community (when community is selected)
   useEffect(() => {
     const fetchMembers = async () => {
-      if (!currentCommunity || !currentCommunity.dbId || currentTab !== 'Members') return;
+      if (!currentCommunity || !currentCommunity.dbId) return;
 
       try {
         const response = await fetch(`${API_BASE}/communities/${currentCommunity.dbId}/members`);
@@ -319,12 +347,12 @@ const CommunityPage = () => {
     };
 
     fetchMembers();
-  }, [currentCommunity?.dbId, currentTab, API_BASE]);
+  }, [currentCommunity?.dbId, API_BASE]);
 
-  // Fetch opportunities for current community category (only when Opportunities tab is active)
+  // Fetch opportunities for current community category (when community is selected)
   useEffect(() => {
     const fetchOpportunities = async () => {
-      if (!currentCommunity || !currentCommunity.category || currentTab !== 'Opportunities') return;
+      if (!currentCommunity || !currentCommunity.category) return;
 
       try {
         const response = await fetch(`${API_BASE}/opportunities?category=${encodeURIComponent(currentCommunity.category)}&limit=10`);
@@ -349,12 +377,12 @@ const CommunityPage = () => {
     };
 
     fetchOpportunities();
-  }, [currentCommunity?.category, currentTab, API_BASE]);
+  }, [currentCommunity?.category, API_BASE]);
 
-  // Fetch events for current community category (only when Events tab is active)
+  // Fetch events for current community category (when community is selected)
   useEffect(() => {
     const fetchEvents = async () => {
-      if (!currentCommunity || !currentCommunity.category || currentTab !== 'Events') return;
+      if (!currentCommunity || !currentCommunity.category) return;
 
       try {
         const response = await fetch(`${API_BASE}/events?category=${encodeURIComponent(currentCommunity.category)}&limit=10`);
@@ -383,12 +411,12 @@ const CommunityPage = () => {
     };
 
     fetchEvents();
-  }, [currentCommunity?.category, currentTab, API_BASE]);
+  }, [currentCommunity?.category, API_BASE]);
 
-  // Fetch discussions for current community (only when Discussions tab is active)
+  // Fetch discussions for current community (when community is selected)
   useEffect(() => {
     const fetchDiscussions = async () => {
-      if (!currentCommunity || !currentCommunity.dbId || currentTab !== 'Discussions') return;
+      if (!currentCommunity || !currentCommunity.dbId) return;
 
       try {
         const response = await fetch(`${API_BASE}/community-discussions/community/${currentCommunity.dbId}`);
@@ -418,7 +446,7 @@ const CommunityPage = () => {
     };
 
     fetchDiscussions();
-  }, [currentCommunity?.dbId, currentTab, API_BASE]);
+  }, [currentCommunity?.dbId, API_BASE]);
 
   const showToast = (message) => {
     setToast({ show: true, message });
@@ -967,7 +995,7 @@ const CommunityPage = () => {
 
   const renderSidebar = () => {
     const sidebarMembers = members.slice(0, 5);
-    const trends = [];
+    const trends = discussions.slice(0, 5);
     const sidebarEvents = events.slice(0, 3);
     const opps = opportunities.slice(0, 4);
 
@@ -975,51 +1003,67 @@ const CommunityPage = () => {
       <aside className="sidebar">
         <div className="sidebar-card">
           <h4>Community Members</h4>
-          {sidebarMembers.map(m => (
-            <div key={m.name} className="member-row">
-              <div className="avatar">{m.initial}</div>
-              <div>
-                <span>{m.name}</span>
-                <small>{m.role}</small>
+          {sidebarMembers.length > 0 ? (
+            sidebarMembers.map(m => (
+              <div key={m.name} className="member-row">
+                <div className="avatar">{m.initial}</div>
+                <div>
+                  <span>{m.name}</span>
+                  <small>{m.role}</small>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p style={{ color: 'var(--muted)', fontSize: '13px' }}>No members yet</p>
+          )}
         </div>
 
         <div className="sidebar-card">
           <h4>Trending Discussions</h4>
-          {trends.map((t, i) => (
-            <div key={i} className="trend-item" onClick={() => showToast(`Opening: ${t.name}`)}>
-              <span>{t.name}</span>
-              <span className="count">{t.count} posts</span>
-            </div>
-          ))}
+          {trends.length > 0 ? (
+            trends.map((t, i) => (
+              <div key={i} className="trend-item" onClick={() => showToast(`Opening: ${t.title}`)}>
+                <span>{t.title}</span>
+                <span className="count">{t.comment_count || 0} replies</span>
+              </div>
+            ))
+          ) : (
+            <p style={{ color: 'var(--muted)', fontSize: '13px' }}>No discussions yet</p>
+          )}
         </div>
 
         <div className="sidebar-card">
           <h4>Upcoming Events</h4>
-          {sidebarEvents.map((e, i) => (
-            <div key={i} className="event-item">
-              <div className="event-date">
-                <strong>{e.day}</strong>
-                <span>{e.month}</span>
+          {sidebarEvents.length > 0 ? (
+            sidebarEvents.map((e, i) => (
+              <div key={i} className="event-item">
+                <div className="event-date">
+                  <strong>{e.day}</strong>
+                  <span>{e.month}</span>
+                </div>
+                <div className="event-info">
+                  <strong>{e.title}</strong>
+                  <span>{e.venue}</span>
+                </div>
               </div>
-              <div className="event-info">
-                <strong>{e.title}</strong>
-                <span>{e.venue}</span>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p style={{ color: 'var(--muted)', fontSize: '13px' }}>No upcoming events</p>
+          )}
         </div>
 
         <div className="sidebar-card">
           <h4>Opportunities</h4>
-          {opps.map((o, i) => (
-            <div key={i} className="opportunity-item" onClick={() => showToast(`Opening: ${o.title}`)}>
-              <span className="dot"></span>
-              {o.title}
-            </div>
-          ))}
+          {opps.length > 0 ? (
+            opps.map((o, i) => (
+              <div key={i} className="opportunity-item" onClick={() => showToast(`Opening: ${o.title}`)}>
+                <span className="dot"></span>
+                {o.title}
+              </div>
+            ))
+          ) : (
+            <p style={{ color: 'var(--muted)', fontSize: '13px' }}>No opportunities</p>
+          )}
         </div>
       </aside>
     );
@@ -1085,10 +1129,10 @@ const CommunityPage = () => {
             {p.content && (
               <div className="post-content">
                 {expandedPosts.has(p.id) || p.content.split('\n').length <= 3 ? (
-                  <div>{p.content}</div>
+                  <div>{formatContent(p.content)}</div>
                 ) : (
                   <div>
-                    <div>{truncateText(p.content, 3)}</div>
+                    <div>{formatContent(truncateText(p.content, 3))}</div>
                     <button 
                       className="see-more-btn" 
                       onClick={() => togglePostExpansion(p.id)}
