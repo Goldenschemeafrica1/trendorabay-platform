@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import GoogleAd from '../../components/ads/GoogleAd';
 import './CommunityPage.css';
 
 const CommunityPage = () => {
@@ -1002,11 +1001,6 @@ const CommunityPage = () => {
 
     return (
       <aside className="sidebar">
-        {/* Google Ad */}
-        <div className="sidebar-card">
-          <GoogleAd adSlot="7302363722" />
-        </div>
-
         <div className="sidebar-card">
           <h4>Community Members</h4>
           {sidebarMembers.length > 0 ? (
