@@ -679,24 +679,24 @@ body.dark-mode .join-btn:hover {
 }
 
 /* Left tile: tall, leaves right column gap */
-.ta {
-  width: 55%;
+.hero-art .ta {
+  width: 48%;
   height: 85%;
-  left: 0;
+  left: -20px;
   top: 7.5%;
 }
 
 /* Top-right tile */
-.tb {
-  width: 40%;
+.hero-art .tb {
+  width: 55%;
   height: 42%;
   right: 0;
   top: 0;
 }
 
 /* Bottom-right tile, with gap below the top-right one */
-.tc {
-  width: 40%;
+.hero-art .tc {
+  width: 55%;
   height: 42%;
   right: 0;
   bottom: 0;
@@ -747,12 +747,15 @@ body.dark-mode .join-btn:hover {
 
   .hero-cta {
     width: 100%;
+    gap: 6px;
   }
 
   .hero-cta .dark-btn,
   .hero-cta .light-btn {
     flex: 1;
     text-align: center;
+    padding: 6px 10px;
+    font-size: 10px;
   }
 }
 
@@ -1762,6 +1765,7 @@ body.dark-mode .nl-podcast-player {
   text-transform: uppercase;
   transition: 0.2s;
   cursor: pointer;
+  max-width: fit-content;
 }
 
 .join-btn:hover {

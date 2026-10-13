@@ -305,6 +305,14 @@ body.dark-mode .story-detail-body p {
   color: #f7f7f5;
 }
 
+body.dark-mode .story-detail-body h2,
+body.dark-mode .story-detail-body h3,
+body.dark-mode .story-detail-body h4,
+body.dark-mode .story-detail-body h5,
+body.dark-mode .story-detail-body h6 {
+  color: #e6ff3f;
+}
+
 body.dark-mode .story-detail-back {
   color: #e6ff3f;
 }
@@ -398,7 +406,7 @@ body.dark-mode .story-detail {
 }
 
 body.dark-mode .story-detail h1 {
-  color: #f7f7f5;
+  color: #e6ff3f;
 }
 
 body.dark-mode .story-detail-tag {
