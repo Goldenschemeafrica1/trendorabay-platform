@@ -11,6 +11,7 @@ const HeroSection = ({ heroStory, latestStories }) => {
           <div className="hero-cta">
             <Link to="/store" className="dark-btn">Explore the store</Link>
             <Link to="/stories" className="light-btn">Read the magazine</Link>
+            <Link to="/writers" className="light-btn">Write for us</Link>
           </div>
         </div>
         <div className="hero-art">
