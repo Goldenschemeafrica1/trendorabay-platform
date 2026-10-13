@@ -45,7 +45,21 @@ trendorabay/
 │   ├── public/             # Static assets
 │   ├── src/
 │   │   ├── components/     # React components
+│   │   │   ├── ads/        # AdSense components
+│   │   │   ├── cart/       # Shopping cart
+│   │   │   ├── common/     # Shared components
+│   │   │   ├── events/     # Events
+│   │   │   ├── landing/    # Landing page components
+│   │   │   ├── magazines/  # Magazine components
+│   │   │   ├── merchandise/# E-commerce
+│   │   │   └── opportunities/# Opportunities
 │   │   ├── pages/          # Page components
+│   │   │   ├── LandingPage/ # Landing page
+│   │   │   ├── MagazinesPage/
+│   │   │   ├── StoriesPage/
+│   │   │   ├── StorePage/
+│   │   │   ├── CommunityPage/
+│   │   │   └── ...          # Other pages
 │   │   ├── services/       # API services
 │   │   ├── store/          # Redux store
 │   │   ├── hooks/          # Custom hooks

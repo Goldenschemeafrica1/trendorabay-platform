@@ -18,17 +18,20 @@ Trendorabay focuses on African content and culture while providing digital tools
 
 The platform currently includes:
 
+* Landing page with hero section
 * Digital magazines
 * Stories and articles
-* Podcasts
-* Contributor and creator profiles
-* Events
-* E-commerce
-* Community engagement
+* Opportunities (formerly events)
+* E-commerce store
+* Community features
+* Writers/contributor profiles
+* Partner programs
 * Advertising
-* Partnerships
-* Content pitches
+* Subscriptions
+* Donations
 * User accounts and authentication
+* Search functionality
+* Gallery
 
 Our goal is to build a scalable digital ecosystem around African media, culture, creators, businesses, and communities.
 
@@ -355,7 +358,11 @@ trendorabay-platform/
 │   ├── public/
 │   └── src/
 │       ├── components/
+│       │   ├── landing/
+│       │   └── ...
 │       ├── pages/
+│       │   ├── LandingPage/
+│       │   └── ...
 │       ├── services/
 │       ├── store/
 │       ├── hooks/
