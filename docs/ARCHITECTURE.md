@@ -61,17 +61,46 @@ Trendorabay follows a modern monolithic architecture with clear separation betwe
 ```
 src/
 ├── components/           # Reusable UI components
+│   ├── ads/            # Google AdSense components
+│   ├── cart/           # Shopping cart components
 │   ├── common/          # Shared components (Header, Footer, etc.)
+│   ├── events/          # Events components
+│   ├── landing/         # Landing page components
+│   │   ├── HeroSection.jsx
+│   │   ├── MagazineSection.jsx
+│   │   ├── CommunityCard.jsx
+│   │   └── ...
 │   ├── magazines/       # Magazine-specific components
-│   ├── stories/         # Story-specific components
 │   ├── merchandise/     # E-commerce components
-│   ├── events/          # Event components
+│   ├── opportunities/   # Opportunities components
 │   └── forms/           # Form components
 ├── pages/               # Page-level components
-│   ├── HomePage/        # Home page
-│   ├── MagazinesPage/   # Magazines listing
+│   ├── AboutPage/       # About page
+│   ├── AdvertisePage/   # Advertising page
+│   ├── CheckoutPage/    # Checkout process
+│   ├── CommunityPage/   # Community features
+│   ├── ContactPage/     # Contact page
+│   ├── DonatePage/      # Donation page
+│   ├── ForgotPasswordPage/ # Password recovery
+│   ├── GalleryPage/     # Photo gallery
+│   ├── LandingPage/     # Landing page
+│   ├── Legal/           # Legal pages (Terms, Privacy)
+│   ├── LoginPage/       # User login
+│   ├── MagazinesPage/   # Magazines listing & detail
+│   ├── MissionPage/     # Mission statement
+│   ├── MusicPage/       # Music community
+│   ├── NotFoundPage/    # 404 page
+│   ├── OpportunityDetailPage/ # Opportunity details
+│   ├── OrdersPage/      # User orders
+│   ├── PartnerPage/     # Partner program
+│   ├── ProfilePage/     # User profile
+│   ├── SearchPage/      # Search functionality
+│   ├── SettingsPage/    # User settings
+│   ├── SignupPage/      # User registration
+│   ├── StoriesPage/     # Stories listing & detail
 │   ├── StorePage/       # E-commerce store
-│   └── ...              # Other pages
+│   ├── SubscribePage/   # Subscription page
+│   └── WritersPage/     # Writers/contributors
 ├── services/            # API service layer
 ├── store/               # Redux state management
 │   ├── slices/          # Redux slices

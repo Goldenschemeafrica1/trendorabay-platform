@@ -208,7 +208,7 @@ The frontend application will start on `http://localhost:5173`
 
 #### Verify Frontend Installation
 
-Open your browser and navigate to `http://localhost:5173`. You should see the Trendorabay homepage.
+Open your browser and navigate to `http://localhost:5173`. You should see the Trendorabay landing page with hero section, featured stories, magazines, and community sections.
 
 ### 4. Redis Setup (Optional but Recommended)
 
