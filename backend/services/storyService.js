@@ -5,17 +5,21 @@ import {
   generateSlug,
   getStoriesByDisplaySection 
 } from '../utils/storyHelpers.js';
-import { cacheDelPattern } from '../config/redis.js';
+import { cacheDelPattern, cacheGet, cacheSet } from '../config/redis.js';
 import { cachePatterns } from '../middleware/cacheMiddleware.js';
 
 export const StoryService = {
   async getHomepageStories(status = 'published') {
+    const cacheKey = `stories:homepage:${status}`;
+    const cached = await cacheGet(cacheKey);
+    if (cached) return cached;
+
     const sections = ['featured', 'horizontal', 'must_read', 'text_only', 'innovation', 'latest_stories'];
     const results = await Promise.all(
       sections.map(section => getStoriesByDisplaySection(pool, status, section))
     );
     
-    return {
+    const data = {
       featuredStories: results[0][0].map(transformStory),
       horizontalStories: results[1][0].map(transformStory),
       mustReadStories: results[2][0].map(transformStory),
@@ -23,6 +27,9 @@ export const StoryService = {
       innovationStories: results[4][0].map(transformStory),
       latestStories: results[5][0].map(transformStory)
     };
+
+    await cacheSet(cacheKey, data, 300); // Cache for 5 minutes
+    return data;
   },
 
   async getStories(filters = {}) {
@@ -114,6 +121,10 @@ export const StoryService = {
   },
 
   async getLatestStories(limit = 10) {
+    const cacheKey = `stories:latest:${limit}`;
+    const cached = await cacheGet(cacheKey);
+    if (cached) return cached;
+
     const [rows] = await pool.query(
       `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
        FROM stories s
@@ -125,7 +136,9 @@ export const StoryService = {
       [limit]
     );
 
-    return rows.map(transformStory);
+    const data = rows.map(transformStory);
+    await cacheSet(cacheKey, data, 300); // Cache for 5 minutes
+    return data;
   },
 
   async getFeaturedStory() {
@@ -171,6 +184,9 @@ export const StoryService = {
 
   async getStoryByIdOrId(param) {
     const isNumeric = /^\d+$/.test(param);
+    const cacheKey = `story:${isNumeric ? 'id' : 'slug'}:${param}`;
+    const cached = await cacheGet(cacheKey);
+    if (cached) return cached;
 
     console.log('getStoryByIdOrId called with param:', param, 'isNumeric:', isNumeric);
 
@@ -212,7 +228,9 @@ export const StoryService = {
       story.slug = generatedSlug;
     }
 
-    return transformStoryWithImages(story);
+    const transformed = transformStoryWithImages(story);
+    await cacheSet(cacheKey, transformed, 600); // Cache for 10 minutes
+    return transformed;
   },
 
   async createStory(data) {
@@ -291,6 +309,11 @@ export const StoryService = {
       [id]
     );
     
+    // Invalidate cache
+    await cacheDelPattern('cache:/api/stories*');
+    await cacheDel(`story:id:${id}`);
+    await cacheDel(`story:slug:${slug}`);
+    
     return updated[0];
   },
 
@@ -311,6 +334,10 @@ export const StoryService = {
        WHERE s.id = ?`,
       [id]
     );
+    
+    // Invalidate cache
+    await cacheDelPattern('cache:/api/stories*');
+    await cacheDel(`story:id:${id}`);
     
     return updated[0];
   },

@@ -1,0 +1,39 @@
+# Frontend Environment Variables for Vercel Deployment
+
+# API Configuration
+# In production, set this to your actual backend URL
+VITE_API_URL=https://your-backend-url.com
+
+# For local development, this is proxied through Vite (see vite.config.js)
+# VITE_API_URL=http://localhost:3001
+
+# Analytics Configuration
+VITE_GA_MEASUREMENT_ID=your-google-analytics-id
+VITE_VERCEL_ANALYTICS_ID=your-vercel-analytics-id
+
+# Feature Flags
+VITE_ENABLE_ANALYTICS=true
+VITE_ENABLE_ERROR_TRACKING=true
+
+# Environment
+NODE_ENV=production
+
+# CMS URL (for image serving)
+VITE_CMS_URL=https://trendorabay-content-management-system.onrender.com
+
+# Backend URL (for direct API calls when not using proxy)
+VITE_BACKEND_URL=https://your-backend-url.com
+
+# Cloudinary Configuration (if using Cloudinary for images)
+VITE_CLOUDINARY_CLOUD_NAME=your-cloud-name
+VITE_CLOUDINARY_UPLOAD_PRESET=your-upload-preset
+
+# Social Media Links (optional)
+VITE_TWITTER_URL=https://twitter.com/trendorabay
+VITE_INSTAGRAM_URL=https://instagram.com/trendorabay
+VITE_LINKEDIN_URL=https://linkedin.com/company/trendorabay
+
+# Site Configuration
+VITE_SITE_NAME=Trendorabay
+VITE_SITE_URL=https://www.trendorabay.com
+VITE_SITE_DESCRIPTION=Trendorabay - Your Platform Description

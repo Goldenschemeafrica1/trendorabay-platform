@@ -1,6 +1,9 @@
 import { testConnection } from './database.js';
 import { getRedisClient } from './redis.js';
 import { getMetrics } from './metrics.js';
+import queryMonitor from './queryMonitor.js';
+import { getRedisStats } from './redis.js';
+import { adminAuth, devOnly } from '../middleware/adminAuth.js';
 
 export function setupHealthChecks(app) {
   // Health check endpoint for load balancers
@@ -63,6 +66,33 @@ export function setupHealthChecks(app) {
     try {
       const data = await getMetrics();
       res.json(data);
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Query performance monitoring endpoint (protected)
+  app.get('/api/query-performance', devOnly, async (req, res) => {
+    try {
+      const report = queryMonitor.getReport();
+      const redisStats = await getRedisStats();
+      
+      res.json({
+        success: true,
+        timestamp: new Date().toISOString(),
+        queries: report,
+        redis: redisStats
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  // Reset query monitoring stats (protected)
+  app.post('/api/query-performance/reset', adminAuth, async (req, res) => {
+    try {
+      queryMonitor.reset();
+      res.json({ success: true, message: 'Query monitoring stats reset' });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
     }

@@ -1,5 +1,6 @@
 import express from 'express';
 import pool from '../config/database.js';
+import { cache, invalidateCache } from '../middleware/cacheMiddleware.js';
 
 const router = express.Router();
 
@@ -30,7 +31,7 @@ const getImageUrl = (url) => {
 };
 
 // Get all work types
-router.get('/work-types', async (req, res, next) => {
+router.get('/work-types', cache(3600), async (req, res, next) => {
   try {
     // Return predefined work types
     const workTypes = [
@@ -52,7 +53,7 @@ router.get('/work-types', async (req, res, next) => {
 });
 
 // Get all categories (industry/sector categories)
-router.get('/categories', async (req, res, next) => {
+router.get('/categories', cache(3600), async (req, res, next) => {
   try {
     const [rows] = await pool.query(
       'SELECT DISTINCT category FROM opportunities WHERE category IS NOT NULL AND category != "" ORDER BY category ASC'
@@ -65,7 +66,7 @@ router.get('/categories', async (req, res, next) => {
 });
 
 // Get all opportunities
-router.get('/', async (req, res, next) => {
+router.get('/', cache(300), async (req, res, next) => {
   try {
     const { status, featured, category, country, opportunity_type, page = 1, limit = 20 } = req.query;
     const offset = (page - 1) * limit;
@@ -153,7 +154,7 @@ router.get('/:identifier', async (req, res, next) => {
 });
 
 // Create opportunity
-router.post('/', async (req, res, next) => {
+router.post('/', invalidateCache('cache:/api/opportunities*'), async (req, res, next) => {
   try {
     const { 
       title, 
@@ -298,7 +299,7 @@ router.post('/', async (req, res, next) => {
 });
 
 // Update opportunity
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', invalidateCache('cache:/api/opportunities*'), async (req, res, next) => {
   try {
     const { 
       title, 

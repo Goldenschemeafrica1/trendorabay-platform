@@ -7,7 +7,7 @@ import { startServer } from './config/serverStartup.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000;
 
 // Setup middleware
 setupMiddleware(app);
