@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import mysql from 'mysql2/promise';
 import { recordDbQuery } from './metrics.js';
+import { recordDbQueryWithMonitoring } from './queryMonitor.js';
 
 // Create primary database connection pool
 const pool = mysql.createPool({
@@ -99,7 +100,7 @@ const routingPool = new Proxy(pool, {
         try {
           return await withRetry(() => (useRead ? readPool : target)[prop](...args));
         } finally {
-          recordDbQuery(args[0], Date.now() - start);
+          recordDbQueryWithMonitoring(args[0], Date.now() - start);
         }
       };
     }

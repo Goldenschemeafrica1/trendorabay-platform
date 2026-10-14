@@ -1,0 +1,45 @@
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=trendorabay
+DB_CONNECTION_LIMIT=20
+
+# Read Replica Configuration (Optional)
+# DB_READ_REPLICA_HOST=
+# DB_READ_REPLICA_PORT=3306
+# DB_READ_REPLICA_USER=
+# DB_READ_REPLICA_PASSWORD=
+# DB_READ_REPLICA_NAME=
+# DB_READ_REPLICA_CONNECTION_LIMIT=20
+
+# SSL Configuration
+# DB_SSL=false
+# DB_SSL_REJECT_UNAUTHORIZED=true
+
+# Redis Configuration
+REDIS_URL=redis://localhost:6379
+REDIS_PASSWORD=
+ENABLE_REDIS=true
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+# Admin API Key for Monitoring Endpoints
+# Generate a secure random key using: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+ADMIN_API_KEY=your-secure-admin-api-key-change-this-in-production
+
+# Environment
+NODE_ENV=development
+
+# CMS URL (for image serving)
+CMS_URL=https://trendorabay-content-management-system.onrender.com
+
+# Backend URL (for image serving)
+BACKEND_URL=http://localhost:10000
+
+# Cloudinary Configuration (Optional)
+# CLOUDINARY_CLOUD_NAME=
+# CLOUDINARY_API_KEY=
+# CLOUDINARY_API_SECRET=

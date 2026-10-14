@@ -9,6 +9,11 @@ export const cache = (ttl = 600) => {
       return next();
     }
 
+    // Don't cache requests with authentication headers (user-specific data)
+    if (req.header('Authorization') || req.cookies?.token) {
+      return next();
+    }
+
     const key = `cache:${req.originalUrl}`;
     
     try {
@@ -68,5 +73,6 @@ export const cachePatterns = {
   magazines: 'cache:/api/magazines*',
   podcasts: 'cache:/api/podcasts*',
   contributors: 'cache:/api/contributors*',
-  users: 'cache:/api/users*'
+  users: 'cache:/api/users*',
+  opportunities: 'cache:/api/opportunities*'
 };
