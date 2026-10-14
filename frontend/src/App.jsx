@@ -31,8 +31,7 @@ import SearchPage from './pages/SearchPage/SearchPage';
 import PartnerPage from './pages/PartnerPage/PartnerPage';
 import TermsPage from './pages/Legal/TermsPage';
 import PrivacyPage from './pages/Legal/PrivacyPage';
-import LoginPage from './pages/LoginPage/LoginPage';
-import SignupPage from './pages/SignupPage/SignupPage';
+import AuthPage from './pages/AuthPage/AuthPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage';
 import AdvertisePage from './pages/AdvertisePage/AdvertisePage';
 import SubscribePage from './pages/SubscribePage/SubscribePage';
@@ -202,7 +201,7 @@ function App() {
         toastClassName="african-toast"
       />
 
-      {/* Main Header - Hidden on login, signup, terms, privacy, forgot-password, and opportunity detail pages */}
+      {/* Main Header - Hidden on auth, terms, privacy, forgot-password, and opportunity detail pages */}
       {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/forgot-password' && !location.pathname.startsWith('/opportunities/') && <Header />}
 
 
@@ -244,8 +243,8 @@ function App() {
         <Route path="/privacy" element={<PrivacyPage />} />
 
         {/* Authentication */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<AuthPage />} />
+        <Route path="/signup" element={<AuthPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
         {/* User Account Pages */}
@@ -279,8 +278,8 @@ function App() {
       {/* Quick View Modal (can be added here) */}
       {/* <QuickViewModal /> */}
 
-      {/* Vercel Analytics */}
-      <Analytics />
+      {/* Vercel Analytics - Only include if properly configured */}
+      {import.meta.env.VITE_VERCEL_ANALYTICS_ID && <Analytics />}
     </div>
   );
 }
