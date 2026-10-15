@@ -2,6 +2,9 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .story-detail-loading {
@@ -261,6 +264,9 @@
   font-size: 16px;
   color: #222;
   display: flow-root;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .story-detail-body p {
@@ -268,6 +274,44 @@
 }
 
 @media (max-width: 600px) {
+  .story-detail {
+    padding: 24px 16px;
+    overflow-x: hidden;
+  }
+
+  .story-detail h1 {
+    font-size: 24px;
+    line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .story-detail-body {
+    font-size: 15px;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .story-detail-body p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .story-detail-actions {
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+
+  .story-action-btn {
+    flex: 1;
+    min-width: calc(50% - 6px);
+    justify-content: center;
+  }
+
   .story-detail-inline-left,
   .story-detail-inline-right {
     float: none;
