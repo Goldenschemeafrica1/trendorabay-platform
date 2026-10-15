@@ -40,6 +40,30 @@ export function setupStaticFiles(app) {
   const hasFrontendDist = fs.existsSync(frontendDistPath);
 
   if (hasFrontendDist) {
+    // Serve sitemap.xml specifically
+    app.get('/sitemap.xml', (req, res) => {
+      const sitemapPath = path.join(frontendDistPath, 'sitemap.xml');
+      if (fs.existsSync(sitemapPath)) {
+        res.setHeader('Content-Type', 'application/xml');
+        res.setHeader('Cache-Control', 'public, max-age=3600');
+        res.sendFile(sitemapPath);
+      } else {
+        res.status(404).send('Sitemap not found');
+      }
+    });
+
+    // Serve robots.txt specifically
+    app.get('/robots.txt', (req, res) => {
+      const robotsPath = path.join(frontendDistPath, 'robots.txt');
+      if (fs.existsSync(robotsPath)) {
+        res.setHeader('Content-Type', 'text/plain');
+        res.setHeader('Cache-Control', 'public, max-age=3600');
+        res.sendFile(robotsPath);
+      } else {
+        res.status(404).send('Robots.txt not found');
+      }
+    });
+
     app.use(express.static(frontendDistPath, {
       index: false,
       immutable: true,
@@ -55,9 +79,9 @@ export function setupStaticFiles(app) {
       }
     }));
 
-    // SPA fallback: only for non-API, non-upload routes
+    // SPA fallback: only for non-API, non-upload, non-sitemap routes
     app.get('*', (req, res, next) => {
-      if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) {
+      if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/') || req.path === '/sitemap.xml' || req.path === '/robots.txt') {
         return next();
       }
       res.sendFile(path.join(frontendDistPath, 'index.html'));
