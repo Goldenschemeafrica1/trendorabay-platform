@@ -63,8 +63,9 @@ export const StoryService = {
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
+    // Exclude content field for list views to reduce data transfer
     let query = `
-      SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+      SELECT s.id, s.slug, s.title, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
       FROM stories s
       LEFT JOIN authors a ON s.author_id = a.id
       LEFT JOIN categories c ON s.category_id = c.id
@@ -125,8 +126,9 @@ export const StoryService = {
     const cached = await cacheGet(cacheKey);
     if (cached) return cached;
 
+    // Exclude content field for list views to reduce data transfer
     const [rows] = await pool.query(
-      `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+      `SELECT s.id, s.slug, s.title, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.status, s.display_section, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
        FROM stories s
        LEFT JOIN authors a ON s.author_id = a.id
        LEFT JOIN categories c ON s.category_id = c.id
