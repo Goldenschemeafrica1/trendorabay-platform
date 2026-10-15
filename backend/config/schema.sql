@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255) NOT NULL,
   first_name VARCHAR(100),
   last_name VARCHAR(100),
+  country VARCHAR(10) DEFAULT 'KE',
+  phone VARCHAR(30),
   profile_image TEXT,
   role ENUM('user', 'admin') DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

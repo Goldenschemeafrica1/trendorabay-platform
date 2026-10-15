@@ -28,7 +28,7 @@ export const UserService = {
   async findUserByEmail(email) {
     const normalizedEmail = email.trim().toLowerCase();
     const [users] = await pool.query(
-      'SELECT id, username, email, password, first_name, last_name, profile_image, role FROM users WHERE email = ?',
+      'SELECT id, username, email, password, first_name, last_name, country, phone, profile_image, role FROM users WHERE email = ?',
       [normalizedEmail]
     );
     return users[0] || null;
@@ -44,16 +44,16 @@ export const UserService = {
   },
 
   async createUser(userData) {
-    const { username, email, password, first_name, last_name } = userData;
+    const { username, email, password, first_name, last_name, country, phone } = userData;
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedUsername = username.trim();
 
     const hashedPassword = await this.hashPassword(password);
 
     const [result] = await pool.query(
-      `INSERT INTO users (username, email, password, first_name, last_name)
-       VALUES (?, ?, ?, ?, ?)`,
-      [normalizedUsername, normalizedEmail, hashedPassword, first_name || null, last_name || null]
+      `INSERT INTO users (username, email, password, first_name, last_name, country, phone)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [normalizedUsername, normalizedEmail, hashedPassword, first_name || null, last_name || null, country || 'KE', phone || null]
     );
 
     return {
@@ -62,6 +62,8 @@ export const UserService = {
       email: normalizedEmail,
       first_name: first_name || null,
       last_name: last_name || null,
+      country: country || 'KE',
+      phone: phone || null,
       profile_image: null
     };
   },

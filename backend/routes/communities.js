@@ -74,28 +74,28 @@ router.get('/', async (req, res, next) => {
   try {
     const { category, community_type, status, page = 1, limit = 25 } = req.query;
     const offset = (page - 1) * limit;
-    
+
     let query = 'SELECT * FROM communities WHERE 1=1';
     const params = [];
-    
+
     if (category) {
       query += ' AND category = ?';
       params.push(category);
     }
-    
+
     if (community_type) {
       query += ' AND community_type = ?';
       params.push(community_type);
     }
-    
+
     if (status) {
       query += ' AND status = ?';
       params.push(status);
     }
-    
+
     query += ' ORDER BY member_count DESC LIMIT ? OFFSET ?';
     params.push(parseInt(limit), offset);
-    
+
     const [rows] = await pool.query(query, params);
 
     // Transform image URLs to serve CMS uploads
@@ -107,6 +107,15 @@ router.get('/', async (req, res, next) => {
 
     res.json({ success: true, data: transformed });
   } catch (error) {
+    console.error('Error fetching communities:', error);
+    // Handle database connection errors specifically
+    if (error.code === 'ECONNREFUSED' || error.code === 'ETIMEDOUT' || error.code === 'PROTOCOL_CONNECTION_LOST') {
+      return res.status(503).json({
+        success: false,
+        error: 'Service Unavailable',
+        details: 'Database connection failed. Please try again later.'
+      });
+    }
     next(error);
   }
 });

@@ -76,6 +76,9 @@ node migrations/migrate.js all
 - `add_user_id_to_orders.sql` - User ID in orders
 - `add_video_url_to_podcasts.sql` - Video URL for podcasts
 - `add_views_to_stories.sql` - View counter for stories
+- `add_country_to_users.sql` - Country column for users
+- `add_phone_to_users.sql` - Phone column for users
+- `modify_phone_column_size.sql` - Increase phone column size for international numbers
 
 ### Column Removals
 - `remove_slug_excerpt.sql` - Removed deprecated columns

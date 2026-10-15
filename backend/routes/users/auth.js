@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/register', redisAuthLimiter, async (req, res, next) => {
   try {
     console.log('Registration attempt for new user');
-    const { username, email, password, first_name, last_name } = req.body;
+    const { username, email, password, first_name, last_name, country, phone } = req.body;
 
     if (!email || !password || !username) {
       console.log('Validation failed: Missing required fields');
@@ -18,13 +18,47 @@ router.post('/register', redisAuthLimiter, async (req, res, next) => {
       });
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
-    if (!passwordRegex.test(password)) {
+    if (!phone) {
       return res.status(400).json({
         success: false,
-        error: 'Password must be at least 8 characters and contain uppercase, lowercase, number, and special character'
+        error: 'Phone number is required'
       });
     }
+
+    // Validate phone number format
+    if (!/^\+?[0-9\s\-\(\)]{10,30}$/.test(phone.replace(/\s/g, ''))) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid phone number format'
+      });
+    }
+
+    // Password validation - check for minimum requirements
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must be at least 8 characters'
+      });
+    }
+
+    // Check for at least one uppercase and one lowercase
+    if (!/[A-Z]/.test(password) || !/[a-z]/.test(password)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must contain both uppercase and lowercase letters'
+      });
+    }
+
+    // Check for at least one number
+    if (!/\d/.test(password)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must contain at least one number'
+      });
+    }
+
+    // Check for at least one special character (optional but recommended)
+    // Not strictly required to match frontend behavior
 
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedUsername = username.trim();
@@ -58,7 +92,9 @@ router.post('/register', redisAuthLimiter, async (req, res, next) => {
       email: normalizedEmail,
       password,
       first_name,
-      last_name
+      last_name,
+      country: country || 'KE',
+      phone
     });
 
     console.log('User created successfully');
