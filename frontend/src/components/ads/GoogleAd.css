@@ -1,0 +1,32 @@
+/* Google Ad Container Styles */
+.google-ad-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.google-ad-container .adsbygoogle {
+  display: block;
+  width: 100%;
+}
+
+/* Story detail page ad */
+.story-detail-ad {
+  width: 100%;
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Sidebar ad */
+.sidebar-card .google-ad-container {
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .story-detail-ad {
+    margin: 20px 0;
+  }
+}

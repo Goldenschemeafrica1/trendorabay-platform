@@ -2,6 +2,16 @@ export const errorHandler = (err, req, res, next) => {
   console.error('Error details:', err.message);
   console.error('Error stack:', err.stack);
 
+  // Handle database connection errors
+  if (err.code === 'ECONNREFUSED' || err.code === 'ETIMEDOUT' || err.code === 'PROTOCOL_CONNECTION_LOST') {
+    console.error('Database connection error:', err.code);
+    return res.status(503).json({
+      success: false,
+      error: 'Service Unavailable',
+      details: 'Database connection failed. Please try again later.'
+    });
+  }
+
   if (err.name === 'ValidationError') {
     return res.status(400).json({
       success: false,

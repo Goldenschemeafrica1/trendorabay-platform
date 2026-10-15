@@ -51,6 +51,12 @@ const CommunityPage = () => {
         return;
       }
 
+      // Handle service unavailable (503)
+      if (response.status === 503) {
+        console.error('Service unavailable when fetching joined communities');
+        return;
+      }
+
       const data = await response.json();
 
       if (data.success && data.data) {
@@ -107,6 +113,13 @@ const CommunityPage = () => {
         // Handle rate limiting (429)
         if (response.status === 429) {
           console.warn('Rate limited fetching communities');
+          setLoading(false);
+          return;
+        }
+
+        // Handle service unavailable (503)
+        if (response.status === 503) {
+          console.error('Service unavailable when fetching communities');
           setLoading(false);
           return;
         }
@@ -257,6 +270,13 @@ const CommunityPage = () => {
 
       try {
         const response = await fetch(`${API_BASE}/community-posts/community/${currentCommunity.dbId}`);
+
+        // Handle service unavailable (503)
+        if (response.status === 503) {
+          console.error('Service unavailable when fetching posts');
+          return;
+        }
+
         const data = await response.json();
 
         if (data.success && data.data) {
@@ -420,6 +440,13 @@ const CommunityPage = () => {
 
       try {
         const response = await fetch(`${API_BASE}/community-discussions/community/${currentCommunity.dbId}`);
+
+        // Handle service unavailable (503)
+        if (response.status === 503) {
+          console.error('Service unavailable when fetching discussions');
+          return;
+        }
+
         const data = await response.json();
 
         if (data.success && data.data) {

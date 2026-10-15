@@ -180,25 +180,14 @@ const LoginPage = () => {
             </Link>
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="login-button"
             disabled={isLoading}
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-
-        <div className="login-divider">
-          <span>OR</span>
-        </div>
-
-        <div className="social-login">
-          <button className="social-button google">
-            <i className="fab fa-google"></i>
-            Continue with Google
-          </button>
-        </div>
 
         <div className="signup-link">
           <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
