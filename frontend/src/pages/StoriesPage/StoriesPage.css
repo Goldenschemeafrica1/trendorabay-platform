@@ -385,7 +385,7 @@ body.dark-mode .stories-category-btn.active {
   }
 
   .story-image {
-    width: 120px;
+    width: 150px;
     height: auto;
     min-height: 100px;
     flex-shrink: 0;
