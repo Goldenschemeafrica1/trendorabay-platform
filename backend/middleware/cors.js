@@ -14,6 +14,7 @@ const allowedOrigins = [
   'http://localhost:5175',
   'http://127.0.0.1:5173',
   'https://trendorabay-platform-j5j0e39eq-golden-scheme-africa-s-projects.vercel.app',
+  'https://trendorabay-platform-qn53sqsys-golden-scheme-africa-s-projects.vercel.app',
   'https://trendorabay-platform.vercel.app',
   'https://trendorabay.com',
   'https://www.trendorabay.com'
