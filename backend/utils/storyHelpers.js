@@ -132,9 +132,9 @@ export const transformStoryWithImages = (story) => {
 };
 
 export const getStoriesByDisplaySection = async (pool, status, displaySection) => {
-  // OPTIMIZATION: Only select necessary fields for list views (no full content, only first image)
+  // Return full content for homepage to allow frontend to create custom excerpts
   return pool.query(
-    `SELECT s.id, s.slug, s.title, LEFT(s.content, 300) as excerpt, s.featured_image_url, s.category_id, s.author_id, s.featured, s.created_at, s.status, s.display_section, s.country, s.read_time, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
+    `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.created_at, s.status, s.display_section, s.country, s.read_time, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
      FROM stories s
      LEFT JOIN authors a ON s.author_id = a.id
      LEFT JOIN categories c ON s.category_id = c.id
