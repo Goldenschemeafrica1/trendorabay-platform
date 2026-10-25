@@ -114,26 +114,22 @@ const magazineService = {
     return result;
   },
 
-  // Get magazine by slug
+  // Get magazine by slug (now uses ID)
   getMagazineBySlug: async (slug) => {
     if (import.meta.env.DEV) {
       console.log('magazineService.getMagazineBySlug called with slug:', slug);
     }
+    // Clear cache to ensure fresh data
     const cacheKey = `magazine_${slug}`;
-    const cached = getCached(cacheKey);
-    if (cached) {
-      if (import.meta.env.DEV) {
-        console.log('Returning cached magazine for slug:', slug);
-      }
-      return cached;
-    }
+    cache.delete(cacheKey);
 
     if (import.meta.env.DEV) {
-      console.log('Fetching magazine from API for slug:', slug);
+      console.log('Fetching magazine from API for ID:', slug);
     }
+    // Use the slug as an ID since we're now passing IDs
     const response = await apiRequest.get(`/magazines/${slug}`);
     if (import.meta.env.DEV) {
-      console.log('API response received for slug:', slug, response);
+      console.log('API response received for ID:', slug, response);
     }
     const magazine = response.data?.data || response.data;
     if (import.meta.env.DEV) {

@@ -4,15 +4,16 @@ import { StoryService } from '../../services/storyService.js';
 
 const router = express.Router();
 
-router.get('/:slug', cache(300), async (req, res, next) => {
-  try {
-    console.log('Fetching story with slug:', req.params.slug);
-    const story = await StoryService.getStoryByIdOrId(req.params.slug);
+const reservedPaths = ['innovation', 'latest', 'featured', 'recent', 'popular', 'search'];
 
-    console.log('Story found:', !!story);
-    if (story) {
-      console.log('Story ID:', story.id, 'Story slug:', story.slug);
-    }
+router.get('/:slug', cache(300), async (req, res, next) => {
+  // Skip if this is a reserved path
+  if (reservedPaths.includes(req.params.slug)) {
+    return next();
+  }
+
+  try {
+    const story = await StoryService.getStoryByIdOrId(req.params.slug);
 
     if (!story) {
       return res.status(404).json({ success: false, error: 'Story not found' });
@@ -20,7 +21,6 @@ router.get('/:slug', cache(300), async (req, res, next) => {
 
     res.json({ success: true, data: story });
   } catch (error) {
-    console.error('Error fetching story:', error);
     next(error);
   }
 });

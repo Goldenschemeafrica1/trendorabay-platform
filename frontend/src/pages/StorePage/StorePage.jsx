@@ -241,32 +241,8 @@ const StorePage = () => {
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <div className="eyebrow">Shop</div>
-              <h2>Browse categories</h2>
-              <p>Find something from the spaces you love.</p>
-            </div>
-          </div>
-          <div className="chips">
-            {categories.map(cat => (
-              <button 
-                key={cat}
-                className={`chip ${currentCategory === cat ? 'active' : ''}`}
-                onClick={() => setCurrentCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Official Merchandise Section */}
-      <section className="section" style={{paddingTop: '0', marginTop: '-50px'}}>
+      <section className="section" style={{paddingTop: '40px', marginTop: '0'}}>
         <div className="container">
           <div className="section-head">
             <div>
@@ -297,17 +273,14 @@ const StorePage = () => {
                   <div className="product-info">
                     <div className="product-name">{product.name}</div>
                     <div className="price">{formatPrice(product.price)}</div>
-                    <div className="meta">
-                      <span>{product.meta || 'Official Trendorabay'}</span>
-                    </div>
                     <div className="product-buttons">
-                      <button 
+                      <button
                         className="add"
                         onClick={() => handleAddToCart(product)}
                       >
                         Add to Cart
                       </button>
-                      <button 
+                      <button
                         className="buy-now"
                         onClick={() => handleBuyNow(product)}
                       >
@@ -354,22 +327,14 @@ const StorePage = () => {
                   <div className="product-info">
                     <div className="product-name">{product.name}</div>
                     <div className="price">{formatPrice(product.price)}</div>
-                    <div className="meta">
-                      <span>{product.seller}</span>
-                    </div>
-                    {product.community && (
-                      <div className="meta">
-                        <span>Community: {product.community}</span>
-                      </div>
-                    )}
                     <div className="product-buttons">
-                      <button 
+                      <button
                         className="add"
                         onClick={() => handleAddToCart(product)}
                       >
                         Add to Cart
                       </button>
-                      <button 
+                      <button
                         className="buy-now"
                         onClick={() => handleBuyNow(product)}
                       >

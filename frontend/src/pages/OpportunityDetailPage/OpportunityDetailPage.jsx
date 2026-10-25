@@ -10,6 +10,7 @@ const OpportunityDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [saved, setSaved] = useState(false);
+  const [relatedOpportunities, setRelatedOpportunities] = useState([]);
 
   useEffect(() => {
     const fetchOpportunity = async () => {
@@ -17,6 +18,14 @@ const OpportunityDetailPage = () => {
         const response = await opportunityService.getOpportunityById(id);
         setOpportunity(response.data || response);
         setLoading(false);
+
+        // Fetch related opportunities
+        try {
+          const relatedResponse = await opportunityService.getOpportunities({ limit: 4 });
+          setRelatedOpportunities((relatedResponse.data || []).filter(o => o.id !== id).slice(0, 3));
+        } catch (err) {
+          console.error('Failed to fetch related opportunities:', err);
+        }
       } catch (err) {
         console.error('Failed to fetch opportunity:', err);
         setError('Failed to load opportunity details');
@@ -69,6 +78,17 @@ const OpportunityDetailPage = () => {
     setSaved(!saved);
   };
 
+  const getDeadlineStatus = (deadline) => {
+    if (!deadline) return { status: 'open', text: 'Apply soon' };
+    const now = new Date();
+    const deadlineDate = new Date(deadline);
+    const daysLeft = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24));
+
+    if (daysLeft < 0) return { status: 'closed', text: 'Closed' };
+    if (daysLeft <= 7) return { status: 'urgent', text: `${daysLeft} days left` };
+    return { status: 'open', text: `${daysLeft} days left` };
+  };
+
   if (loading) {
     return (
       <div className="opportunity-detail-loading">
@@ -88,6 +108,7 @@ const OpportunityDetailPage = () => {
   }
 
   const typeLabel = opportunity.work_type || opportunity.category || 'Jobs';
+  const deadlineStatus = getDeadlineStatus(opportunity.deadline);
 
   return (
     <main className="opportunity-detail-page">
@@ -96,84 +117,205 @@ const OpportunityDetailPage = () => {
           ← Back to Opportunities
         </button>
 
-        <div className="detail-header">
-          <span className={`opp-type ${getTypeClass(typeLabel)}`}>{typeLabel}</span>
-          {opportunity.remote === 1 && <span className="opp-type remote">Remote</span>}
-          <div className="header-actions">
-            <button className="action-button" onClick={handleSave}>
-              {saved ? '♥ Saved' : '♡ Save'}
-            </button>
-            <button className="action-button" onClick={handleShare}>
-              ↗ Share
-            </button>
+        <div className="layout">
+          {/* Main Content Column */}
+          <div className="main-col">
+            {/* Badges */}
+            <div className="badges">
+              {opportunity.remote === 1 && <span className="badge badge-status">Remote</span>}
+            </div>
+
+            {/* Title */}
+            <h1 className="opp-title">{opportunity.title}</h1>
+
+            {/* Organization Row */}
+            <div className="org-row">
+              <div className="org-logo">
+                {opportunity.organization_name?.charAt(0) || 'O'}
+              </div>
+              <div>
+                <div className="org-name">
+                  {opportunity.organization_name || 'Organization'}
+                </div>
+                <div className="org-sub">
+                  {opportunity.location || 'Location'} {opportunity.country && `• ${opportunity.country}`}
+                </div>
+              </div>
+            </div>
+
+            {/* Meta Row */}
+            <div className="meta-row">
+              <div className="meta-item">
+                <span>📅</span>
+                <span><strong>Deadline:</strong> {opportunity.deadline ? new Date(opportunity.deadline).toLocaleDateString() : 'Not specified'}</span>
+              </div>
+              {opportunity.salary && (
+                <div className="meta-item">
+                  <span>💰</span>
+                  <span><strong>Salary:</strong> {opportunity.salary}</span>
+                </div>
+              )}
+              {opportunity.opportunity_type && (
+                <div className="meta-item">
+                  <span>🏷️</span>
+                  <span><strong>Type:</strong> {opportunity.opportunity_type}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Description Section */}
+            <div className="content">
+              <div className="section">
+                <h2>About this opportunity</h2>
+                <div className="prose">
+                  <p>{opportunity.description || opportunity.short_description}</p>
+                </div>
+              </div>
+
+              {opportunity.eligibility && (
+                <div className="section">
+                  <h2>Eligibility</h2>
+                  <div className="prose">
+                    <p>{opportunity.eligibility}</p>
+                  </div>
+                </div>
+              )}
+
+              {opportunity.requirements && (
+                <div className="section">
+                  <h2>Requirements</h2>
+                  <div className="prose">
+                    <p>{opportunity.requirements}</p>
+                  </div>
+                </div>
+              )}
+
+              {opportunity.benefits && (
+                <div className="section">
+                  <h2>Benefits</h2>
+                  <div className="prose">
+                    <p>{opportunity.benefits}</p>
+                  </div>
+                </div>
+              )}
+
+              {opportunity.contact_name || opportunity.contact_email && (
+                <div className="section">
+                  <h2>Contact</h2>
+                  <div className="prose">
+                    {opportunity.contact_name && <p><strong>Name:</strong> {opportunity.contact_name}</p>}
+                    {opportunity.contact_email && <p><strong>Email:</strong> {opportunity.contact_email}</p>}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        <h1 className="detail-title">{opportunity.title}</h1>
+          {/* Sidebar */}
+          <div className="sidebar">
+            {/* Apply Card */}
+            <div className="apply-card">
+              <div className="apply-card-top">
+                <div className="deadline-label">Application deadline</div>
+                <div className="deadline-date">
+                  {opportunity.deadline ? new Date(opportunity.deadline).toLocaleDateString() : 'Not specified'}
+                </div>
+                <div className={`countdown ${deadlineStatus.status}`}>
+                  {deadlineStatus.text}
+                </div>
+              </div>
+              <div className="apply-card-body">
+                <ul className="specs">
+                  <li>
+                    <span className="k">Type</span>
+                    <span className="v">{typeLabel}</span>
+                  </li>
+                  {opportunity.location && (
+                    <li>
+                      <span className="k">Location</span>
+                      <span className="v">{opportunity.location}</span>
+                    </li>
+                  )}
+                  {opportunity.country && (
+                    <li>
+                      <span className="k">Country</span>
+                      <span className="v">{opportunity.country}</span>
+                    </li>
+                  )}
+                  {opportunity.salary && (
+                    <li>
+                      <span className="k">Salary</span>
+                      <span className="v">{opportunity.salary}</span>
+                    </li>
+                  )}
+                </ul>
 
-        <div className="detail-meta">
-          {opportunity.organization_name && (
-            <span className="detail-org">{opportunity.organization_name}</span>
-          )}
-          <div className="detail-location">
-            {opportunity.location && <span>📍 {opportunity.location}</span>}
-            {opportunity.country && <span>🌍 {opportunity.country}</span>}
-            {opportunity.deadline && <span>📅 Deadline: {new Date(opportunity.deadline).toLocaleDateString()}</span>}
+                {deadlineStatus.status === 'closed' ? (
+                  <div className="closed-banner">
+                    <span>✕</span>
+                    <span>This opportunity is closed</span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="action-pair">
+                      <button
+                        className={`btn btn-primary btn-block ${saved ? 'is-saved' : ''}`}
+                        onClick={handleSave}
+                      >
+                        {saved ? '♥ Saved' : '♡ Save'}
+                      </button>
+                      <button className="btn btn-ghost btn-block" onClick={handleShare}>
+                        ↗ Share
+                      </button>
+                    </div>
+                    {opportunity.application_url && (
+                      <button
+                        className="btn btn-primary btn-block"
+                        onClick={() => window.open(opportunity.application_url, '_blank')}
+                      >
+                        Apply Now →
+                      </button>
+                    )}
+                  </>
+                )}
+
+                <div className="card-note">
+                  <span>ℹ️</span>
+                  <span>Applications are processed directly by the organization. Trendorabay is not responsible for the hiring process.</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div className="detail-description">
-          <h3>Description</h3>
-          <p>{opportunity.description || opportunity.short_description}</p>
-        </div>
-
-        {opportunity.salary && (
-          <div className="detail-salary">
-            <h3>Compensation</h3>
-            <p>{opportunity.salary}</p>
-          </div>
-        )}
-
-        {opportunity.eligibility && (
-          <div className="detail-section">
-            <h3>Eligibility</h3>
-            <p>{opportunity.eligibility}</p>
-          </div>
-        )}
-
-        {opportunity.requirements && (
-          <div className="detail-section">
-            <h3>Requirements</h3>
-            <p>{opportunity.requirements}</p>
-          </div>
-        )}
-
-        {opportunity.benefits && (
-          <div className="detail-section">
-            <h3>Benefits</h3>
-            <p>{opportunity.benefits}</p>
-          </div>
-        )}
-
-        {opportunity.contact_name || opportunity.contact_email && (
-          <div className="detail-contact">
-            <h3>Contact</h3>
-            {opportunity.contact_name && <p>Name: {opportunity.contact_name}</p>}
-            {opportunity.contact_email && <p>Email: {opportunity.contact_email}</p>}
-          </div>
-        )}
-
-        <div className="detail-actions">
-          {opportunity.application_url && (
-            <button
-              className="btn-primary"
-              onClick={() => window.open(opportunity.application_url, '_blank')}
-            >
-              Apply Now
-            </button>
-          )}
         </div>
       </div>
+
+      {/* Related Opportunities */}
+      {relatedOpportunities.length > 0 && (
+        <div className="related">
+          <div className="container">
+            <div className="related-head">
+              <h2>More opportunities like this</h2>
+              <p>Similar opportunities you might be interested in</p>
+            </div>
+            <div className="related-grid">
+              {relatedOpportunities.map((opp) => (
+                <Link
+                  key={opp.id}
+                  to={`/opportunities/${opp.id}`}
+                  className="opp-card"
+                >
+                  <h3>{opp.title}</h3>
+                  <div className="card-org">{opp.organization_name || 'Organization'}</div>
+                  <div className="card-foot">
+                    <span className="dl">{opp.work_type || opp.category || 'Jobs'}</span>
+                    <span>{opp.location || 'Remote'}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 };

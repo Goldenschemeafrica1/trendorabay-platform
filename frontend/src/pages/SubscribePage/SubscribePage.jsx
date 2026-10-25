@@ -53,23 +53,21 @@ const SubscribePage = () => {
   return (
     <main className="subscribe-page">
       {/* HERO */}
-      <section className="hero">
-        <div className="container">
-          <div className="hero-grid">
-            <div>
-              <div className="eyebrow">Trendorabay Rate Card</div>
-              <h1>Get your brand <em>in front of Africa's creators.</em></h1>
-              <p>Feature your article, product, brand or event on Trendorabay — the platform telling the stories shaping tomorrow's African narrative. Choose the package that fits your goals.</p>
-              <div className="hero-cta">
-                <button className="dark-btn" onClick={scrollToRates}>See rates</button>
-                <button className="light-btn" onClick={scrollToContact}>Talk to us</button>
-              </div>
+      <section className="page-hero">
+        <div className="container hero-grid">
+          <div>
+            <div className="eyebrow">Trendorabay Rate Card</div>
+            <h1>Get your brand <em>in front of Africa's creators.</em></h1>
+            <p>Feature your article, product, brand or event on Trendorabay — the platform telling the stories shaping tomorrow's African narrative. Choose the package that fits your goals.</p>
+            <div className="hero-cta">
+              <button className="dark-btn" onClick={scrollToRates}>See rates</button>
+              <button className="light-btn" onClick={scrollToContact}>Talk to us</button>
             </div>
-            <div className="hero-art">
-              <div className="tile ta"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=700&q=85" alt="Brand feature" /></div>
-              <div className="tile tb"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=85" alt="Storytelling" /></div>
-              <div className="tile tc"><img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=600&q=85" alt="Magazine" /></div>
-            </div>
+          </div>
+          <div className="hero-art">
+            <div className="tile ta"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=700&q=85" alt="Brand feature" /></div>
+            <div className="tile tb"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=85" alt="Storytelling" /></div>
+            <div className="tile tc"><img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=600&q=85" alt="Magazine" /></div>
           </div>
         </div>
       </section>

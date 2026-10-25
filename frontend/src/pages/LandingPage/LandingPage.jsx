@@ -1,8 +1,10 @@
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
 import podcastService from '../../services/podcastService';
+import { toggleTheme } from '../../store/slices/uiSlice';
 import LandingPageSkeleton from '../../components/LandingPageSkeleton';
 import HeroSection from '../../components/landing/HeroSection';
 import LatestStories from '../../components/landing/LatestStories';
@@ -104,15 +106,17 @@ const initialInnovationStories = [
 ];
 
 const initialOpportunities = [
-  { tag: 'GRANT', title: 'Startup Growth Fund', meta: 'Africa • No deadline' },
-  { tag: 'JOB', title: 'Product Designer', meta: 'Nairobi • No deadline' },
-  { tag: 'EVENT', title: 'Africa Innovation Summit', meta: 'Virtual • No deadline' },
+  { id: 1, tag: 'GRANT', title: 'Startup Growth Fund', description: 'Funding for early-stage startups across Africa', meta: 'Africa • No deadline' },
+  { id: 2, tag: 'JOB', title: 'Product Designer', description: 'Join our team to build products that matter', meta: 'Nairobi • No deadline' },
+  { id: 3, tag: 'EVENT', title: 'Africa Innovation Summit', description: 'Connect with innovators and entrepreneurs', meta: 'Virtual • No deadline' },
 ];
 
 const formatPrice = (price) => `KES ${price.toLocaleString()}`;
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const theme = useSelector((state) => state.ui.theme);
   const [email, setEmail] = useState('');
   const [latestStories, setLatestStories] = useState([]);
   const [magazines, setMagazines] = useState([]);
@@ -147,7 +151,7 @@ const LandingPage = () => {
       try {
         const [homeRes, magRes, oppRes, storiesRes] = await Promise.all([
           api.get('/stories/homepage'),
-          api.get('/magazines?limit=5'),
+          api.get('/magazines?limit=6'),
           api.get('/opportunities?limit=3'),
           api.get('/stories/latest?limit=4'),
         ]);
@@ -198,7 +202,7 @@ const LandingPage = () => {
           tag: s.categoryName || 'Story',
           title: s.title,
           excerpt: makeExcerpt(s.content, 120),
-          meta: '5 min read',
+          meta: s.readTime || s.read_time || s.readingTime || s.reading_time || '5 min read',
         }));
 
         setHeroStory(home.featuredStories?.[0] || null);
@@ -211,7 +215,7 @@ const LandingPage = () => {
           tag: s.categoryName || 'Story',
           title: s.title,
           excerpt: makeExcerpt(s.content, 120),
-          meta: `${s.categoryName || 'Story'} • 5 min read`,
+          meta: `${s.categoryName || 'Story'} • ${s.readTime || s.read_time || s.readingTime || s.reading_time || '5 min read'}`,
         })));
         setInnovationStories(mapStories(home.innovationStories || home.featuredStories || [], 'INNOVATION').slice(0, 4).map((s) => ({
           ...s,
@@ -253,8 +257,10 @@ const LandingPage = () => {
         })));
 
         setOpportunities((oppRes.data.data || []).slice(0, 3).map((o) => ({
+          id: o.id,
           tag: (o.category || 'OPPORTUNITY').toUpperCase(),
           title: o.title,
+          description: o.short_description || o.description || '',
           meta: `${o.location || o.country || 'Remote'} • ${formatDate(o.deadline)}`,
         })));
 
@@ -523,7 +529,6 @@ const LandingPage = () => {
         <section id="nl-innovation" className="nl-section">
           <div className="nl-section-head">
             <h2>✦ Innovation</h2>
-            <Link to="/stories">EXPLORE →</Link>
           </div>
           <div className="nl-trending">
             {innovationStories.map((story) => (
@@ -554,6 +559,9 @@ const LandingPage = () => {
                 </article>
               </Link>
             ))}
+          </div>
+          <div className="nl-section-foot">
+            <Link to="/innovation">EXPLORE →</Link>
           </div>
         </section>
 
@@ -705,9 +713,15 @@ const LandingPage = () => {
             <p>Funding, jobs, grants, scholarships, competitions and events worth knowing about.</p>
             <div className="nl-opp-grid">
               {opportunities.map((opp) => (
-                <div key={opp.title || opp.tag} className="nl-opp">
+                <div
+                  key={opp.title || opp.tag}
+                  className="nl-opp"
+                  onClick={() => opp.id && navigate(`/opportunities/${opp.id}`)}
+                  style={{ cursor: opp.id ? 'pointer' : 'default' }}
+                >
                   <span className="nl-tag">{opp.tag}</span>
                   <strong>{opp.title}</strong>
+                  <p className="nl-opp-desc">{opp.description}</p>
                   <p className="nl-meta">{opp.meta}</p>
                 </div>
               ))}
@@ -792,6 +806,15 @@ const LandingPage = () => {
         />
 
       </div>
+
+      {/* Sticky Theme Toggle Button */}
+      <button
+        className="landing-theme-toggle"
+        onClick={() => dispatch(toggleTheme())}
+        aria-label="Toggle theme"
+      >
+        {theme === 'dark' ? '☀' : '☾'}
+      </button>
     </section>
   );
 };

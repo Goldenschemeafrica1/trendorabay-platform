@@ -32,9 +32,10 @@ const MagazineSection = ({ magazines }) => {
   if (!featured) return null;
 
   const handleMagazineClick = (magazine) => {
-    const slug = magazine.slug || String(magazine.id);
+    // Use ID as slug to ensure uniqueness
+    const slug = String(magazine.id);
     if (import.meta.env.DEV) {
-      console.log('Navigating to magazine:', slug);
+      console.log('Navigating to magazine with ID:', magazine.id, 'slug:', slug, 'title:', magazine.title);
     }
     navigate(`/magazines/${slug}`);
   };
@@ -47,7 +48,6 @@ const MagazineSection = ({ magazines }) => {
             <span className="nl-tag">TRENDORABAY STORE</span>
             <h2>✦ Magazines</h2>
           </div>
-          <Link to="/magazines">ALL ISSUES →</Link>
         </div>
 
         <div className="nl-magazine-hero">
@@ -77,10 +77,9 @@ const MagazineSection = ({ magazines }) => {
 
         <div className="nl-section-head nl-section-head-spaced">
           <h2>Latest Issues</h2>
-          <Link to="/magazines">BROWSE ALL →</Link>
         </div>
         <div className="nl-mag-grid">
-          {magazines.map((magazine) => (
+          {magazines.slice(1).map((magazine) => (
             <article
               key={magazine.id}
               className="nl-mag-card"
@@ -88,13 +87,21 @@ const MagazineSection = ({ magazines }) => {
             >
               <MagazineCover magazine={magazine} variant="nl-mag-cover-small" />
               <div className="nl-mag-info">
-                <span className="nl-tag">{magazine.tag.toUpperCase()}</span>
                 <h3>{magazine.title}</h3>
                 <p className="nl-meta">{magazine.issue}</p>
-                <div className="nl-price nl-price-small">{formatPrice(magazine.price)}</div>
+                <button
+                  type="button"
+                  className="nl-mag-btn"
+                  onClick={() => handleMagazineClick(magazine)}
+                >
+                  Read or Buy Print
+                </button>
               </div>
             </article>
           ))}
+        </div>
+        <div className="nl-section-foot">
+          <Link to="/magazines">ALL ISSUES →</Link>
         </div>
       </div>
     </section>

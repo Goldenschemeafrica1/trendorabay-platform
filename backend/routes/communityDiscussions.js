@@ -1,5 +1,6 @@
 import express from 'express';
 import pool from '../config/database.js';
+import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -69,11 +70,12 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Create a new discussion
-router.post('/', async (req, res, next) => {
+router.post('/', auth, async (req, res, next) => {
   try {
-    const { community_id, user_id, title, content, tag } = req.body;
+    const { community_id, title, content, tag } = req.body;
+    const user_id = req.userId;
 
-    if (!community_id || !user_id || !title || !content) {
+    if (!community_id || !title || !content) {
       return res.status(400).json({ success: false, error: 'Missing required fields' });
     }
 
@@ -109,13 +111,14 @@ router.post('/', async (req, res, next) => {
 });
 
 // Add reply to a discussion
-router.post('/:id/replies', async (req, res, next) => {
+router.post('/:id/replies', auth, async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { user_id, content } = req.body;
+    const { content } = req.body;
+    const user_id = req.userId;
 
-    if (!user_id || !content) {
-      return res.status(400).json({ success: false, error: 'User ID and content required' });
+    if (!content) {
+      return res.status(400).json({ success: false, error: 'Content required' });
     }
 
     const [result] = await pool.query(
@@ -135,6 +138,71 @@ router.post('/:id/replies', async (req, res, next) => {
     res.status(201).json({ success: true, data: newReply[0] });
   } catch (error) {
     console.error('Error adding reply:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Delete a discussion
+router.delete('/:id', auth, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user_id = req.userId;
+
+    // Check if user owns the discussion
+    const [discussion] = await pool.query(
+      'SELECT * FROM community_discussions WHERE id = ? AND user_id = ?',
+      [id, user_id]
+    );
+
+    if (discussion.length === 0) {
+      return res.status(403).json({ success: false, error: 'You can only delete your own discussions' });
+    }
+
+    await pool.query('DELETE FROM community_discussion_replies WHERE discussion_id = ?', [id]);
+    await pool.query('DELETE FROM community_discussions WHERE id = ?', [id]);
+    res.json({ success: true, message: 'Discussion deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting discussion:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Update a discussion
+router.put('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { title, content, user_id } = req.body;
+
+    if (!user_id || !title || !content) {
+      return res.status(400).json({ success: false, error: 'User ID, title and content required' });
+    }
+
+    // Check if user owns the discussion
+    const [discussion] = await pool.query(
+      'SELECT * FROM community_discussions WHERE id = ? AND user_id = ?',
+      [id, user_id]
+    );
+
+    if (discussion.length === 0) {
+      return res.status(403).json({ success: false, error: 'You can only edit your own discussions' });
+    }
+
+    await pool.query(
+      'UPDATE community_discussions SET title = ?, content = ? WHERE id = ?',
+      [title, content, id]
+    );
+
+    const [updatedDiscussion] = await pool.query(
+      `SELECT cd.*, u.username, u.first_name, u.last_name, u.profile_image
+       FROM community_discussions cd
+       INNER JOIN users u ON cd.user_id = u.id
+       WHERE cd.id = ?`,
+      [id]
+    );
+
+    res.json({ success: true, data: updatedDiscussion[0] });
+  } catch (error) {
+    console.error('Error updating discussion:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

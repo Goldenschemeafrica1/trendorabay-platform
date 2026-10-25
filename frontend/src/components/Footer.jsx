@@ -70,6 +70,7 @@ const Footer = () => {
             <a href="#nl-magazines" onClick={(e) => { e.preventDefault(); scrollToSection('nl-magazines'); }}>Magazines</a>
             <a href="#nl-merchandise" onClick={(e) => { e.preventDefault(); scrollToSection('nl-merchandise'); }}>Merchandise</a>
             <a href="#nl-podcasts" onClick={(e) => { e.preventDefault(); scrollToSection('nl-podcasts'); }}>Podcasts</a>
+            <Link to="/gallery">Gallery</Link>
           </div>
 
           <div className="footer-links">

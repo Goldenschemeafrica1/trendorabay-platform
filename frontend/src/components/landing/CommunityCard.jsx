@@ -26,7 +26,7 @@ const CommunityCard = () => {
         <p className="subtitle">Connect with storytellers, creators and innovators across Africa.</p>
         <p className="body">Be part of a growing community of writers, readers, and changemakers shaping the African narrative. Share ideas, collaborate on projects, and amplify voices that matter.</p>
         <button className="join-btn" onClick={handleJoinClick}>
-          Join Community <span className="arrow">→</span>
+          Explore Communities <span className="arrow">→</span>
         </button>
       </div>
     </section>

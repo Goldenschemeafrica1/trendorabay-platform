@@ -11,9 +11,11 @@
 
   background: #fff;
   border-bottom: 1px solid var(--nl-line);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 50;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   font-family: Inter, Arial, sans-serif;
 }
 
@@ -114,8 +116,8 @@
   display: inline-block;
   background: #111318;
   color: #fff;
-  padding: 9px 16px;
-  font-size: 12px;
+  padding: 5px 10px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.5px;
   transition: 0.2s;
@@ -176,29 +178,70 @@ body.dark-mode .nl-loginbtn:hover {
   top: calc(100% + 8px);
   right: 0;
   background: #fff;
-  border: 1px solid var(--line);
+  border: 1px solid var(--nl-line);
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: 6px;
-  min-width: 120px;
+  min-width: 140px;
   z-index: 1000;
+  animation: fadeIn 0.18s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nl-profile-item {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--nl-ink);
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nl-profile-item:hover {
+  background: #f5f5f5;
+  transform: translateX(2px);
 }
 
 .nl-profile-logout {
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 8px;
   border: none;
   background: transparent;
   color: #ef4444;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 13px;
   cursor: pointer;
   text-align: left;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  border-top: 1px solid var(--nl-line);
 }
 
 .nl-profile-logout:hover {
-  background: #fee2e2;
+  background: #fef2f2;
+  transform: translateX(2px);
 }
 
 body.dark-mode .nl-profile-dropdown {
@@ -206,8 +249,17 @@ body.dark-mode .nl-profile-dropdown {
   border-color: #374151;
 }
 
+body.dark-mode .nl-profile-item {
+  color: #e5e7eb;
+}
+
+body.dark-mode .nl-profile-item:hover {
+  background: #374151;
+}
+
 body.dark-mode .nl-profile-logout {
   color: #f87171;
+  border-top-color: #374151;
 }
 
 body.dark-mode .nl-profile-logout:hover {
@@ -456,6 +508,13 @@ body.dark-mode .nl-mobile-theme-option:hover {
 
   .nl-actions .nl-iconbtn {
     display: none;
+  }
+
+  .nl-actions .nl-search-toggle {
+    display: flex;
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
   }
 
   .nl-actions .nl-theme-toggle {

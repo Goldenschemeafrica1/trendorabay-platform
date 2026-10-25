@@ -197,10 +197,69 @@ const OpportunitiesPage = () => {
 
   if (loading) {
     return (
-      <div className="opportunities-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading opportunities...</p>
-      </div>
+      <main className="opportunities-page">
+        {/* HERO SKELETON */}
+        <section className="hero">
+          <div className="container hero-grid">
+            <div>
+              <div className="eyebrow skeleton-text"></div>
+              <h1 className="skeleton-text"></h1>
+              <p className="skeleton-text"></p>
+              <div className="hero-cta">
+                <div className="dark-btn skeleton-button"></div>
+                <div className="light-btn skeleton-button"></div>
+              </div>
+            </div>
+            <div className="hero-art">
+              <div className="tile ta skeleton-image"></div>
+              <div className="tile tb skeleton-image"></div>
+              <div className="tile tc skeleton-image"></div>
+            </div>
+          </div>
+        </section>
+
+        {/* LISTINGS SKELETON */}
+        <section className="section" id="listings">
+          <div className="container">
+            {/* Work Type Filters Skeleton */}
+            <div className="filters">
+              <span className="filter-label skeleton-text"></span>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="filter skeleton-filter"></div>
+              ))}
+            </div>
+
+            {/* Category Filters Skeleton */}
+            <div className="filters category-filters">
+              <span className="filter-label skeleton-text"></span>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="filter skeleton-filter"></div>
+              ))}
+            </div>
+
+            {/* Search Skeleton */}
+            <div className="search skeleton-input"></div>
+
+            {/* Grid Skeleton */}
+            <div className="opps-grid">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <article key={i} className="opp-card skeleton-card">
+                  <div className="opp-header">
+                    <span className="type skeleton-text"></span>
+                    <div className="save skeleton-icon"></div>
+                  </div>
+                  <h3 className="skeleton-text"></h3>
+                  <p className="org skeleton-text"></p>
+                  <div className="meta">
+                    <span className="location skeleton-text"></span>
+                    <span className="date skeleton-text"></span>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
     );
   }
 
@@ -229,12 +288,6 @@ const OpportunitiesPage = () => {
       {/* LISTINGS */}
       <section className="section" id="listings">
         <div className="container">
-          <div className="section-head">
-            <div className="eyebrow">Browse</div>
-            <h2>Open opportunities.</h2>
-            <p>Filter by type, search by keyword, and apply directly. New listings added every week.</p>
-          </div>
-
           {/* Work Type Filters */}
           <div className="filters">
             <span className="filter-label">Work Type:</span>
@@ -343,7 +396,7 @@ const OpportunitiesPage = () => {
                           showToast('Share: ' + opp.title);
                         }}
                       >
-                        ↗
+                        Share
                       </button>
                     </div>
                   </article>

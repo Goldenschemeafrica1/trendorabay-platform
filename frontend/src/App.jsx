@@ -48,6 +48,7 @@ import StoryDetailPage from './pages/StoryDetailPage/StoryDetailPage';
 import MusicPage from './pages/MusicPage/MusicPage';
 import CommunityPage from './pages/CommunityPage/CommunityPage';
 import OpportunityDetailPage from './pages/OpportunityDetailPage/OpportunityDetailPage';
+import InnovationPage from './pages/InnovationPage/InnovationPage';
 
 function App() {
   const location = useLocation();
@@ -202,7 +203,7 @@ function App() {
       />
 
       {/* Main Header - Hidden on auth, terms, privacy, forgot-password, and opportunity detail pages */}
-      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/forgot-password' && !location.pathname.startsWith('/opportunities/') && <Header />}
+      {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/terms' && location.pathname !== '/privacy' && location.pathname !== '/forgot-password' && !location.pathname.startsWith('/opportunities/') && <Header hideThemeToggle={true} />}
 
 
 
@@ -236,6 +237,7 @@ function App() {
         <Route path="/mission" element={<MissionPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/writers" element={<WritersPage />} />
+        <Route path="/innovation" element={<InnovationPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/partner" element={<PartnerPage />} />
         <Route path="/partner-with-us" element={<PartnerPage />} />
