@@ -273,8 +273,20 @@ body.dark-mode .footer {
   }
 
   .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-links:nth-of-type(2) {
+    grid-column: 1 / 2;
+  }
+
+  .footer-links:nth-of-type(3) {
+    grid-column: 2 / -1;
   }
 
   .footer-bottom-inner {

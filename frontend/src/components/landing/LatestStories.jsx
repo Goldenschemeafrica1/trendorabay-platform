@@ -5,7 +5,6 @@ const LatestStories = ({ stories }) => {
     <section id="nl-latest" className="nl-section">
       <div className="nl-section-head">
         <h2>✦ Latest Stories</h2>
-        <Link to="/stories">READ MORE</Link>
       </div>
       <div className="nl-trending">
         {stories.map((story) => (
@@ -36,6 +35,9 @@ const LatestStories = ({ stories }) => {
             </article>
           </Link>
         ))}
+      </div>
+      <div className="nl-section-foot">
+        <Link to="/stories">READ MORE →</Link>
       </div>
     </section>
   );

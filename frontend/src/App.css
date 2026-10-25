@@ -43,6 +43,7 @@ html, body {
   background: transparent;
   width: 100%;
   max-width: none;
+  overflow-x: hidden;
 }
 
 /* Prevent footer flash on page load */
@@ -57,9 +58,8 @@ html, body {
 
 /* Main Content */
 .main-content {
-  flex: 0 1 auto;
-  min-height: 0;
-  padding-top: 20px;
+  flex: 1;
+  padding-top: 96px;
   animation: fadeIn 0.5s ease-in-out;
   background: transparent;
 }

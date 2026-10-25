@@ -249,9 +249,7 @@ const AuthPage = () => {
       badge: 'Welcome back',
       quote: 'Every story you\'ve saved, every creator you\'ve followed — right where you left them.',
       images: [
-        '/login-magazine-cover.jpg',
-        '/promo-road-to-1m.jpg',
-        '/hoodie-product.jpg'
+        '/road-to-1m-followers.jpg'
       ]
     },
     signup: {
@@ -261,9 +259,7 @@ const AuthPage = () => {
       badge: 'New members welcome',
       quote: 'The stories that shape Africa deserve an audience that shows up.',
       images: [
-        '/login-magazine-cover.jpg',
-        '/promo-road-to-1m.jpg',
-        '/hoodie-product.jpg'
+        '/road-to-1m-followers.jpg'
       ]
     }
   };
@@ -567,8 +563,6 @@ const AuthPage = () => {
 
         <div className="visual-mosaic">
           <div className="vm-tile vm-1"><img src={currentVisual.images[0]} alt="Team meeting" /></div>
-          <div className="vm-tile vm-2"><img src={currentVisual.images[1]} alt="Collaboration" /></div>
-          <div className="vm-tile vm-3"><img src={currentVisual.images[2]} alt="Teamwork" /></div>
         </div>
 
         <div className="visual-quote-card">

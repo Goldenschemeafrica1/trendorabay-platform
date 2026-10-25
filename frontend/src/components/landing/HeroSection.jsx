@@ -10,7 +10,7 @@ const HeroSection = ({ heroStory, latestStories }) => {
           <p>Trendorabay is where Africa's stories are told, its products are discovered, and its opportunities are shared. A magazine, a marketplace, and a community — all in one place.-from mtaa to Global</p>
           <div className="hero-cta">
             <Link to="/store" className="dark-btn">Explore the store</Link>
-            <Link to="/stories" className="light-btn">Read the magazine</Link>
+            <Link to="/magazines" className="light-btn">Read the magazine</Link>
             <Link to="/writers" className="light-btn">Write for us</Link>
           </div>
         </div>

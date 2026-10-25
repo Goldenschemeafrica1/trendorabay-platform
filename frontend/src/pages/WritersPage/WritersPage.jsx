@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { toast } from 'react-toastify';
@@ -28,6 +28,18 @@ const WritersPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const [showForm, setShowForm] = useState(false);
+
+  // Scroll to form when it's shown
+  useEffect(() => {
+    if (showForm) {
+      setTimeout(() => {
+        const formSection = document.getElementById('apply');
+        if (formSection) {
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [showForm]);
 
   const areasOfInterestOptions = [
     'Fashion', 'Art', 'Agriculture', 'Food & Nutrition', 'Music', 'Beauty',
@@ -224,6 +236,20 @@ const WritersPage = () => {
           </div>
         </section>
 
+        {/* CTA BANNER */}
+        <section className="section" style={{ paddingTop: 0 }}>
+          <div className="container">
+            <div className="cta-banner">
+              <div>
+                <div className="eyebrow" style={{ color: '#aaa' }}>Ready to write?</div>
+                <h2>Add your voice to Africa's most exciting story.</h2>
+                <p>Send us a pitch, share a sample, and let's see what we can build together.</p>
+              </div>
+              <button className="white-btn" onClick={() => setShowForm(true)}>Apply now →</button>
+            </div>
+          </div>
+        </section>
+
         {/* APPLICATION FORM */}
         {showForm && (
           <section className="section apply" id="apply">
@@ -358,12 +384,11 @@ const WritersPage = () => {
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="writingSampleUrl">Writing sample URL</label>
+                  <label htmlFor="writingSampleUrl">Writing sample URL <span className="optional">(optional)</span></label>
                   <input
                     id="writingSampleUrl"
                     name="writingSampleUrl"
                     type="url"
-                    required
                     placeholder="https://link-to-a-sample-piece"
                     value={formData.writingSampleUrl}
                     onChange={handleInputChange}
@@ -487,20 +512,6 @@ const WritersPage = () => {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA BANNER */}
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="container">
-            <div className="cta-banner">
-              <div>
-                <div className="eyebrow" style={{ color: '#aaa' }}>Ready to write?</div>
-                <h2>Add your voice to Africa's most exciting story.</h2>
-                <p>Send us a pitch, share a sample, and let's see what we can build together.</p>
-              </div>
-              <button className="white-btn" onClick={() => setShowForm(true)}>Apply now →</button>
             </div>
           </div>
         </section>

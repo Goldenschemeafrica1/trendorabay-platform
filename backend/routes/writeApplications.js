@@ -18,32 +18,30 @@ router.post('/', async (req, res, next) => {
       socialMediaLinks,
       writingSampleUrl,
       whyWriteForTrendorabay,
-      cvResumeUrl,
-      profilePhotoUrl,
       agreeToGuidelines
     } = req.body;
-    
+
     // Validate required fields
     if (!fullName || !email || !location || !shortBio || !writingExperience || !whyWriteForTrendorabay) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Full name, email, location, short bio, writing experience, and reason for writing are required' 
+      return res.status(400).json({
+        success: false,
+        error: 'Full name, email, location, short bio, writing experience, and reason for writing are required'
       });
     }
 
     if (!agreeToGuidelines) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'You must agree to the writer guidelines' 
+      return res.status(400).json({
+        success: false,
+        error: 'You must agree to the writer guidelines'
       });
     }
 
     const [result] = await pool.query(
-      `INSERT INTO write_applications 
-       (full_name, email, phone_number, location, short_bio, areas_of_interest, 
-        writing_experience, portfolio_url, social_media_links, writing_sample_url, 
-        why_write_for_trendorabay, cv_resume_url, profile_photo_url, agree_to_guidelines) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO write_applications
+       (full_name, email, phone_number, location, short_bio, areas_of_interest,
+        writing_experience, portfolio_url, social_media_links, writing_sample_url,
+        why_write_for_trendorabay, agree_to_guidelines)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         fullName,
         email,
@@ -56,17 +54,15 @@ router.post('/', async (req, res, next) => {
         socialMediaLinks ? JSON.stringify(socialMediaLinks) : null,
         writingSampleUrl || null,
         whyWriteForTrendorabay,
-        cvResumeUrl || null,
-        profilePhotoUrl || null,
         agreeToGuidelines ? 1 : 0
       ]
     );
-    
+
     const [newApplication] = await pool.query(
       'SELECT * FROM write_applications WHERE id = ?',
       [result.insertId]
     );
-    
+
     // Parse JSON fields for response (handle both string and object formats)
     const application = newApplication[0];
     if (application.areas_of_interest && typeof application.areas_of_interest === 'string') {
@@ -75,7 +71,7 @@ router.post('/', async (req, res, next) => {
     if (application.social_media_links && typeof application.social_media_links === 'string') {
       application.social_media_links = JSON.parse(application.social_media_links);
     }
-    
+
     res.status(201).json({ success: true, data: application });
   } catch (error) {
     next(error);

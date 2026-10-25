@@ -67,19 +67,24 @@ export const transformStory = (story) => {
     imageUrl: getImageUrl(story.featured_image_url, categoryName),
     categoryName: categoryName,
     category: categoryName,
+    category_name: categoryName,
+    country: story.country || null,
     featured: story.featured === 1,
     displaySection: story.display_section,
+    readTime: story.read_time || '5 min read',
     author: story.author_id ? {
       id: story.author_id,
       name: story.author_name || 'Unknown Author',
-      avatar: getAvatarUrl(story.author_avatar)
+      avatar: getAvatarUrl(story.author_avatar),
+      bio: story.author_bio
     } : null,
     publishedDate: story.published_at || story.created_at,
     createdAt: story.created_at,
     updatedAt: story.updated_at,
     status: story.status,
     author_name: story.author_name,
-    author_id: story.author_id
+    author_id: story.author_id,
+    author_bio: story.author_bio
   };
 };
 
@@ -101,19 +106,35 @@ export const transformStoryWithImages = (story) => {
   if (story.featured_image_url_4) {
     imageUrls.push(getImageUrl(story.featured_image_url_4, categoryName));
   }
+  if (story.featured_image_url_5) {
+    imageUrls.push(getImageUrl(story.featured_image_url_5, categoryName));
+  }
+  if (story.featured_image_url_6) {
+    imageUrls.push(getImageUrl(story.featured_image_url_6, categoryName));
+  }
+  if (story.featured_image_url_7) {
+    imageUrls.push(getImageUrl(story.featured_image_url_7, categoryName));
+  }
+  if (story.featured_image_url_8) {
+    imageUrls.push(getImageUrl(story.featured_image_url_8, categoryName));
+  }
 
   return {
     ...story,
     slug,
     category: categoryName,
+    country: story.country || null,
+    readTime: story.read_time || '5 min read',
     author_avatar: getAvatarUrl(story.author_avatar),
+    author_bio: story.author_bio,
     featured_image_url: imageUrls.length > 0 ? imageUrls : null
   };
 };
 
 export const getStoriesByDisplaySection = async (pool, status, displaySection) => {
+  // OPTIMIZATION: Only select necessary fields for list views (no full content, only first image)
   return pool.query(
-    `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+    `SELECT s.id, s.slug, s.title, LEFT(s.content, 300) as excerpt, s.featured_image_url, s.category_id, s.author_id, s.featured, s.created_at, s.status, s.display_section, s.country, s.read_time, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
      FROM stories s
      LEFT JOIN authors a ON s.author_id = a.id
      LEFT JOIN categories c ON s.category_id = c.id

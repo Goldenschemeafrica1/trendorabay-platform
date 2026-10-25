@@ -41,8 +41,9 @@ router.get('/search', cache(60), async (req, res, next) => {
 router.get('/latest', cache(300), async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
-    const stories = await StoryService.getLatestStories(limit);
-    
+    const page = parseInt(req.query.page) || 1;
+    const stories = await StoryService.getLatestStories(limit, page);
+
     res.json({ success: true, data: stories });
   } catch (error) {
     next(error);
@@ -79,6 +80,23 @@ router.get('/popular', cache(300), async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 6;
     const stories = await StoryService.getPopularStories(limit);
     res.json({ success: true, data: stories });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/innovation', cache(300), async (req, res, next) => {
+  try {
+    const limit = parseInt(req.query.limit) || 10;
+    const filters = {
+      display_section: 'innovation',
+      status: 'published',
+      limit
+    };
+
+    const result = await StoryService.getStories(filters);
+
+    res.json({ success: true, data: result.data || [] });
   } catch (error) {
     next(error);
   }

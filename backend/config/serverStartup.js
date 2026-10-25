@@ -29,6 +29,51 @@ async function createInquiriesTable() {
   }
 }
 
+async function createCommunityDiscussionsTables() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS community_discussions (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        community_id BIGINT UNSIGNED NOT NULL,
+        user_id INT NOT NULL,
+        title VARCHAR(255) NOT NULL,
+        content TEXT NOT NULL,
+        tag VARCHAR(50),
+        views INT UNSIGNED DEFAULT 0,
+        status ENUM('active', 'archived', 'deleted') DEFAULT 'active',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_community (community_id),
+        INDEX idx_user (user_id),
+        INDEX idx_status (status),
+        INDEX idx_created_at (created_at)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    `);
+    console.log('Community discussions table checked/created successfully');
+  } catch (error) {
+    console.error('Error creating community_discussions table:', error);
+  }
+
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS community_discussion_replies (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        discussion_id BIGINT UNSIGNED NOT NULL,
+        user_id INT NOT NULL,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_discussion (discussion_id),
+        INDEX idx_user (user_id),
+        INDEX idx_created_at (created_at)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    `);
+    console.log('Community discussion replies table checked/created successfully');
+  } catch (error) {
+    console.error('Error creating community_discussion_replies table:', error);
+  }
+}
+
 export async function startServer(app, PORT) {
   try {
     // Validate critical environment variables
@@ -37,7 +82,13 @@ export async function startServer(app, PORT) {
       console.error('The server cannot start without a JWT secret for authentication.');
       console.error('Please set JWT_SECRET in your .env file or environment variables.');
       console.error('You can generate a secure JWT secret using: node scripts/generateJwtSecret.js');
-      process.exit(1);
+      // In production, exit; in development, use a fallback
+      if (process.env.NODE_ENV === 'production') {
+        process.exit(1);
+      } else {
+        console.warn('WARNING: Using fallback JWT secret for development. DO NOT use in production!');
+        process.env.JWT_SECRET = 'dev-fallback-secret-change-in-production';
+      }
     }
 
     if (process.env.JWT_SECRET === 'your_jwt_secret_here_use_strong_random_string' || 
@@ -54,10 +105,15 @@ export async function startServer(app, PORT) {
 
     const dbConnected = await testConnection();
     if (!dbConnected) {
-      console.warn('Warning: Database connection failed. Server will start but database operations will fail.');
+      console.warn('⚠️  Database connection failed. Server will start but database operations will fail.');
+      console.warn('⚠️  Please check your DATABASE_URL environment variable.');
+      if (process.env.NODE_ENV === 'production') {
+        console.warn('⚠️  In production, this is a critical issue. Please fix database connectivity.');
+      }
     } else {
       await validateTablesAtStartup();
       await createInquiriesTable();
+      await createCommunityDiscussionsTables();
     }
     
     startQueueWorker();

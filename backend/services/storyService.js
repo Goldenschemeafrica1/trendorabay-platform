@@ -63,8 +63,9 @@ export const StoryService = {
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
+    // OPTIMIZATION: Only select necessary fields for list views (no full content, only first image)
     let query = `
-      SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+      SELECT s.id, s.slug, s.title, LEFT(s.content, 300) as excerpt, s.featured_image_url, s.category_id, s.author_id, s.featured, s.created_at, s.status, s.display_section, s.country, s.read_time, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
       FROM stories s
       LEFT JOIN authors a ON s.author_id = a.id
       LEFT JOIN categories c ON s.category_id = c.id
@@ -106,52 +107,60 @@ export const StoryService = {
 
   async searchStories(query, page = 1, limit = 12) {
     const offset = (page - 1) * limit;
-    
+
     const [rows] = await pool.query(
-      `SELECT s.*, a.name as author_name 
-       FROM stories s 
-       LEFT JOIN authors a ON s.author_id = a.id 
+      `SELECT s.*, a.name as author_name
+       FROM stories s
+       LEFT JOIN authors a ON s.author_id = a.id
        WHERE (s.title LIKE ? OR s.content LIKE ?) AND s.status = 'published'
-       ORDER BY s.created_at DESC 
+       ORDER BY s.created_at DESC
        LIMIT ? OFFSET ?`,
       [`%${query}%`, `%${query}%`, limit, offset]
     );
-    
-    return rows;
+
+    return rows.map(transformStory);
   },
 
-  async getLatestStories(limit = 10) {
-    const cacheKey = `stories:latest:${limit}`;
-    const cached = await cacheGet(cacheKey);
-    if (cached) return cached;
+  async getLatestStories(limit = 10, page = 1) {
+    try {
+      const offset = (page - 1) * limit;
+      const cacheKey = `stories:latest:${limit}:${page}`;
+      const cached = await cacheGet(cacheKey);
+      if (cached) return cached;
 
-    const [rows] = await pool.query(
-      `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
-       FROM stories s
-       LEFT JOIN authors a ON s.author_id = a.id
-       LEFT JOIN categories c ON s.category_id = c.id
-       WHERE s.status = 'published'
-       ORDER BY s.created_at DESC
-       LIMIT ?`,
-      [limit]
-    );
+      // OPTIMIZATION: Only select necessary fields for list views
+      const [rows] = await pool.query(
+        `SELECT s.id, s.slug, s.title, LEFT(s.content, 300) as excerpt, s.featured_image_url, s.category_id, s.author_id, s.featured, s.created_at, s.status, s.display_section, s.country, s.read_time, a.name as author_name, a.avatar_url as author_avatar, c.name as category_name
+         FROM stories s
+         LEFT JOIN authors a ON s.author_id = a.id
+         LEFT JOIN categories c ON s.category_id = c.id
+         WHERE s.status = 'published' AND s.display_section = 'latest_stories'
+         ORDER BY s.created_at DESC
+         LIMIT ? OFFSET ?`,
+        [limit, offset]
+      );
 
-    const data = rows.map(transformStory);
-    await cacheSet(cacheKey, data, 300); // Cache for 5 minutes
-    return data;
+      const data = rows.map(transformStory);
+      await cacheSet(cacheKey, data, 300); // Cache for 5 minutes
+      return data;
+    } catch (error) {
+      console.error('Error in getLatestStories:', error);
+      // Return empty array on error to prevent 500
+      return [];
+    }
   },
 
   async getFeaturedStory() {
     const [rows] = await pool.query(
-      `SELECT s.*, a.name as author_name 
-       FROM stories s 
-       LEFT JOIN authors a ON s.author_id = a.id 
-       WHERE s.featured = 1 AND s.status = 'published' 
-       ORDER BY s.created_at DESC 
+      `SELECT s.*, a.name as author_name
+       FROM stories s
+       LEFT JOIN authors a ON s.author_id = a.id
+       WHERE s.featured = 1 AND s.status = 'published'
+       ORDER BY s.created_at DESC
        LIMIT 1`
     );
-    
-    return rows[0] || null;
+
+    return rows[0] ? transformStory(rows[0]) : null;
   },
 
   async getRecentStories(limit = 10) {
@@ -188,14 +197,11 @@ export const StoryService = {
     const cached = await cacheGet(cacheKey);
     if (cached) return cached;
 
-    console.log('getStoryByIdOrId called with param:', param, 'isNumeric:', isNumeric);
-
     let rows;
 
     if (isNumeric) {
-      console.log('Querying by ID:', param);
       [rows] = await pool.query(
-        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.featured_image_url_5, s.featured_image_url_6, s.featured_image_url_7, s.featured_image_url_8, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, s.views, s.country, s.read_time, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          LEFT JOIN categories c ON s.category_id = c.id
@@ -203,9 +209,8 @@ export const StoryService = {
         [param]
       );
     } else {
-      console.log('Querying by slug:', param);
       [rows] = await pool.query(
-        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, s.views, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
+        `SELECT s.id, s.slug, s.title, s.content, s.featured_image_url, s.featured_image_url_2, s.featured_image_url_3, s.featured_image_url_4, s.featured_image_url_5, s.featured_image_url_6, s.featured_image_url_7, s.featured_image_url_8, s.category_id, s.author_id, s.featured, s.published_at, s.created_at, s.updated_at, s.status, s.display_section, s.views, s.country, s.read_time, a.name as author_name, a.avatar_url as author_avatar, a.bio as author_bio, c.name as category_name
          FROM stories s
          LEFT JOIN authors a ON s.author_id = a.id
          LEFT JOIN categories c ON s.category_id = c.id
@@ -213,8 +218,6 @@ export const StoryService = {
         [param]
       );
     }
-
-    console.log('Query returned', rows.length, 'rows');
 
     if (rows.length === 0) {
       return null;

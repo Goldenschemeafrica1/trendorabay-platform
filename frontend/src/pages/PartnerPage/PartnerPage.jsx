@@ -62,7 +62,7 @@ const PartnerPage = () => {
   return (
     <main className="partners-page">
       {/* HERO */}
-      <section className="hero">
+      <section className="page-hero">
         <div className="container hero-grid">
           <div>
             <div className="eyebrow">Partners</div>
@@ -182,7 +182,7 @@ const PartnerPage = () => {
       </section>
 
       {/* CONTACT FORM */}
-      <section className="section" id="contact" style={{ paddingTop: 0 }}>
+      <section className="section" id="contact" style={{ paddingTop: '40px' }}>
         <div className="container">
           <div className="section-head">
             <div className="eyebrow">Get in touch</div>

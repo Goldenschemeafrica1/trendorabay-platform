@@ -55,7 +55,6 @@ const uploadToCMS = async (file, filename) => {
 router.get('/profile', auth, async (req, res, next) => {
   try {
     const userId = req.userId;
-    console.log('Fetching user profile');
 
     if (!userId) {
       return res.status(401).json({
@@ -67,12 +66,11 @@ router.get('/profile', auth, async (req, res, next) => {
     let users;
     try {
       const [usersWithProfile] = await pool.query(
-        'SELECT id, username, email, first_name, last_name, profile_image, role, created_at FROM users WHERE id = ?',
+        'SELECT id, username, email, first_name, last_name, profile_image, role, created_at, membership_number, membership_status, bio, location, interests, verified FROM users WHERE id = ?',
         [userId]
       );
       users = usersWithProfile;
     } catch (error) {
-      console.log('profile_image column error, trying fallback:', error.message);
       const [usersWithoutProfile] = await pool.query(
         'SELECT id, username, email, first_name, last_name, role, created_at FROM users WHERE id = ?',
         [userId]
@@ -87,10 +85,8 @@ router.get('/profile', auth, async (req, res, next) => {
       });
     }
 
-    console.log('User profile fetched successfully');
     res.json({ success: true, data: users[0] });
   } catch (error) {
-    console.error('Error fetching profile:', error.message);
     return res.status(500).json({
       success: false,
       error: 'Failed to fetch profile',
@@ -104,26 +100,16 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
     const userId = req.userId;
     const { first_name, last_name } = req.body;
 
-    console.log('=== Profile Update Request ===');
-    console.log('Processing profile update request');
-    console.log('Profile update data received');
-    console.log('File received:', req.file ? 'Yes' : 'No');
-
     let query = `UPDATE users SET first_name = ?, last_name = ?`;
     const params = [first_name, last_name];
 
     if (req.file) {
-      console.log('File upload received for profile image');
-
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
       const filename = 'profile-' + uniqueSuffix + path.extname(req.file.originalname);
       const profileImageUrl = await uploadToCMS(req.file, filename);
 
-      console.log('Profile image uploaded successfully');
-
       try {
         await pool.query('SELECT profile_image FROM users LIMIT 1');
-        console.log('profile_image column exists');
         
         const [columnInfo] = await pool.query(`
           SELECT COLUMN_TYPE 
@@ -133,12 +119,9 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
         `);
         
         if (columnInfo.length > 0 && columnInfo[0].COLUMN_TYPE.includes('varchar')) {
-          console.log('Upgrading profile_image column from VARCHAR to TEXT...');
           await pool.query('ALTER TABLE users MODIFY COLUMN profile_image TEXT');
-          console.log('profile_image column upgraded to TEXT');
         }
       } catch (error) {
-        console.log('Creating profile_image column as TEXT...');
         await pool.query('ALTER TABLE users ADD COLUMN profile_image TEXT');
       }
 
@@ -149,15 +132,12 @@ router.put('/profile', auth, upload.single('profile_image'), async (req, res, ne
     query += ` WHERE id = ?`;
     params.push(userId);
 
-    console.log('Executing profile update query');
-
     await pool.query(query, params);
-    console.log('Profile update successful');
 
     let updatedUser;
     try {
       const [userWithProfile] = await pool.query(
-        'SELECT id, username, email, first_name, last_name, profile_image, role, created_at FROM users WHERE id = ?',
+        'SELECT id, username, email, first_name, last_name, profile_image, role, created_at, membership_number, membership_status, bio, location, interests, verified FROM users WHERE id = ?',
         [userId]
       );
       updatedUser = userWithProfile[0];

@@ -224,4 +224,43 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
+// Update a post
+router.put('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { user_id, content } = req.body;
+
+    if (!user_id || !content) {
+      return res.status(400).json({ success: false, error: 'User ID and content required' });
+    }
+
+    // Check if user owns the post
+    const [post] = await pool.query(
+      'SELECT * FROM community_posts WHERE id = ? AND user_id = ?',
+      [id, user_id]
+    );
+
+    if (post.length === 0) {
+      return res.status(403).json({ success: false, error: 'You can only edit your own posts' });
+    }
+
+    await pool.query(
+      'UPDATE community_posts SET content = ? WHERE id = ?',
+      [content, id]
+    );
+
+    const [updatedPost] = await pool.query(
+      `SELECT cp.*, u.username, u.first_name, u.last_name, u.profile_image
+       FROM community_posts cp
+       INNER JOIN users u ON cp.user_id = u.id
+       WHERE cp.id = ?`,
+      [id]
+    );
+
+    res.json({ success: true, data: updatedPost[0] });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

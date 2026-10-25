@@ -10,10 +10,10 @@ const router = express.Router();
 // Homepage endpoint
 router.use('/homepage', homepageRoutes);
 
-// List and search endpoints
+// List and search endpoints (must be before single story route to avoid conflicts)
 router.use('/', listRoutes);
 
-// Single story endpoint
+// Single story endpoint (must be after specific list routes)
 router.use('/', singleRoutes);
 
 // CRUD operations
