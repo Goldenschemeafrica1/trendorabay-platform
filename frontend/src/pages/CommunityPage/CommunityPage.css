@@ -1048,7 +1048,7 @@
   .hero h1 { font-size: 44px; }
   .hero-visual { height: 250px; }
   .hero-search { max-width: 85%; }
-  .hero-search button { padding: 8px 12px; font-size: 12px; }
+  .hero-search button { display: none; }
   .community-grid { grid-template-columns: 1fr; }
   .steps { grid-template-columns: 1fr; }
   .detail-cover { height: 180px; border-radius: var(--radius); }
