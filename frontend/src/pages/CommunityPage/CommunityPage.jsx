@@ -638,9 +638,6 @@ const CommunityPage = () => {
                   >
                     <div className="card-image">
                       <img src={community.cover} alt={community.name} />
-                      {joinedCommunities.has(community.dbId) && (
-                        <span className="badge" style={{position: 'absolute', top: '12px', right: '12px', background: 'var(--ink)', color: '#fff'}}>✓ Joined</span>
-                      )}
                     </div>
                     <div className="card-body">
                       <div className="card-meta">
