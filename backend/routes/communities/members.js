@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/:id/members', async (req, res, next) => {
   try {
     const [rows] = await pool.query(
-      `SELECT u.id, u.username, u.first_name, u.last_name, u.location, u.avatar,
+      `SELECT u.id, u.username, u.first_name, u.last_name, u.country, u.profile_image_url as avatar,
               cm.role, cm.joined_at
        FROM community_members cm
        JOIN users u ON cm.user_id = u.id

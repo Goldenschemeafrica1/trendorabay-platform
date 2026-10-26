@@ -84,8 +84,12 @@ router.post('/', async (req, res, next) => {
   try {
     const { community_id, user_id, content, image_url, poll_data } = req.body;
 
-    if (!community_id || !user_id || !content) {
+    if (!community_id || !user_id) {
       return res.status(400).json({ success: false, error: 'Missing required fields' });
+    }
+
+    if (!content && !image_url) {
+      return res.status(400).json({ success: false, error: 'Post must have either content or an image' });
     }
 
     // Check if user is a member of the community
@@ -101,7 +105,7 @@ router.post('/', async (req, res, next) => {
     const [result] = await pool.query(
       `INSERT INTO community_posts (community_id, user_id, content, image_url, poll_data)
        VALUES (?, ?, ?, ?, ?)`,
-      [community_id, user_id, content, image_url || null, poll_data ? JSON.stringify(poll_data) : null]
+      [community_id, user_id, content || '', image_url || null, poll_data ? JSON.stringify(poll_data) : null]
     );
 
     const [newPost] = await pool.query(

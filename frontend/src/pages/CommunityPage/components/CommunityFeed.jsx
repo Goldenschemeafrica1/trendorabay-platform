@@ -26,17 +26,14 @@ const CommunityFeed = ({
         <p className="empty-state">No posts yet. Be the first to share!</p>
       ) : (
         posts.map(post => (
-          <div key={post.id} className="post-card">
+          <div key={post.id} className="post">
             <div className="post-header">
               <div className="post-author">
-                <div className="author-avatar">{post.initial}</div>
-                <div className="author-info">
-                  <span className="author-name">{post.author}</span>
-                  <span className="post-time">{post.time}</span>
-                </div>
+                <strong>{post.author}</strong>
+                <span>{post.time}</span>
               </div>
               <div className="post-menu-container">
-                <button 
+                <button
                   className="post-menu-btn"
                   onClick={() => setPostMenuOpen(postMenuOpen === post.id ? null : post.id)}
                 >
@@ -79,12 +76,12 @@ const CommunityFeed = ({
               <div className="post-content">
                 {post.image && <img src={post.image} alt="Post" className="post-image" />}
                 <p>
-                  {expandedPosts.has(post.id) || post.content.length < 200 
+                  {expandedPosts.has(post.id) || post.content.length < 200
                     ? formatContent(post.content)
                     : formatContent(post.content.substring(0, 200)) + '...'}
                 </p>
                 {post.content.length > 200 && (
-                  <button 
+                  <button
                     className="expand-btn"
                     onClick={() => togglePostExpansion(post.id)}
                   >
@@ -95,14 +92,14 @@ const CommunityFeed = ({
             )}
 
             <div className="post-actions">
-              <button 
-                className={`action-btn ${post.liked ? 'liked' : ''}`}
+              <button
+                className={`post-action ${post.liked ? 'liked' : ''}`}
                 onClick={() => toggleLike(post.id)}
               >
                 {post.liked ? '❤️' : '🤍'} {post.likes}
               </button>
-              <button 
-                className="action-btn"
+              <button
+                className="post-action"
                 onClick={() => toggleComments(post.id)}
               >
                 💬 {post.comments?.length || 0}
@@ -110,14 +107,16 @@ const CommunityFeed = ({
             </div>
 
             {post.commentsOpen && (
-              <div className="comments-section">
+              <div className="comment-section">
                 {post.comments?.map((comment, idx) => (
                   <div key={idx} className="comment">
-                    <span className="comment-author">{comment.author}:</span>
-                    <span className="comment-text">{comment.text}</span>
+                    <div className="comment-body">
+                      <strong>{comment.author}</strong>
+                      <p>{comment.text}</p>
+                    </div>
                   </div>
                 ))}
-                <div className="comment-input">
+                <div className="comment-composer">
                   <input
                     type="text"
                     placeholder="Write a comment..."

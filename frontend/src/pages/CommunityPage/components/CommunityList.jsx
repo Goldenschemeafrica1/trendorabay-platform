@@ -54,19 +54,19 @@ const CommunityList = ({
           <h1>Find your people.</h1>
           <p>Join communities around your interests, connect with creators, and discover opportunities.</p>
           
-          <div className="filters">
+          <div className="category-bar">
             <input
               type="text"
               placeholder="Search communities..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
+              className="search-bar"
             />
-            <div className="category-pills">
+            <div className="category-chips">
               {categories.map(category => (
                 <button
                   key={category}
-                  className={`category-pill ${selectedCategory === category ? 'active' : ''}`}
+                  className={`category-chip ${selectedCategory === category ? 'active' : ''}`}
                   onClick={() => setSelectedCategory(category)}
                 >
                   {category}
@@ -90,17 +90,19 @@ const CommunityList = ({
               className="community-card"
               onClick={() => openCommunity(community.dbId)}
             >
-              <div className="community-cover">
+              <div className="card-image">
                 <img src={community.cover} alt={community.name} />
                 {joinedCommunities.has(community.dbId) && (
-                  <span className="joined-badge">✓ Joined</span>
+                  <span className="badge">✓ Joined</span>
                 )}
               </div>
-              <div className="community-info">
-                <h3>{community.name}</h3>
-                <p className="community-category">{community.category}</p>
-                <p className="community-desc">{community.shortDesc}</p>
-                <p className="community-members">{community.members} members</p>
+              <div className="card-body">
+                <h3 className="card-title">{community.name}</h3>
+                <div className="card-meta">
+                  <span className="badge category-badge">{community.category}</span>
+                  <span className="card-desc">{community.shortDesc}</span>
+                  <span className="card-desc">{community.members} members</span>
+                </div>
               </div>
             </div>
           ))}

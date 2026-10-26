@@ -8,7 +8,7 @@ const router = express.Router();
 // Get all communities
 router.get('/', cache(300), async (req, res, next) => {
   try {
-    const { category, status, page = 1, limit = 20 } = req.query;
+    const { category, status, page = 1, limit = 1000 } = req.query;
     const offset = (page - 1) * limit;
 
     let query = 'SELECT * FROM communities WHERE 1=1';

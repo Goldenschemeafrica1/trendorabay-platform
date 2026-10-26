@@ -1,131 +1,60 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import CommunityList from './components/CommunityList';
-import CommunityFeed from './components/CommunityFeed';
-import CommunityDiscussions from './components/CommunityDiscussions';
-import CommunityMembers from './components/CommunityMembers';
-import CommunityOpportunities from './components/CommunityOpportunities';
-import CommunityEvents from './components/CommunityEvents';
-import PostComposer from './components/PostComposer';
-import CommunityHeader from './components/CommunityHeader';
-import JoinPopup from './components/JoinPopup';
-import Toast from './components/Toast';
 import './CommunityPage.css';
 
 const CommunityPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const API_BASE = '/api';
 
-  const categories = [
-    'All', 'Business', 'Technology', 'Music', 'Fashion', 'Agriculture',
-    'Sports', 'Education', 'Finance', 'Creative Arts', 'Lifestyle',
-    'Youth', 'Women in Business', 'Community Impact'
-  ];
-
   const [communities, setCommunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [joinedCommunities, setJoinedCommunities] = useState(new Set());
   const [currentCommunity, setCurrentCommunity] = useState(null);
   const [currentTab, setCurrentTab] = useState('Feed');
-  const [isJoined, setIsJoined] = useState(false);
-  const [followingMembers, setFollowingMembers] = useState(new Set());
-  const [showComposerModal, setShowComposerModal] = useState(false);
+  const [joinedCommunities, setJoinedCommunities] = useState(new Set());
+  const [posts, setPosts] = useState([]);
+  const [showComposer, setShowComposer] = useState(false);
   const [composerText, setComposerText] = useState('');
-  const [pendingImageDataUrl, setPendingImageDataUrl] = useState(null);
-  const [fileInputRef, setFileInputRef] = useState(null);
-  const hasFetchedCommunities = useRef(false);
-  const hasFetchedJoinedCommunities = useRef(false);
-  const [members, setMembers] = useState([]);
-  const [opportunities, setOpportunities] = useState([]);
-  const [events, setEvents] = useState([]);
+  const [toast, setToast] = useState({ show: false, message: '' });
+  const [loadingPosts, setLoadingPosts] = useState(false);
   const [discussions, setDiscussions] = useState([]);
-  const [selectedDiscussion, setSelectedDiscussion] = useState(null);
-  const [showDiscussionComposer, setShowDiscussionComposer] = useState(false);
+  const [loadingDiscussions, setLoadingDiscussions] = useState(false);
+  const [members, setMembers] = useState([]);
+  const [loadingMembers, setLoadingMembers] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
+  const [postContent, setPostContent] = useState('');
+  const [postImage, setPostImage] = useState(null);
+  const [submittingPost, setSubmittingPost] = useState(false);
+  const [isComposerExpanded, setIsComposerExpanded] = useState(false);
+  const [expandedPosts, setExpandedPosts] = useState(new Set());
+  const [postMenuOpen, setPostMenuOpen] = useState(null);
+  const [categories, setCategories] = useState(['All']);
+  const [showDiscussionModal, setShowDiscussionModal] = useState(false);
   const [discussionTitle, setDiscussionTitle] = useState('');
   const [discussionContent, setDiscussionContent] = useState('');
-  const [discussionTag, setDiscussionTag] = useState('');
-  const [replyText, setReplyText] = useState('');
-  const [postMenuOpen, setPostMenuOpen] = useState(null);
+  const [discussionTag, setDiscussionTag] = useState('General');
+  const [submittingDiscussion, setSubmittingDiscussion] = useState(false);
   const [discussionMenuOpen, setDiscussionMenuOpen] = useState(null);
-  const [editingPost, setEditingPost] = useState(null);
-  const [editPostContent, setEditPostContent] = useState('');
-  const [expandedPosts, setExpandedPosts] = useState(new Set());
-  const [posts, setPosts] = useState([]);
-  const [currentUserId, setCurrentUserId] = useState(null);
-  const [showJoinPopup, setShowJoinPopup] = useState(false);
-  const [selectedCommunityForJoin, setSelectedCommunityForJoin] = useState(null);
-  const [toast, setToast] = useState({ show: false, message: '' });
+  const [initialCommunityId, setInitialCommunityId] = useState(null);
 
-  // Load joined communities from localStorage
-  const loadJoinedCommunities = () => {
-    try {
-      const stored = localStorage.getItem('joinedCommunities');
-      return stored ? new Set(JSON.parse(stored)) : new Set();
-    } catch (error) {
-      console.error('Error loading joined communities:', error);
-      return new Set();
-    }
-  };
-
-  // Fetch user's joined communities from database
-  const fetchUserJoinedCommunities = async (userId) => {
-    if (hasFetchedJoinedCommunities.current) {
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/communities/user/${userId}`);
-
-      if (response.status === 429) {
-        console.warn('Rate limited, using cached data if available');
-        return;
-      }
-
-      if (response.status === 503) {
-        console.error('Service unavailable when fetching joined communities');
-        return;
-      }
-
-      const data = await response.json();
-
-      if (data.success && data.data) {
-        const communityIds = data.data.map(c => c.id);
-        const newSet = new Set(communityIds);
-        localStorage.setItem('joinedCommunities', JSON.stringify([...newSet]));
-        setJoinedCommunities(newSet);
-        hasFetchedJoinedCommunities.current = true;
-      }
-    } catch (error) {
-      console.error('Error fetching joined communities:', error);
-    }
-  };
-
-  // Fetch communities from API
   useEffect(() => {
-    if (hasFetchedCommunities.current) {
-      return;
-    }
+    const handleClickOutside = (event) => {
+      if (postMenuOpen && !event.target.closest('.post-menu-container')) {
+        setPostMenuOpen(null);
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [postMenuOpen]);
+
+  // Fetch communities
+  useEffect(() => {
     const fetchCommunities = async () => {
       try {
-        const response = await fetch(`${API_BASE}/communities`);
-
-        if (response.status === 429) {
-          console.warn('Rate limited fetching communities');
-          setLoading(false);
-          return;
-        }
-
-        if (response.status === 503) {
-          console.error('Service unavailable when fetching communities');
-          setLoading(false);
-          return;
-        }
-
+        const response = await fetch(`${API_BASE}/communities?limit=1000`);
         const data = await response.json();
-
         if (data.success && data.data) {
           const transformed = data.data.map(c => ({
             id: c.slug,
@@ -136,55 +65,192 @@ const CommunityPage = () => {
             shortDesc: c.short_description || c.description,
             members: c.member_count || 0,
             cover: c.cover_image_url
-          }));
+          })).sort((a, b) => b.members - a.members);
           setCommunities(transformed);
-          hasFetchedCommunities.current = true;
+
+          // Extract unique categories from communities
+          const uniqueCategories = ['All', ...new Set(data.data.map(c => c.category).filter(Boolean))];
+          setCategories(uniqueCategories);
         }
       } catch (error) {
         console.error('Error fetching communities:', error);
-        setCommunities([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchCommunities();
   }, []);
 
-  // Fetch user's joined communities when user is available
+  // Load joined communities from localStorage
   useEffect(() => {
-    const userStr = localStorage.getItem('trendorabay-user');
-    const user = userStr ? JSON.parse(userStr) : null;
-    const userId = user?.id;
-
-    if (userId) {
-      setCurrentUserId(userId);
-      fetchUserJoinedCommunities(userId);
+    const stored = localStorage.getItem('joinedCommunities');
+    if (stored) {
+      setJoinedCommunities(new Set(JSON.parse(stored)));
     }
   }, []);
 
-  // Helper to save joined communities to localStorage
-  const saveJoinedCommunities = (set) => {
-    const newSet = new Set(set);
-    localStorage.setItem('joinedCommunities', JSON.stringify([...newSet]));
-    setJoinedCommunities(newSet);
+  // Store initial community ID from URL on mount
+  useEffect(() => {
+    const communityId = searchParams.get('community');
+    if (communityId) {
+      setInitialCommunityId(communityId);
+    }
+  }, []);
+
+  // Check URL params for community
+  useEffect(() => {
+    const communityId = searchParams.get('community');
+    const tab = searchParams.get('tab') || 'Feed';
+    if (communityId && !loading) {
+      const community = communities.find(c => c.id === communityId || c.dbId === parseInt(communityId));
+      if (community) {
+        setCurrentCommunity(community);
+        setCurrentTab(tab);
+      }
+    }
+  }, [searchParams, communities, loading]);
+
+  // Fetch posts when community changes
+  useEffect(() => {
+    if (currentCommunity) {
+      const fetchPosts = async () => {
+        setLoadingPosts(true);
+        try {
+          console.log('Fetching posts for community:', currentCommunity.dbId);
+          const response = await fetch(`${API_BASE}/community-posts/community/${currentCommunity.dbId}`);
+          const data = await response.json();
+          console.log('Posts response:', data);
+          if (data.success && data.data) {
+            const transformed = data.data.map(post => ({
+              id: post.id,
+              author: post.username || `${post.first_name} ${post.last_name}`.trim(),
+              initial: (post.username || post.first_name || 'U')[0].toUpperCase(),
+              time: new Date(post.created_at).toLocaleDateString(),
+              content: post.content,
+              image: post.image_url,
+              likes: post.likes_count || 0,
+              liked: false,
+              comments: [],
+              commentsOpen: false
+            }));
+            setPosts(transformed);
+          }
+        } catch (error) {
+          console.error('Error fetching posts:', error);
+          setPosts([]);
+        } finally {
+          setLoadingPosts(false);
+        }
+      };
+      fetchPosts();
+    }
+  }, [currentCommunity]);
+
+  // Fetch discussions when community changes or tab changes to Discussions
+  useEffect(() => {
+    if (currentCommunity && currentTab === 'Discussions') {
+      const fetchDiscussions = async () => {
+        setLoadingDiscussions(true);
+        try {
+          console.log('Fetching discussions for community:', currentCommunity.dbId);
+          const response = await fetch(`${API_BASE}/community-discussions/community/${currentCommunity.dbId}`);
+          const data = await response.json();
+          console.log('Discussions response:', data);
+          if (data.success && data.data) {
+            const transformed = data.data.map(discussion => ({
+              id: discussion.id,
+              tag: discussion.tag || 'General',
+              title: discussion.title,
+              excerpt: discussion.content.substring(0, 150) + '...',
+              body: discussion.content,
+              author: discussion.username || `${discussion.first_name} ${discussion.last_name}`.trim(),
+              initial: (discussion.username || discussion.first_name || 'U')[0].toUpperCase(),
+              time: new Date(discussion.created_at).toLocaleDateString(),
+              views: discussion.views || 0,
+              repliesList: []
+            }));
+            setDiscussions(transformed);
+          }
+        } catch (error) {
+          console.error('Error fetching discussions:', error);
+          setDiscussions([]);
+        } finally {
+          setLoadingDiscussions(false);
+        }
+      };
+      fetchDiscussions();
+    }
+  }, [currentCommunity, currentTab]);
+
+  // Fetch members when community changes or tab changes to Members
+  useEffect(() => {
+    if (currentCommunity && currentTab === 'Members') {
+      const fetchMembers = async () => {
+        setLoadingMembers(true);
+        try {
+          console.log('Fetching members for community:', currentCommunity.dbId);
+          const response = await fetch(`${API_BASE}/communities/${currentCommunity.dbId}/members`);
+          const data = await response.json();
+          console.log('Members response:', data);
+          if (data.success && data.data) {
+            const transformed = data.data.map(member => ({
+              name: member.username || `${member.first_name} ${member.last_name}`.trim(),
+              role: member.role || 'Community Member',
+              initial: (member.username || member.first_name || 'U')[0].toUpperCase(),
+              location: member.country || 'Unknown',
+              posts: member.post_count || 0
+            }));
+            setMembers(transformed);
+          }
+        } catch (error) {
+          console.error('Error fetching members:', error);
+          setMembers([]);
+        } finally {
+          setLoadingMembers(false);
+        }
+      };
+      fetchMembers();
+    }
+  }, [currentCommunity, currentTab]);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (showPostModal) {
+      console.log('Modal opening - disabling body scroll and blur');
+      document.body.style.overflow = 'hidden';
+      document.body.style.filter = 'none';
+      document.body.style.backdropFilter = 'none';
+      document.body.style.webkitBackdropFilter = 'none';
+      document.documentElement.style.filter = 'none';
+      document.documentElement.style.backdropFilter = 'none';
+      document.documentElement.style.webkitBackdropFilter = 'none';
+      // Remove any blur from all elements
+      document.querySelectorAll('*').forEach(el => {
+        el.style.backdropFilter = 'none';
+        el.style.webkitBackdropFilter = 'none';
+      });
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.filter = '';
+      document.body.style.backdropFilter = '';
+      document.body.style.webkitBackdropFilter = '';
+      document.documentElement.style.filter = '';
+      document.documentElement.style.backdropFilter = '';
+      document.documentElement.style.webkitBackdropFilter = '';
+    };
+  }, [showPostModal]);
+
+  const showToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: '' }), 3000);
   };
 
-  // Helper to truncate text
-  const truncateText = (text, maxLines = 3) => {
-    const lines = text.split('\n');
-    if (lines.length <= maxLines) return text;
-    return lines.slice(0, maxLines).join('\n') + '...';
-  };
-
-  // Helper to format links in content
-  const formatContent = (text) => {
-    if (!text) return '';
-    
+  const linkify = (text) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.split(urlRegex);
-    
-    return parts.map((part, index) => {
+    return text.split(urlRegex).map((part, index) => {
       if (part.match(urlRegex)) {
         return (
           <a 
@@ -192,7 +258,12 @@ const CommunityPage = () => {
             href={part} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="content-link"
+            style={{
+              color: '#0066cc',
+              textDecoration: 'underline',
+              wordBreak: 'break-word',
+              wordWrap: 'break-word'
+            }}
           >
             {part}
           </a>
@@ -202,691 +273,9 @@ const CommunityPage = () => {
     });
   };
 
-  // Toggle post expansion
-  const togglePostExpansion = (postId) => {
-    const newExpanded = new Set(expandedPosts);
-    if (newExpanded.has(postId)) {
-      newExpanded.delete(postId);
-    } else {
-      newExpanded.add(postId);
-    }
-    setExpandedPosts(newExpanded);
-  };
-
-  // Helper function to format time
-  const formatTimeAgo = (dateString) => {
-    if (!dateString) return 'Just now';
-    
-    const date = new Date(dateString);
-    const now = new Date();
-    
-    const timezoneOffset = now.getTimezoneOffset() * 60 * 1000;
-    const adjustedDate = new Date(date.getTime() - timezoneOffset);
-    
-    const seconds = Math.floor((now - adjustedDate) / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const weeks = Math.floor(days / 7);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(days / 365);
-
-    if (seconds < 60) return 'Just now';
-    if (minutes < 60) return `${minutes} ${minutes === 1 ? 'min' : 'mins'} ago`;
-    if (hours < 24) return `${hours} ${hours === 1 ? 'hr' : 'hrs'} ago`;
-    if (days < 7) return `${days} ${days === 1 ? 'day' : 'days'} ago`;
-    if (weeks < 4) return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-    if (months < 12) return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-    if (years > 0) return `${years} ${years === 1 ? 'year' : 'years'} ago`;
-    return date.toLocaleDateString();
-  };
-
-  // Restore community from URL on mount
-  useEffect(() => {
-    const communityId = searchParams.get('community');
-    if (communityId) {
-      const community = communities.find(c => c.id === communityId);
-      if (community) {
-        setCurrentCommunity(community);
-        setIsJoined(joinedCommunities.has(community.dbId));
-        setCurrentTab(searchParams.get('tab') || 'Feed');
-        window.scrollTo(0, 0);
-      }
-    } else {
-      window.scrollTo(0, 0);
-    }
-  }, [communities, searchParams, joinedCommunities]);
-
-  // Close menus when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest('.post-menu-container')) {
-        setPostMenuOpen(null);
-      }
-      if (!event.target.closest('.discussion-menu-container')) {
-        setDiscussionMenuOpen(null);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
-
-  // Fetch posts for current community
-  useEffect(() => {
-    const fetchPosts = async () => {
-      if (!currentCommunity || !currentCommunity.dbId || currentTab !== 'Feed') return;
-
-      try {
-        const response = await fetch(`${API_BASE}/community-posts/community/${currentCommunity.dbId}`);
-
-        if (response.status === 503) {
-          console.error('Service unavailable when fetching posts');
-          return;
-        }
-
-        const data = await response.json();
-
-        if (data.success && data.data) {
-          const postsWithoutComments = data.data.map(p => ({
-            id: p.id,
-            author: p.username || `${p.first_name} ${p.last_name}`.trim(),
-            initial: (p.username || p.first_name || 'U')[0].toUpperCase(),
-            time: formatTimeAgo(p.created_at),
-            content: p.content,
-            image: p.image_url,
-            likes: p.likes_count || 0,
-            liked: false,
-            commentsOpen: false,
-            comments: [],
-            userId: p.user_id,
-            authorUsername: p.username
-          }));
-
-          setPosts(postsWithoutComments);
-
-          postsWithoutComments.forEach(async (post) => {
-            try {
-              const commentsResponse = await fetch(`${API_BASE}/community-posts/${post.id}`);
-              const commentsData = await commentsResponse.json();
-              if (commentsData.success && commentsData.data.comments) {
-                const comments = commentsData.data.comments.map(c => ({
-                  author: c.username || `${c.first_name} ${c.last_name}`.trim(),
-                  text: c.content
-                }));
-                setPosts(prevPosts => prevPosts.map(p => {
-                  if (p.id === post.id) {
-                    return { ...p, comments };
-                  }
-                  return p;
-                }));
-              }
-            } catch (error) {
-              console.error('Error fetching comments for post:', post.id, error);
-            }
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
-    };
-
-    fetchPosts();
-  }, [currentCommunity?.dbId, currentTab, API_BASE]);
-
-  // Fetch members for current community
-  useEffect(() => {
-    const fetchMembers = async () => {
-      if (!currentCommunity || !currentCommunity.dbId) return;
-
-      try {
-        const response = await fetch(`${API_BASE}/communities/${currentCommunity.dbId}/members`);
-        const data = await response.json();
-
-        if (data.success && data.data) {
-          const transformed = data.data.map(m => ({
-            name: m.username || `${m.first_name} ${m.last_name}`.trim(),
-            role: m.role || 'Member',
-            initial: (m.username || m.first_name || 'U')[0].toUpperCase(),
-            location: m.location || 'Unknown',
-            posts: m.post_count || 0
-          }));
-          setMembers(transformed);
-        }
-      } catch (error) {
-        console.error('Error fetching members:', error);
-      }
-    };
-
-    fetchMembers();
-  }, [currentCommunity?.dbId, API_BASE]);
-
-  // Fetch opportunities for current community category
-  useEffect(() => {
-    const fetchOpportunities = async () => {
-      if (!currentCommunity || !currentCommunity.category) return;
-
-      try {
-        const response = await fetch(`${API_BASE}/opportunities?category=${encodeURIComponent(currentCommunity.category)}&limit=10`);
-        const data = await response.json();
-
-        if (data.success && data.data) {
-          const transformed = data.data.map(o => ({
-            title: o.title,
-            org: o.organization_name || 'Unknown',
-            logo: o.organization_logo || '🏢',
-            tags: [o.opportunity_type, o.category].filter(Boolean),
-            deadline: o.deadline ? `Closes ${formatTimeAgo(o.deadline)}` : 'No deadline',
-            location: o.location || o.country || 'Remote'
-          }));
-          setOpportunities(transformed);
-        }
-      } catch (error) {
-        console.error('Error fetching opportunities:', error);
-      }
-    };
-
-    fetchOpportunities();
-  }, [currentCommunity?.category, API_BASE]);
-
-  // Fetch events for current community category
-  useEffect(() => {
-    const fetchEvents = async () => {
-      if (!currentCommunity || !currentCommunity.category) return;
-
-      try {
-        const response = await fetch(`${API_BASE}/events?category=${encodeURIComponent(currentCommunity.category)}&limit=10`);
-        const data = await response.json();
-
-        if (data.success && data.data) {
-          const transformed = data.data.map(e => {
-            const date = new Date(e.event_date);
-            const attendees = Array.isArray(e.attendees) ? e.attendees : [];
-            return {
-              day: date.getDate(),
-              month: date.toLocaleString('default', { month: 'short' }),
-              title: e.title,
-              venue: e.location || 'TBD',
-              attendees: attendees.slice(0, 3).map(a => a[0] || 'A'),
-              spots: `${attendees.length} attending`
-            };
-          });
-          setEvents(transformed);
-        }
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      }
-    };
-
-    fetchEvents();
-  }, [currentCommunity?.category, API_BASE]);
-
-  // Fetch discussions for current community
-  useEffect(() => {
-    const fetchDiscussions = async () => {
-      if (!currentCommunity || !currentCommunity.dbId || currentTab !== 'Discussions') return;
-
-      try {
-        const response = await fetch(`${API_BASE}/community-discussions/community/${currentCommunity.dbId}`);
-
-        if (response.status === 503) {
-          console.error('Service unavailable when fetching discussions');
-          return;
-        }
-
-        const data = await response.json();
-
-        if (data.success && data.data) {
-          const transformed = data.data.map(d => ({
-            id: d.id,
-            title: d.title,
-            content: d.content,
-            author: d.username || `${d.first_name} ${d.last_name}`.trim(),
-            initial: (d.username || d.first_name || 'U')[0].toUpperCase(),
-            time: formatTimeAgo(d.created_at),
-            tag: d.tag,
-            repliesCount: d.replies_count || 0,
-            views: d.views || 0,
-            userId: d.user_id,
-            authorUsername: d.username
-          }));
-          setDiscussions(transformed);
-        }
-      } catch (error) {
-        console.error('Error fetching discussions:', error);
-      }
-    };
-
-    fetchDiscussions();
-  }, [currentCommunity?.dbId, currentTab, API_BASE]);
-
-  const showToast = (message) => {
-    setToast({ show: true, message });
-    setTimeout(() => setToast({ show: false, message: '' }), 2600);
-  };
-
-  const openCommunity = (dbId) => {
-    const community = communities.find(c => c.dbId === dbId);
-    if (!community) return;
-    setCurrentCommunity(community);
-    setCurrentTab('Feed');
-    setSelectedDiscussion(null);
-    setIsJoined(joinedCommunities.has(dbId));
-    setSearchParams({ community: community.id, tab: 'Feed' });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const goBackToList = () => {
-    setCurrentCommunity(null);
-    setSearchParams({});
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openJoinPopup = (community) => {
-    setSelectedCommunityForJoin(community);
-    setShowJoinPopup(true);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeJoinPopup = () => {
-    setShowJoinPopup(false);
-    document.body.style.overflow = '';
-    setSelectedCommunityForJoin(null);
-  };
-
-  const handleConfirmJoin = async () => {
-    if (!selectedCommunityForJoin) return;
-
-    const dbId = selectedCommunityForJoin.dbId;
-    const userStr = localStorage.getItem('trendorabay-user');
-    const user = userStr ? JSON.parse(userStr) : null;
-    const userId = user?.id;
-
-    if (!userId) {
-      showToast('Please log in to join a community');
-      closeJoinPopup();
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/communities/${dbId}/join`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId: parseInt(userId) }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        const newJoined = new Set(joinedCommunities);
-        newJoined.add(dbId);
-        saveJoinedCommunities(newJoined);
-        setIsJoined(true);
-
-        if (currentCommunity && currentCommunity.dbId === dbId) {
-          const membersResponse = await fetch(`${API_BASE}/communities/${dbId}/members`);
-          const membersData = await membersResponse.json();
-          if (membersData.success && membersData.data) {
-            const transformed = membersData.data.map(m => ({
-              name: m.username || `${m.first_name} ${m.last_name}`.trim(),
-              role: m.role || 'Member',
-              initial: (m.username || m.first_name || 'U')[0].toUpperCase(),
-              location: m.location || 'Unknown',
-              posts: m.post_count || 0
-            }));
-            setMembers(transformed);
-          }
-        }
-
-        const joinedName = selectedCommunityForJoin.name;
-        closeJoinPopup();
-        showToast(`✓ You joined ${joinedName}!`);
-      } else {
-        console.error('Join failed:', result);
-        showToast(result.error || 'Failed to join community. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error joining community:', error);
-      showToast('Failed to join community. Please try again.');
-    }
-  };
-
-  const toggleJoin = async () => {
-    if (!currentCommunity) return;
-    
-    const userStr = localStorage.getItem('trendorabay-user');
-    const user = userStr ? JSON.parse(userStr) : null;
-    const userId = user?.id;
-
-    if (!userId) {
-      showToast('Please log in to join a community');
-      return;
-    }
-
-    try {
-      if (isJoined) {
-        const response = await fetch(`${API_BASE}/communities/${currentCommunity.dbId}/leave`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId: parseInt(userId) }),
-        });
-
-        if (response.ok) {
-          const newJoined = new Set(joinedCommunities);
-          newJoined.delete(currentCommunity.dbId);
-          saveJoinedCommunities(newJoined);
-          setIsJoined(false);
-          showToast(`You left ${currentCommunity.name}.`);
-        } else {
-          showToast('Failed to leave community. Please try again.');
-        }
-      } else {
-        const response = await fetch(`${API_BASE}/communities/${currentCommunity.dbId}/join`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId: parseInt(userId) }),
-        });
-
-        if (response.ok) {
-          const newJoined = new Set(joinedCommunities);
-          newJoined.add(currentCommunity.dbId);
-          saveJoinedCommunities(newJoined);
-          setIsJoined(true);
-          
-          const membersResponse = await fetch(`${API_BASE}/communities/${currentCommunity.dbId}/members`);
-          const membersData = await membersResponse.json();
-          if (membersData.success && membersData.data) {
-            const transformed = membersData.data.map(m => ({
-              name: m.username || `${m.first_name} ${m.last_name}`.trim(),
-              role: m.role || 'Member',
-              initial: (m.username || m.first_name || 'U')[0].toUpperCase(),
-              location: m.location || 'Unknown',
-              posts: m.post_count || 0
-            }));
-            setMembers(transformed);
-          }
-          
-          showToast(`✓ You joined ${currentCommunity.name}!`);
-        } else {
-          showToast('Failed to join community. Please try again.');
-        }
-      }
-    } catch (error) {
-      console.error('Error toggling join:', error);
-      showToast('Failed to update membership. Please try again.');
-    }
-  };
-
-  const toggleLike = async (postId) => {
-    const userStr = localStorage.getItem('trendorabay-user');
-    const user = userStr ? JSON.parse(userStr) : null;
-    const userId = user?.id;
-
-    if (!userId) {
-      showToast('Please log in to like posts');
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/community-posts/${postId}/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ user_id: parseInt(userId) }),
-      });
-
-      const result = await response.json();
-      if (response.ok && result.success) {
-        setPosts(posts.map(p => {
-          if (p.id === postId) {
-            return { 
-              ...p, 
-              liked: result.liked, 
-              likes: result.liked ? p.likes + 1 : p.likes - 1 
-            };
-          }
-          return p;
-        }));
-      }
-    } catch (error) {
-      console.error('Error toggling like:', error);
-      setPosts(posts.map(p => {
-        if (p.id === postId) {
-          return { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 };
-        }
-        return p;
-      }));
-    }
-  };
-
-  const toggleComments = (postId) => {
-    setPosts(posts.map(p => {
-      if (p.id === postId) {
-        return { ...p, commentsOpen: !p.commentsOpen };
-      }
-      return p;
-    }));
-  };
-
-  const submitComment = async (postId, text) => {
-    if (!text.trim()) return;
-
-    const userStr = localStorage.getItem('trendorabay-user');
-    const user = userStr ? JSON.parse(userStr) : null;
-    const userId = user?.id;
-
-    if (!userId) {
-      showToast('Please log in to comment');
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/community-posts/${postId}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: parseInt(userId),
-          content: text
-        }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        try {
-          const commentsResponse = await fetch(`${API_BASE}/community-posts/${postId}`);
-          const commentsData = await commentsResponse.json();
-          if (commentsData.success && commentsData.data.comments) {
-            setPosts(posts.map(p => {
-              if (p.id === postId) {
-                return {
-                  ...p,
-                  comments: commentsData.data.comments.map(c => ({
-                    author: c.username || `${c.first_name} ${c.last_name}`.trim(),
-                    text: c.content
-                  })),
-                  commentsOpen: true
-                };
-              }
-              return p;
-            }));
-          }
-        } catch (error) {
-          console.error('Error refetching comments:', error);
-          setPosts(posts.map(p => {
-            if (p.id === postId) {
-              const newComments = [...(p.comments || []), {
-                author: result.data.username || user.username || 'You',
-                text
-              }];
-              return { ...p, comments: newComments, commentsOpen: true };
-            }
-            return p;
-          }));
-        }
-        showToast('Comment posted!');
-      } else {
-        console.error('Comment failed:', result);
-        showToast(result.error || result.message || 'Failed to post comment');
-      }
-    } catch (error) {
-      console.error('Error submitting comment:', error);
-      showToast('Failed to post comment. Please try again.');
-    }
-  };
-
-  const deletePost = async (postId) => {
-    if (!currentUserId) {
-      showToast('Please log in to delete posts');
-      return;
-    }
-
-    if (!confirm('Are you sure you want to delete this post?')) {
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/community-posts/${postId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ user_id: parseInt(currentUserId) }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        setPosts(posts.filter(p => p.id !== postId));
-        showToast('Post deleted successfully');
-      } else {
-        console.error('Delete failed:', result);
-        showToast(result.error || 'Failed to delete post');
-      }
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      showToast('Failed to delete post. Please try again.');
-    }
-  };
-
-  const deleteDiscussion = async (discussionId) => {
-    if (!currentUserId) {
-      showToast('Please log in to delete discussions');
-      return;
-    }
-
-    if (!confirm('Are you sure you want to delete this discussion? This cannot be undone.')) {
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/community-discussions/${discussionId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        setDiscussions(discussions.filter(d => d.id !== discussionId));
-        if (selectedDiscussion && selectedDiscussion.id === discussionId) {
-          setSelectedDiscussion(null);
-        }
-        setDiscussionMenuOpen(null);
-        showToast('Discussion deleted successfully');
-      } else {
-        console.error('Delete failed:', result);
-        showToast(result.error || 'Failed to delete discussion');
-      }
-    } catch (error) {
-      console.error('Error deleting discussion:', error);
-      showToast('Failed to delete discussion. Please try again.');
-    }
-  };
-
-  const editPost = async (postId) => {
-    if (!editPostContent.trim()) {
-      showToast('Content cannot be empty');
-      return;
-    }
-
-    if (!currentUserId) {
-      showToast('Please log in to edit posts');
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/community-posts/${postId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: parseInt(currentUserId),
-          content: editPostContent
-        }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        setPosts(posts.map(p => {
-          if (p.id === postId) {
-            return { ...p, content: editPostContent };
-          }
-          return p;
-        }));
-        setEditingPost(null);
-        setEditPostContent('');
-        setPostMenuOpen(null);
-        showToast('Post updated successfully');
-      } else {
-        console.error('Edit failed:', result);
-        showToast(result.error || 'Failed to update post');
-      }
-    } catch (error) {
-      console.error('Error editing post:', error);
-      showToast('Failed to update post. Please try again.');
-    }
-  };
-
-  const handleImageSelect = (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) { showToast('Please pick an image file.'); return; }
-    if (file.size > 8 * 1024 * 1024) { showToast('Image is too large (max 8MB).'); return; }
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setPendingImageDataUrl(ev.target.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const submitPost = async () => {
-    if (!composerText.trim() && !pendingImageDataUrl) { showToast('Write something or add an image first.'); return; }
-
-    const userStr = localStorage.getItem('trendorabay-user');
-    const user = userStr ? JSON.parse(userStr) : null;
-    const userId = user?.id;
-
-    if (!userId) {
-      showToast('Please log in to post');
-      return;
-    }
-
-    if (!currentCommunity) {
-      showToast('Please select a community');
+  const handleSubmitPost = async () => {
+    if (!postContent.trim() && !postImage) {
+      showToast('Please enter some content or add an image');
       return;
     }
 
@@ -895,333 +284,1112 @@ const CommunityPage = () => {
       return;
     }
 
+    setSubmittingPost(true);
     try {
+      const userStr = localStorage.getItem('trendorabay-user');
+      console.log('User string from localStorage:', userStr);
+      const user = userStr ? JSON.parse(userStr) : null;
+      console.log('Parsed user:', user);
+
+      if (!user) {
+        showToast('Please log in to post');
+        return;
+      }
+
+      console.log('Creating post with user_id:', user.id, 'community_id:', currentCommunity.dbId);
+
       const response = await fetch(`${API_BASE}/community-posts`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           community_id: currentCommunity.dbId,
-          user_id: parseInt(userId),
-          content: composerText,
-          image_url: pendingImageDataUrl || null
-        }),
+          user_id: user.id,
+          content: postContent || '',
+          image_url: postImage
+        })
       });
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        const newPost = {
-          id: result.data.id,
-          author: result.data.username || user.username || 'You',
-          initial: (result.data.username || user.username || 'You')[0].toUpperCase(),
-          time: 'Just now',
-          content: composerText,
-          image: pendingImageDataUrl || null,
-          likes: 0,
-          liked: false,
-          commentsOpen: false,
-          comments: [],
-          userId: parseInt(userId),
-          authorUsername: result.data.username || user.username
-        };
-        setPosts([newPost, ...posts]);
-        setComposerText('');
-        setPendingImageDataUrl(null);
-        setShowComposerModal(false);
-        showToast('Post published!');
+      const data = await response.json();
+      console.log('Post response:', data);
+      
+      if (data.success) {
+        showToast('Post created successfully!');
+        setPostContent('');
+        setPostImage(null);
+        setShowPostModal(false);
+        fetchPosts();
       } else {
-        console.error('Post failed:', result);
-        showToast(result.error || result.message || 'Failed to publish post.');
+        showToast(data.error || 'Failed to create post');
       }
     } catch (error) {
-      console.error('Error submitting post:', error);
-      showToast('Failed to publish post. Please try again.');
+      console.error('Error creating post:', error);
+      showToast('Failed to create post');
+    } finally {
+      setSubmittingPost(false);
     }
   };
 
-  const submitDiscussion = async () => {
+  const handleSubmitDiscussion = async () => {
     if (!discussionTitle.trim() || !discussionContent.trim()) {
-      showToast('Please provide both title and content');
+      showToast('Please enter a title and content');
       return;
     }
 
-    const userStr = localStorage.getItem('trendorabay-user');
-    const user = userStr ? JSON.parse(userStr) : null;
-    const userId = user?.id;
-
-    if (!userId) {
-      showToast('Please log in to start a discussion');
-      return;
-    }
-
-    if (!isJoined) {
-      showToast('Please join this community to start discussions');
-      return;
-    }
-
+    setSubmittingDiscussion(true);
     try {
+      const userStr = localStorage.getItem('trendorabay-user');
+      const user = userStr ? JSON.parse(userStr) : null;
+
+      if (!user) {
+        showToast('Please log in to create a discussion');
+        return;
+      }
+
       const response = await fetch(`${API_BASE}/community-discussions`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           community_id: currentCommunity.dbId,
-          user_id: parseInt(userId),
           title: discussionTitle,
           content: discussionContent,
-          tag: discussionTag || null
-        }),
+          tag: discussionTag
+        })
       });
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        const newDiscussion = {
-          id: result.data.id,
-          title: discussionTitle,
-          content: discussionContent,
-          author: result.data.username || user.username || 'You',
-          initial: (result.data.username || user.username || 'You')[0].toUpperCase(),
-          time: 'Just now',
-          tag: discussionTag,
-          repliesCount: 0,
-          views: 0,
-          userId: parseInt(userId),
-          authorUsername: result.data.username || user.username
-        };
-        setDiscussions([newDiscussion, ...discussions]);
+      const data = await response.json();
+      
+      if (data.success) {
+        showToast('Discussion created successfully!');
         setDiscussionTitle('');
         setDiscussionContent('');
-        setDiscussionTag('');
-        setShowDiscussionComposer(false);
-        showToast('Discussion started!');
+        setDiscussionTag('General');
+        setShowDiscussionModal(false);
+        // Refresh discussions
+        const discussionsResponse = await fetch(`${API_BASE}/community-discussions/community/${currentCommunity.dbId}`);
+        const discussionsData = await discussionsResponse.json();
+        if (discussionsData.success && discussionsData.data) {
+          const transformed = discussionsData.data.map(discussion => ({
+            id: discussion.id,
+            tag: discussion.tag || 'General',
+            title: discussion.title,
+            excerpt: discussion.content.substring(0, 150) + '...',
+            body: discussion.content,
+            author: discussion.username || `${discussion.first_name} ${discussion.last_name}`.trim(),
+            initial: (discussion.username || discussion.first_name || 'U')[0].toUpperCase(),
+            time: new Date(discussion.created_at).toLocaleDateString(),
+            views: discussion.views || 0,
+            repliesList: []
+          }));
+          setDiscussions(transformed);
+        }
       } else {
-        console.error('Discussion failed:', result);
-        showToast(result.error || 'Failed to start discussion');
+        showToast(data.error || 'Failed to create discussion');
       }
     } catch (error) {
-      console.error('Error submitting discussion:', error);
-      showToast('Failed to start discussion. Please try again.');
+      console.error('Error creating discussion:', error);
+      showToast('Failed to create discussion');
+    } finally {
+      setSubmittingDiscussion(false);
     }
   };
 
-  const openDiscussion = async (discussionId) => {
+  const handleDeleteDiscussion = async (discussionId) => {
     try {
-      const response = await fetch(`${API_BASE}/community-discussions/${discussionId}`);
+      const userStr = localStorage.getItem('trendorabay-user');
+      const user = userStr ? JSON.parse(userStr) : null;
+
+      if (!user) {
+        showToast('Please log in to delete discussions');
+        return;
+      }
+
+      const response = await fetch(`${API_BASE}/community-discussions/${discussionId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id })
+      });
+
       const data = await response.json();
 
-      if (data.success && data.data) {
-        const discussion = {
-          id: data.data.id,
-          title: data.data.title,
-          content: data.data.content,
-          author: data.data.username || `${data.data.first_name} ${data.data.last_name}`.trim(),
-          initial: (data.data.username || data.data.first_name || 'U')[0].toUpperCase(),
-          time: formatTimeAgo(data.data.created_at),
-          tag: data.data.tag,
-          views: data.data.views || 0,
-          userId: data.data.user_id,
-          authorUsername: data.data.username,
-          replies: data.data.replies ? data.data.replies.map(r => ({
-            id: r.id,
-            author: r.username || `${r.first_name} ${r.last_name}`.trim(),
-            initial: (r.username || r.first_name || 'U')[0].toUpperCase(),
-            content: r.content,
-            time: formatTimeAgo(r.created_at)
-          })) : []
-        };
-        setSelectedDiscussion(discussion);
+      if (data.success) {
+        showToast('Discussion deleted successfully');
+        setDiscussions(discussions.filter(d => d.id !== discussionId));
+        setDiscussionMenuOpen(null);
+      } else {
+        showToast(data.error || 'Failed to delete discussion');
       }
     } catch (error) {
-      console.error('Error fetching discussion:', error);
-      showToast('Failed to load discussion');
+      console.error('Error deleting discussion:', error);
+      showToast('Failed to delete discussion');
     }
   };
 
-  const submitReply = async () => {
-    if (!replyText.trim()) return;
+  const handleDeletePost = async (postId) => {
+    try {
+      const userStr = localStorage.getItem('trendorabay-user');
+      const user = userStr ? JSON.parse(userStr) : null;
+      
+      if (!user) {
+        showToast('Please log in to delete posts');
+        return;
+      }
 
+      const response = await fetch(`${API_BASE}/community-posts/${postId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        showToast('Post deleted successfully');
+        setPostMenuOpen(null);
+        // Refresh posts
+        const postsResponse = await fetch(`${API_BASE}/community-posts/community/${currentCommunity.dbId}`);
+        const postsData = await postsResponse.json();
+        if (postsData.success && postsData.data) {
+          const transformed = postsData.data.map(post => ({
+            id: post.id,
+            author: post.username || `${post.first_name} ${post.last_name}`.trim(),
+            initial: (post.username || post.first_name || 'U')[0].toUpperCase(),
+            time: new Date(post.created_at).toLocaleDateString(),
+            content: post.content,
+            image: post.image_url,
+            likes: post.likes_count || 0,
+            liked: false,
+            comments: [],
+            commentsOpen: false
+          }));
+          setPosts(transformed);
+        }
+      } else {
+        showToast(data.error || 'Failed to delete post');
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      showToast('Failed to delete post');
+    }
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPostImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const openCommunity = (community) => {
+    setCurrentCommunity(community);
+    setSearchParams({ community: community.id, tab: 'Feed' });
+  };
+
+  const goBackToList = () => {
+    setCurrentCommunity(null);
+    setSearchParams({});
+  };
+
+  const toggleJoin = async (community) => {
+    console.log('Toggle join called for community:', community.name, 'dbId:', community.dbId);
+    console.log('Current joinedCommunities:', joinedCommunities);
+    
     const userStr = localStorage.getItem('trendorabay-user');
     const user = userStr ? JSON.parse(userStr) : null;
-    const userId = user?.id;
-
-    if (!userId) {
-      showToast('Please log in to reply');
+    
+    if (!user) {
+      showToast('Please log in to join communities');
       return;
     }
 
+    const isCurrentlyJoined = joinedCommunities.has(community.dbId);
+    
     try {
-      const response = await fetch(`${API_BASE}/community-discussions/${selectedDiscussion.id}/replies`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: replyText
-        }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        const newReply = {
-          id: result.data.id,
-          author: result.data.username || user.username || 'You',
-          initial: (result.data.username || user.username || 'You')[0].toUpperCase(),
-          content: replyText,
-          time: 'Just now'
-        };
-        setSelectedDiscussion({
-          ...selectedDiscussion,
-          replies: [...selectedDiscussion.replies, newReply]
+      if (isCurrentlyJoined) {
+        // Leave community
+        const response = await fetch(`${API_BASE}/communities/${community.dbId}/leave`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: user.id })
         });
-        setReplyText('');
-        showToast('Reply posted!');
+        const data = await response.json();
+        
+        if (data.success) {
+          const newSet = new Set(joinedCommunities);
+          newSet.delete(community.dbId);
+          setJoinedCommunities(newSet);
+          localStorage.setItem('joinedCommunities', JSON.stringify([...newSet]));
+          showToast(`Left ${community.name}`);
+        } else {
+          showToast(data.error || 'Failed to leave community');
+        }
       } else {
-        console.error('Reply failed:', result);
-        showToast(result.error || 'Failed to post reply');
+        // Join community
+        const response = await fetch(`${API_BASE}/communities/${community.dbId}/join`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: user.id })
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+          const newSet = new Set(joinedCommunities);
+          newSet.add(community.dbId);
+          setJoinedCommunities(newSet);
+          localStorage.setItem('joinedCommunities', JSON.stringify([...newSet]));
+          showToast(`Joined ${community.name}`);
+        } else {
+          showToast(data.error || 'Failed to join community');
+        }
       }
     } catch (error) {
-      console.error('Error submitting reply:', error);
-      showToast('Failed to post reply. Please try again.');
+      console.error('Error toggling join:', error);
+      showToast('Failed to update membership');
     }
   };
 
-  const toggleFollow = (memberName) => {
-    const newFollowing = new Set(followingMembers);
-    if (newFollowing.has(memberName)) {
-      newFollowing.delete(memberName);
-      showToast(`Unfollowed ${memberName}`);
-    } else {
-      newFollowing.add(memberName);
-      showToast(`Following ${memberName}`);
-    }
-    setFollowingMembers(newFollowing);
-  };
+  const filteredCommunities = communities.filter(c => {
+    const matchesCategory = selectedCategory === 'All' || c.category === selectedCategory;
+    const matchesSearch = !searchQuery || 
+      c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.desc.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const isJoined = currentCommunity ? joinedCommunities.has(currentCommunity.dbId) : false;
+  console.log('isJoined:', isJoined, 'currentCommunity.dbId:', currentCommunity?.dbId, 'joinedCommunities:', joinedCommunities);
 
   return (
-    <div className="community-page">
-      {!currentCommunity && (
-        <CommunityList
-          communities={communities}
-          loading={loading}
-          categories={categories}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          openCommunity={openCommunity}
-          joinedCommunities={joinedCommunities}
-        />
-      )}
+    <div className="community-page-new">
+      {loading && initialCommunityId ? (
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh'}}>
+          <div className="skeleton-text" style={{width: '200px', height: '20px'}}></div>
+        </div>
+      ) : !currentCommunity ? (
+        <main>
+          <section className="page-hero">
+            <div className="container hero-grid">
+              <div>
+                <div className="eyebrow">The Trendorabay Community</div>
+                <h1>Find your people. Build your space.</h1>
+                <p>Join communities built around the interests, industries and ideas shaping Africa. Share, connect, discover opportunities, attend events and support people doing meaningful work.</p>
+                <div className="hero-search">
+                  <span style={{paddingLeft: '12px'}}>⌕</span>
+                  <input
+                    placeholder="Search communities..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    type="text"
+                  />
+                  <button type="button">Search</button>
+                </div>
+              </div>
+              <div className="hero-art">
+                <div className="tile ta"><img src="/music.jpeg" alt="Music" /></div>
+                <div className="tile tb"><img src="/blockchain.jpeg" alt="Technology" /></div>
+                <div className="tile tc"><img src="/fashionandbusiness.jpeg" alt="Fashion" /></div>
+              </div>
+            </div>
+          </section>
 
-      {currentCommunity && (
-        <>
-          <CommunityHeader
-            currentCommunity={currentCommunity}
-            goBackToList={goBackToList}
-            isJoined={isJoined}
-            toggleJoin={toggleJoin}
-            currentTab={currentTab}
-            setCurrentTab={setCurrentTab}
-            showComposerModal={showComposerModal}
-            setShowComposerModal={setShowComposerModal}
-          />
+          <section className="section section-soft" id="all">
+            <div className="container">
+              <div className="section-head">
+                <h2>Discover Communities</h2>
+              </div>
+              <div className="category-bar">
+                {categories.map(category => (
+                  <button
+                    key={category}
+                    className={`category-chip ${selectedCategory === category ? 'active' : ''}`}
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+              <div className="community-grid">
+                {loading ? (
+                  Array(6).fill(0).map((_, i) => (
+                    <div key={i} className="community-card skeleton">
+                      <div className="card-image skeleton-image"></div>
+                      <div className="card-content">
+                        <div className="card-category skeleton-text"></div>
+                        <h3 className="skeleton-text"></h3>
+                        <p className="skeleton-text"></p>
+                        <div className="card-stats skeleton-text"></div>
+                      </div>
+                    </div>
+                  ))
+                ) : filteredCommunities.length === 0 ? (
+                  <p style={{gridColumn: '1/-1', textAlign: 'center', color: 'var(--muted)', padding: '40px'}}>
+                    No communities found matching your criteria.
+                  </p>
+                ) : (
+                  filteredCommunities.map(community => (
+                  <div
+                    key={community.id}
+                    className="community-card"
+                    onClick={() => openCommunity(community)}
+                  >
+                    <div className="card-image">
+                      <img src={community.cover} alt={community.name} />
+                      {joinedCommunities.has(community.dbId) && (
+                        <span className="badge" style={{position: 'absolute', top: '12px', right: '12px', background: 'var(--ink)', color: '#fff'}}>✓ Joined</span>
+                      )}
+                    </div>
+                    <div className="card-body">
+                      <div className="card-meta">
+                        <span className="badge category-badge">{community.category}</span>
+                      </div>
+                      <h3 className="card-title">{community.name}</h3>
+                      <p className="card-desc">{community.shortDesc}</p>
+                      <div className="card-stats">
+                        <span>
+                          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                          {community.members} members
+                        </span>
+                      </div>
+                      <div className="card-actions">
+                        <button className="btn btn-outline btn-sm">View</button>
+                        {joinedCommunities.has(community.dbId) ? (
+                          <button className="btn btn-outline btn-sm joined" disabled>✓ Joined</button>
+                        ) : (
+                          <button 
+                            className="btn btn-dark btn-sm join-btn" 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleJoin(community);
+                            }}
+                          >
+                            Join Community
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))
+                )}
+              </div>
+            </div>
+          </section>
 
-          <div className="community-content">
-            {currentTab === 'Feed' && (
-              <CommunityFeed
-                posts={posts}
-                expandedPosts={expandedPosts}
-                togglePostExpansion={togglePostExpansion}
-                formatTimeAgo={formatTimeAgo}
-                formatContent={formatContent}
-                toggleLike={toggleLike}
-                toggleComments={toggleComments}
-                submitComment={submitComment}
-                currentUserId={currentUserId}
-                deletePost={deletePost}
-                editPost={editPost}
-                editingPost={editingPost}
-                editPostContent={editPostContent}
-                setEditPostContent={setEditPostContent}
-                setEditingPost={setEditingPost}
-                setPostMenuOpen={setPostMenuOpen}
-                postMenuOpen={postMenuOpen}
-              />
-            )}
+          <section className="section soft">
+            <div className="container">
+              <div className="head">
+                <div>
+                  <div className="eyebrow">Inside a community</div>
+                  <h2>More than a group chat.</h2>
+                  <p>Each community can have its own social space and ecosystem.</p>
+                </div>
+              </div>
+              <div className="steps">
+                <div className="step"><div className="number">01</div><h3>Join</h3><p>Choose communities that interest you, agree to the community rules and become a member.</p></div>
+                <div className="step"><div className="number">02</div><h3>Connect</h3><p>Post, comment, react, follow members and take part in conversations and community activities.</p></div>
+                <div className="step"><div className="number">03</div><h3>Discover</h3><p>Find events, opportunities, creators, businesses, stories and resources related to the community.</p></div>
+                <div className="step"><div className="number">04</div><h3>Build &amp; Sell</h3><p>Creators and businesses can showcase their work and sell products through the Trendorabay marketplace.</p></div>
+              </div>
+            </div>
+          </section>
+        </main>
+      ) : (
+        <main>
+          <div className="detail-view active">
+            <div className="container">
+              <div className="detail-back" onClick={goBackToList}>
+                <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to communities
+              </div>
 
-            {currentTab === 'Discussions' && (
-              <CommunityDiscussions
-                discussions={discussions}
-                selectedDiscussion={selectedDiscussion}
-                setSelectedDiscussion={setSelectedDiscussion}
-                showDiscussionComposer={showDiscussionComposer}
-                setShowDiscussionComposer={setShowDiscussionComposer}
-                discussionTitle={discussionTitle}
-                setDiscussionTitle={setDiscussionTitle}
-                discussionContent={discussionContent}
-                setDiscussionContent={setDiscussionContent}
-                discussionTag={discussionTag}
-                setDiscussionTag={setDiscussionTag}
-                submitDiscussion={submitDiscussion}
-                openDiscussion={openDiscussion}
-                deleteDiscussion={deleteDiscussion}
-                currentUserId={currentUserId}
-                discussionMenuOpen={discussionMenuOpen}
-                setDiscussionMenuOpen={setDiscussionMenuOpen}
-                replyText={replyText}
-                setReplyText={setReplyText}
-                submitReply={submitReply}
-              />
-            )}
+              <div className="detail-cover">
+                <img src={currentCommunity.cover} alt={currentCommunity.name} />
+                <div className="detail-cover-overlay"></div>
+                <div className="detail-cover-content">
+                  <div className="eyebrow-light">{currentCommunity.category} Community</div>
+                  <h1>{currentCommunity.name}</h1>
+                  <div className="detail-cover-stats">
+                    <span>👥 {currentCommunity.members.toLocaleString()} members</span>
+                  </div>
+                </div>
+              </div>
 
-            {currentTab === 'Members' && (
-              <CommunityMembers
-                members={members}
-                followingMembers={followingMembers}
-                toggleFollow={toggleFollow}
-              />
-            )}
+              <div className="detail-bar">
+                <div className="detail-tabs">
+                  {['Feed', 'Discussions', 'Opportunities', 'Events', 'Members', 'About'].map(tab => (
+                    <button
+                      key={tab}
+                      className={`tab-btn${tab === currentTab ? ' active' : ''}`}
+                      onClick={() => { setCurrentTab(tab); setSearchParams({ community: currentCommunity.id, tab }); }}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
+                <div className="detail-bar-actions">
+                  <button className="btn btn-outline btn-sm" onClick={() => showToast('Share link copied')}>Share</button>
+                  <button
+                    className={`btn ${isJoined ? 'btn-outline joined' : 'btn-dark'} btn-sm`}
+                    onClick={() => {
+                      console.log('Join button clicked for community:', currentCommunity.name, 'dbId:', currentCommunity.dbId);
+                      toggleJoin(currentCommunity);
+                    }}
+                  >
+                    {isJoined ? 'Leave Community' : 'Join Community'}
+                  </button>
+                </div>
+              </div>
 
-            {currentTab === 'Opportunities' && (
-              <CommunityOpportunities
-                opportunities={opportunities}
-              />
-            )}
+              <div className="detail-layout">
+                <div className="detail-main">
+                  {currentTab === 'Feed' && (
+                    <div>
+                      {isJoined ? (
+                        <div style={{
+                          background: '#fff',
+                          borderRadius: '16px',
+                          padding: '16px',
+                          marginBottom: '24px',
+                          border: '1px solid #eaeaea',
+                          maxWidth: '550px',
+                          margin: '0 auto 24px auto'
+                        }}>
+                          <textarea
+                            value={postContent}
+                            onChange={(e) => setPostContent(e.target.value)}
+                            placeholder="What's on your mind?"
+                            style={{
+                              width: '100%',
+                              minHeight: '80px',
+                              padding: '12px',
+                              border: '1px solid #eaeaea',
+                              borderRadius: '12px',
+                              fontSize: '14px',
+                              fontFamily: 'inherit',
+                              resize: 'vertical'
+                            }}
+                          />
 
-            {currentTab === 'Events' && (
-              <CommunityEvents
-                events={events}
-              />
-            )}
+                          {postImage && (
+                            <div style={{position: 'relative', margin: '12px 0', borderRadius: '12px', overflow: 'hidden', background: '#f8f8f6', border: '1px solid #f2f2f2'}}>
+                              <img src={postImage} alt="Selected image" style={{width: '100%', height: 'auto', maxHeight: '280px', objectFit: 'cover', display: 'block'}} />
+                              <button
+                                type="button"
+                                onClick={() => setPostImage(null)}
+                                style={{
+                                  position: 'absolute',
+                                  top: '8px',
+                                  right: '8px',
+                                  width: '32px',
+                                  height: '32px',
+                                  borderRadius: '50%',
+                                  background: 'rgba(0,0,0,0.7)',
+                                  color: '#fff',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  border: 'none',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          )}
+
+                          <input type="file" accept="image/*" style={{display: 'none'}} onChange={handleImageUpload} />
+
+                          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px'}}>
+                            <div style={{display: 'flex', gap: '8px'}}>
+                              <button
+                                type="button"
+                                onClick={() => document.querySelector('input[type="file"]').click()}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  padding: '7px 14px',
+                                  borderRadius: '99px',
+                                  fontSize: '12px',
+                                  fontWeight: 600,
+                                  color: '#6f6f6f',
+                                  border: '1px solid #eaeaea',
+                                  background: '#fff',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                Image
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => showToast('Poll feature coming soon!')}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  padding: '7px 14px',
+                                  borderRadius: '99px',
+                                  fontSize: '12px',
+                                  fontWeight: 600,
+                                  color: '#6f6f6f',
+                                  border: '1px solid #eaeaea',
+                                  background: '#fff',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                Poll
+                              </button>
+                            </div>
+                            <button
+                              onClick={handleSubmitPost}
+                              disabled={submittingPost || (!postContent.trim() && !postImage)}
+                              style={{
+                                padding: '8px 20px',
+                                borderRadius: '999px',
+                                fontSize: '13px',
+                                fontWeight: 600,
+                                border: '1px solid #111',
+                                background: '#111',
+                                color: '#fff',
+                                cursor: (submittingPost || (!postContent.trim() && !postImage)) ? 'not-allowed' : 'pointer',
+                                opacity: (submittingPost || (!postContent.trim() && !postImage)) ? 0.5 : 1
+                              }}
+                            >
+                              {submittingPost ? 'Posting...' : 'Post'}
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div style={{
+                          background: '#fff',
+                          borderRadius: '16px',
+                          padding: '24px',
+                          marginBottom: '24px',
+                          border: '1px solid #eaeaea',
+                          maxWidth: '550px',
+                          margin: '0 auto 24px auto',
+                          textAlign: 'center'
+                        }}>
+                          <p style={{fontSize: '14px', color: '#6f6f6f', marginBottom: '12px'}}>
+                            Join this community to share your thoughts and connect with other members.
+                          </p>
+                          <button
+                            onClick={() => toggleJoin(currentCommunity)}
+                            style={{
+                              padding: '10px 24px',
+                              borderRadius: '999px',
+                              fontSize: '13px',
+                              fontWeight: 600,
+                              border: '1px solid #111',
+                              background: '#111',
+                              color: '#fff',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            Join Community
+                          </button>
+                        </div>
+                      )}
+
+                      {loadingPosts ? (
+                        <div style={{textAlign: 'center', padding: '40px', color: 'var(--muted)'}}>Loading posts...</div>
+                      ) : posts.length === 0 ? (
+                        <div className="locked-prompt" style={{maxWidth: '550px', margin: '0 auto'}}>
+                          <h4>No posts yet</h4>
+                          <p>Be the first to share something with the community!</p>
+                        </div>
+                      ) : (
+                        posts.map(post => {
+                          const isExpanded = expandedPosts.has(post.id);
+                          const shouldTruncate = post.content.length > 100 && !isExpanded;
+                          const displayContent = shouldTruncate ? post.content.substring(0, 100) + '...' : post.content;
+                          const userStr = localStorage.getItem('trendorabay-user');
+                          const user = userStr ? JSON.parse(userStr) : null;
+                          const isOwnPost = user && (post.author === user.username || post.author === `${user.first_name} ${user.last_name}`.trim());
+                          
+                          return (
+                            <div key={post.id} className="post">
+                              <div className="post-header" style={{position: 'relative'}}>
+                                <div className="avatar">{post.initial}</div>
+                                <div className="post-author">
+                                  <strong>{post.author}</strong>
+                                  <span>{post.time}</span>
+                                </div>
+                                {isOwnPost && (
+                                  <div className="post-menu-container" style={{position: 'relative'}}>
+                                    <button 
+                                      onClick={() => setPostMenuOpen(postMenuOpen === post.id ? null : post.id)}
+                                      style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        padding: '4px',
+                                        borderRadius: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                      }}
+                                    >
+                                      <svg viewBox="0 0 24 24" style={{width: '20px', height: '20px', stroke: '#6f6f6f', fill: 'none', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round'}}>
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                        <circle cx="12" cy="5" r="1"></circle>
+                                        <circle cx="12" cy="19" r="1"></circle>
+                                      </svg>
+                                    </button>
+                                    {postMenuOpen === post.id && (
+                                      <div style={{
+                                        position: 'absolute',
+                                        right: 0,
+                                        top: '100%',
+                                        background: '#fff',
+                                        border: '1px solid #ddd',
+                                        borderRadius: '8px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                        zIndex: 10,
+                                        minWidth: '120px'
+                                      }}>
+                                        <button 
+                                          onClick={() => handleDeletePost(post.id)}
+                                          style={{
+                                            width: '100%',
+                                            padding: '8px 12px',
+                                            background: 'none',
+                                            border: 'none',
+                                            textAlign: 'left',
+                                            cursor: 'pointer',
+                                            fontSize: '13px',
+                                            color: '#dc3545'
+                                          }}
+                                        >
+                                          Delete
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                              <div className="post-content" style={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: isExpanded ? 'unset' : 2,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                wordBreak: 'break-word',
+                                wordWrap: 'break-word'
+                              }}>
+                                {linkify(post.content)}
+                              </div>
+                              {post.content.length > 100 && (
+                                <button 
+                                  onClick={() => {
+                                    const newExpanded = new Set(expandedPosts);
+                                    if (newExpanded.has(post.id)) {
+                                      newExpanded.delete(post.id);
+                                    } else {
+                                      newExpanded.add(post.id);
+                                    }
+                                    setExpandedPosts(newExpanded);
+                                  }}
+                                  style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#6f6f6f',
+                                    cursor: 'pointer',
+                                    fontSize: '13px',
+                                    padding: '4px 0',
+                                    fontWeight: 500
+                                  }}
+                                >
+                                  {isExpanded ? 'See less' : 'See more'}
+                                </button>
+                              )}
+                              {post.image && (
+                                <div className="post-image">
+                                  <img src={post.image} alt="Post" />
+                                </div>
+                              )}
+                              <div className="post-actions">
+                                <button className="post-action">
+                                  <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                  {post.likes}
+                                </button>
+                                <button className="post-action">
+                                  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                  {post.comments?.length || 0}
+                                </button>
+                                <button 
+                                  className="post-action"
+                                  onClick={() => {
+                                    if (navigator.share) {
+                                      navigator.share({
+                                        title: 'Check out this post',
+                                        text: post.content,
+                                        url: window.location.href
+                                      });
+                                    } else {
+                                      navigator.clipboard.writeText(window.location.href);
+                                      showToast('Link copied to clipboard');
+                                    }
+                                  }}
+                                >
+                                  <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  )}
+
+                  {currentTab === 'Discussions' && (
+                    <div>
+                      <div className="tab-header">
+                        <div>
+                          <h3>Discussions</h3>
+                          <div className="sub">{discussions.length} {discussions.length === 1 ? 'thread' : 'threads'} in this community</div>
+                        </div>
+                      </div>
+
+                      {isJoined && (
+                        <div style={{
+                          background: '#fff',
+                          borderRadius: '16px',
+                          padding: '16px',
+                          marginBottom: '24px',
+                          border: '1px solid #eaeaea',
+                          maxWidth: '550px',
+                          margin: '0 auto 24px auto'
+                        }}>
+                          <input
+                            type="text"
+                            value={discussionTitle}
+                            onChange={(e) => setDiscussionTitle(e.target.value)}
+                            placeholder="Discussion title..."
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              border: '1px solid #eaeaea',
+                              borderRadius: '8px',
+                              fontSize: '14px',
+                              marginBottom: '10px'
+                            }}
+                          />
+                          <textarea
+                            value={discussionContent}
+                            onChange={(e) => setDiscussionContent(e.target.value)}
+                            placeholder="What is on your mind?"
+                            rows={3}
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              border: '1px solid #eaeaea',
+                              borderRadius: '8px',
+                              fontSize: '14px',
+                              resize: 'vertical',
+                              marginBottom: '10px'
+                            }}
+                          />
+                          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <select
+                              value={discussionTag}
+                              onChange={(e) => setDiscussionTag(e.target.value)}
+                              style={{
+                                padding: '8px 12px',
+                                border: '1px solid #eaeaea',
+                                borderRadius: '8px',
+                                fontSize: '13px',
+                                background: '#fff'
+                              }}
+                            >
+                              <option value="General">General</option>
+                              <option value="Question">Question</option>
+                              <option value="Idea">Idea</option>
+                              <option value="Help">Help</option>
+                            </select>
+                            <button
+                              onClick={handleSubmitDiscussion}
+                              disabled={submittingDiscussion || !discussionTitle.trim() || !discussionContent.trim()}
+                              style={{
+                                padding: '8px 20px',
+                                borderRadius: '999px',
+                                fontSize: '13px',
+                                fontWeight: 600,
+                                border: '1px solid #111',
+                                background: '#111',
+                                color: '#fff',
+                                cursor: (submittingDiscussion || !discussionTitle.trim() || !discussionContent.trim()) ? 'not-allowed' : 'pointer',
+                                opacity: (submittingDiscussion || !discussionTitle.trim() || !discussionContent.trim()) ? 0.5 : 1
+                              }}
+                            >
+                              {submittingDiscussion ? 'Posting...' : 'Post Discussion'}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {!isJoined ? (
+                        <div className="locked-prompt">
+                          <h4>Only members can start discussions</h4>
+                          <p>Join this community to ask questions, share ideas and start conversations with other members.</p>
+                          <button className="btn btn-dark btn-sm" onClick={() => toggleJoin(currentCommunity)}>Join Community</button>
+                        </div>
+                      ) : loadingDiscussions ? (
+                        <div style={{textAlign: 'center', padding: '40px', color: 'var(--muted)'}}>Loading discussions...</div>
+                      ) : discussions.length === 0 ? (
+                        <p style={{color: 'var(--muted)'}}>No discussions yet. Be the first to start one.</p>
+                      ) : (
+                        <div className="discussion-list">
+                          {discussions.map(discussion => {
+                            const userStr = localStorage.getItem('trendorabay-user');
+                            const user = userStr ? JSON.parse(userStr) : null;
+                            const isOwnDiscussion = user && (discussion.author === user.username || discussion.author === `${user.first_name} ${user.last_name}`.trim());
+
+                            return (
+                              <div key={discussion.id} className="discussion-item">
+                                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                                  <div style={{flex: 1}}>
+                                    <span className="discussion-tag">{discussion.tag}</span>
+                                    <h3>{discussion.title}</h3>
+                                    <p>{discussion.excerpt}</p>
+                                    <div className="discussion-meta">
+                                      <span>
+                                        <svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H4l2-4a8 8 0 1 1 15-4z"/></svg>
+                                        {discussion.repliesList.length} replies
+                                      </span>
+                                      <span>⏱ {discussion.time}</span>
+                                      <span>👁 {discussion.views} views</span>
+                                      <span>by {discussion.author}</span>
+                                    </div>
+                                  </div>
+                                  {isOwnDiscussion && (
+                                    <div className="discussion-menu-container" style={{position: 'relative'}}>
+                                      <button
+                                        onClick={() => setDiscussionMenuOpen(discussionMenuOpen === discussion.id ? null : discussion.id)}
+                                        style={{
+                                          background: 'none',
+                                          border: 'none',
+                                          cursor: 'pointer',
+                                          padding: '4px',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center'
+                                        }}
+                                      >
+                                        <svg viewBox="0 0 24 24" style={{width: '20px', height: '20px', stroke: '#6f6f6f', fill: 'none', strokeWidth: '2', strokeLinecap: 'round', strokeLinejoin: 'round'}}>
+                                          <circle cx="12" cy="12" r="1"></circle>
+                                          <circle cx="12" cy="5" r="1"></circle>
+                                          <circle cx="12" cy="19" r="1"></circle>
+                                        </svg>
+                                      </button>
+                                      {discussionMenuOpen === discussion.id && (
+                                        <div style={{
+                                          position: 'absolute',
+                                          right: '0',
+                                          top: '100%',
+                                          background: '#fff',
+                                          border: '1px solid #eaeaea',
+                                          borderRadius: '8px',
+                                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                          zIndex: 10,
+                                          minWidth: '120px'
+                                        }}>
+                                          <button
+                                            onClick={() => handleDeleteDiscussion(discussion.id)}
+                                            style={{
+                                              width: '100%',
+                                              padding: '8px 12px',
+                                              border: 'none',
+                                              background: 'none',
+                                              textAlign: 'left',
+                                              cursor: 'pointer',
+                                              fontSize: '13px',
+                                              color: '#ff4444'
+                                            }}
+                                          >
+                                            Delete
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {currentTab === 'Opportunities' && (
+                    <div className="locked-prompt">
+                      <h4>Opportunities</h4>
+                      <p>Coming soon! Discover jobs, grants, and opportunities in this community.</p>
+                    </div>
+                  )}
+
+                  {currentTab === 'Events' && (
+                    <div className="locked-prompt">
+                      <h4>Events</h4>
+                      <p>Coming soon! Discover and attend community events.</p>
+                    </div>
+                  )}
+
+                  {currentTab === 'Members' && (
+                    <div>
+                      <div className="tab-header">
+                        <div>
+                          <h3>Members</h3>
+                          <div className="sub">{members.length} {members.length === 1 ? 'member' : 'members'} in this community</div>
+                        </div>
+                      </div>
+
+                      {loadingMembers ? (
+                        <div style={{textAlign: 'center', padding: '40px', color: 'var(--muted)'}}>Loading members...</div>
+                      ) : members.length === 0 ? (
+                        <p style={{color: 'var(--muted)'}}>No members yet. Be the first to join!</p>
+                      ) : (
+                        <div className="members-grid">
+                          {members.map(member => (
+                            <div key={member.name} className="member-card">
+                              <div className="avatar">{member.initial}</div>
+                              <h3>{member.name}</h3>
+                              <div className="role">{member.role}</div>
+                              <div className="member-meta">
+                                <span>📍 {member.location}</span>
+                                <span>📝 {member.posts} posts</span>
+                              </div>
+                              <button className="btn btn-outline btn-sm">Follow</button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {currentTab === 'About' && (
+                    <div className="about-card">
+                      <h3>About {currentCommunity.name}</h3>
+                      <p>{currentCommunity.desc}</p>
+                      <h4>Community Guidelines</h4>
+                      <div className="rules-grid">
+                        <div className="rule-item"><div className="rule-num">1</div><p>Be respectful to other members and their perspectives</p></div>
+                        <div className="rule-item"><div className="rule-num">2</div><p>Share relevant, honest and useful contributions</p></div>
+                        <div className="rule-item"><div className="rule-num">3</div><p>Do not harass, threaten, impersonate or target other members</p></div>
+                        <div className="rule-item"><div className="rule-num">4</div><p>Do not post spam, scams or misleading promotional content</p></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="sidebar">
+                  <div className="sidebar-card">
+                    <h4>Trending</h4>
+                    <div className="trend-item">
+                      <span>AI in Africa</span>
+                      <span className="count">24</span>
+                    </div>
+                    <div className="trend-item">
+                      <span>Remote Work</span>
+                      <span className="count">18</span>
+                    </div>
+                    <div className="trend-item">
+                      <span>Startups</span>
+                      <span className="count">15</span>
+                    </div>
+                  </div>
+                  <div className="sidebar-card">
+                    <h4>Opportunities</h4>
+                    <div className="trend-item">
+                      <span>Job Openings</span>
+                      <span className="count">12</span>
+                    </div>
+                    <div className="trend-item">
+                      <span>Grants</span>
+                      <span className="count">8</span>
+                    </div>
+                    <div className="trend-item">
+                      <span>Internships</span>
+                      <span className="count">5</span>
+                    </div>
+                  </div>
+                  <div className="sidebar-card">
+                    <h4>Events</h4>
+                    <div className="trend-item">
+                      <span>Upcoming</span>
+                      <span className="count">3</span>
+                    </div>
+                    <div className="trend-item">
+                      <span>Past</span>
+                      <span className="count">15</span>
+                    </div>
+                  </div>
+                  <div className="sidebar-card">
+                    <h4>Members</h4>
+                    <div className="trend-item">
+                      <span>Total</span>
+                      <span className="count">{currentCommunity?.members?.toLocaleString() || 0}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </>
+        </main>
       )}
 
-      <PostComposer
-        showComposerModal={showComposerModal}
-        setShowComposerModal={setShowComposerModal}
-        composerText={composerText}
-        setComposerText={setComposerText}
-        pendingImageDataUrl={pendingImageDataUrl}
-        setPendingImageDataUrl={setPendingImageDataUrl}
-        fileInputRef={fileInputRef}
-        handleImageSelect={handleImageSelect}
-        submitPost={submitPost}
-      />
+      {toast.show && (
+        <div className={`toast${toast.show ? ' show' : ''}`}>
+          {toast.message}
+        </div>
+      )}
 
-      <JoinPopup
-        showJoinPopup={showJoinPopup}
-        closeJoinPopup={closeJoinPopup}
-        selectedCommunityForJoin={selectedCommunityForJoin}
-        handleConfirmJoin={handleConfirmJoin}
-      />
+      {/* Post Creation Modal */}
+      {showPostModal && (
+        <div className="modal-overlay open">
+          <div className="modal composer-modal">
+            <button className="modal-close" onClick={() => setShowPostModal(false)}>
+              <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+            <h3>Create a post</h3>
+            <p style={{marginBottom: '16px'}}>Share an idea, question or opportunity with the community.</p>
+            <textarea
+              value={postContent}
+              onChange={(e) => setPostContent(e.target.value)}
+              placeholder="What's on your mind?"
+              style={{width: '100%', minHeight: '120px', padding: '12px', border: '1px solid #ddd', borderRadius: '12px', fontSize: '14px'}}
+            />
 
-      <Toast show={toast.show} message={toast.message} />
+            {postImage && (
+              <div className="image-preview">
+                <img src={postImage} alt="Selected image" />
+                <button className="remove-image" type="button" onClick={() => setPostImage(null)}>
+                  <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+              </div>
+            )}
+
+            <input type="file" accept="image/*" style={{display: 'none'}} onChange={handleImageUpload} />
+
+            <div className="composer-modal-row">
+              <button className="composer-action" type="button" onClick={() => document.querySelector('input[type="file"]').click()}>
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                Image
+              </button>
+            </div>
+            <div className="composer-modal-actions">
+              <button className="btn btn-ghost" type="button" onClick={() => setShowPostModal(false)}>Cancel</button>
+              <button className="btn btn-dark" type="button" onClick={handleSubmitPost} disabled={submittingPost}>
+                {submittingPost ? 'Posting...' : 'Post'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
