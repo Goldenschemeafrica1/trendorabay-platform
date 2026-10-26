@@ -1047,7 +1047,7 @@
   .hero { padding: 50px 0; }
   .hero h1 { font-size: 44px; }
   .hero-visual { height: 250px; }
-  .hero-search { max-width: 100%; }
+  .hero-search { max-width: 85%; }
   .hero-search button { padding: 8px 12px; font-size: 12px; }
   .community-grid { grid-template-columns: 1fr; }
   .steps { grid-template-columns: 1fr; }
