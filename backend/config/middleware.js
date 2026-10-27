@@ -1,7 +1,7 @@
 import express from 'express';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-import { corsMiddleware } from '../middleware/cors.js';
+import { corsMiddleware, ensureCorsHeaders } from '../middleware/cors.js';
 import { securityMiddleware } from '../middleware/security.js';
 import { redisRateLimiter } from '../middleware/redisRateLimiter.js';
 import { sanitizeInput } from '../middleware/validator.js';
@@ -17,6 +17,7 @@ export function setupMiddleware(app) {
   // Security middleware
   app.use(securityMiddleware);
   app.use(corsMiddleware);
+  app.use(ensureCorsHeaders); // Ensure CORS headers are always set, even for errors
   app.use(compression());
 
   // Request timeout (60 seconds)

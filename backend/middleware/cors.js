@@ -38,7 +38,7 @@ export const corsMiddleware = cors({
     }
 
     const normalizedOrigin = normalizeOrigin(origin);
-    
+
     if (allowedOrigins.indexOf(normalizedOrigin) !== -1) {
       console.log(`CORS: Origin ${normalizedOrigin} allowed`);
       callback(null, true);
@@ -50,5 +50,22 @@ export const corsMiddleware = cors({
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  maxAge: 86400 // Cache preflight requests for 24 hours
+  maxAge: 86400, // Cache preflight requests for 24 hours
+  preflightContinue: false,
+  optionsSuccessStatus: 204 // Some legacy browsers choke on 204
 });
+
+// Middleware to ensure CORS headers are always set, even for error responses
+export function ensureCorsHeaders(req, res, next) {
+  const origin = req.headers.origin;
+  const normalizedOrigin = normalizeOrigin(origin);
+
+  if (origin && allowedOrigins.indexOf(normalizedOrigin) !== -1) {
+    res.setHeader('Access-Control-Allow-Origin', normalizedOrigin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  }
+
+  next();
+}

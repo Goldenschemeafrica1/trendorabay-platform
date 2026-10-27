@@ -5,6 +5,7 @@ import { setupStaticFiles, configureMulter } from './config/staticFiles.js';
 import { setupHealthChecks } from './config/healthChecks.js';
 import { startServer } from './config/serverStartup.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import { ensureCorsHeaders } from './middleware/cors.js';
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -40,6 +41,9 @@ setupRoutes(app);
 
 // 404 handler
 app.use(notFound);
+
+// Ensure CORS headers on error responses
+app.use(ensureCorsHeaders);
 
 // Error handler
 app.use(errorHandler);
