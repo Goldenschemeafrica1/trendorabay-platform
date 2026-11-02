@@ -25,31 +25,37 @@ router.get('/:id/members', async (req, res, next) => {
 router.post('/:id/join', async (req, res, next) => {
   try {
     const { user_id } = req.body;
-    
+    console.log('Join request - community_id:', req.params.id, 'user_id:', user_id, 'body:', req.body);
+
+    if (!user_id) {
+      return res.status(400).json({ success: false, error: 'user_id is required' });
+    }
+
     // Check if already a member
     const [existing] = await pool.query(
       'SELECT * FROM community_members WHERE community_id = ? AND user_id = ?',
       [req.params.id, user_id]
     );
-    
+
     if (existing.length > 0) {
       return res.status(400).json({ success: false, error: 'Already a member' });
     }
-    
+
     await pool.query(
       `INSERT INTO community_members (community_id, user_id, role, status, joined_at)
        VALUES (?, ?, 'member', 'active', NOW())`,
       [req.params.id, user_id]
     );
-    
+
     // Update member count
     await pool.query(
       'UPDATE communities SET member_count = member_count + 1 WHERE id = ?',
       [req.params.id]
     );
-    
+
     res.json({ success: true, message: 'Joined community successfully' });
   } catch (error) {
+    console.error('Error joining community:', error);
     next(error);
   }
 });

@@ -94,9 +94,7 @@ const ProfilePage = () => {
 
         // Fetch posts
         const postsResponse = await apiRequest.get('/users/posts');
-        console.log('Posts response:', postsResponse.data);
         if (postsResponse.data.success) {
-          console.log('Setting posts:', postsResponse.data.data);
           setPosts(postsResponse.data.data);
         }
 
@@ -142,9 +140,8 @@ const ProfilePage = () => {
   };
 
   const handleLike = (postId) => {
-    // TODO: Implement like functionality with backend API
-    setPosts(posts.map(p => 
-      p.id === postId 
+    setPosts(posts.map(p =>
+      p.id === postId
         ? { ...p, likes_count: p.likes_count + 1 }
         : p
     ));
@@ -397,7 +394,6 @@ const ProfilePage = () => {
                       </svg>
                     </button>
                   </div>
-                  {console.log('Rendering posts in overview, count:', posts.length)}
                   {posts.length > 0 ? posts.slice(0, 2).map(p => (
                     <article className="post" key={p.id}>
                       <header className="post__head">

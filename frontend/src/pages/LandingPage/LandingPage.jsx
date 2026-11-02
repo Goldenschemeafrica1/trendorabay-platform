@@ -8,7 +8,6 @@ import { toggleTheme } from '../../store/slices/uiSlice';
 import LandingPageSkeleton from '../../components/LandingPageSkeleton';
 import HeroSection from '../../components/landing/HeroSection';
 import LatestStories from '../../components/landing/LatestStories';
-import CommunityCard from '../../components/landing/CommunityCard';
 import MagazineSection from '../../components/landing/MagazineSection';
 import './LandingPage.css';
 
@@ -117,6 +116,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useSelector((state) => state.ui.theme);
+  const { user } = useSelector(state => state.auth);
   const [email, setEmail] = useState('');
   const [latestStories, setLatestStories] = useState([]);
   const [magazines, setMagazines] = useState([]);
@@ -302,6 +302,18 @@ const LandingPage = () => {
     setEmail('');
   };
 
+  const handleCommunityClick = () => {
+    if (user?.id) {
+      // User is logged in, navigate to communities page
+      navigate('/communities');
+    } else {
+      // User is not logged in, show message and redirect to login page
+      toast.error('You must login to access communities');
+      localStorage.setItem('redirectAfterLogin', '/communities');
+      navigate('/login');
+    }
+  };
+
   const handlePlayPodcast = async (podcast) => {
     const audioUrl = podcast.audioUrl || podcast.audio_file_url;
 
@@ -434,8 +446,26 @@ const LandingPage = () => {
         {/* Latest Stories */}
         <LatestStories stories={latestStories} />
 
-        {/* Community Card */}
-        <CommunityCard />
+        {/* Quick Access Cards */}
+        <section className="nl-section">
+          <div className="nl-quick-access">
+            <div className="nl-quick-card" onClick={handleCommunityClick} style={{cursor: 'pointer'}}>
+              <h3>Communities</h3>
+              <p>25+ niche communities, discussions, networking and shared interests.</p>
+              <span className="nl-quick-link">Explore Community →</span>
+            </div>
+            <Link to="/opportunities" className="nl-quick-card">
+              <h3>Opportunities</h3>
+              <p>Jobs, internships, funding, grants, scholarships and events.</p>
+              <span className="nl-quick-link">Discover Opportunities →</span>
+            </Link>
+            <Link to="/business" className="nl-quick-card">
+              <h3>Business & Commerce</h3>
+              <p>Business discovery, products, services, creator services and marketplace.</p>
+              <span className="nl-quick-link">Explore Business →</span>
+            </Link>
+          </div>
+        </section>
 
         {/* Magazines */}
         <MagazineSection magazines={magazines} />
@@ -702,32 +732,6 @@ const LandingPage = () => {
         <div className="top-ad">
           <img src="https://placehold.co/1200x100?text=AD" alt="Advertisement" loading="lazy" />
         </div>
-
-        {/* Opportunities */}
-        <section id="nl-opportunities" className="nl-section">
-          <div className="nl-opps">
-            <div className="nl-section-head">
-              <h2>✦ Opportunities</h2>
-              <Link to="/opportunities">SEE ALL →</Link>
-            </div>
-            <p>Funding, jobs, grants, scholarships, competitions and events worth knowing about.</p>
-            <div className="nl-opp-grid">
-              {opportunities.map((opp) => (
-                <div
-                  key={opp.title || opp.tag}
-                  className="nl-opp"
-                  onClick={() => opp.id && navigate(`/opportunities/${opp.id}`)}
-                  style={{ cursor: opp.id ? 'pointer' : 'default' }}
-                >
-                  <span className="nl-tag">{opp.tag}</span>
-                  <strong>{opp.title}</strong>
-                  <p className="nl-opp-desc">{opp.description}</p>
-                  <p className="nl-meta">{opp.meta}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Write for Us */}
         <section id="nl-writers" className="nl-section writers-section">

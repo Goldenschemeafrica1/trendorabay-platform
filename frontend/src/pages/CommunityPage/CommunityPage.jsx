@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import CommunityPageSkeleton from '../../components/CommunityPageSkeleton';
 import './CommunityPage.css';
 
 const CommunityPage = () => {
@@ -37,6 +38,7 @@ const CommunityPage = () => {
   const [submittingDiscussion, setSubmittingDiscussion] = useState(false);
   const [discussionMenuOpen, setDiscussionMenuOpen] = useState(null);
   const [initialCommunityId, setInitialCommunityId] = useState(null);
+  const [savedPosts, setSavedPosts] = useState(new Set());
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -49,14 +51,15 @@ const CommunityPage = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [postMenuOpen]);
 
-  // Fetch communities
+  // Fetch communities and joined communities in parallel
   useEffect(() => {
-    const fetchCommunities = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${API_BASE}/communities?limit=1000`);
-        const data = await response.json();
-        if (data.success && data.data) {
-          const transformed = data.data.map(c => ({
+        // Fetch communities
+        const communitiesResponse = await fetch(`${API_BASE}/communities?limit=100`);
+        const communitiesData = await communitiesResponse.json();
+        if (communitiesData.success && communitiesData.data) {
+          const transformed = communitiesData.data.map(c => ({
             id: c.slug,
             dbId: c.id,
             name: c.name,
@@ -69,23 +72,53 @@ const CommunityPage = () => {
           setCommunities(transformed);
 
           // Extract unique categories from communities
-          const uniqueCategories = ['All', ...new Set(data.data.map(c => c.category).filter(Boolean))];
+          const uniqueCategories = ['All', ...new Set(communitiesData.data.map(c => c.category).filter(Boolean))];
           setCategories(uniqueCategories);
         }
       } catch (error) {
         console.error('Error fetching communities:', error);
-      } finally {
-        setLoading(false);
       }
+
+      // Load joined communities
+      const userStr = localStorage.getItem('trendorabay-user');
+      const user = userStr ? JSON.parse(userStr) : null;
+
+      if (user) {
+        try {
+          const joinedResponse = await fetch(`${API_BASE}/communities/user/${user.id}`);
+          const joinedData = await joinedResponse.json();
+          if (joinedData.success && joinedData.data) {
+            const communityIds = joinedData.data.map(c => c.id);
+            setJoinedCommunities(new Set(communityIds));
+            localStorage.setItem('joinedCommunities', JSON.stringify(communityIds));
+          }
+        } catch (error) {
+          console.error('Error fetching joined communities:', error);
+          // Fallback to localStorage if API fails
+          const stored = localStorage.getItem('joinedCommunities');
+          if (stored) {
+            setJoinedCommunities(new Set(JSON.parse(stored)));
+          }
+        }
+      } else {
+        // Not logged in, load from localStorage
+        const stored = localStorage.getItem('joinedCommunities');
+        if (stored) {
+          setJoinedCommunities(new Set(JSON.parse(stored)));
+        }
+      }
+
+      setLoading(false);
     };
-    fetchCommunities();
+
+    fetchData();
   }, []);
 
-  // Load joined communities from localStorage
+  // Load saved posts from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('joinedCommunities');
+    const stored = localStorage.getItem('savedPosts');
     if (stored) {
-      setJoinedCommunities(new Set(JSON.parse(stored)));
+      setSavedPosts(new Set(JSON.parse(stored)));
     }
   }, []);
 
@@ -110,38 +143,39 @@ const CommunityPage = () => {
     }
   }, [searchParams, communities, loading]);
 
+  // Fetch posts function
+  const fetchPosts = async () => {
+    if (!currentCommunity) return;
+    setLoadingPosts(true);
+    try {
+      const response = await fetch(`${API_BASE}/community-posts/community/${currentCommunity.dbId}`);
+      const data = await response.json();
+      if (data.success && data.data) {
+        const transformed = data.data.map(post => ({
+          id: post.id,
+          author: post.username || `${post.first_name} ${post.last_name}`.trim(),
+          initial: (post.username || post.first_name || 'U')[0].toUpperCase(),
+          time: new Date(post.created_at).toLocaleDateString(),
+          content: post.content,
+          image: post.image_url,
+          likes: post.likes_count || 0,
+          liked: false,
+          comments: [],
+          commentsOpen: false
+        }));
+        setPosts(transformed);
+      }
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      setPosts([]);
+    } finally {
+      setLoadingPosts(false);
+    }
+  };
+
   // Fetch posts when community changes
   useEffect(() => {
     if (currentCommunity) {
-      const fetchPosts = async () => {
-        setLoadingPosts(true);
-        try {
-          console.log('Fetching posts for community:', currentCommunity.dbId);
-          const response = await fetch(`${API_BASE}/community-posts/community/${currentCommunity.dbId}`);
-          const data = await response.json();
-          console.log('Posts response:', data);
-          if (data.success && data.data) {
-            const transformed = data.data.map(post => ({
-              id: post.id,
-              author: post.username || `${post.first_name} ${post.last_name}`.trim(),
-              initial: (post.username || post.first_name || 'U')[0].toUpperCase(),
-              time: new Date(post.created_at).toLocaleDateString(),
-              content: post.content,
-              image: post.image_url,
-              likes: post.likes_count || 0,
-              liked: false,
-              comments: [],
-              commentsOpen: false
-            }));
-            setPosts(transformed);
-          }
-        } catch (error) {
-          console.error('Error fetching posts:', error);
-          setPosts([]);
-        } finally {
-          setLoadingPosts(false);
-        }
-      };
       fetchPosts();
     }
   }, [currentCommunity]);
@@ -152,10 +186,8 @@ const CommunityPage = () => {
       const fetchDiscussions = async () => {
         setLoadingDiscussions(true);
         try {
-          console.log('Fetching discussions for community:', currentCommunity.dbId);
           const response = await fetch(`${API_BASE}/community-discussions/community/${currentCommunity.dbId}`);
           const data = await response.json();
-          console.log('Discussions response:', data);
           if (data.success && data.data) {
             const transformed = data.data.map(discussion => ({
               id: discussion.id,
@@ -188,10 +220,8 @@ const CommunityPage = () => {
       const fetchMembers = async () => {
         setLoadingMembers(true);
         try {
-          console.log('Fetching members for community:', currentCommunity.dbId);
           const response = await fetch(`${API_BASE}/communities/${currentCommunity.dbId}/members`);
           const data = await response.json();
-          console.log('Members response:', data);
           if (data.success && data.data) {
             const transformed = data.data.map(member => ({
               name: member.username || `${member.first_name} ${member.last_name}`.trim(),
@@ -287,16 +317,12 @@ const CommunityPage = () => {
     setSubmittingPost(true);
     try {
       const userStr = localStorage.getItem('trendorabay-user');
-      console.log('User string from localStorage:', userStr);
       const user = userStr ? JSON.parse(userStr) : null;
-      console.log('Parsed user:', user);
 
       if (!user) {
         showToast('Please log in to post');
         return;
       }
-
-      console.log('Creating post with user_id:', user.id, 'community_id:', currentCommunity.dbId);
 
       const response = await fetch(`${API_BASE}/community-posts`, {
         method: 'POST',
@@ -310,8 +336,7 @@ const CommunityPage = () => {
       });
 
       const data = await response.json();
-      console.log('Post response:', data);
-      
+
       if (data.success) {
         showToast('Post created successfully!');
         setPostContent('');
@@ -496,17 +521,18 @@ const CommunityPage = () => {
   const toggleJoin = async (community) => {
     console.log('Toggle join called for community:', community.name, 'dbId:', community.dbId);
     console.log('Current joinedCommunities:', joinedCommunities);
-    
+
     const userStr = localStorage.getItem('trendorabay-user');
     const user = userStr ? JSON.parse(userStr) : null;
-    
+    console.log('User from localStorage:', user);
+
     if (!user) {
       showToast('Please log in to join communities');
       return;
     }
 
     const isCurrentlyJoined = joinedCommunities.has(community.dbId);
-    
+
     try {
       if (isCurrentlyJoined) {
         // Leave community
@@ -516,7 +542,7 @@ const CommunityPage = () => {
           body: JSON.stringify({ user_id: user.id })
         });
         const data = await response.json();
-        
+
         if (data.success) {
           const newSet = new Set(joinedCommunities);
           newSet.delete(community.dbId);
@@ -524,17 +550,20 @@ const CommunityPage = () => {
           localStorage.setItem('joinedCommunities', JSON.stringify([...newSet]));
           showToast(`Left ${community.name}`);
         } else {
+          console.error('Leave failed:', data);
           showToast(data.error || 'Failed to leave community');
         }
       } else {
         // Join community
+        console.log('Sending join request with user_id:', user.id, 'community_id:', community.dbId);
         const response = await fetch(`${API_BASE}/communities/${community.dbId}/join`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: user.id })
         });
         const data = await response.json();
-        
+        console.log('Join response:', data);
+
         if (data.success) {
           const newSet = new Set(joinedCommunities);
           newSet.add(community.dbId);
@@ -542,6 +571,7 @@ const CommunityPage = () => {
           localStorage.setItem('joinedCommunities', JSON.stringify([...newSet]));
           showToast(`Joined ${community.name}`);
         } else {
+          console.error('Join failed:', data);
           showToast(data.error || 'Failed to join community');
         }
       }
@@ -549,6 +579,19 @@ const CommunityPage = () => {
       console.error('Error toggling join:', error);
       showToast('Failed to update membership');
     }
+  };
+
+  const toggleSavePost = (postId) => {
+    const newSet = new Set(savedPosts);
+    if (newSet.has(postId)) {
+      newSet.delete(postId);
+      showToast('Post removed from saved');
+    } else {
+      newSet.add(postId);
+      showToast('Post saved');
+    }
+    setSavedPosts(newSet);
+    localStorage.setItem('savedPosts', JSON.stringify([...newSet]));
   };
 
   const filteredCommunities = communities.filter(c => {
@@ -561,14 +604,11 @@ const CommunityPage = () => {
   });
 
   const isJoined = currentCommunity ? joinedCommunities.has(currentCommunity.dbId) : false;
-  console.log('isJoined:', isJoined, 'currentCommunity.dbId:', currentCommunity?.dbId, 'joinedCommunities:', joinedCommunities);
 
   return (
     <div className="community-page-new">
-      {loading && initialCommunityId ? (
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh'}}>
-          <div className="skeleton-text" style={{width: '200px', height: '20px'}}></div>
-        </div>
+      {loading || (initialCommunityId && !currentCommunity) ? (
+        <CommunityPageSkeleton />
       ) : !currentCommunity ? (
         <main>
           <section className="page-hero">
@@ -589,18 +629,15 @@ const CommunityPage = () => {
                 </div>
               </div>
               <div className="hero-art">
-                <div className="tile ta"><img src="/music.jpeg" alt="Music" /></div>
-                <div className="tile tb"><img src="/blockchain.jpeg" alt="Technology" /></div>
-                <div className="tile tc"><img src="/fashionandbusiness.jpeg" alt="Fashion" /></div>
+                <div className="tile ta"><img src="/hero.jpeg" alt="African fashion" /></div>
+                <div className="tile tb"><img src="/road.jpeg" alt="Creator" /></div>
+                <div className="tile tc"><img src="/hero2.jpeg" alt="Art" /></div>
               </div>
             </div>
           </section>
 
           <section className="section section-soft" id="all">
             <div className="container">
-              <div className="section-head">
-                <h2>Discover Communities</h2>
-              </div>
               <div className="category-bar">
                 {categories.map(category => (
                   <button
@@ -654,7 +691,7 @@ const CommunityPage = () => {
                       <div className="card-actions">
                         <button className="btn btn-outline btn-sm">View</button>
                         {joinedCommunities.has(community.dbId) ? (
-                          <button className="btn btn-outline btn-sm joined" disabled>✓ Joined</button>
+                          <button className="btn btn-outline btn-sm joined" disabled>member</button>
                         ) : (
                           <button 
                             className="btn btn-dark btn-sm join-btn" 
@@ -727,7 +764,7 @@ const CommunityPage = () => {
                   ))}
                 </div>
                 <div className="detail-bar-actions">
-                  <button className="btn btn-outline btn-sm" onClick={() => showToast('Share link copied')}>Share</button>
+                  <button className="btn btn-outline btn-sm share-btn" onClick={() => showToast('Share link copied')}>Share</button>
                   <button
                     className={`btn ${isJoined ? 'btn-outline joined' : 'btn-dark'} btn-sm`}
                     onClick={() => {
@@ -892,7 +929,28 @@ const CommunityPage = () => {
                       )}
 
                       {loadingPosts ? (
-                        <div style={{textAlign: 'center', padding: '40px', color: 'var(--muted)'}}>Loading posts...</div>
+                        <div style={{maxWidth: '550px', margin: '0 auto'}}>
+                          {[1, 2, 3].map((i) => (
+                            <div key={i} className="post skeleton" style={{marginBottom: '8px'}}>
+                              <div className="post-header">
+                                <div className="skeleton-text" style={{width: '32px', height: '32px', borderRadius: '50%'}} />
+                                <div style={{flex: 1}}>
+                                  <div className="skeleton-text" style={{width: '100px', height: '12px', marginBottom: '4px'}} />
+                                  <div className="skeleton-text" style={{width: '60px', height: '10px'}} />
+                                </div>
+                              </div>
+                              <div className="skeleton-text skeleton-excerpt" style={{marginBottom: '8px'}} />
+                              <div className="skeleton-text skeleton-excerpt" style={{marginBottom: '8px'}} />
+                              <div className="skeleton-text skeleton-excerpt" style={{width: '60%', marginBottom: '8px'}} />
+                              <div className="post-actions">
+                                <div className="skeleton-text" style={{width: '40px', height: '16px'}} />
+                                <div className="skeleton-text" style={{width: '40px', height: '16px'}} />
+                                <div className="skeleton-text" style={{width: '40px', height: '16px'}} />
+                                <div className="skeleton-text" style={{width: '40px', height: '16px'}} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       ) : posts.length === 0 ? (
                         <div className="locked-prompt" style={{maxWidth: '550px', margin: '0 auto'}}>
                           <h4>No posts yet</h4>
@@ -1017,7 +1075,13 @@ const CommunityPage = () => {
                                   <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                                   {post.comments?.length || 0}
                                 </button>
-                                <button 
+                                <button
+                                  className={`post-action ${savedPosts.has(post.id) ? 'saved' : ''}`}
+                                  onClick={() => toggleSavePost(post.id)}
+                                >
+                                  <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                </button>
+                                <button
                                   className="post-action"
                                   onClick={() => {
                                     if (navigator.share) {
@@ -1135,7 +1199,20 @@ const CommunityPage = () => {
                           <button className="btn btn-dark btn-sm" onClick={() => toggleJoin(currentCommunity)}>Join Community</button>
                         </div>
                       ) : loadingDiscussions ? (
-                        <div style={{textAlign: 'center', padding: '40px', color: 'var(--muted)'}}>Loading discussions...</div>
+                        <div style={{maxWidth: '550px', margin: '0 auto'}}>
+                          {[1, 2, 3].map((i) => (
+                            <div key={i} className="discussion-item skeleton" style={{marginBottom: '12px'}}>
+                              <div className="skeleton-text skeleton-tag" style={{width: '60px', marginBottom: '8px'}} />
+                              <div className="skeleton-text skeleton-heading" style={{width: '70%', marginBottom: '6px'}} />
+                              <div className="skeleton-text skeleton-excerpt" style={{marginBottom: '8px'}} />
+                              <div className="skeleton-text skeleton-excerpt" style={{width: '60%', marginBottom: '10px'}} />
+                              <div className="discussion-meta">
+                                <div className="skeleton-text" style={{width: '60px', height: '12px'}} />
+                                <div className="skeleton-text" style={{width: '60px', height: '12px'}} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       ) : discussions.length === 0 ? (
                         <p style={{color: 'var(--muted)'}}>No discussions yet. Be the first to start one.</p>
                       ) : (
@@ -1246,7 +1323,17 @@ const CommunityPage = () => {
                       </div>
 
                       {loadingMembers ? (
-                        <div style={{textAlign: 'center', padding: '40px', color: 'var(--muted)'}}>Loading members...</div>
+                        <div className="members-grid">
+                          {[1, 2, 3, 4, 5, 6].map((i) => (
+                            <div key={i} className="member-card skeleton">
+                              <div className="skeleton-text" style={{width: '50px', height: '50px', borderRadius: '50%', margin: '0 auto 10px'}} />
+                              <div className="skeleton-text skeleton-heading" style={{width: '60%', marginBottom: '2px'}} />
+                              <div className="skeleton-text skeleton-tag" style={{width: '80px', marginBottom: '6px'}} />
+                              <div className="skeleton-text skeleton-excerpt" style={{width: '60%', marginBottom: '12px'}} />
+                              <div className="skeleton-button" style={{width: '100%', height: '32px'}} />
+                            </div>
+                          ))}
+                        </div>
                       ) : members.length === 0 ? (
                         <p style={{color: 'var(--muted)'}}>No members yet. Be the first to join!</p>
                       ) : (

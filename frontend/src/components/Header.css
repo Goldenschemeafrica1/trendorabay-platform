@@ -47,8 +47,9 @@
 .nl-navlinks {
   display: flex;
   gap: 24px;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 600;
 }
 
 .nl-navlinks > button {
@@ -107,6 +108,12 @@
   justify-content: center;
 }
 
+.nl-search-toggle {
+  border: none;
+  background: transparent;
+  border-radius: 0;
+}
+
 .nl-menubtn {
   display: none;
   border-radius: 10px;
@@ -141,8 +148,8 @@ body.dark-mode .nl-loginbtn:hover {
 }
 
 .nl-profile-icon {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #111318;
   border: none;

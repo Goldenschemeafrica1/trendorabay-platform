@@ -9,7 +9,7 @@ const MagazinesPage = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [email, setEmail] = useState('');
-  const itemsPerPage = 8;
+  const itemsPerPage = 10;
 
   const formatPrice = (price) => `KSh ${price.toLocaleString()}`;
 
@@ -223,8 +223,7 @@ const MagazinesPage = () => {
         <div className="container">
           <div className="section-head">
             <div>
-              <span className="eyebrow">The Archive</span>
-              <h2>Browse all {magazines.length} issues.</h2>
+              <h2>The Archive</h2>
             </div>
           </div>
 
@@ -236,7 +235,6 @@ const MagazinesPage = () => {
                 className="issue-card"
               >
                 <div className="issue-cover">
-                  <span className="issue-tag">Digital + Print</span>
                   {magazine.coverImage ? (
                     <img src={magazine.coverImage} alt={magazine.title} loading="lazy" />
                   ) : (
@@ -244,11 +242,6 @@ const MagazinesPage = () => {
                       <span style={{fontSize: '18px', fontWeight: 'bold', color: '#666'}}>TRENDORABAY</span>
                     </div>
                   )}
-                </div>
-                <div className="issue-info">
-                  <h3>{magazine.issue || `Issue ${magazine.id}`}</h3>
-                  <p>{magazine.title}</p>
-                  <span className="read-link">Open Issue →</span>
                 </div>
               </Link>
             ))}

@@ -122,10 +122,8 @@ const Header = ({ hideThemeToggle = false }) => {
                   <button
                     type="button"
                     className="nl-profile-item"
-                    onClick={() => {
-                      navigate('/profile');
-                      setProfileOpen(false);
-                    }}
+                    disabled
+                    style={{ opacity: 0.5, cursor: 'not-allowed' }}
                   >
                     View Profile
                   </button>

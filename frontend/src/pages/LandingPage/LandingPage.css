@@ -562,7 +562,7 @@ body.dark-mode .join-btn:hover {
 }
 
 .nl-hero-side p {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.45;
   margin: 0;
 }
@@ -644,7 +644,7 @@ body.dark-mode .join-btn:hover {
 }
 
 .hero p {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
   color: #555;
   max-width: 560px;
@@ -848,7 +848,7 @@ body.dark-mode .join-btn:hover {
 }
 
 .nl-excerpt {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--nl-muted);
   margin-top: 8px;
   line-height: 1.4;
@@ -897,7 +897,7 @@ body.dark-mode .join-btn:hover {
 }
 
 .nl-section-foot a {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -908,7 +908,7 @@ body.dark-mode .join-btn:hover {
 }
 
 .nl-section-head a {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -924,7 +924,7 @@ body.dark-mode .join-btn:hover {
   border-radius: 50%;
   border: 1px solid #ddd;
   background: #fff;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1;
   display: grid;
   place-items: center;
@@ -1059,9 +1059,11 @@ body.dark-mode .join-btn:hover {
 }
 
 .nl-story-card h3 {
-  font-size: 16px;
-  line-height: 1.25;
-  margin: 7px 0;
+  font-size: 11px;
+  line-height: 1.3;
+  margin: 6px 0;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 600;
   display: -webkit-box;
   display: box;
   -webkit-line-clamp: 2;
@@ -1072,7 +1074,7 @@ body.dark-mode .join-btn:hover {
 }
 
 .nl-story-card p {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--nl-muted);
   margin: 0;
   display: -webkit-box;
@@ -1118,7 +1120,7 @@ body.dark-mode .join-btn:hover {
 }
 
 .nl-magazine-hero h2 {
-  font-size: clamp(34px, 5vw, 60px);
+  font-size: clamp(24px, 4vw, 40px);
   line-height: 0.94;
   letter-spacing: -3px;
   margin: 12px 0;
@@ -1259,7 +1261,7 @@ body.dark-mode .join-btn:hover {
   padding: 13px 20px;
   border-radius: 9px;
   font-weight: 950;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   text-decoration: none;
   transition: none;
@@ -1287,7 +1289,7 @@ body.dark-mode .join-btn:hover {
   padding: 12px 18px;
   border-radius: 9px;
   font-weight: 800;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   margin-left: 7px;
   text-decoration: none;
@@ -1376,7 +1378,7 @@ body.dark-mode .join-btn:hover {
 .nl-mag-price {
   font-weight: 950;
   margin-top: 4px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 /* ===== Magazine detail ===== */
@@ -1384,7 +1386,7 @@ body.dark-mode .join-btn:hover {
   border: 0;
   background: transparent;
   font-weight: 800;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   padding: 0;
   margin-bottom: 18px;
@@ -1424,7 +1426,7 @@ body.dark-mode .join-btn:hover {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--nl-muted);
   margin: 15px 0;
 }
@@ -1557,7 +1559,7 @@ body.dark-mode .join-btn:hover {
 
 .nl-merch-price {
   font-weight: 950;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .nl-merch-btn {
@@ -1647,7 +1649,7 @@ body.dark-mode .join-btn:hover {
   background: rgba(255, 255, 255, 0.9);
   border: none;
   border-radius: 50%;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1675,7 +1677,7 @@ body.dark-mode .join-btn:hover {
 }
 
 .nl-podcast-episode-info h4 {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.2;
   margin: 0 0 6px;
   color: #111;
@@ -1793,7 +1795,7 @@ body.dark-mode .join-btn:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   transition: 0.15s;
 }
@@ -1859,7 +1861,7 @@ body.dark-mode .nl-podcast-player {
     padding: 16px;
   }
   .nl-podcast-description h3 {
-    font-size: 16px;
+    font-size: 13px;
   }
 }
 
@@ -1921,7 +1923,7 @@ body.dark-mode .nl-podcast-player {
 }
 
 .community-card .body {
-  font-size: 14px;
+  font-size: 13px;
   color: #666;
   line-height: 1.75;
   margin: 0 0 34px;
@@ -1939,7 +1941,7 @@ body.dark-mode .nl-podcast-player {
   border-radius: 999px;
   padding: 15px 26px;
   font-weight: 800;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   transition: 0.2s;
@@ -1977,11 +1979,11 @@ body.dark-mode .nl-podcast-player {
   }
 
   .community-card .subtitle {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .community-card .body {
-    font-size: 13px;
+    font-size: 12px;
     margin-bottom: 28px;
   }
 
@@ -2024,7 +2026,7 @@ body.dark-mode .nl-podcast-player {
 .nl-writers-copy p {
   max-width: 650px;
   color: #30351f;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .nl-writer-cta {
@@ -2135,7 +2137,7 @@ body.dark-mode .nl-podcast-player {
   position: absolute;
   top: 26px;
   right: 26px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   color: #fff;
 }
@@ -2153,7 +2155,7 @@ body.dark-mode .nl-podcast-player {
 
 .nl-sidebox p {
   color: #c9cbd0;
-  font-size: 14px;
+  font-size: 13px;
   margin: 0;
 }
 
@@ -2198,7 +2200,7 @@ body.dark-mode .nl-podcast-player {
   color: var(--nl-muted);
   font-weight: 500;
   margin-top: 5px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 /* ===== Opportunities ===== */
@@ -2293,7 +2295,7 @@ body.dark-mode .nl-podcast-player {
 .nl-faq-item p {
   margin: 10px 0 0;
   color: var(--nl-muted);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -2419,7 +2421,7 @@ body.dark-mode .nl-podcast-player {
   }
 
   .nl-opp strong {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .nl-opp-desc {
@@ -2461,7 +2463,7 @@ body.dark-mode .nl-podcast-player {
   }
 
   #nl-magazines .nl-section-head-spaced h2 {
-    font-size: 16px;
+    font-size: 13px;
   }
 
   #nl-magazines .nl-section-head-spaced a {
@@ -2577,7 +2579,7 @@ body.dark-mode .nl-podcast-player {
   }
 
   .nl-story-card h3 {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .nl-section-actions {
@@ -2628,7 +2630,11 @@ body.dark-mode .nl-podcast-player {
   }
 
   #nl-innovation .nl-story-card h3 {
-    font-size: 14px;
+    font-size: 11px;
+  }
+
+  #nl-innovation .nl-story-card p {
+    font-size: 12px;
   }
 
   .nl-podcast-feature .nl-card-img {
@@ -2791,6 +2797,100 @@ body.dark-mode .landing-theme-toggle:hover {
     right: 20px;
     width: 44px;
     height: 44px;
+    font-size: 18px;
+  }
+}
+
+/* Quick Access Cards */
+.nl-quick-access {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 40px 0;
+}
+
+.nl-quick-card {
+  background: var(--nl-card);
+  border: 1px solid var(--nl-line);
+  border-radius: 16px;
+  padding: 32px 24px;
+  color: var(--nl-ink);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nl-quick-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nl-quick-card:hover {
+  border-color: var(--nl-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.nl-quick-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.nl-quick-card p {
+  font-size: 13px;
+  color: var(--nl-muted);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+
+.nl-quick-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nl-accent);
+  margin-top: 8px;
+}
+
+body.dark-mode .nl-quick-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+body.dark-mode .nl-quick-card:hover {
+  border-color: #e6ff3f;
+}
+
+body.dark-mode .nl-quick-card h3 {
+  color: #f7f7f5;
+}
+
+body.dark-mode .nl-quick-card p {
+  color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+  .nl-quick-access {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .nl-quick-card {
+    padding: 24px 20px;
+  }
+
+  .nl-story-card h3 {
+    font-size: 10px;
+  }
+
+  .nl-story-card p {
+    font-size: 11px;
+  }
+
+  .nl-quick-card h3 {
     font-size: 18px;
   }
 }
