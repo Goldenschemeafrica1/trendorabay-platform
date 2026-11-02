@@ -1593,6 +1593,10 @@ body.dark-mode .join-btn:hover {
   margin-inline: auto;
 }
 
+#nl-innovation .nl-story-card p {
+  font-size: 10px;
+}
+
 /* ===== Podcasts ===== */
 #nl-podcasts {
   max-width: 1100px;
@@ -2634,7 +2638,7 @@ body.dark-mode .nl-podcast-player {
   }
 
   #nl-innovation .nl-story-card p {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .nl-podcast-feature .nl-card-img {
