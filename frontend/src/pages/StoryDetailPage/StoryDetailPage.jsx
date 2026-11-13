@@ -178,7 +178,8 @@ const StoryDetailPage = () => {
   };
 
   const handleShare = async (platform = null) => {
-    const shareUrl = window.location.href;
+    // Share via the OG endpoint so link previews include the story image
+    const shareUrl = `${window.location.origin}/share/story/${story.slug || slug}`;
     const shareText = story.title || 'Check out this story on Trendorabay';
 
     if (platform === 'whatsapp') {

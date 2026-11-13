@@ -8,14 +8,7 @@
   },
   "rewrites": [
     {
-      "source": "/stories/:slug",
-      "has": [
-        {
-          "type": "header",
-          "key": "user-agent",
-          "value": ".*(facebookexternalhit|Facebot|WhatsApp|Twitterbot|LinkedInBot|Slackbot|TelegramBot|Discordbot|Googlebot|bingbot|Pinterest|Applebot|redditbot|Embedly).*"
-        }
-      ],
+      "source": "/share/story/:slug",
       "destination": "https://trendorabay-platform.onrender.com/api/share/story/:slug"
     },
     {
