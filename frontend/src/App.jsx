@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, Navigate, useLocation, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Analytics } from '@vercel/analytics/react';
@@ -49,6 +49,13 @@ import MusicPage from './pages/MusicPage/MusicPage';
 import CommunityPage from './pages/CommunityPage/CommunityPage';
 import OpportunityDetailPage from './pages/OpportunityDetailPage/OpportunityDetailPage';
 import InnovationPage from './pages/InnovationPage/InnovationPage';
+
+// Redirects copied share links (/share/story/:slug) to the real story page.
+// Fallback for when the CDN rewrite to the OG share endpoint isn't active.
+const ShareStoryRedirect = () => {
+  const { slug } = useParams();
+  return <Navigate to={`/stories/${slug}`} replace />;
+};
 
 function App() {
   const location = useLocation();
@@ -269,6 +276,7 @@ function App() {
         {/* Story Routes */}
         <Route path="/stories" element={<StoriesPage />} />
         <Route path="/stories/:slug" element={<StoryDetailPage />} />
+        <Route path="/share/story/:slug" element={<ShareStoryRedirect />} />
 
         {/* 404 Page */}
         <Route path="*" element={<NotFoundPage />} />
