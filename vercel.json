@@ -5,6 +5,10 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/share/story/:slug",
+      "destination": "https://trendorabay-platform.onrender.com/api/share/story/:slug"
+    },
+    {
       "source": "/api/:path*",
       "destination": "https://trendorabay-platform.onrender.com/api/:path*"
     },
