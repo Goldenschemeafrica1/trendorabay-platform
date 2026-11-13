@@ -23,10 +23,14 @@ import communityRoutes from '../routes/communities.js';
 import communityPostRoutes from '../routes/communityPosts.js';
 import communityDiscussionRoutes from '../routes/communityDiscussions.js';
 import writeApplicationRoutes from '../routes/writeApplications.js';
+import shareRoutes from '../routes/share.js';
 
 const API_VERSION = process.env.API_VERSION || 'v1';
 
 export function setupRoutes(app) {
+  // Crawler-facing Open Graph share pages (unversioned, stable public URL)
+  app.use('/api/share', shareRoutes);
+
   // API Routes with versioning
   app.use(`/api/${API_VERSION}/users`, userRoutes);
   app.use(`/api/${API_VERSION}/magazines`, magazineRoutes);
