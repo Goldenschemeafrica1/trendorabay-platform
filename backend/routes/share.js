@@ -54,10 +54,19 @@ const renderPage = ({ target, title, description, image, url }) => `<!doctype ht
 </body>
 </html>`;
 
+const BOT_UA = /facebookexternalhit|Facebot|WhatsApp|Twitterbot|LinkedInBot|Slackbot|TelegramBot|Discordbot|Googlebot|bingbot|Pinterest|Applebot|redditbot|Embedly|vkShare|iMessage|Snapchat|Snap URL Preview|Cardyb|Mastodon|SkypeUriPreview|Microsoft Teams|Viber|Google-InspectionTool/i;
+
 // Serves crawler-friendly Open Graph HTML for shared story links.
-// Social bots read the meta tags; browsers get redirected to the SPA.
+// Social bots get the meta tags; real browsers get an instant HTTP
+// redirect to the SPA with no intermediate page.
 router.get('/story/:slug', async (req, res, next) => {
-  const fallbackTarget = `${FRONTEND_URL}/stories/${encodeURIComponent(req.params.slug)}`;
+  const redirectTarget = `${FRONTEND_URL}/stories/${encodeURIComponent(req.params.slug)}`;
+
+  if (!BOT_UA.test(req.get('user-agent') || '')) {
+    return res.redirect(302, redirectTarget);
+  }
+
+  const fallbackTarget = redirectTarget;
 
   try {
     const story = await StoryService.getStoryByIdOrId(req.params.slug);
